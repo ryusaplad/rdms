@@ -1,0 +1,78 @@
+<!DOCTYPE html >
+<html xmlns="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>Login Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+   
+     <link th:href="@{fonts/material-design-iconic-font/css/material-design-iconic-font.min.css.css}" rel="stylesheet" />
+    <!-- STYLE CSS -->
+      <link th:href="@{css/style.css}" rel="stylesheet" />
+        <link th:href="@{css/bootstrap.css}" rel="stylesheet" />
+    
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="image-holder">
+        <img th:src="@{images/abst.jpeg}" src="images/abst.jpeg" alt="Background" />
+      
+<div class="endText">
+	<span>St.Vincent De Ferrer College of Camarin Inc.</span>
+</div>
+<div class="bottomText">
+	<span>xxxxxxxxxxxxxxx System</span>
+</div>
+      </div>
+      
+      <div class="form-inner ">
+        <form action="#" onsubmit="return(validate());">
+         
+          <div class="text-center ">
+            <img th:src="@{images/svfclog.png}" class=" logo responsive rounded-circle" alt="School Logo">
+            <h5 class="scText">St. Vincent De Ferrer College of Camarin Inc.</h5>
+          </div>
+        
+          <div class="form-group">
+            <label for="">Username:</label>
+            <input type="text" class="form-control" name="username" placeholder="Username"  id="username" ></input>
+			<div class="alert alert-danger userMessage mt-2" style="display: none;" role="alert">
+				<strong class="userError"> </strong>
+			</div>
+				
+          </div>
+
+          <div class="form-group">
+            <label for="">Password:</label>
+            <input type="password" class="form-control" name="pass" placeholder="Password" id="password" ></input>
+		  <div class="alert alert-danger passMessage mt-2" style="display: none;" role="alert">
+			<strong class="passError"> </strong>
+		</div>
+          </div>
+          <div class="form-group">
+            <label for="">Account Type:</label>
+            <select name="accType" id="accType" class="form-control" onchange="usernameChangerBySelection();">
+              <option disabled selected>Account Type</option>
+              <option value="Student">Student</option>
+		    <option value="Teacher">Teacher</option>
+              <option value="Facilitator">Facilitator</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+		  <div class="alert alert-danger accTypeMessage mt-2" style="display: none;" role="alert">
+			<strong class="accTypeError"> </strong>
+		</div>
+          </div>
+          <input class="btn btn-dark w-100" type="submit"></input>
+        </form>
+      </div>
+    </div>
+
+    <script type="text/javascript" th:src="@{js/login.js}"></script>
+    <script type="text/javascript" th:src="@{js/bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{js/popper.js}"></script>
+
+  </body>
+  <!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
