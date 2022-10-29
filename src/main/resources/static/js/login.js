@@ -1,5 +1,3 @@
-let accountType = document.getElementById("accType");
-
 let userMessage = document.querySelector(".userMessage");
 let passMessage = document.querySelector(".passMessage");
 let accTypeMessage = document.querySelector(".accTypeMessage");
@@ -8,6 +6,7 @@ let passError = document.querySelector(".passError");
 let accTypeError = document.querySelector(".accTypeError");
 
 function validate() {
+  let accountType = document.getElementById("accType");
   let user = document.getElementById("username").value.toLowerCase();
   let pass = document.getElementById("password").value.toLowerCase();
   let getSelected = accountType.options[accountType.selectedIndex].value;
@@ -38,7 +37,7 @@ function validate() {
     } else if (getSelected == "Teacher") {
       if (!user.includes("prof-")) {
         displayMessage(userMessage, userError, 2, getSelected);
-       
+
         return false;
       }
     } else if (getSelected == "Facilitator") {
@@ -64,7 +63,7 @@ function displayMessage(alertMessage, errorMessage, errorType, accountType) {
   if (errorType == 1) {
     alertMessage.style = "display:block";
     errorMessage.innerText = accountType + ", Please fill this field.";
-    
+
     return false;
   } else if (errorType == 2) {
     if (accountType == "Student") {
