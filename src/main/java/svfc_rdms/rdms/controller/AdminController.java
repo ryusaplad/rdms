@@ -8,7 +8,27 @@ public class AdminController {
 
      // Get Mapping Method
      @GetMapping("/admin")
-     public String methodName() {
+     public String dashboard_View() {
           return "/dashboard";
+     }
+
+     @GetMapping("/facilitators")
+     public String facilitatorAccounts_View() {
+          return "/view_facilitators";
+     }
+
+     @GetMapping("/registrars")
+     public String registrarAccounts_View() {
+          return "/view_registrars";
+     }
+
+     @GetMapping("/teachers")
+     public String teacherAccounts_View() {
+          return "/view_teachers";
+     }
+
+     @GetMapping("/students")
+     public String studentAccounts_View() {
+          return "/view_students";
      }
 }
