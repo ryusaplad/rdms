@@ -11699,3 +11699,17 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
+
+
+::-webkit-scrollbar{
+    width: 5px;
+    height: 10px;
+    padding-top: 20px;
+}
+::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+    border: 1px solid var(--bs-gray);
+    background:var(--bs-gray);
+    border-radius: 5px;
+
+}

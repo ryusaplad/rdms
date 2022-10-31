@@ -31,4 +31,14 @@ public class AdminController {
      public String studentAccounts_View() {
           return "/view_students";
      }
+
+     @GetMapping("/all_request")
+     public String viewAllRequests() {
+          return "/all_requests";
+     }
+
+     @GetMapping("/admin_logs")
+     public String viewAdminLogs() {
+          return "/admin_logs";
+     }
 }
