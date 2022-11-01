@@ -11713,3 +11713,12 @@ body {
     border-radius: 5px;
 
 }
+
+
+.imageDiv>img{
+  width: 100%;
+  height: 200px;
+}
+.pagesCards >.card-body> a{
+  width: 100%;
+}

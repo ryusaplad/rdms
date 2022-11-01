@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Teachers Account</title>
+    <title th:text="${title}"></title>
 
     <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
     <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
@@ -35,7 +35,7 @@
                         style=" width:35px"></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="#!">My Profile</a></li>
-                
+
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -66,7 +66,9 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
-                                <a class="nav-link" href="#">Deleted Facilitators</a> </nav>
+                                <a class="nav-link" href="#">Deleted Facilitators</a>
+                                <a class="nav-link" href="#">Facilitators Page</a>
+                            </nav>
                         </div>
                         <!-- Manage Registrar -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#regDropDown"
@@ -78,9 +80,10 @@
                         <div class="collapse" id="regDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                                            <a class="nav-link" href="/registrars">View / Add Registrar</a>
-                                                            
-                                                            <a class="nav-link" href="#">Deleted Registrars</a>
+                                <a class="nav-link" href="/registrars">View / Add Registrar</a>
+
+                                <a class="nav-link" href="#">Deleted Registrars</a>
+                                <a class="nav-link" href="#">Registrars Page</a>
                             </nav>
                         </div>
                         <!-- Manage Teachers -->
@@ -94,9 +97,10 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/teachers">View / Add Teachers</a>
-                                
-                                
+
+
                                 <a class="nav-link" href="#">Deleted Teachers</a>
+                                <a class="nav-link" href="#">Teachers Page</a>
                             </nav>
                         </div>
                         <!-- Manage Students -->
@@ -110,7 +114,9 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/students">View / Add Students</a>
-                                <a class="nav-link" href="#">Deleted Students</a> </nav>
+                                <a class="nav-link" href="#">Deleted Students</a>
+                                <a class="nav-link" href="#">Students Page</a>
+                            </nav>
                         </div>
 
 
@@ -123,6 +129,12 @@
                         <a class="nav-link" href="/all_request">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Requests Lists
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Settings</div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Connection Settings
+
                         </a>
 
                     </div>
@@ -137,20 +149,22 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Teachers Accounts</h1>
+                    <h1 class="mt-4" th:text="${title}"></h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Teachers Accounts</li>
+                        <li class="breadcrumb-item active" th:text="${title}"></li>
                     </ol>
 
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex flex-row-reverse">
-                                <div class=""><a data-bs-toggle="modal" data-bs-target="#registerTeacher" class="btn btn-primary ">Add Teacher</a>
+                                <div class=""><a data-bs-toggle="modal" data-bs-target="#registerTeacher"
+                                        class="btn btn-primary ">Add <span
+                                            th:text="${#strings.replace(title,'Accounts','')}"></span></a>
                                 </div>
-                            
+
                             </div>
-                            </div>
+                        </div>
                         <div class="card-body">
                             <table id="datatablesSimple">
                                 <thead>
@@ -196,50 +210,52 @@
         </div>
 
     </div>
-<!-- Modal -->
-<div class="modal fade" id="registerTeacher" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    role="dialog" aria-labelledby="registerTeacherTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="registerTeacherTitle">Teacher Account Informations</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="#!">
-                    <div class="form-group">
-                        <label for="userId">User Id</label>
-                        <input type="text" class="form-control" id="userId" placeholder="T-0 / t-0" name="userId">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Name:" name="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Username:" name="username">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password:"
-                            name="password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPass">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPass" placeholder="Confirm Password:">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save
-                    changes</button>
+    <!-- Modal -->
+    <div class="modal fade" id="registerTeacher" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="registerTeacherTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerTeacherTitle">Teacher Account Informations</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="#!">
+                        <div class="form-group">
+                            <label for="userId">User Id</label>
+                            <input type="text" class="form-control" id="userId" placeholder="T-0 / t-0" name="userId">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name:" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Username:"
+                                name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password:"
+                                name="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPass">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPass"
+                                placeholder="Confirm Password:">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Save
+                        changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
     <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{js/scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/latest.js}"></script>
