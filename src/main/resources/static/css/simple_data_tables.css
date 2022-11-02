@@ -169,3 +169,6 @@
 	content: " ";
 	display: table;
 }
+
+#usernameTd,#passwordTd{color:transparent;cursor:default;}
+

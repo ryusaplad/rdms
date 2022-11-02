@@ -10,6 +10,7 @@
     <title>Dashboard - RDMS</title>
     <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
     <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
+
     <script type="text/javascript" th:src="@{js/all.js}"></script>
 </head>
 
@@ -68,7 +69,7 @@
                                 <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
                                 <a class="nav-link" href="#">Deleted Facilitators</a>
                                 <a class="nav-link" href="#">Facilitators Page</a>
-                                </nav>
+                            </nav>
                         </div>
                         <!-- Manage Registrar -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#regDropDown"
@@ -112,7 +113,7 @@
                                 <a class="nav-link" href="/students">View / Add Students</a>
                                 <a class="nav-link" href="#">Deleted Students</a>
                                 <a class="nav-link" href="#">Students Page</a>
-                                </nav>
+                            </nav>
                         </div>
 
 
@@ -130,7 +131,7 @@
                         <a class="nav-link" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                             Connection Settings
-                        
+
                         </a>
 
                     </div>
@@ -156,7 +157,7 @@
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">Facilitators</div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <div class="small text-white">0</div>
+                                    <div class="small text-white" th:text="${totalFacilitators}"></div>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +165,7 @@
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">Registrar</div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <div class="small text-white">0</div>
+                                    <div class="small text-white" th:text="${totalRegistrars}"></div>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +173,7 @@
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">Teachers</div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <div class="small text-white">0</div>
+                                    <div class="small text-white" th:text="${totalTeachers}"></div>
                                 </div>
                             </div>
                         </div>
@@ -180,7 +181,7 @@
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">Students</div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <div class="small text-white">0</div>
+                                    <div class="small text-white" th:text="${totalStudents}"></div>
                                 </div>
                             </div>
                         </div>
@@ -223,11 +224,10 @@
                             <div class="col-sm">
                                 <div class="card pagesCards">
                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                    
+
                                         <a href="#!">
                                             <div class="imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-                                                <img th:src="@{images/studentImageTest.jpg}" src="images/studentImageTest"
-                                                    class="img-fluid" />
+                                                <img th:src="@{images/studentImageTest.jpg}" src="images/studentImageTest" class="img-fluid" />
                                             </div>
                                         </a>
                                     </div>
@@ -243,8 +243,7 @@
                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                         <a href="#!">
                                             <div class="imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-                                                <img th:src="@{images/facilitatorImagetest.jpg}" src="images/facilitator"
-                                                    class="img-fluid" />
+                                                <img th:src="@{images/facilitatorImagetest.jpg}" src="images/facilitator" class="img-fluid" />
                                             </div>
                                         </a>
                                     </div>
@@ -260,9 +259,9 @@
                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                         <a href="#!">
                                             <div class=" imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-                    
+
                                                 <img th:src="@{images/regImageTest.png}" src="images/registrar" class="img-fluid " />
-                    
+
                                             </div>
                                         </a>
                                     </div>
@@ -278,9 +277,9 @@
                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                         <a href="#!">
                                             <div class=" imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-                    
+
                                                 <img th:src="@{images/teacherImagetest.png}" src="images/teacher" class="img-fluid " />
-                    
+
                                             </div>
                                         </a>
                                     </div>
@@ -304,8 +303,10 @@
 
     <script type="text/javascript" th:src="@{js/scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
-    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"></script>
+    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
+
     <script type="text/javascript" th:src="@{js/latest.js}"></script>
+    <script type="text/javascript" th:src="@{js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{js/popper.js}"></script>
 </body>
 

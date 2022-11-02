@@ -11,6 +11,7 @@
 
     <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
     <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
+
     <script type="text/javascript" th:src="@{js/all.js}"></script>
 
 </head>
@@ -148,17 +149,43 @@
 
         <div id="layoutSidenav_content">
             <main>
+
                 <div class="container-fluid px-4">
+
                     <h1 class="mt-4" th:text="${title}"></h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                         <li class="breadcrumb-item active" th:text="${title}"></li>
                     </ol>
+                    <div th:if="${session.alertType=='error'}">
+                        <div class="alert alert-warning alert-dismissible fade show" style="display:block" role="alert">
+                            <strong th:text="${session.alertMessage}"></strong>
+                            <button type="button" class="close bg-warning float-end" style="border:1px solid white" data-bs-dismiss="alert"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div th:if="${session.alertType=='success'}">
+                        <div class="alert alert-success alert-dismissible fade show" style="display:block" role="alert">
+                            <strong th:text="${session.alertMessage}"></strong>
+                            <button type="button" class="close bg-success float-end" style="border:1px solid white" data-bs-dismiss="alert"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Removing Something -->
 
+                    <div th:if="${session.alertMessage != null}">
+                        <div th:remove=" ${#session.removeAttribute('alertMessage')}"></div>
+                        <div th:remove=" ${#session.removeAttribute('alertType')}"></div>
+                    </div>
+                    <!-- Removing Something -->
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex flex-row-reverse">
-                                <div class=""><a data-bs-toggle="modal" data-bs-target="#registerTeacher"
+                                <div class=""><a data-bs-toggle="modal" data-bs-target="#registerModal"
                                         class="btn btn-primary ">Add <span
                                             th:text="${#strings.replace(title,'Accounts','')}"></span></a>
                                 </div>
@@ -166,40 +193,43 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="datatablesSimple">
+                            <table id="datatablesSimple" class="text-center">
                                 <thead>
                                     <tr>
-                                        <th>count</th>
-                                        <th>Student Id</th>
+                                        <th>Count</th>
                                         <th>Name</th>
                                         <th>Username</th>
                                         <th>Password</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>C-082095</td>
-                                        <td>Ryu Saplad</td>
-                                        <td>123</td>
-                                        <td>123</td>
+                                    <tr th:each="userList : ${usersLists}">
+                                        <td th:text="${userList.userId}"></td>
+                                        <td th:text="${userList.name}"></td>
+                                        <td th:text="${userList.username}"></td>
+                                        </td>
+                                        <td th:text="${#strings.replace(userList.password,userList.password,'********')} ">
+                                        </td>
 
+                                        <td th:text="${userList.type}"></td>
+                                        <td th:text="${userList.status}"></td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-primary w-100">Edit</a>
+                                                    <a th:href="@{/user/update/(userId=${userList.userId})}" type="button" class="edit btn btn-primary w-100">Edit</a>
                                                 </div>
                                                 <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-danger w-100">Delete</a>
-
+                                                    <a th:href="@{/user/delete/(userId=${userList.userId})}" type="button" class="btn btn-danger w-100">Delete</a>
                                                 </div>
-
 
                                             </div>
                                         </td>
                                     </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -211,55 +241,114 @@
 
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="registerTeacher" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="registerTeacherTitle" aria-hidden="true">
+    <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="registerModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="registerTeacherTitle">Teacher Account Informations</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="registerModal"><span id="titleVal" th:text="${title}"></span>
+                        Informations</h5>
+                    <button type="button" class="close" style="border: 1px solid white; background-color:red; color:white;"
+                        data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="#!">
+                    <form method="POST" action="/saveUser" th:object="${users}" onsubmit="return(validateAddingForm());">
                         <div class="form-group">
-                            <label for="userId">User Id</label>
-                            <input type="text" class="form-control" id="userId" placeholder="T-0 / t-0" name="userId">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Name:" name="name" required>
+                        </div>
+                        <div class="alert alert-danger mt-2 font-weight-bold" role="alert" id="alertMessage1" style="display:none"></div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" th:field="*{username}" id="username" th:placeholder="${userIdFormat}"
+                                name="username" required>
+                        </div>
+                        <div class="alert alert-danger mt-2" role="alert" id="alertMessage2" style="display:none"></div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Password:"
+                                name="password" required>
+                        </div>
+                        <div class="alert alert-danger mt-2" role="alert" id="alertMessage3" style="display:none"></div>
+                        <div class="form-group">
+                            <label for="confirmPass">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPass" placeholder="Confirm Password:" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage4" style="display:none"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Save
+                                    changes</button>
+                            </div>
+                            </form>
+                            </div>
+                            </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
+                                aria-labelledby="updateModal" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updateModal"><span id="titleVal" th:text="${title}"></span>
+                                                Update Informations</h5>
+                                            <button type="button" class="close" style="border: 1px solid white; background-color:red; color:white;"
+                                                data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="POST" th:action="@{/updateUser}" th:object="${users}"
+                                                onsubmit="return(validateAddingForm());" id="updateFormModal">
+                                                <div class="form-group" style="display:none">
+                                                    <label for="name">userId</label>
+                                                    <input type="text" class="form-control" th:field="*{userId}" id="userIdEdit"
+                                                        placeholder="userId:" name="userId" required>
                         </div>
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Name:" name="name">
+                            <input type="text" class="form-control" th:field="*{name}" id="nameEdit" placeholder="Name:" name="name" required>
                         </div>
+                        <div class="alert alert-danger mt-2 font-weight-bold" role="alert" id="alertMessage1" style="display:none"></div>
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" placeholder="Username:"
-                                name="username">
+                            <input type="text" class="form-control" th:field="*{username}" id="usernameEdit" th:placeholder="${userIdFormat}"
+                                name="username" required>
                         </div>
+                        <div class="alert alert-danger mt-2" role="alert" id="alertMessage2" style="display:none"></div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Password:"
-                                name="password">
+                            <input type="password" class="form-control" th:field="*{password}" id="passwordEdit" placeholder="Password:"
+                                name="password" required>
                         </div>
+                        <div class="alert alert-danger mt-2" role="alert" id="alertMessage3" style="display:none"></div>
                         <div class="form-group">
                             <label for="confirmPass">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPass"
-                                placeholder="Confirm Password:">
+                            <input type="password" class="form-control" id="confirmPassEdit" placeholder="Confirm Password:" required>
                         </div>
-                    </form>
+                        <div class="alert alert-danger mt-2" role="alert" id="alertMessage4" style="display:none"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Save
+                    <button type="submit" class="btn btn-success save">Save
                         changes</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
     <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{js/scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/latest.js}"></script>
-    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"></script>
+    <script type="text/javascript" th:src="@{js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{js/popper.js}"></script>
+    <script type="text/javascript" th:src="@{js/account_adding.js}"></script>
+    <script type="text/javascript" th:src="@{js/updatingModal.js}"></script>
+    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
+
 </body>
 
 </html>

@@ -11,6 +11,7 @@
 
     <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
     <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
+
     <script type="text/javascript" th:src="@{js/all.js}"></script>
 
 </head>
@@ -67,7 +68,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
                                 <a class="nav-link" href="#">Deleted Facilitators</a>
-<a class="nav-link" href="#">Facilitators Page</a>
+                                <a class="nav-link" href="#">Facilitators Page</a>
                             </nav>
                         </div>
                         <!-- Manage Registrar -->
@@ -83,7 +84,7 @@
                                 <a class="nav-link" href="/registrars">View / Add Registrar</a>
 
                                 <a class="nav-link" href="#">Deleted Registrars</a>
-<a class="nav-link" href="#">Registrars Page</a>
+                                <a class="nav-link" href="#">Registrars Page</a>
 
                             </nav>
                         </div>
@@ -101,7 +102,7 @@
 
 
                                 <a class="nav-link" href="#">Deleted Teachers</a>
-<a class="nav-link" href="#">Teachers Page</a>
+                                <a class="nav-link" href="#">Teachers Page</a>
                             </nav>
                         </div>
                         <!-- Manage Students -->
@@ -116,7 +117,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/students">View / Add Students</a>
                                 <a class="nav-link" href="#">Deleted Students</a>
-<a class="nav-link" href="#">Students Page</a>
+                                <a class="nav-link" href="#">Students Page</a>
                             </nav>
                         </div>
 
@@ -131,12 +132,12 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Requests Lists
                         </a>
-<div class="sb-sidenav-menu-heading">Settings</div>
-<a class="nav-link" href="#">
-    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-    Connection Settings
+                        <div class="sb-sidenav-menu-heading">Settings</div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Connection Settings
 
-</a>
+                        </a>
 
                     </div>
                 </div>
@@ -162,57 +163,55 @@
                                 <div class=""><a href="/admin-request" class="btn btn-primary ">Add Request</a></div>
 
                             </div>
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple" class="text-center">
-                                    <thead>
-                                        <tr>
-                                            <th>Count</th>
-                                            <th>Id</th>
-                                            <th>Name</th>
-                                            <th>From</th>
-                                            <th>To</th>
-                                            <th>Concerns</th>
-                                            <th>Date</th>
-                                            <th>Files</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple" class="text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Count</th>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Concerns</th>
+                                        <th>Date</th>
+                                        <th>Files</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
 
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>none</td>
-                                            <td>none</td>
-                                            <td>john</td>
-                                            <td>doe</td>
-                                            <td>"C-1 Grades"</td>
-                                            <td>00/00/0000</td>
-                                            <td>File.txt</td>
-                                            <td>
-                                                <div class="row">
-                                                    <div class="col-sm">
-                                                        <a href="#" type="button" class="btn btn-primary w-100">Edit</a>
-                                                    </div>
-                                                    <div class="col-sm">
-                                                        <a href="#" type="button"
-                                                            class="btn btn-danger w-100">Delete</a>
-
-                                                    </div>
-                                                    <div class="col-sm">
-                                                        <a href="#" type="button"
-                                                            class="btn btn-success w-100">Download</a>
-
-                                                    </div>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>none</td>
+                                        <td>none</td>
+                                        <td>john</td>
+                                        <td>doe</td>
+                                        <td>"C-1 Grades"</td>
+                                        <td>00/00/0000</td>
+                                        <td>File.txt</td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <a href="#" type="button" class="btn btn-primary w-100">Edit</a>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <a href="#" type="button" class="btn btn-danger w-100">Delete</a>
 
                                                 </div>
+                                                <div class="col-sm">
+                                                    <a href="#" type="button" class="btn btn-success w-100">Download</a>
+
+                                                </div>
+
+                                            </div>
                                             </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                                            </tr>
+                                            </tbody>
+                                            </table>
+                                            </div>
+                                            </div>
+                                            </div>
             </main>
 
         </div>
@@ -222,7 +221,9 @@
     <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{js/scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/latest.js}"></script>
-    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"></script>
+    <script type="text/javascript" th:src="@{js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
+
 </body>
 
 </html>
