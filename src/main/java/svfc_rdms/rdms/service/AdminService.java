@@ -6,16 +6,18 @@ import svfc_rdms.rdms.model.Users;
 
 public interface AdminService {
 
-     List<Users> diplayAllAccounts(String type);
+     List<Users> diplayAllAccounts(String status, String type);
 
      boolean saveUsersAccount(Users user);
 
      boolean findUserName(String username);
 
-     List<Users> findOneUserById(long id);
+     List<Users> findOneUserById(long userId);
 
-     boolean deleteData(long id);
+     boolean deleteData(long userId);
 
-     int displayCounts(String type);
+     boolean changeAccountStatus(String status, long userId);
+
+     int displayCountsByStatusAndType(String status, String type);
 
 }

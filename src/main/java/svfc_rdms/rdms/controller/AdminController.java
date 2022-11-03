@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,10 +27,15 @@ public class AdminController {
      // Get Mapping Method
      @GetMapping("/admin")
      public String dashboard_View(Model model) {
-          model.addAttribute("totalStudents", repository.displayCounts("Student"));
-          model.addAttribute("totalFacilitators", repository.displayCounts("Facilator"));
-          model.addAttribute("totalRegistrars", repository.displayCounts("Registrar"));
-          model.addAttribute("totalTeachers", repository.displayCounts("Teacher"));
+          model.addAttribute("totalStudents", repository.displayCountsByStatusAndType("Active", "Student"));
+          model.addAttribute("totalFacilitators", repository.displayCountsByStatusAndType("Active", "Facilitator"));
+          model.addAttribute("totalRegistrars", repository.displayCountsByStatusAndType("Active", "Registrar"));
+          model.addAttribute("totalTeachers", repository.displayCountsByStatusAndType("Active", "Teacher"));
+
+          model.addAttribute("totalDeletedStud", repository.displayCountsByStatusAndType("Temporary", "Teacher"));
+          model.addAttribute("totalDeletedFac", repository.displayCountsByStatusAndType("Temporary", "Student"));
+          model.addAttribute("totalDeletedReg", repository.displayCountsByStatusAndType("Temporary", "Facilitator"));
+          model.addAttribute("totalDeletedTeach", repository.displayCountsByStatusAndType("Temporary", "Registrar"));
 
           return "/dashboard";
      }
@@ -39,7 +45,8 @@ public class AdminController {
           model.addAttribute("title", "Facilitator Accounts");
           model.addAttribute("userIdFormat", "F- / f-");
           model.addAttribute("users", new Users());
-          model.addAttribute("usersLists", repository.diplayAllAccounts("Facilitator"));
+          model.addAttribute("hide", false);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Active", "Facilitator"));
           return "/view_accounts";
      }
 
@@ -48,7 +55,8 @@ public class AdminController {
           model.addAttribute("title", "Registrar Accounts");
           model.addAttribute("userIdFormat", "R- / r-");
           model.addAttribute("users", new Users());
-          model.addAttribute("usersLists", repository.diplayAllAccounts("Registrar"));
+          model.addAttribute("hide", false);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Active", "Registrar"));
           return "/view_accounts";
      }
 
@@ -57,16 +65,55 @@ public class AdminController {
           model.addAttribute("title", "Teachers Accounts");
           model.addAttribute("userIdFormat", "T- / t-");
           model.addAttribute("users", new Users());
-          model.addAttribute("usersLists", repository.diplayAllAccounts("Teacher"));
+          model.addAttribute("hide", false);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Active", "Teacher"));
           return "/view_accounts";
      }
 
      @GetMapping("/students")
      public String studentAccounts_View(Model model) {
-          model.addAttribute("title", "Students Accounts");
+          model.addAttribute("title", "Deleted Students Accounts");
           model.addAttribute("userIdFormat", "C- / c-");
           model.addAttribute("users", new Users());
-          model.addAttribute("usersLists", repository.diplayAllAccounts("Student"));
+          model.addAttribute("hide", false);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Active", "Student"));
+          return "/view_accounts";
+     }
+
+     // Deleted pages
+     @GetMapping("/facilitators-deleted")
+     public String deletedFacilitators_View(Model model) {
+          model.addAttribute("title", "Deleted Facilitator Accounts");
+          model.addAttribute("hide", true);
+          model.addAttribute("users", null);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Temporary", "Facilitator"));
+          return "/view_accounts";
+     }
+
+     @GetMapping("/registrars-deleted")
+     public String deletedRegistrars_View(Model model) {
+          model.addAttribute("title", "Deleted Registrar Accounts");
+          model.addAttribute("hide", true);
+          model.addAttribute("users", null);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Temporary", "Registrar"));
+          return "/view_accounts";
+     }
+
+     @GetMapping("/teachers-deleted")
+     public String deletedTeachers_View(Model model) {
+          model.addAttribute("title", "Deleted Teachers Accounts");
+          model.addAttribute("hide", true);
+          model.addAttribute("users", null);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Temporary", "Teacher"));
+          return "/view_accounts";
+     }
+
+     @GetMapping("/students-deleted")
+     public String deletedStudents_View(Model model) {
+          model.addAttribute("title", "Deleted Students Accounts");
+          model.addAttribute("hide", true);
+          model.addAttribute("users", null);
+          model.addAttribute("usersLists", repository.diplayAllAccounts("Temporary", "Student"));
           return "/view_accounts";
      }
 
@@ -95,6 +142,61 @@ public class AdminController {
      public String updateUser(@ModelAttribute("users") Users user, HttpSession session, Model model) {
           return saveWithRestriction(user, session, 1);
 
+     }
+
+     @GetMapping(value = "/user/delete/")
+     @ResponseBody
+     public String deleteUsers(@RequestParam("userId") long userId, HttpSession session, HttpServletRequest request) {
+          String referer = request.getHeader("Referer");
+          if (repository.deleteData(userId)) {
+               session.setAttribute("alertMessage", "Deleted Successfully!");
+               session.setAttribute("alertType", "success");
+               return "redirect:" + referer;
+
+          } else {
+               session.setAttribute("alertMessage", "Deletition Failed!");
+               session.setAttribute("alertType", "error");
+          }
+
+          return "redirect:" + referer;
+     }
+
+     @GetMapping(value = "/user/{status}")
+     @ResponseBody
+     public String changeStatus(@PathVariable("status") String status, @RequestParam("userId") long userId,
+               HttpSession session,
+               HttpServletRequest request) {
+          String referer = request.getHeader("Referer");
+
+          if (!status.isEmpty() || !status.isBlank()) {
+               String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
+               // changing status based on the input
+               if (repository.changeAccountStatus(capitalizeS, userId)) {
+
+                    String sessionMesssage = (capitalizeS.contains("Active")) ? "Undoing Successfully."
+                              : "Deleted Temporary.";
+                    session.setAttribute("alertMessage", sessionMesssage);
+                    session.setAttribute("alertType", "success");
+                    return "redirect:" + referer;
+
+               } else {
+                    session.setAttribute("alertMessage", "Deletition Failed!");
+                    session.setAttribute("alertType", "error");
+               }
+          } else {
+               session.setAttribute("alertMessage", "Deleting / Changing Status Failed!");
+               session.setAttribute("alertType", "error");
+          }
+
+          return "redirect:" + referer;
+     }
+
+     @GetMapping("/user/update")
+     @ResponseBody
+     public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
+          model.addAttribute("users", repository.findOneUserById(id));
+
+          return repository.findOneUserById(id);
      }
 
      public String saveWithRestriction(Users user, HttpSession session, int action) {
@@ -141,7 +243,7 @@ public class AdminController {
 
                     try {
                          repository.saveUsersAccount(user);
-                         session.setAttribute("alertMessage", "Row, Updated Successfully!");
+                         session.setAttribute("alertMessage", "Updated Successfully!");
                          session.setAttribute("alertType", "success");
                     } catch (Exception e) {
                          error = e.getMessage();
@@ -159,30 +261,6 @@ public class AdminController {
 
           }
           return endPoint;
-     }
-
-     @GetMapping(value = "/user/delete/")
-     public String deleteUsers(@RequestParam("userId") long userId, HttpSession session, HttpServletRequest request) {
-          String referer = request.getHeader("Referer");
-          if (repository.deleteData(userId)) {
-               session.setAttribute("alertMessage", "Row, Deleted Successfully!");
-               session.setAttribute("alertType", "success");
-               return "redirect:" + referer;
-
-          } else {
-               session.setAttribute("alertMessage", "Deletition Failed!");
-               session.setAttribute("alertType", "error");
-          }
-
-          return "redirect:" + referer;
-     }
-
-     @GetMapping("/user/update")
-     @ResponseBody
-     public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
-          model.addAttribute("users", repository.findOneUserById(id));
-
-          return repository.findOneUserById(id);
      }
 
 }

@@ -16,8 +16,8 @@ public class MainServiceImpl implements AdminService {
      adminRepository repository;
 
      @Override
-     public List<Users> diplayAllAccounts(String type) {
-          return repository.findAllByType(type);
+     public List<Users> diplayAllAccounts(String status, String type) {
+          return repository.findAllByStatusAndType(status, type);
      }
 
      @Override
@@ -25,6 +25,15 @@ public class MainServiceImpl implements AdminService {
           System.out.println(findOneUserById(userId).size());
           if (findOneUserById(userId).size() > 0) {
                repository.deleteById(userId);
+               return true;
+          }
+          return false;
+     }
+
+     @Override
+     public boolean changeAccountStatus(String status, long userId) {
+          if (findOneUserById(userId).size() > 0) {
+               repository.changeStatusOfUser(status, userId);
                return true;
           }
           return false;
@@ -49,13 +58,13 @@ public class MainServiceImpl implements AdminService {
      }
 
      @Override
-     public List<Users> findOneUserById(long id) {
-          return repository.findByuserId(id);
+     public List<Users> findOneUserById(long userId) {
+          return repository.findByuserId(userId);
      }
 
      @Override
-     public int displayCounts(String type) {
-          return repository.countUsers(type);
+     public int displayCountsByStatusAndType(String status, String type) {
+          return repository.totalUsers(status, type);
      }
 
 }
