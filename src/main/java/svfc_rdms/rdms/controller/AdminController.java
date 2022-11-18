@@ -202,65 +202,79 @@ public class AdminController {
      public String saveWithRestriction(Users user, HttpSession session, int action) {
           String error = "";
           String endPoint = "";
-          if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
-               error = "Some value are empty, Invalid Values";
-          } else if (user.getUsername() == null || user.getUsername().length() < 1 || user.getUsername().isEmpty()) {
-               error = "Some value are empty, Invalid Values";
-          } else if (user.getPassword() == null || user.getPassword().length() < 1 || user.getPassword().isEmpty()) {
-               error = "Some value are empty, Invalid Values";
-          } else {
-               String userIdFormat = user.getUsername().toUpperCase();
+          try {
+               if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
+                    error = "Some value are empty, Invalid Values";
+               } else if (user.getUsername() == null || user.getUsername().length() < 1
+                         || user.getUsername().isEmpty()) {
+                    error = "Some value are empty, Invalid Values";
+               } else if (user.getPassword() == null || user.getPassword().length() < 1
+                         || user.getPassword().isEmpty()) {
+                    error = "Some value are empty, Invalid Values";
+               } else {
+                    String userIdFormat = user.getUsername().toUpperCase();
 
-               user.setStatus("Active");
-               if (userIdFormat.contains("C")) {
-                    endPoint = "/students";
-                    user.setType("Student");
-               } else if (userIdFormat.contains("F-")) {
-                    endPoint = "/facilitators";
-                    user.setType("Facilitator");
-               } else if (userIdFormat.contains("R-")) {
-                    endPoint = "/registrars";
-                    user.setType("Registrar");
-               } else if (userIdFormat.contains("T-")) {
-                    endPoint = "/teachers";
-                    user.setType("Teacher");
-               }
-
-               if (action == 0) {
-                    if (repository.findUserName(userIdFormat.toLowerCase())) {
-                         error = "Username is already taken, Please try again!";
-                         session.setAttribute("alertType", "error");
-                         session.setAttribute("alertMessage", error);
-
-                         return "redirect:" + endPoint + "?error=Invalid Inputs";
-                    } else {
-                         repository.saveUsersAccount(user);
-                         session.setAttribute("alertMessage", "Account Inserted!");
-                         session.setAttribute("alertType", "success");
-                         return "redirect:" + endPoint;
+                    user.setStatus("Active");
+                    if (userIdFormat.contains("C")) {
+                         endPoint = "/students";
+                         user.setType("Student");
+                    } else if (userIdFormat.contains("F-")) {
+                         endPoint = "/facilitators";
+                         user.setType("Facilitator");
+                    } else if (userIdFormat.contains("R-")) {
+                         endPoint = "/registrars";
+                         user.setType("Registrar");
+                    } else if (userIdFormat.contains("T-")) {
+                         endPoint = "/teachers";
+                         user.setType("Teacher");
                     }
-               } else if (action == 1) {
 
-                    try {
-                         repository.saveUsersAccount(user);
-                         session.setAttribute("alertMessage", "Updated Successfully!");
-                         session.setAttribute("alertType", "success");
-                    } catch (Exception e) {
-                         error = e.getMessage();
-                         if (error.contains("ConstraintViolationException")) {
-
+                    if (action == 0) {
+                         if (repository.findUserName(userIdFormat.toLowerCase())) {
+                              error = "Username is already taken, Please try again!";
                               session.setAttribute("alertType", "error");
-                              session.setAttribute("alertMessage",
-                                        "Updating Failed!. Username is already taken, Please try again!");
+                              session.setAttribute("alertMessage", error);
 
+                              return "redirect:" + endPoint + "?error=Invalid Inputs";
+                         } else {
+                              repository.saveUsersAccount(user);
+                              session.setAttribute("alertMessage", "Account Inserted!");
+                              session.setAttribute("alertType", "success");
+                              return "redirect:" + endPoint;
                          }
+                    } else if (action == 1) {
+
+                         try {
+                              repository.saveUsersAccount(user);
+                              session.setAttribute("alertMessage", "Updated Successfully!");
+                              session.setAttribute("alertType", "success");
+                         } catch (Exception e) {
+                              error = e.getMessage();
+                              if (error.contains("ConstraintViolationException")) {
+
+                                   session.setAttribute("alertType", "error");
+                                   session.setAttribute("alertMessage",
+                                             "Updating Failed!. Username is already taken, Please try again!");
+
+                              }
+                         }
+                         return "redirect:" + endPoint;
+
                     }
-                    return "redirect:" + endPoint;
 
                }
+          } catch (Exception e) {
+               error = e.getMessage();
+               if (error.contains("ConstraintViolationException")) {
 
+                    session.setAttribute("alertType", "error");
+                    session.setAttribute("alertMessage",
+                              "Updating Failed!. Username is already taken, Please try again!");
+
+               }
           }
-          return endPoint;
+
+          return "redirect:" + endPoint;
      }
 
 }

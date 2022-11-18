@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.adminRepository;
+import svfc_rdms.rdms.repository.AdminRepository;
 import svfc_rdms.rdms.service.AdminService;
 
 @Service
 public class MainServiceImpl implements AdminService {
 
      @Autowired
-     adminRepository repository;
+     AdminRepository repository;
 
      @Override
      public List<Users> diplayAllAccounts(String status, String type) {
