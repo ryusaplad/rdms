@@ -29,7 +29,9 @@
 
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+<button type="button" class="btn btn-dark text-white w-100"><span class=" fa-solid fa-bell"></span></button>
             <li class="nav-item dropdown">
+                
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><img thsrc="@{images/userImages.png}" src="images/userImage.png" alt=""
                         srcset="" class="rounded img-responsive border border-white rounded-circle"
@@ -127,14 +129,19 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             All Activity Logs
                         </a>
-                        <div class="sb-sidenav-menu-heading">View All Requests</div>
+                        <div class="sb-sidenav-menu-heading">Manage Requests</div>
                         <a class="nav-link" href="/all_request">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Requests Lists
                         </a>
+<div class="sb-sidenav-menu-heading">Manage Documents</div>
+<a class="nav-link" href="/add_documents">
+    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+    Add Documents
+</a>
                         <div class="sb-sidenav-menu-heading">Settings</div>
                         <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                             Connection Settings
 
                         </a>
@@ -150,21 +157,29 @@
 
         <div id="layoutSidenav_content">
             <main>
+            
                 <div class="container">
                     <h1 class="mt-4">Select Requests</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                         <li class="breadcrumb-item active">Requests</li>
                     </ol>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <div class="d-flex flex-row-reverse">
+                                <div class=""><a href="/add-documents" class="btn btn-primary ">Add Documents</a></div>
+                    
+                            </div>
+                        </div>
+                        <div class="card-body">
                     <div class="row">
                         <div class="col-sm">
                             <div class="card pagesCards">
                                 <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-
+                    
                                     <a href="#!">
                                         <div class="imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-                                            <img th:src="@{images/.jpg}" src="images/studentImageTest"
-                                                class="img-fluid" />
+                                            <img th:src="@{images/.jpg}" src="images/studentImageTest" class="img-fluid" />
                                         </div>
                                     </a>
                                 </div>
@@ -175,6 +190,7 @@
                                 </div>
                             </div>
                         </div>
+                    
                         <div class="col-sm">
                             <div class="card pagesCards">
                                 <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
@@ -196,9 +212,9 @@
                                 <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                     <a href="#!">
                                         <div class=" imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-
+                    
                                             <img th:src="@{images/.png}" src="images/registrar" class="img-fluid " />
-
+                    
                                         </div>
                                     </a>
                                 </div>
@@ -214,9 +230,9 @@
                                 <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                     <a href="#!">
                                         <div class=" imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-
+                    
                                             <img th:src="@{images/.png}" src="images/teacher" class="img-fluid " />
-
+                    
                                         </div>
                                     </a>
                                 </div>
@@ -228,6 +244,8 @@
                             </div>
                         </div>
                     </div>
+                        </div>
+                        </div>
                 </div>
             </main>
 

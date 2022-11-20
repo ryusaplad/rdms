@@ -27,7 +27,9 @@ public class UsersRequest {
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "request_sequence")
      private long requestId;
 
-     private String requestDocument; // what document? / COM/COR/ID/GRADES/
+     @ManyToOne
+     @JoinColumn(name = "request_document", referencedColumnName = "documentId")
+     private Documents requestDocument; // what document? / COM/COR/ID/GRADES/
      // the name of requestor is in the requestBy
      private String yrAnCourse;
      private String semester; // What semester the document needed?
@@ -60,4 +62,45 @@ public class UsersRequest {
      @JoinColumn(name = "request_by", referencedColumnName = "userId")
      private Users requestBy; // One User to many Request
 
+     /*
+      * Important logic for this requesting do this with thymeleaf
+      * 
+      * 
+      * if Request document is equal to id
+      * # Requirements
+      * - Student Id(userId)
+      * - Student Name(name)
+      * - ID Picture (UserFiles)
+      * 
+      * --Can be found on this class--
+      * - Yr/Course
+      * - Semester
+      * #End
+      * ----------------------------
+      * if Request document is equal to COR / COM
+      * #Requirements
+      * - Student Id(userId)
+      * - Student Name(name)
+      * 
+      * --Can be found on this class--
+      * - Yr/Course
+      * - Semester
+      * ---
+      * - Signature(file)
+      * #End
+      * ----------------------------
+      * if rrequest document is equal to grades
+      * - Student Id(userId)
+      * - Student Name(name)
+      * --Can be found on this class--
+      * - Yr/Course
+      * - Semester
+      * - list of subjects
+      * - list of professors
+      * ---
+      * - Signature(file)
+      * #End
+      * ----------------------------
+      * 
+      */
 }

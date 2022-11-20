@@ -72,7 +72,7 @@ public class AdminController {
 
      @GetMapping("/students")
      public String studentAccounts_View(Model model) {
-          model.addAttribute("title", "Deleted Students Accounts");
+          model.addAttribute("title", "Students Accounts");
           model.addAttribute("userIdFormat", "C- / c-");
           model.addAttribute("users", new Users());
           model.addAttribute("hide", false);

@@ -29,6 +29,7 @@
 
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+<button type="button" class="btn btn-dark text-white w-100"><span class=" fa-solid fa-bell"></span></button>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><img thsrc="@{images/userImages.png}" src="images/userImage.png" alt=""
@@ -127,14 +128,19 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             All Activity Logs
                         </a>
-                        <div class="sb-sidenav-menu-heading">View All Requests</div>
+                        <div class="sb-sidenav-menu-heading">Manage Requests</div>
                         <a class="nav-link" href="/all_request">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Requests Lists
                         </a>
+<div class="sb-sidenav-menu-heading">Manage Documents</div>
+<a class="nav-link" href="/add_documents">
+    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+    Add Documents
+</a>
                         <div class="sb-sidenav-menu-heading">Settings</div>
                         <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                             Connection Settings
 
                         </a>

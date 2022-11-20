@@ -44,6 +44,8 @@ public class Users {
      private String type;
      // temporarily remove / permanently deleted / active
      private String status;
+     @Column(name = "profile_image", columnDefinition = "LONGBLOB")
+     private byte profilePicture;
 
      @OneToMany(mappedBy = "requestBy")
      private List<UsersRequest> requests;

@@ -29,6 +29,7 @@
 
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+<button type="button" class="btn btn-dark text-white w-100"><span class=" fa-solid fa-bell"></span></button>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><img thsrc="@{images/userImages.png}" src="images/userImage.png" alt=""
@@ -127,14 +128,19 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             All Activity Logs
                         </a>
-                        <div class="sb-sidenav-menu-heading">View All Requests</div>
+                        <div class="sb-sidenav-menu-heading">Manage Requests</div>
                         <a class="nav-link" href="/all_request">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Requests Lists
                         </a>
+                        <div class="sb-sidenav-menu-heading">Manage Documents</div>
+                        <a class="nav-link" href="/add_documents">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Add Documents
+                        </a>
                         <div class="sb-sidenav-menu-heading">Settings</div>
                         <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                             Connection Settings
 
                         </a>
@@ -168,28 +174,24 @@
                             <table id="datatablesSimple" class="text-center">
                                 <thead>
                                     <tr>
-                                        <th>Count</th>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>From</th>
-                                        <th>To</th>
-                                        <th>Concerns</th>
-                                        <th>Date</th>
-                                        <th>Files</th>
+                                        <th>ID</th>
+                                        <th>Request By(ID)</th>
+                                        <th>Documents</th>
+                                        <th>Manage By</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
+
+
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     <tr>
-                                        <td>1</td>
-                                        <td>none</td>
-                                        <td>none</td>
-                                        <td>john</td>
-                                        <td>doe</td>
-                                        <td>"C-1 Grades"</td>
-                                        <td>00/00/0000</td>
-                                        <td>File.txt</td>
+                                        <td>Request-0</td>
+                                        <td>C-000000</td>
+                                        <td>COM, COR</td>
+                                        <td>Facilitator</td>
+                                        <td>Pending</td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-sm">
@@ -200,28 +202,68 @@
 
                                                 </div>
                                                 <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-success w-100">Download</a>
+                                                    <a data-bs-toggle="modal" data-bs-target="#detailModal" type="button" class="btn btn-success w-100">
+                                                        Details</a>
 
                                                 </div>
 
                                             </div>
-                                            </td>
-                                            </tr>
-                                            </tbody>
-                                            </table>
-                                            </div>
-                                            </div>
-                                            </div>
+                                        </td>
+                                        </tr>
+                                        </tbody>
+                                        </table>
+                                        </div>
+                                        </div>
+                                        </div>
             </main>
 
         </div>
 
+    </div>
+    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
+        aria-labelledby="detailModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModal">
+                        <span id="titleVal">More Details</span>
+                    </h5>
+                    <button type="button" class="close" style="border: 1px solid white; background-color:red; color:white;"
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="font-weight-bold">Request ID : 0</p>
+                    <p class="font-weight-bold">Request By: C-000000</p>
+                    <p class="font-weight-bold">Student Name: John Doe</p>
+                    <p class="font-weight-bold">Year: 4th year</p>
+                    <p class="font-weight-bold">Course: Bachelor of Science in Information Technology (BSIT)</p>
+                    <hr>
+                    <p class="font-weight-bold">Request Documents: COM, COR</p>
+                    <p class="font-weight-bold">Requirement Status:(Incomplete/Complete/Invalid)</p>
+                    <hr>
+                    <p class="font-weight-bold">Status : Pending/Ongoing/Compeleted</p>
+                    <hr>
+                    <p class="font-weight-bold">Manage By: Facilitator</p>
+                    <hr>
+                    <p class="font-weight-bold">Date of Request: 00/00/2022</p>
+                    <p class="font-weight-bold">Date of Released: 00/00/2022</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    
+                </div>
+    
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{js/scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/latest.js}"></script>
     <script type="text/javascript" th:src="@{js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{js/popper.js}"></script>
     <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
 
 </body>

@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user_files")
+@Table(name = "files")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class UserFiles {
      @Id
      @SequenceGenerator(name = "file_sequence", sequenceName = "file_sequence", allocationSize = 1)
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_sequence")
-     private int fId;
+     private long fId;
      private String name;
      private String size;
      @Column(name = "file", columnDefinition = "LONGBLOB")
