@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+     <meta charset="utf-8" />
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+     <meta name="description" content="" />
+     <meta name="author" content="" />
+     <link th:href="@{/css/userpageCSS/jquery.steps.css}" rel="stylesheet" />
+     <link th:href="@{/css/userpageCSS/steps.css}" rel="stylesheet" />
+     <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
+
+     <title></title>
+</head>
+
+<body>
+
+     <div class="page-wrapper">
+          <!-- ============================================================== -->
+          <!-- Bread crumb and right sidebar toggle -->
+          <!-- ============================================================== -->
+          <div class="page-breadcrumb">
+               <div class="row">
+                    <div class="col-12 d-flex no-block align-items-center">
+                         <h4 class="page-title">Request <strong
+                                   th:text="${#strings.toUpperCase(documentType)}"></strong>
+                         </h4>
+                         <div class="ms-auto text-end">
+                              <nav aria-label="breadcrumb">
+                                   <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Request</li>
+                                   </ol>
+                              </nav>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <!-- ============================================================== -->
+          <!-- End Bread crumb and right sidebar toggle -->
+          <!-- ============================================================== -->
+          <!-- ============================================================== -->
+          <!-- Container fluid  -->
+          <!-- ============================================================== -->
+          <div class="container-fluid">
+               <!-- ============================================================== -->
+               <!-- Start Page Content -->
+               <!-- ============================================================== -->
+               <div th:if="${documentType} == 'id'">
+
+                    <div class="card">
+                         <div class="card-body wizard-content">
+                              <h4 class="card-title">Request Form - <strong
+                                        th:text="${#strings.toUpperCase(documentType)}"></strong></h4>
+                              <p><b class="text-danger">(*) all fields are required</b></p>
+                              <h6 class="card-subtitle"></h6>
+                              <form id="form" method="POST" th:action="${documentType} +'/sent'" class="mt-5">
+                                   <div>
+                                        <h3>Information</h3>
+                                        <section>
+                                             <label for="studId">Student Id *</label>
+                                             <input id="studId" name="userId" type="text" class="required form-control">
+                                             <label for="studName">Student Name *</label>
+                                             <input id="studName" name="name" type="text" class="required form-control">
+                                             <label for="year">Year *</label>
+                                             <select id="year" name="year" class="required form-control">
+                                                  <option value="1ST YEAR">1ST YEAR</option>
+                                                  <option value="2ND YEAR">2ND YEAR</option>
+                                                  <option value="3RD YEAR">3RD YEAR</option>
+                                                  <option value="4TH YEAR">4TH YEAR</option>
+                                                  <option value="5TH YEAR">5TH YEAR</option>
+                                             </select>
+                                             <label for="course">Course *</label>
+                                             <select id="course" name="course" class="required form-control">
+                                                  <option value="BSIT">BSIT</option>
+                                                  <option value="BPAD">BPAD</option>
+                                                  <option value="BSHM">BSHM</option>
+                                             </select>
+                                             <label for="semester">Semester *</label>
+                                             <select id="semester" name="semester" class="required form-control">
+                                                  <option value="1ST SEMESTER">1ST SEMESTER</option>
+                                                  <option value="2ND SEMESTER">2ND SEMESTER</option>
+
+                                             </select>
+
+
+                                             <p>(*) Mandatory</p>
+                                        </section>
+                                        <h3>Requirements</h3>
+                                        <section>
+
+
+                                             <div class="container text-center ">
+                                                  <div class="row">
+                                                       <div class="col-sm">
+                                                            <label for="idRequirement">Upload Id Picture *</label>
+                                                            <div
+                                                                 class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+
+                                                                 <input id="idRequirement" type="file"
+                                                                      name="idRequirement" onchange="readURL(this,1);"
+                                                                      class="required form-control border-0   "
+                                                                      accept="image/png,image/jpeg">
+                                                            </div>
+                                                       </div>
+                                                       <div class="col-sm">
+                                                            <p class="font-italic text-dark text-center">Preview</p>
+                                                            <div class="image-area">
+                                                                 <img id="idResult" style="height: 250px; width: 100%;"
+                                                                      src="#" alt=""
+                                                                      class="img-fluid rounded shadow-sm mx-auto d-block border border-dark">
+                                                            </div>
+
+                                                       </div>
+
+                                                       <div class="col-sm">
+                                                            <label for="signatureRequirement">Upload Signature Image
+                                                                 *</label>
+                                                            <div
+                                                                 class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+
+                                                                 <input id="signatureRequirement" type="file"
+                                                                      name="signatureRequirement"
+                                                                      onchange="readURL(this,2);"
+                                                                      class="required form-control border-0   "
+                                                                      accept="image/png,image/jpeg">
+                                                            </div>
+                                                       </div>
+                                                       <div class="col-sm">
+                                                            <p class="font-italic text-dark text-center">Preview</p>
+                                                            <div class="image-area">
+                                                                 <img id="signatureResult"
+                                                                      style="height: 250px; width: 100%;" src="#" alt=""
+                                                                      class="img-fluid rounded shadow-sm mx-auto d-block border border-dark">
+                                                            </div>
+
+                                                       </div>
+                                                  </div>
+                                             </div>
+
+
+                                        </section>
+                                        <h3>Summary</h3>
+                                        <section>
+                                             <ul>
+                                                  <li>xxxx</li>
+                                                  <li>xxxx</li>
+                                                  <li>xxxx</li>
+                                                  <li>xxxx</li>
+                                                  <li>xxxx</li>
+                                             </ul>
+                                        </section>
+                                        <h3>Finish</h3>
+                                        <section>
+                                             <h1>completed</h1>
+                                        </section>
+                                   </div>
+                              </form>
+                         </div>
+                    </div>
+               </div>
+               <div th:if="${documentType} == 'com-cor'">
+
+                    <div class="card">
+                         <form id="form" class="form-horizontal">
+                              <div class="card-body">
+                                   <h4 class="card-title">Request Form - <strong
+                                             th:text="${#strings.toUpperCase(documentType)}"></strong></h4>
+                                   <p><b class="text-danger">(*) all fields are required</b></p>
+                                   <label for="studId">Student Id *</label>
+                                   <input id="studId" name="userId" type="text" class="required form-control">
+                                   <label for="studName">Student Name *</label>
+                                   <input id="studName" name="name" type="text" class="required form-control">
+                                   <label for="year">Year *</label>
+                                   <select id="year" name="year" class="required form-control">
+                                        <option value="1ST YEAR">1ST YEAR</option>
+                                        <option value="2ND YEAR">2ND YEAR</option>
+                                        <option value="3RD YEAR">3RD YEAR</option>
+                                        <option value="4TH YEAR">4TH YEAR</option>
+                                        <option value="5TH YEAR">5TH YEAR</option>
+                                   </select>
+                                   <label for="course">Course *</label>
+                                   <select id="course" name="course" class="required form-control">
+                                        <option value="BSIT">BSIT</option>
+                                        <option value="BPAD">BPAD</option>
+                                        <option value="BSHM">BSHM</option>
+                                   </select>
+                                   <label for="semester">Semester *</label>
+                                   <select id="semester" name="semester" class="required form-control">
+                                        <option value="1ST SEMESTER">1ST SEMESTER</option>
+                                        <option value="2ND SEMESTER">2ND SEMESTER</option>
+
+                                   </select>
+
+
+                                   <label for="message">Message</label>
+                                   <textarea id="message"
+                                        placeholder="Add message here, ex: I need COM and COR for scholarship."
+                                        class="form-control"></textarea>
+                                   <p>(*) Mandatory</p>
+                              </div>
+
+
+
+
+                              <div class="border-top">
+                                   <div class="card-body">
+                                        <button type="button" class="btn btn-primary">Submit</button>
+                                   </div>
+                              </div>
+                         </form>
+                    </div>
+
+
+               </div>
+               <div th:if="${documentType} == 'grades'">
+                    <div class="card">
+                         <form id="form" class="form-horizontal">
+                              <div class="card-body">
+                                   <h4 class="card-title">Request Form - <strong
+                                             th:text="${#strings.toUpperCase(documentType)}"></strong>
+                                   </h4>
+                                   <p><b class="text-danger">(*) all fields are required</b></p>
+                                   <label for="studId">Student Id *</label>
+                                   <input id="studId" name="userId" type="text" class="required form-control">
+                                   <label for="studName">Student Name *</label>
+                                   <input id="studName" name="name" type="text" class="required form-control">
+                                   <label for="year">Year *</label>
+                                   <select id="year" name="year" class="required form-control">
+                                        <option value="1ST YEAR">1ST YEAR</option>
+                                        <option value="2ND YEAR">2ND YEAR</option>
+                                        <option value="3RD YEAR">3RD YEAR</option>
+                                        <option value="4TH YEAR">4TH YEAR</option>
+                                        <option value="5TH YEAR">5TH YEAR</option>
+                                   </select>
+                                   <label for="course">Course *</label>
+                                   <select id="course" name="course" class="required form-control">
+                                        <option value="BSIT">BSIT</option>
+                                        <option value="BPAD">BPAD</option>
+                                        <option value="BSHM">BSHM</option>
+                                   </select>
+                                   <label for="semester">Semester *</label>
+                                   <select id="semester" name="semester" class="required form-control">
+                                        <option value="1ST SEMESTER">1ST SEMESTER</option>
+                                        <option value="2ND SEMESTER">2ND SEMESTER</option>
+
+                                   </select>
+
+                                   <label for="message">Message</label>
+                                   <textarea id="message" placeholder="Please add list of subjects and professors here!"
+                                        class=" required form-control"></textarea>
+                                   <p>(*) Mandatory</p>
+                              </div>
+
+
+
+
+                              <div class="border-top">
+                                   <div class="card-body">
+                                        <button type="button" class="btn btn-primary">Submit</button>
+                                   </div>
+                              </div>
+                         </form>
+                    </div>
+
+               </div>
+               <div th:if="${documentType != 'id' && documentType != 'com-cor' && documentType  != 'grades'}">
+                    <h1>Contact the administator to add new document</h1>
+                    <a href="#" class="btn btn-primary">Contact</a>
+               </div>
+          </div>
+
+     </div>
+
+
+</body>
+<script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/sparkline.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/jquery.steps.min.js}"></script>
+
+<script>
+
+
+     /*  ==========================================
+         SHOW UPLOADED IMAGE
+     * ========================================== */
+     function readURL(input, option) {
+          if (option == 1) {
+               if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    console.log(reader);
+                    reader.onload = function (e) {
+                         $('#idResult')
+                              .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+               }
+          } else if (option == 2) {
+               if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    console.log(reader);
+                    reader.onload = function (e) {
+                         $('#signatureResult')
+                              .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+               }
+          }
+
+     }
+
+
+
+     $(function () {
+          $('#idRequirement').on('change', function () {
+               readURL(idInput, 1);
+          });
+     });
+
+     $(function () {
+          $('#signatureRequirement').on('change', function () {
+               readURL(signature, 2);
+          });
+     });
+
+     /*  ==========================================
+         SHOW UPLOADED IMAGE NAME
+     * ========================================== */
+     var idInput = document.getElementById('idRequirement');
+     var signature = document.getElementById('signatureRequirement');
+     var infoArea = document.getElementById('upload-label');
+
+     idInput.addEventListener('change', showFileName);
+     function showFileName(event) {
+          var idInput = event.srcElement;
+          var fileName = idInput.files[0].name;
+          infoArea.textContent = 'File name: ' + fileName;
+     }
+
+     signature.addEventListener('change', showFileName);
+     function showFileName(event) {
+          var signature = event.srcElement;
+          var fileName = signature.files[0].name;
+          infoArea.textContent = 'File name: ' + fileName;
+     }
+
+     // Basic Example with form
+     var form = $("#form");
+     form.validate({
+          errorPlacement: function errorPlacement(error, element) { element.before(error); },
+          rules: {
+               confirm: {
+                    equalTo: "#password"
+               }
+          }
+     });
+
+     form.children("div").steps({
+          headerTag: "h3",
+          bodyTag: "section",
+          transitionEffect: "slideLeft",
+          onStepChanging: function (event, currentIndex, newIndex) {
+               form.validate().settings.ignore = ":disabled,:hidden";
+               return form.valid();
+          },
+          onFinishing: function (event, currentIndex) {
+               form.validate().settings.ignore = ":disabled";
+               return form.valid();
+          },
+          onFinished: function (event, currentIndex) {
+               form.submit();
+          }
+     });
+
+
+</script>
+
+</html>

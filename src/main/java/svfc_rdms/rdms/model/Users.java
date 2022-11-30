@@ -48,11 +48,17 @@ public class Users {
      private byte profilePicture;
 
      @OneToMany(mappedBy = "requestBy")
-     private List<UsersRequest> requests;
+     private List<RegistrarRequest> requests;
+
+     @OneToMany(mappedBy = "requestBy")
+     private List<StudentRequest> studentRequest;
 
      @OneToMany(mappedBy = "from")
      private List<Notifications> from;
 
      @OneToMany(mappedBy = "to")
      private List<Notifications> to;
+
+     @OneToMany(mappedBy = "requestTo")
+     private List<RegistrarRequest> requestTo;
 }

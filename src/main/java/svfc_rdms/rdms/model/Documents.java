@@ -28,7 +28,7 @@ public class Documents {
      private String title;
      private String description;
      @Column(name = "image", columnDefinition = "LONGBLOB")
-     private byte image;
+     private byte[] image;
      private boolean status;
 
 }

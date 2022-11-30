@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title th:text="${title}"></title>
+
+    <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
+    <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
+
+    <script type="text/javascript" th:src="@{js/all.js}"></script>
+
+</head>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="/admin">Admin - RDMS</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+                class="fas fa-bars"></i></button>
+        <div class="input-group">
+
+        </div>
+
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <button type="button" class="btn btn-dark text-white w-100"><span class=" fa-solid fa-bell"></span></button>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false"><img thsrc="@{images/userImages.png}" src="images/userImage.png" alt=""
+                        srcset="" class="rounded img-responsive border border-white rounded-circle"
+                        style=" width:35px"></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#!">My Profile</a></li>
+
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <a class="nav-link" href="/admin">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Actions</div>
+                        <!-- Manage Facilitator -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#faciDropDown"
+                            aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Manage Facilitator
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="faciDropDown" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
+                                <a class="nav-link" href="/facilitators-deleted">Deleted Facilitators</a>
+                                <a class="nav-link" href="#">Facilitators Page</a>
+                            </nav>
+                        </div>
+                        <!-- Manage Registrar -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#regDropDown"
+                            aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Manage Registrar
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="regDropDown" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/registrars">View / Add Registrar</a>
+
+                                <a class="nav-link" href="/registrars-deleted">Deleted Registrars</a>
+                                <a class="nav-link" href="#">Registrars Page</a>
+                            </nav>
+                        </div>
+                        <!-- Manage Teachers -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#teachDropDown"
+                            aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Manage Teachers
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="teachDropDown" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/teachers">View / Add Teachers</a>
+
+
+                                <a class="nav-link" href="/teachers-deleted">Deleted Teachers</a>
+                                <a class="nav-link" href="#">Teachers Page</a>
+                            </nav>
+                        </div>
+                        <!-- Manage Students -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#studDropDown"
+                            aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Manage Students
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="studDropDown" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/students">View / Add Students</a>
+                                <a class="nav-link" href="students-deleted">Deleted Students</a>
+                                <a class="nav-link" href="#">Students Page</a>
+                            </nav>
+                        </div>
+
+
+                        <div class="sb-sidenav-menu-heading">Auditory</div>
+                        <a class="nav-link" href="/admin_logs">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            All Activity Logs
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Manage Requests</div>
+                        <a class="nav-link" href="/all_request">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Requests Lists
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Manage Documents</div>
+                        <a class="nav-link" href="/add-documents">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Add Documents
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Settings</div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
+                            Connection Settings
+
+                        </a>
+
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged in as: Admin</div>
+
+                </div>
+            </nav>
+        </div>
+
+        <div id="layoutSidenav_content">
+            <main>
+
+                <div class="container-fluid px-4">
+
+                    <h1 class="mt-4" th:text="${title}"></h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        <li class="breadcrumb-item active" th:text="${title}"></li>
+                    </ol>
+                    <div th:if="${session.alertType=='error'}">
+                        <div class="alert alert-warning alert-dismissible fade show" style="display:block" role="alert">
+                            <strong th:text="${session.alertMessage}"></strong>
+                            <button type="button" class="close bg-warning float-end" style="border:1px solid white"
+                                data-bs-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div th:if="${session.alertType=='success'}">
+                        <div class="alert alert-success alert-dismissible fade show" style="display:block" role="alert">
+                            <strong th:text="${session.alertMessage}"></strong>
+                            <button type="button" class="close bg-success float-end" style="border:1px solid white"
+                                data-bs-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Removing Something -->
+
+                    <div th:if="${session.alertMessage != null}">
+                        <div th:remove=" ${#session.removeAttribute('alertMessage')}"></div>
+                        <div th:remove=" ${#session.removeAttribute('alertType')}"></div>
+                    </div>
+                    <!-- Removing Something -->
+                    <div class="card mb-4">
+                        <div th:if="${!hide}">
+                            <div class="card-header">
+                                <div class="d-flex flex-row-reverse">
+                                    <div class=""><a data-bs-toggle="modal" data-bs-target="#registerModal"
+                                            class="btn btn-primary ">Add <span
+                                                th:text="${#strings.replace(title,'Accounts','')}"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple" class="text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Count</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr th:each="userList : ${usersLists}">
+                                        <td th:text="${userList.userId}"></td>
+                                        <td th:text="${userList.name}"></td>
+                                        <td th:text="${userList.username}"></td>
+                                        </td>
+                                        <td
+                                            th:text="${#strings.replace(userList.password,userList.password,'********')} ">
+                                        </td>
+
+                                        <td th:text="${userList.type}"></td>
+                                        <td th:text="${userList.status}"></td>
+                                        <td>
+                                            <div th:if="${!hide}">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <a th:href="@{/user/update/(userId=${userList.userId})}"
+                                                            type="button" class="edit btn btn-primary w-100">Edit</a>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <a th:href=" ${userList.userId}" type="button"
+                                                            class="delete btn btn-danger w-100">Delete</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div th:if="${hide}">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <a th:href="${userList.userId}" type="button"
+                                                            class="undo  btn btn-danger w-100">Undo</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+    </div>
+    <!-- Modal -->
+    <div th:if="${!hide}">
+        <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registerModal"><span id="titleVal" th:text="${title}"></span>
+                            Informations</h5>
+                        <button type="button" class="close"
+                            style="border: 1px solid white; background-color:red; color:white;" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/saveUser" th:object="${users}"
+                            onsubmit="return(validateAddingForm());">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Name:"
+                                    name="name" required>
+                            </div>
+                            <div class="alert alert-danger mt-2 font-weight-bold" role="alert" id="alertMessage1"
+                                style="display:none"></div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" th:field="*{username}" id="username"
+                                    th:placeholder="${userIdFormat}" name="username" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage2" style="display:none">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" th:field="*{password}" id="password"
+                                    placeholder="Password:" name="password" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage3" style="display:none">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPass">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPass"
+                                    placeholder="Confirm Password:" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage4" style="display:none">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save
+                            changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="updateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            role="dialog" aria-labelledby="updateModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateModal"><span id="titleVal" th:text="${title}"></span>
+                            Update Informations</h5>
+                        <button type="button" class="close"
+                            style="border: 1px solid white; background-color:red; color:white;" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" th:action="@{/updateUser}" th:object="${users}"
+                            onsubmit="return(validateAddingForm());" id="updateFormModal">
+                            <div class="form-group" style="display:none">
+                                <label for="name">userId</label>
+                                <input type="text" class="form-control" th:field="*{userId}" id="userIdEdit"
+                                    placeholder="userId:" name="userId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" th:field="*{name}" id="nameEdit"
+                                    placeholder="Name:" name="name" required>
+                            </div>
+                            <div class="alert alert-danger mt-2 font-weight-bold" role="alert" id="alertMessage1"
+                                style="display:none"></div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" th:field="*{username}" id="usernameEdit"
+                                    th:placeholder="${userIdFormat}" name="username" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage2" style="display:none">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" th:field="*{password}" id="passwordEdit"
+                                    placeholder="Password:" name="password" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage3" style="display:none">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPass">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassEdit"
+                                    placeholder="Confirm Password:" required>
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage4" style="display:none">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success save">Save
+                            changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Select Deleting Type</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal"
+                            style="border: 1px solid white; background-color:red; color:white;" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <ul>
+                            <li>If you choose <b>temporary</b>, the data will be saved in <u><b>deleted lists</b></u>
+                                and
+                                can be <b>undo</b>..</li>
+                        </ul>
+
+
+                        <ul>
+                            <li>If you choose <b>permanently</b>, the data will be <u><b>permanently deleted</b></u>
+                                and
+                                cannot be <b>undone</b>.
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-warning deleteTemporarily">Temporary</button>
+                        <button type="button" class="btn btn-danger deletePermanently">Permanently</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:if="${hide}">
+        <div class="modal fade" id="undoModal" tabindex="-1" role="dialog" aria-labelledby="undoModalLabel"
+            aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="undoModalLabel">Undoing Deleted Account.</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal"
+                            style="border: 1px solid white; background-color:red; color:white;" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+
+                        By <b>undoing</b>, this account will become <b>active and usable.</b>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-warning undoAccount">Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{js/scripts.js}"></script>
+    <script type="text/javascript" th:src="@{js/latest.js}"></script>
+    <script type="text/javascript" th:src="@{js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{js/popper.js}"></script>
+    <script type="text/javascript" th:src="@{js/account_adding.js}"></script>
+    <script type="text/javascript" th:src="@{js/modalsForAccounts.js}"></script>
+    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
+
+</body>
+
+</html>
