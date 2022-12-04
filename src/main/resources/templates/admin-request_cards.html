@@ -69,7 +69,7 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
-                                <a class="nav-link" href="/facilitators-deleted">Deleted Facilitators</a>
+                                <a class="nav-link" href="/facilitators-deleted/">Deleted Facilitators</a>
                                 <a class="nav-link" href="#">Facilitators Page</a>
                             </nav>
                         </div>
@@ -118,7 +118,7 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/students">View / Add Students</a>
-                                <a class="nav-link" href="students-deleted">Deleted Students</a>
+                                <a class="nav-link" href="/students-deleted">Deleted Students</a>
                                 <a class="nav-link" href="#">Students Page</a>
                             </nav>
                         </div>
@@ -189,7 +189,7 @@
                                         <div class="card-body">
                                             <h5 class="card-title" th:text="${documentList.title}"></h5>
                                             <p class="card-text" th:text="${documentList.description}"></p>
-                                            <a th:href="@{'/request'+${#strings.toLowerCase(documentList.title)}}"
+                                            <a th:href="@{'/request/'+${#strings.toLowerCase(documentList.title)}}"
                                                 class="btn btn-primary">Request This Document</a>
                                             <a th:href="@{'/delete-document-card?docid=' + ${documentList.documentId}}"
                                                 class="btn btn-danger">Delete</a>

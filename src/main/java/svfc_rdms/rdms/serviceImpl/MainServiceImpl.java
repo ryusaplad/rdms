@@ -30,8 +30,9 @@ public class MainServiceImpl implements AdminService {
 
      @Override
      public boolean deleteData(long userId) {
-
+         
           if (findOneUserById(userId).size() > 0) {
+              
                repository.deleteById(userId);
                return true;
           }

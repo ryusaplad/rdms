@@ -9,10 +9,10 @@
     <meta name="author" content="" />
     <title th:text="${title}"></title>
 
-    <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
-    <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
+    <link th:href="@{/css/dashboardStyle.css}" rel="stylesheet" />
+    <link th:href="@{/css/simple_data_tables.css}" rel="stylesheet" />
 
-    <script type="text/javascript" th:src="@{js/all.js}"></script>
+    <script type="text/javascript" th:src="@{/js/all.js}"></script>
 
 </head>
 
@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-dark text-white w-100"><span class=" fa-solid fa-bell"></span></button>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false"><img thsrc="@{images/userImages.png}" src="images/userImage.png" alt=""
+                    aria-expanded="false"><img thsrc="@{images/userImages.png}" src="/images/userImage.png" alt=""
                         srcset="" class="rounded img-responsive border border-white rounded-circle"
                         style=" width:35px"></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -68,7 +68,7 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
-                                <a class="nav-link" href="/facilitators-deleted">Deleted Facilitators</a>
+                                <a class="nav-link" href="/facilitators-deleted/">Deleted Facilitators</a>
                                 <a class="nav-link" href="#">Facilitators Page</a>
                             </nav>
                         </div>
@@ -99,8 +99,6 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/teachers">View / Add Teachers</a>
-
-
                                 <a class="nav-link" href="/teachers-deleted">Deleted Teachers</a>
                                 <a class="nav-link" href="#">Teachers Page</a>
                             </nav>
@@ -116,7 +114,7 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/students">View / Add Students</a>
-                                <a class="nav-link" href="students-deleted">Deleted Students</a>
+                                <a class="nav-link" href="/students-deleted">Deleted Students</a>
                                 <a class="nav-link" href="#">Students Page</a>
                             </nav>
                         </div>
@@ -158,7 +156,7 @@
 
                 <div class="container-fluid px-4">
 
-                    <h1 class="mt-4" th:text="${title}"></h1>
+                    <h1 id="main-title" class="mt-4" th:text="${title}"></h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                         <li class="breadcrumb-item active" th:text="${title}"></li>
@@ -177,6 +175,16 @@
                             <strong th:text="${session.alertMessage}"></strong>
                             <button type="button" class="close bg-success float-end" style="border:1px solid white"
                                 data-bs-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Error Display by ajax -->
+                    <div id="resultDiv" style="display:none">
+                        <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong id="resultMessage"></strong>
+                            <button id="buttonColor" type="button" class="close bg-success b float-end" style="border:1px solid white"
+                                aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -200,7 +208,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="datatablesSimple" class="text-center">
+                            <table id="datatablesSimple" class="text-center table">
                                 <thead>
                                     <tr>
                                         <th>Count</th>
@@ -213,7 +221,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="tableBody">
                                     <tr th:each="userList : ${usersLists}">
                                         <td th:text="${userList.userId}"></td>
                                         <td th:text="${userList.name}"></td>
@@ -233,7 +241,7 @@
                                                             type="button" class="edit btn btn-primary w-100">Edit</a>
                                                     </div>
                                                     <div class="col-sm">
-                                                        <a th:href=" ${userList.userId}" type="button"
+                                                        <a id="delete" th:href=" ${userList.userId}" type="button"
                                                             class="delete btn btn-danger w-100">Delete</a>
                                                     </div>
 
@@ -255,6 +263,7 @@
 
                                 </tbody>
                             </table>
+                            
                         </div>
                     </div>
                 </div>
@@ -279,8 +288,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="/saveUser" th:object="${users}"
-                            onsubmit="return(validateAddingForm());">
+                        <form id="form-insert" method="POST" action="/saveUser" th:object="${users}">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" th:field="*{name}" id="name" placeholder="Name:"
@@ -334,8 +342,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" th:action="@{/updateUser}" th:object="${users}"
-                            onsubmit="return(validateAddingForm());" id="updateFormModal">
+                        <form id="form-update" method="POST" th:action="@{/updateUser}" th:object="${users}">
                             <div class="form-group" style="display:none">
                                 <label for="name">userId</label>
                                 <input type="text" class="form-control" th:field="*{userId}" id="userIdEdit"
@@ -346,34 +353,33 @@
                                 <input type="text" class="form-control" th:field="*{name}" id="nameEdit"
                                     placeholder="Name:" name="name" required>
                             </div>
-                            <div class="alert alert-danger mt-2 font-weight-bold" role="alert" id="alertMessage1"
+                            <div class="alert alert-danger mt-2 font-weight-bold" role="alert" id="alertMessage5"
                                 style="display:none"></div>
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" th:field="*{username}" id="usernameEdit"
                                     th:placeholder="${userIdFormat}" name="username" required>
                             </div>
-                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage2" style="display:none">
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage6" style="display:none">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" th:field="*{password}" id="passwordEdit"
                                     placeholder="Password:" name="password" required>
                             </div>
-                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage3" style="display:none">
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage7" style="display:none">
                             </div>
                             <div class="form-group">
                                 <label for="confirmPass">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirmPassEdit"
                                     placeholder="Confirm Password:" required>
                             </div>
-                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage4" style="display:none">
+                            <div class="alert alert-danger mt-2" role="alert" id="alertMessage8" style="display:none">
                             </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success save">Save
-                            changes</button>
+                        <input type="submit" value="Save Changes" class="btn btn-success save">
                     </div>
                     </form>
                 </div>
@@ -445,15 +451,14 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
-    <script type="text/javascript" th:src="@{js/scripts.js}"></script>
-    <script type="text/javascript" th:src="@{js/latest.js}"></script>
-    <script type="text/javascript" th:src="@{js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{js/popper.js}"></script>
-    <script type="text/javascript" th:src="@{js/account_adding.js}"></script>
-    <script type="text/javascript" th:src="@{js/modalsForAccounts.js}"></script>
-    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
-
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/latest.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datatables-simple-demo.js}"> </script>
+    <script type="text/javascript" th:src="@{/js/account_adding.js}"></script>
+    <script type="text/javascript" th:src="@{/js/manage_account_js-ajax-jquery/adding_account.js}"></script>
 </body>
 
 </html>

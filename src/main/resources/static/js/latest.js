@@ -1378,6 +1378,7 @@
                 switch (t) {
                   case "page":
                     this.renderPage();
+
                     break;
                   case "pager":
                     this.renderPager();
@@ -2215,4 +2216,3 @@
     [2]
   )(2);
 });
-
