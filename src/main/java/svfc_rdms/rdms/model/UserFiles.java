@@ -27,12 +27,15 @@ public class UserFiles {
      @Id
      @SequenceGenerator(name = "file_sequence", sequenceName = "file_sequence", allocationSize = 1)
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_sequence")
-     private long fId;
+
+     private long fileId;
+
+     @Column(name = "file", columnDefinition = "LONGBLOB")
+
+     private byte[] data;
      private String name;
      private String size;
-     @Column(name = "file", columnDefinition = "LONGBLOB")
-     private byte[] data;
-     private boolean status; // active / deleted
+     private String status; // saved/ pending/
      private String dateUploaded;
 
      @ManyToOne(cascade = CascadeType.ALL)

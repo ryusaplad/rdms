@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,21 +15,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
+import svfc_rdms.rdms.repository.AdminRepository;
+import svfc_rdms.rdms.repository.Admin_DocumentRepository;
 import svfc_rdms.rdms.serviceImpl.MainServiceImpl;
+import svfc_rdms.rdms.serviceImpl.StudentServiceImpl;
 
 @Controller
 public class AdminController {
 
      @Autowired
      MainServiceImpl mainService;
+
+     @Autowired
+     StudentServiceImpl studService;
+
+     @Autowired
+     Admin_DocumentRepository docRepo;
+
+     @Autowired
+     AdminRepository adminRepo;
 
      // Get Mapping Method
      @GetMapping("/admin")
@@ -92,45 +108,40 @@ public class AdminController {
      }
 
      // Deleted pages
-     @GetMapping("/facilitators-deleted")
-     public String deletedFacilitators_View(Model model) {
-          model.addAttribute("title", "Deleted Facilitator Accounts");
-          model.addAttribute("hide", true);
-          model.addAttribute("users", null);
-          model.addAttribute("usersLists", mainService.diplayAllAccounts("Temporary", "Facilitator"));
-          return "/admin-view_accounts";
-     }
+     @GetMapping("/{userType}/deleted-accounts")
+     public String deletedFacilitators_View(@PathVariable String userType, Model model) {
 
-     @GetMapping("/registrars-deleted")
-     public String deletedRegistrars_View(Model model) {
-          model.addAttribute("title", "Deleted Registrar Accounts");
-          model.addAttribute("hide", true);
-          model.addAttribute("users", null);
-          model.addAttribute("usersLists", mainService.diplayAllAccounts("Temporary", "Registrar"));
-          return "/admin-view_accounts";
-     }
+          String title = "";
+          boolean hideToggle = false;
+          String dataStatus = "Temporary";
+          String accountType = userType;
 
-     @GetMapping("/teachers-deleted")
-     public String deletedTeachers_View(Model model) {
-          model.addAttribute("title", "Deleted Teachers Accounts");
-          model.addAttribute("hide", true);
-          model.addAttribute("users", null);
-          model.addAttribute("usersLists", mainService.diplayAllAccounts("Temporary", "Teacher"));
-          return "/admin-view_accounts";
-     }
+          if (accountType.equals("facilitator")) {
+               title = "Deleted Facilitator Accounts";
+               hideToggle = true;
+          } else if (accountType.equals("registrar")) {
+               title = "Deleted Registrar Accounts";
+               hideToggle = true;
+          } else if (accountType.equals("teacher")) {
+               title = "Deleted Teacher Accounts";
+               hideToggle = true;
+          } else if (accountType.equals("student")) {
+               title = "Deleted Student Accounts";
+               hideToggle = true;
+          } else {
+               hideToggle = false;
 
-     @GetMapping("/students-deleted")
-     public String deletedStudents_View(Model model) {
-          model.addAttribute("title", "Deleted Students Accounts");
-          model.addAttribute("hide", true);
-          model.addAttribute("users", null);
-          model.addAttribute("usersLists", mainService.diplayAllAccounts("Temporary", "Student"));
+          }
+          if (hideToggle) {
+               accountType = accountType.substring(1).toUpperCase() + accountType.substring(1) + "s";
+               model.addAttribute("title", title);
+               model.addAttribute("hide", hideToggle);
+               model.addAttribute("users", null);
+               model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
+          } else {
+               return "redirect:" + "/admin-view_accounts?error=Invalid User Type";
+          }
           return "/admin-view_accounts";
-     }
-
-     @GetMapping("/all_request")
-     public String viewAllRequests() {
-          return "/admin-all_requests";
      }
 
      @GetMapping("/admin_logs")
@@ -227,6 +238,89 @@ public class AdminController {
           } catch (Exception e) {
                System.out.println(e.getMessage());
           }
+     }
+
+     // Test Student Request
+     @GetMapping("/student_requests")
+     public String viewAllRequests(Model model) {
+          List<StudentRequest> studentsRequest = studService.displayAllRequest();
+          List<StudentRequest_Dto> storeStudentRequest = new ArrayList<>();
+
+          for (StudentRequest studReq : studentsRequest) {
+               storeStudentRequest
+                         .add(new StudentRequest_Dto(studReq.getRequestId(), studReq.getRequestBy().getUserId(),
+                                   studReq.getRequestBy().getType(), studReq.getYear(),
+                                   studReq.getCourse(), studReq.getSemester(), studReq.getRequestDocument().getTitle(),
+                                   studReq.getMessage(), studReq.getRequestBy().getName(), studReq.getRequestDate(),
+                                   studReq.getRequestStatus(), studReq.getReleaseDate(), studReq.getManageBy()));
+
+          }
+
+          model.addAttribute("studentRequests", storeStudentRequest);
+
+          return "/student_all_requests";
+     }
+
+     @GetMapping(value = "/admin/request/{document}")
+     public String requestForm(@PathVariable String document, HttpServletRequest request, Model model) {
+
+          try {
+               if (!mainService.findDocumentByTitle(document)) {
+                    return "redirect:" + "/student_request";
+               }
+               String description = docRepo.findByTitle(document).getDescription();
+               model.addAttribute("documentType", document);
+               model.addAttribute("description", description);
+          } catch (Exception e) {
+               System.out.println("error in global: " + e.getMessage());
+          }
+          return "/request-form";
+
+     }
+
+     @PostMapping("/admin/request/{document}/sent")
+     public String sentRequest(@PathVariable String document,
+               @RequestParam Map<String, String> params, Model model) {
+
+          try {
+
+               StudentRequest req = new StudentRequest();
+               Users user = new Users();
+
+               for (Map.Entry<String, String> entry : params.entrySet()) {
+                    if (entry.getKey().equals("userId")) {
+                         user = adminRepo.findUserIdByUsername(entry.getValue());
+                         req.setRequestBy(user);
+                    } else if (entry.getKey().equals("year")) {
+                         req.setYear(entry.getValue());
+                    } else if (entry.getKey().equals("course")) {
+                         req.setCourse(entry.getValue());
+                    } else if (entry.getKey().equals("semester")) {
+                         req.setSemester(entry.getValue());
+                    }
+               }
+               req.setMessage("HI");
+               req.setRequestDate("2022");
+               req.setRequestStatus("Pending");
+               req.setReleaseDate("2022");
+               req.setManageBy("admin");
+               if (mainService.findDocumentByTitle(document)) {
+                    req.setRequestDocument(docRepo.findByTitle(document));
+
+               }
+
+               // if (studService.saveRequest(req)) {
+               // model.addAttribute("message", "Request Successfully Sent.");
+               // return "/request-form";
+               // } else {
+               // model.addAttribute("message", "Request Failed to sent.");
+               // return "/request-form";
+               // }
+
+          } catch (Exception e) {
+               model.addAttribute("message", "Request Failed to sent, Reason: " + e.getMessage());
+          }
+          return "redirect:/student_requests";
      }
 
 }

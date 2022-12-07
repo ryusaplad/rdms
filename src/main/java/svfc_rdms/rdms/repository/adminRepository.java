@@ -1,4 +1,5 @@
 package svfc_rdms.rdms.repository;
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import svfc_rdms.rdms.model.Users;
 
 public interface AdminRepository extends JpaRepository<Users, Long> {
+
+     public Users findUserIdByUsername(String username);
 
      public List<Users> findByUsername(String username);
 

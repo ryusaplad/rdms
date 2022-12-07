@@ -27,6 +27,8 @@ public interface AdminService {
 
      // Manage Document
 
+     Boolean findDocumentByTitle(String title);
+
      Boolean saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo);
 
      List<Documents> getAllFiles();
@@ -35,8 +37,6 @@ public interface AdminService {
 
      Boolean deleteFile(long id);
 
-     // File saveMultipleFiles(MultipartFile[] files);
-
-     // String checkFile(MultipartFile file, int maxSize);
+  
 
 }

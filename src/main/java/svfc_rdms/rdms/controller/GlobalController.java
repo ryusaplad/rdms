@@ -1,16 +1,27 @@
 package svfc_rdms.rdms.controller;
 
-import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import svfc_rdms.rdms.repository.AdminRepository;
+import svfc_rdms.rdms.repository.Admin_DocumentRepository;
+import svfc_rdms.rdms.serviceImpl.MainServiceImpl;
+import svfc_rdms.rdms.serviceImpl.StudentServiceImpl;
 
 @Controller
 public class GlobalController {
+
+     @Autowired
+     MainServiceImpl mainService;
+     @Autowired
+     Admin_DocumentRepository docRepo;
+
+     @Autowired
+     AdminRepository adminRepo;
+
+     @Autowired
+     StudentServiceImpl studService;
 
      @GetMapping(value = "/")
      public String loginPage() {
@@ -18,21 +29,7 @@ public class GlobalController {
           return "/index";
      }
 
-     // select request page
-     @GetMapping(value = "/request/{document}")
-     public String requestForm(@PathVariable String document, Model model) {
-          model.addAttribute("documentType", document);
-          return "/request-form";
-     }
 
-     @PostMapping(value = "/request/{document}/sent")
-     public String sentRequest(@PathVariable String document, @RequestParam Map<String, String> params, Model model) {
-          System.out.println("Requesting in : " + document);
-          for (Map.Entry<String, String> entry : params.entrySet()) {
-               System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
-          }
-          return "/request-form";
-     }
 
-     
+
 }

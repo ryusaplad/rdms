@@ -7,8 +7,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
      <meta name="description" content="" />
      <meta name="author" content="" />
-     <link th:href="@{/css/userpageCSS/jquery.steps.css}" rel="stylesheet" />
-     <link th:href="@{/css/userpageCSS/steps.css}" rel="stylesheet" />
+
      <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
 
      <title></title>
@@ -43,232 +42,125 @@
           <!-- ============================================================== -->
           <!-- Container fluid  -->
           <!-- ============================================================== -->
-          <div class="container-fluid">
+          <div class="container">
                <!-- ============================================================== -->
                <!-- Start Page Content -->
                <!-- ============================================================== -->
-               <div th:if="${documentType} == 'id'">
+               <div th:if="${documentType} != null">
 
                     <div class="card">
-                         <div class="card-body wizard-content">
-                              <h4 class="card-title">Request Form - <strong
+                         <div class="card-body">
+                              <h4 class="card-title">Request Form - <strong id="documentTypeTitle"
                                         th:text="${#strings.toUpperCase(documentType)}"></strong></h4>
                               <p><b class="text-danger">(*) all fields are required</b></p>
+                              <p><b class="text-black" style="white-space: pre;" th:text="${description}"></b></p>
                               <h6 class="card-subtitle"></h6>
-                              <form id="form" method="POST" th:action="${documentType} +'/sent'" class="mt-5">
-                                   <div>
-                                        <h3>Information</h3>
-                                        <section>
-                                             <label for="studId">Student Id *</label>
-                                             <input id="studId" name="userId" type="text" class="required form-control">
-                                             <label for="studName">Student Name *</label>
-                                             <input id="studName" name="name" type="text" class="required form-control">
-                                             <label for="year">Year *</label>
-                                             <select id="year" name="year" class="required form-control">
-                                                  <option value="1ST YEAR">1ST YEAR</option>
-                                                  <option value="2ND YEAR">2ND YEAR</option>
-                                                  <option value="3RD YEAR">3RD YEAR</option>
-                                                  <option value="4TH YEAR">4TH YEAR</option>
-                                                  <option value="5TH YEAR">5TH YEAR</option>
-                                             </select>
-                                             <label for="course">Course *</label>
-                                             <select id="course" name="course" class="required form-control">
-                                                  <option value="BSIT">BSIT</option>
-                                                  <option value="BPAD">BPAD</option>
-                                                  <option value="BSHM">BSHM</option>
-                                             </select>
-                                             <label for="semester">Semester *</label>
-                                             <select id="semester" name="semester" class="required form-control">
-                                                  <option value="1ST SEMESTER">1ST SEMESTER</option>
-                                                  <option value="2ND SEMESTER">2ND SEMESTER</option>
+                              <form id="form" method="POST" th:action="'/admin/request/' + ${documentType} +'/sent'" class=" mt-5 form-floating">
+                                   <h3>Information</h3>
+                                   <div class="row">
+                                        <div class="col-sm ">
+                                             <div class="mt-2  form-floating">
+                                   
+                                                  <input name="userId" type="text" class="form-control floatingInput" id="userId" placeholder="Student Id">
+                                                  <label for="userId">Student Id *</label>
+                                             </div>
+                                   
+                                             <div class="mt-2 form-floating">
+                                                  <input id="studName" name="name" type="text" class="form-control floatingInput"
+                                                       placeholder="Student Name">
+                                                  <label for="studName">Student Name *</label>
+                                             </div>
+                                             <div class=" mt-2 form-floating">
+                                                  <select id="year" name="year" class="form-select" placeholder="Year Level">
+                                                       <option value="1ST YEAR">1ST YEAR</option>
+                                                       <option value="2ND YEAR">2ND YEAR</option>
+                                                       <option value="3RD YEAR">3RD YEAR</option>
+                                                       <option value="4TH YEAR">4TH YEAR</option>
+                                                       <option value="5TH YEAR">5TH YEAR</option>
+                                                  </select>
+                                                  <label for="year">Year *</label>
+                                                  </div>
+                                                  <div class="mt-2  form-floating">
+                                                  
+                                                       <select id="course" name="course" class="form-select">
+                                                            <option value="BSIT">BSIT</option>
+                                                            <option value="BPAD">BPAD</option>
+                                                            <option value="BSHM">BSHM</option>
+                                                       </select>
+                                                  <label for="course">Course *</label>
+                                                  </div>
+                                                  
+                                                  <div class="mt-2  form-floating">
+                                                  
+                                                       <select id="semester" name="semester" class="form-select">
+                                                            <option value="1ST SEMESTER">1ST SEMESTER</option>
+                                                            <option value="2ND SEMESTER">2ND SEMESTER</option>
 
-                                             </select>
-
-
+                                                  </select>
+                                                  <label for="semester">Semester *</label>
+                                                  </div>
                                              <p>(*) Mandatory</p>
-                                        </section>
-                                        <h3>Requirements</h3>
-                                        <section>
-
-
-                                             <div class="container text-center ">
-                                                  <div class="row">
-                                                       <div class="col-sm">
-                                                            <label for="idRequirement">Upload Id Picture *</label>
-                                                            <div
-                                                                 class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-
-                                                                 <input id="idRequirement" type="file"
-                                                                      name="idRequirement" onchange="readURL(this,1);"
-                                                                      class="required form-control border-0   "
-                                                                      accept="image/png,image/jpeg">
-                                                            </div>
-                                                       </div>
-                                                       <div class="col-sm">
-                                                            <p class="font-italic text-dark text-center">Preview</p>
-                                                            <div class="image-area">
-                                                                 <img id="idResult" style="height: 250px; width: 100%;"
-                                                                      src="#" alt=""
-                                                                      class="img-fluid rounded shadow-sm mx-auto d-block border border-dark">
-                                                            </div>
-
-                                                       </div>
-
-                                                       <div class="col-sm">
-                                                            <label for="signatureRequirement">Upload Signature Image
-                                                                 *</label>
-                                                            <div
-                                                                 class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-
-                                                                 <input id="signatureRequirement" type="file"
-                                                                      name="signatureRequirement"
-                                                                      onchange="readURL(this,2);"
-                                                                      class="required form-control border-0   "
-                                                                      accept="image/png,image/jpeg">
-                                                            </div>
-                                                       </div>
-                                                       <div class="col-sm">
-                                                            <p class="font-italic text-dark text-center">Preview</p>
-                                                            <div class="image-area">
-                                                                 <img id="signatureResult"
-                                                                      style="height: 250px; width: 100%;" src="#" alt=""
-                                                                      class="img-fluid rounded shadow-sm mx-auto d-block border border-dark">
-                                                            </div>
-
-                                                       </div>
+                                             <div class="row">
+                                                  <div class="col">
+                                                       <button type="submit" class="btn saveRequest btn-success w-100">Submit
+                                                            Request</button>
+                                                  </div>
+                                                  <div class="col">
+                                                       <button type="reset" class="btn clearRequest text-dark btn-warning w-100">Reset</button>
                                                   </div>
                                              </div>
-
-
-                                        </section>
-                                        <h3>Summary</h3>
-                                        <section>
-                                             <ul>
-                                                  <li>xxxx</li>
-                                                  <li>xxxx</li>
-                                                  <li>xxxx</li>
-                                                  <li>xxxx</li>
-                                                  <li>xxxx</li>
-                                             </ul>
-                                        </section>
-                                        <h3>Finish</h3>
-                                        <section>
-                                             <h1>completed</h1>
-                                        </section>
-                                   </div>
+                                        </div>
                               </form>
-                         </div>
+                              <div class="col-sm">
+                                   <h3>Requirements</h3>
+                                   <div class="container">
+                                        <form id="fileForm">
+                                             <div class="row mb-2 ">
+                                                  <div class="col col-lg-9">
+                                                       <h5>Upload Needed Requirements here.
+                                                            *</h5>
+                                                  </div>
+                                                  <div class="col-lg-2 mb-2 text-end">
+                                                       <label for="files" class="btn addRequirementFile btn-primary" style="width:130px">
+                                                            Add
+                                                       </label>
+                                                       <div class="text-left" style="display:block">
+                                                            <input class="form-control" name="studentId" type="text" id="studentId" required />
+                                                            <input class="form-control" name="file[]" type="file" id="files" multiple />
+                                                       </div>
+                                                  </div>
+                                                  <div class="col-0 table-responsive ">
+                                                       <table class="table table-white table-bordered mt-2">
+                                                            <thead>
+                                                                 <tr>
+                                                                      <th>Action</th>
+                                                                      <th scope="col">File Name</th>
+                                                                      <th scope="col">File Size</th>
+                                                                 </tr>
+                                                            </thead>
+                                                            <tbody id="fileInfoTable">
+                                                                 <tr>
+                                                                      <td id="fileName"></td>
+                                                                      <td id="fileSize"></td>
+                                                                 </tr>
+                                                            </tbody>
+                                                       </table>
+                                                       <div class="row">
+                                                            <div class="col text-end">
+                                                                 <button type="submit" class="btn saveFile btn-success w-50">Save
+                                                                      File</button>
+                                                                           </div>
+
+                                                       </div>
+                                                       </div>
+                                                       </div>
+                                                       </form>
+                                                       </div>
+                              </div>
+                              </div>
                     </div>
                </div>
-               <div th:if="${documentType} == 'com-cor'">
-
-                    <div class="card">
-                         <form id="form" class="form-horizontal">
-                              <div class="card-body">
-                                   <h4 class="card-title">Request Form - <strong
-                                             th:text="${#strings.toUpperCase(documentType)}"></strong></h4>
-                                   <p><b class="text-danger">(*) all fields are required</b></p>
-                                   <label for="studId">Student Id *</label>
-                                   <input id="studId" name="userId" type="text" class="required form-control">
-                                   <label for="studName">Student Name *</label>
-                                   <input id="studName" name="name" type="text" class="required form-control">
-                                   <label for="year">Year *</label>
-                                   <select id="year" name="year" class="required form-control">
-                                        <option value="1ST YEAR">1ST YEAR</option>
-                                        <option value="2ND YEAR">2ND YEAR</option>
-                                        <option value="3RD YEAR">3RD YEAR</option>
-                                        <option value="4TH YEAR">4TH YEAR</option>
-                                        <option value="5TH YEAR">5TH YEAR</option>
-                                   </select>
-                                   <label for="course">Course *</label>
-                                   <select id="course" name="course" class="required form-control">
-                                        <option value="BSIT">BSIT</option>
-                                        <option value="BPAD">BPAD</option>
-                                        <option value="BSHM">BSHM</option>
-                                   </select>
-                                   <label for="semester">Semester *</label>
-                                   <select id="semester" name="semester" class="required form-control">
-                                        <option value="1ST SEMESTER">1ST SEMESTER</option>
-                                        <option value="2ND SEMESTER">2ND SEMESTER</option>
-
-                                   </select>
-
-
-                                   <label for="message">Message</label>
-                                   <textarea id="message"
-                                        placeholder="Add message here, ex: I need COM and COR for scholarship."
-                                        class="form-control"></textarea>
-                                   <p>(*) Mandatory</p>
-                              </div>
-
-
-
-
-                              <div class="border-top">
-                                   <div class="card-body">
-                                        <button type="button" class="btn btn-primary">Submit</button>
-                                   </div>
-                              </div>
-                         </form>
-                    </div>
-
-
-               </div>
-               <div th:if="${documentType} == 'grades'">
-                    <div class="card">
-                         <form id="form" class="form-horizontal">
-                              <div class="card-body">
-                                   <h4 class="card-title">Request Form - <strong
-                                             th:text="${#strings.toUpperCase(documentType)}"></strong>
-                                   </h4>
-                                   <p><b class="text-danger">(*) all fields are required</b></p>
-                                   <label for="studId">Student Id *</label>
-                                   <input id="studId" name="userId" type="text" class="required form-control">
-                                   <label for="studName">Student Name *</label>
-                                   <input id="studName" name="name" type="text" class="required form-control">
-                                   <label for="year">Year *</label>
-                                   <select id="year" name="year" class="required form-control">
-                                        <option value="1ST YEAR">1ST YEAR</option>
-                                        <option value="2ND YEAR">2ND YEAR</option>
-                                        <option value="3RD YEAR">3RD YEAR</option>
-                                        <option value="4TH YEAR">4TH YEAR</option>
-                                        <option value="5TH YEAR">5TH YEAR</option>
-                                   </select>
-                                   <label for="course">Course *</label>
-                                   <select id="course" name="course" class="required form-control">
-                                        <option value="BSIT">BSIT</option>
-                                        <option value="BPAD">BPAD</option>
-                                        <option value="BSHM">BSHM</option>
-                                   </select>
-                                   <label for="semester">Semester *</label>
-                                   <select id="semester" name="semester" class="required form-control">
-                                        <option value="1ST SEMESTER">1ST SEMESTER</option>
-                                        <option value="2ND SEMESTER">2ND SEMESTER</option>
-
-                                   </select>
-
-                                   <label for="message">Message</label>
-                                   <textarea id="message" placeholder="Please add list of subjects and professors here!"
-                                        class=" required form-control"></textarea>
-                                   <p>(*) Mandatory</p>
-                              </div>
-
-
-
-
-                              <div class="border-top">
-                                   <div class="card-body">
-                                        <button type="button" class="btn btn-primary">Submit</button>
-                                   </div>
-                              </div>
-                         </form>
-                    </div>
-
-               </div>
-               <div th:if="${documentType != 'id' && documentType != 'com-cor' && documentType  != 'grades'}">
-                    <h1>Contact the administator to add new document</h1>
-                    <a href="#" class="btn btn-primary">Contact</a>
-               </div>
+          </div>
           </div>
 
      </div>
@@ -282,104 +174,8 @@
 <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
 <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
 <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/userpageJS/jquery.validate.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/userpageJS/jquery.steps.min.js}"></script>
-
-<script>
+<script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request.js}"></script>
 
 
-     /*  ==========================================
-         SHOW UPLOADED IMAGE
-     * ========================================== */
-     function readURL(input, option) {
-          if (option == 1) {
-               if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    console.log(reader);
-                    reader.onload = function (e) {
-                         $('#idResult')
-                              .attr('src', e.target.result);
-                    };
-                    reader.readAsDataURL(input.files[0]);
-               }
-          } else if (option == 2) {
-               if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    console.log(reader);
-                    reader.onload = function (e) {
-                         $('#signatureResult')
-                              .attr('src', e.target.result);
-                    };
-                    reader.readAsDataURL(input.files[0]);
-               }
-          }
-
-     }
-
-
-
-     $(function () {
-          $('#idRequirement').on('change', function () {
-               readURL(idInput, 1);
-          });
-     });
-
-     $(function () {
-          $('#signatureRequirement').on('change', function () {
-               readURL(signature, 2);
-          });
-     });
-
-     /*  ==========================================
-         SHOW UPLOADED IMAGE NAME
-     * ========================================== */
-     var idInput = document.getElementById('idRequirement');
-     var signature = document.getElementById('signatureRequirement');
-     var infoArea = document.getElementById('upload-label');
-
-     idInput.addEventListener('change', showFileName);
-     function showFileName(event) {
-          var idInput = event.srcElement;
-          var fileName = idInput.files[0].name;
-          infoArea.textContent = 'File name: ' + fileName;
-     }
-
-     signature.addEventListener('change', showFileName);
-     function showFileName(event) {
-          var signature = event.srcElement;
-          var fileName = signature.files[0].name;
-          infoArea.textContent = 'File name: ' + fileName;
-     }
-
-     // Basic Example with form
-     var form = $("#form");
-     form.validate({
-          errorPlacement: function errorPlacement(error, element) { element.before(error); },
-          rules: {
-               confirm: {
-                    equalTo: "#password"
-               }
-          }
-     });
-
-     form.children("div").steps({
-          headerTag: "h3",
-          bodyTag: "section",
-          transitionEffect: "slideLeft",
-          onStepChanging: function (event, currentIndex, newIndex) {
-               form.validate().settings.ignore = ":disabled,:hidden";
-               return form.valid();
-          },
-          onFinishing: function (event, currentIndex) {
-               form.validate().settings.ignore = ":disabled";
-               return form.valid();
-          },
-          onFinished: function (event, currentIndex) {
-               form.submit();
-          }
-     });
-
-
-</script>
 
 </html>

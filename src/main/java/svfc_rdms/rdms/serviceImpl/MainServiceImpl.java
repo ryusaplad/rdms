@@ -129,4 +129,13 @@ public class MainServiceImpl implements AdminService {
           return null;
      }
 
+     @Override
+     public Boolean findDocumentByTitle(String title) {
+
+          if (docRepo.findByTitle(title) != null) {
+               return true;
+          }
+          return false;
+     }
+
 }

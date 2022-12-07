@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import svfc_rdms.rdms.dto.ServiceResponse;
+import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.service.ServiceResponse;
+import svfc_rdms.rdms.repository.AdminRepository;
+import svfc_rdms.rdms.repository.Admin_DocumentRepository;
+import svfc_rdms.rdms.serviceImpl.FileUploadServiceImpl;
 import svfc_rdms.rdms.serviceImpl.MainServiceImpl;
+import svfc_rdms.rdms.serviceImpl.StudentServiceImpl;
 
 @RestController
 public class Admin_RestController {
@@ -22,10 +29,22 @@ public class Admin_RestController {
      @Autowired
      MainServiceImpl mainService;
 
+     @Autowired
+     Admin_DocumentRepository docRepo;
+
+     @Autowired
+     AdminRepository adminRepo;
+
+     @Autowired
+     StudentServiceImpl studService;
+
+     @Autowired
+     FileUploadServiceImpl studFileService;
+
      @PostMapping(value = "/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
           ServiceResponse<Users> serviceResponse = new ServiceResponse<>("success", user);
-          return saveWithRestriction(user, 0, serviceResponse);
+          return saveUserWithRestrict(user, 0, serviceResponse);
 
      }
 
@@ -33,7 +52,7 @@ public class Admin_RestController {
      public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
 
           ServiceResponse<Users> serviceResponse = new ServiceResponse<>("success", user);
-          return saveWithRestriction(user, 1, serviceResponse);
+          return saveUserWithRestrict(user, 1, serviceResponse);
 
      }
 
@@ -48,7 +67,40 @@ public class Admin_RestController {
 
      }
 
-     public ResponseEntity<Object> saveWithRestriction(Users user, int action,
+     @PostMapping("/save_file")
+
+     public ResponseEntity<String> studFileUploadRequirement(@RequestParam("studentId") String id,
+               @RequestParam("file[]") MultipartFile[] files) {
+          try {
+
+               LocalDate dateNow = LocalDate.now();
+
+               if (files != null || id.length() < -1) {
+                    Users user = adminRepo.findUserIdByUsername(id);
+                    for (MultipartFile filex : files) {
+                         UserFiles userFiles = new UserFiles();
+                         userFiles.setData(filex.getBytes());
+                         userFiles.setName(filex.getOriginalFilename());
+                         userFiles.setSize(Long.toString(filex.getSize()));
+                         userFiles.setDateUploaded(dateNow.toString());
+                         userFiles.setStatus("Pending");
+                         userFiles.setUploadedBy(user);
+                         studFileService.saveFiles(userFiles);
+                    }
+
+               } else {
+                    return new ResponseEntity<>("No File Has been save", HttpStatus.BAD_REQUEST);
+               }
+
+          } catch (Exception ex) {
+               ex.printStackTrace();
+               return new ResponseEntity<>("Invalid file format!!", HttpStatus.BAD_REQUEST);
+          }
+
+          return new ResponseEntity<>("File uploaded!!", HttpStatus.OK);
+     }
+
+     public ResponseEntity<Object> saveUserWithRestrict(Users user, int action,
                ServiceResponse<Users> response) {
           String error = "";
           try {
@@ -118,4 +170,5 @@ public class Admin_RestController {
 
           return new ResponseEntity<Object>(response, HttpStatus.FORBIDDEN);
      }
+
 }

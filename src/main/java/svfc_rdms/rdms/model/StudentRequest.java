@@ -1,6 +1,5 @@
 package svfc_rdms.rdms.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,17 +35,14 @@ public class StudentRequest {
       @JoinColumn(name = "request_document", referencedColumnName = "documentId")
       private Documents requestDocument; // what document? / COM/COR/ID/GRADES/ using by id of document
 
-      // Requirements - user upload - for iD only
-      @Column(name = "firstRequiremement", columnDefinition = "LONGBLOB")
-      private byte firstRequirementFile;
-      @Column(name = "secondRequiremement", columnDefinition = "LONGBLOB")
-      private byte secondRequirementFile;
 
-      // for com/cor and grades Requirement only
       private String message;
-      // end
 
-      // end of requirements
+      private String requestDate; // what date request has been sent
+      private String requestStatus; // Pending/ On-Going / Completed / Deleted //
+
+      private String releaseDate;
+
       /*
        * the purpose of this, when the one who manage the request and send the request
        * to other person like registrar or teacher
@@ -61,63 +57,27 @@ public class StudentRequest {
        * 
        * Same to the teacher.
        */
-      private String requestDate; // what date request has been sent
-      private String requestStatus; // Pending/ On-Going / Completed / Deleted //
-
-      private String releaseDate;
       private String manageBy; // who are the users manage the request
 
       @ManyToOne
       @JoinColumn(name = "request_by", referencedColumnName = "userId")
       private Users requestBy; // One User to many Request
 
-      /*
-       * Important logic for this requesting do this with thymeleaf
-       * 
-       * 
-       * if Request document is equal to id
-       * # Requirements
-       * - Student Id(userId)
-       * - Student Name(name)
-       * - ID Picture (UserFiles)
-       * - Signature Image (UserFiles)
-       * --Can be found on this class--
-       * - Yr/Course
-       * - Semester
-       * #End
-       * ----------------------------
-       * if Request document is equal to COR / COM
-       * #Requirements
-       * - Student Id(userId)
-       * - Student Name(name)
-       * 
-       * --Can be found on this class--
-       * - Yr/Course
-       * - Semester
-       * ---
-       * - Signature(file)
-       * #End
-       * ----------------------------
-       * if rrequest document is equal to grades
-       * - Student Id(userId)
-       * - Student Name(name)
-       * --Can be found on this class--
-       * - Yr/Course
-       * - Semester
-       * - list of subjects
-       * - list of professors
-       * ---
-       * - Signature(file)
-       * #End
-       * ----------------------------
-       * 
-       */
+      public StudentRequest(long requestId, String year, String course, String semester, String requestDocument,
+                  String message, Users requestBy, String requestDate, String requestStatus, String releaseDate,
+                  String manageBy) {
+            this.requestId = requestId;
+            this.year = year;
+            this.course = course;
+            this.semester = semester;
+            requestDocument = this.requestDocument.getTitle();
+            this.message = message;
+            this.requestBy = requestBy;
+            this.requestDate = requestDate;
+            this.requestStatus = requestStatus;
+            this.releaseDate = releaseDate;
+            this.manageBy = manageBy;
 
-      /*
-       * New Logic
-       * if document type is equal to id
-       * the showing or preview image will show
-       * if not the preview image will not show
-       * if
-       */
+      }
+
 }

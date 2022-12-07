@@ -1,4 +1,4 @@
-package svfc_rdms.rdms.service;
+package svfc_rdms.rdms.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
