@@ -5,9 +5,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
@@ -55,12 +59,65 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public boolean saveUsersAccount(Users user) {
-          if (user != null) {
-               repository.saveAndFlush(user);
-               return true;
+     public ResponseEntity<Object> saveUsersAccount(Users user, int actions) {
+
+          String error = "";
+          try {
+               if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
+                    error = "Name cannot be empty! " + user.getName();
+                    throw new ApiRequestException(error);
+               } else if (user.getUsername() == null || user.getUsername().length() < 1
+                         || user.getUsername().isEmpty()) {
+                    error = "Username cannot be empty " + user.getUsername();
+                    throw new ApiRequestException(error);
+               } else if (user.getPassword() == null || user.getPassword().length() < 1
+                         || user.getPassword().isEmpty()) {
+                    error = "Password cannot be empty" + user.getPassword();
+                    throw new ApiRequestException(error);
+               } else {
+                    String userIdFormat = user.getUsername().toUpperCase();
+                    user.setStatus("Active");
+                    if (userIdFormat.contains("C")) {
+
+                         user.setType("Student");
+                    } else if (userIdFormat.contains("F-")) {
+
+                         user.setType("Facilitator");
+                    } else if (userIdFormat.contains("R-")) {
+
+                         user.setType("Registrar");
+                    } else if (userIdFormat.contains("T-")) {
+
+                         user.setType("Teacher");
+                    }
+                    if (actions == 0) {
+                         if (findUserName(userIdFormat.toLowerCase())) {
+                              error = "Username is already taken, Please try again!";
+
+                              throw new ApiRequestException(error);
+                         } else {
+
+                              repository.saveAndFlush(user);
+                              ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
+                              return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
+                         }
+                    } else if (actions == 1) {
+
+                         repository.saveAndFlush(user);
+                         ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
+                         return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
+                    }
+               }
+          } catch (Exception e) {
+               error = e.getMessage();
+               if (error.contains("ConstraintViolationException")) {
+
+                    error = "Username is already taken, Please try again!";
+                    throw new ApiRequestException(error);
+               }
+
           }
-          return false;
+          throw new ApiRequestException(error);
      }
 
      @Override
@@ -88,41 +145,61 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public Boolean saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo) {
+     public ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo) {
+
           try {
-              
+
                String title = "";
                String description = "";
                Boolean status = true;
-               if (multipartFile.getSize() > 0 && documentsInfo != null) {
+               System.out.println("Size: " + multipartFile.getSize());
+               System.out.println("Size: " + documentsInfo.size());
+               if (multipartFile.getSize() == 0) {
+                    throw new ApiRequestException("Invalid Image, Documents Image Cannot be Empty");
+               } else {
+                    byte[] image = multipartFile.getBytes();
                     for (Map.Entry<String, String> entry : documentsInfo.entrySet()) {
-                         System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+
                          if (entry.getKey().equals("title")) {
                               title = entry.getValue();
+                              if (title.replace(" ", "").length() <= 0) {
+                                   throw new ApiRequestException("Invalid Title, Title Cannot be empty.");
+                              }
                          } else if (entry.getKey().equals("description")) {
                               description = entry.getValue();
+                              if (description.replace(" ", "").length() <= 0) {
+                                   throw new ApiRequestException("Invalid Description, Description Cannot be empty.");
+                              }
                          } else {
-                              return false;
+                              throw new ApiRequestException("No Documents Information has been found.");
                          }
                     }
-                    byte[] image = multipartFile.getBytes();
-                    Documents docInformation = new Documents(0, title, description, image, status);
 
-                    docRepo.save(docInformation);
-                    return true;
+                    Documents saveDocument = new Documents(0, title, description, image, status);
+
+                    docRepo.save(saveDocument);
+                    return new ResponseEntity<Object>("success", HttpStatus.OK);
                }
+
           } catch (Exception e) {
-               System.out.println(e.getMessage());
+               if (e.getMessage().contains("constraint")) {
+                    throw new ApiRequestException("Document Title has already  taken.");
+               } else {
+                    throw new ApiRequestException(e.getMessage());
+
+               }
+
           }
 
-          return false;
      }
 
      @Override
-     public Boolean saveDocumentData(long id, MultipartFile multipartFile, Map<String, String> documentsInfo) {
+     public ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile,
+               Map<String, String> documentsInfo) {
+
           try {
                byte[] image = docRepo.findById(id).get().getImage();
-              
+
                String title = "";
                String description = "";
                Boolean status = true;
@@ -131,31 +208,44 @@ public class AdminServicesImpl implements AdminService {
                     image = multipartFile.getBytes();
                }
 
-               for (Map.Entry<String, String> entry : documentsInfo.entrySet()) {
+               if (id < 0) {
+                    throw new ApiRequestException(
+                              "Failed to Update Document, Invalid ID, Please Try Again.");
+               } else {
+                    for (Map.Entry<String, String> entry : documentsInfo.entrySet()) {
 
-                    if (entry.getKey().equals("title")) {
+                         if (entry.getKey().equals("title")) {
 
-                         title = entry.getValue();
-                    } else if (entry.getKey().equals("description")) {
-                         description = entry.getValue();
-                    } else if (entry.getKey().equals("status")) {
+                              title = entry.getValue();
+                              if (title.replace(" ", "").length() <= 0) {
+                                   throw new ApiRequestException("Invalid Title, Title Cannot be empty.");
+                              }
+                         } else if (entry.getKey().equals("description")) {
+                              description = entry.getValue();
+                              if (description.replace(" ", "").length() <= 0) {
+                                   throw new ApiRequestException("Invalid Description, Description Cannot be empty.");
+                              }
+                         } else if (entry.getKey().equals("status")) {
+                              status = (entry.getValue().equals("1")) ? true : false;
 
-                         status = (entry.getValue().equals("1")) ? true : false;
+                         }
                     }
+
+                    Documents updateDocument = new Documents(id, title, description, image, status);
+
+                    docRepo.save(updateDocument);
+                    return new ResponseEntity<Object>("success", HttpStatus.OK);
                }
 
-               Documents docInformation = new Documents(id, title, description, image, status);
+          } catch (Exception e) {
+               if (e.getMessage().contains("constraint")) {
+                    throw new ApiRequestException("Document Title has already  taken.");
 
-               docRepo.save(docInformation);
+               } else {
+                    throw new ApiRequestException(e.getMessage());
 
-               return true;
-          } catch (
-
-          Exception e) {
-               System.out.println(e.getMessage());
+               }
           }
-
-          return false;
      }
 
      @Override

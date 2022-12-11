@@ -238,13 +238,20 @@ $(document).ready(function () {
         }
       },
       error: function (e) {
+        var m = "";
+        if (e.responseText != null) {
+          m = e.responseText;
+        } else {
+          m = e.responseJSON.message;
+        }
         $("#resultDiv").fadeOut(1);
         $("#resultDiv").fadeIn(100);
         $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
         $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-        $("#resultMessage").html(
-          "Insertion/Updating Failed Reason: " + e.responseText
-        );
+        $("#resultMessage").html("Insertion/Updating Failed Reason: " + m);
+
+        $("#updateModal").modal("hide");
+        $("#registerModal").modal("hide");
       },
     });
   }
@@ -324,14 +331,18 @@ $(document).ready(function () {
         }
       },
       error: function (e) {
-        if (e.responseText == !null) {
-          $("#resultDiv").fadeOut(1);
-          $("#resultDiv").fadeIn(100);
-          $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
-          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#resultMessage").html("Deletion Failed Reason: " + e.responseText);
-          $("#deleteModal").modal("hide");
-        } 
+        if (e.responseText != null) {
+          e = e.responseText;
+        } else {
+          e = e.responseJSON.message;
+        }
+
+        $("#resultDiv").fadeOut(1);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html("Deletion Failed Reason: " + e);
+        $("#deleteModal").modal("hide");
       },
     });
     $(document).on("click", ".undo", function (event) {
@@ -357,7 +368,7 @@ $(document).ready(function () {
     //updating modal
     $(document).on("click", ".edit", function (event) {
       event.preventDefault();
-      console.log("clicked");
+
       var href = $(this).attr("href");
       $.get(href, function (user) {
         $("#userIdEdit").val(user[0].userId);

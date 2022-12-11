@@ -46,17 +46,14 @@ public class Admin_RestController {
 
      @PostMapping(value = "/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
-          ServiceResponse<Users> serviceResponse = new ServiceResponse<>("success", user);
-          return saveUserWithRestrict(user, 0, serviceResponse);
 
+          return mainService.saveUsersAccount(user, 0);
      }
 
      @PostMapping(value = "/updateUserAcc")
      public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
 
-          ServiceResponse<Users> serviceResponse = new ServiceResponse<>("success", user);
-          return saveUserWithRestrict(user, 1, serviceResponse);
-
+          return mainService.saveUsersAccount(user, 1);
      }
 
      @GetMapping(value = "/getAllUser")
@@ -101,14 +98,10 @@ public class Admin_RestController {
      }
 
      @PostMapping("/save-document-info")
-     public ResponseEntity<Object> saveDocument(@RequestParam("image") MultipartFile partFile,
+     public void saveDocument(@RequestParam("image") MultipartFile partFile,
                @RequestParam Map<String, String> params) {
 
-          try {
-               return saveDocumentWithRestrict(0, partFile, params, "save");
-          } catch (Exception e) {
-               return new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-          }
+          mainService.saveDocumentData(partFile, params);
 
      }
 
@@ -131,17 +124,11 @@ public class Admin_RestController {
      }
 
      @PostMapping("/update-document-info")
-     public ResponseEntity<Object> updateDocument(@RequestParam("docId") long id,
+     public void updateDocument(@RequestParam("docId") long id,
                @RequestParam("image") MultipartFile partFile,
                @RequestParam Map<String, String> params) {
 
-          try {
-
-               return saveDocumentWithRestrict(id, partFile, params, "update");
-
-          } catch (Exception e) {
-               return new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-          }
+          mainService.saveDocumentData(id, partFile, params);
 
      }
 
@@ -164,116 +151,6 @@ public class Admin_RestController {
                return new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
           }
 
-     }
-
-     public ResponseEntity<Object> saveDocumentWithRestrict(long id, MultipartFile partFile,
-               Map<String, String> params, String actions) {
-          try {
-
-               if (actions.equals("save")) {
-                    if (partFile.getSize() < 0) {
-                         return new ResponseEntity<Object>("Invalid Image File, Please Try Again.",
-                                   HttpStatus.BAD_REQUEST);
-                    } else if (params.isEmpty()) {
-                         return new ResponseEntity<Object>("No Parameters Found", HttpStatus.BAD_REQUEST);
-                    } else {
-                         if (!mainService.saveDocumentData(partFile, params)) {
-                              throw new IllegalArgumentException(
-                                        "Failed to Save Document, It's either invalid Image or Invalid Informations, Please Try Again.");
-                         }
-                    }
-               } else if (actions.equals("update")) {
-
-                    if (id < 0) {
-                         throw new IllegalArgumentException(
-                                   "Failed to Update Document, Invalid ID, Please Try Again.");
-                    } else {
-                         if (!mainService.saveDocumentData(id, partFile, params)) {
-                              throw new IllegalArgumentException(
-                                        "Failed to Update Document, Invalid Informations, Please Try Again.");
-                         }
-                    }
-               } else {
-                    throw new IllegalArgumentException(
-                              "Invalid Adding Actions, Please Try Again.");
-               }
-
-               return new ResponseEntity<Object>("success", HttpStatus.OK);
-          } catch (Exception e) {
-               return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
-          }
-
-     }
-
-     public ResponseEntity<Object> saveUserWithRestrict(Users user, int action,
-               ServiceResponse<Users> response) {
-          String error = "";
-          try {
-               if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
-                    error = "Name cannot be empty! " + user.getName();
-                    return new ResponseEntity<Object>(error, HttpStatus.FORBIDDEN);
-               } else if (user.getUsername() == null || user.getUsername().length() < 1
-                         || user.getUsername().isEmpty()) {
-                    error = "Username cannot be empty " + user.getUsername();
-                    return new ResponseEntity<Object>(error, HttpStatus.FORBIDDEN);
-               } else if (user.getPassword() == null || user.getPassword().length() < 1
-                         || user.getPassword().isEmpty()) {
-                    error = "Password cannot be empty" + user.getPassword();
-                    return new ResponseEntity<Object>(error, HttpStatus.FORBIDDEN);
-               } else {
-                    String userIdFormat = user.getUsername().toUpperCase();
-                    user.setStatus("Active");
-                    if (userIdFormat.contains("C")) {
-
-                         user.setType("Student");
-                    } else if (userIdFormat.contains("F-")) {
-
-                         user.setType("Facilitator");
-                    } else if (userIdFormat.contains("R-")) {
-
-                         user.setType("Registrar");
-                    } else if (userIdFormat.contains("T-")) {
-
-                         user.setType("Teacher");
-                    }
-                    if (action == 0) {
-                         if (mainService.findUserName(userIdFormat.toLowerCase())) {
-                              error = "Username is already taken, Please try again!";
-
-                              return new ResponseEntity<Object>(error, HttpStatus.FORBIDDEN);
-                         } else {
-                              mainService.saveUsersAccount(user);
-
-                              return new ResponseEntity<Object>(response, HttpStatus.OK);
-                         }
-                    } else if (action == 1) {
-
-                         try {
-                              mainService.saveUsersAccount(user);
-
-                              return new ResponseEntity<Object>(response, HttpStatus.OK);
-                         } catch (Exception e) {
-                              error = e.getMessage();
-                              if (error.contains("ConstraintViolationException")) {
-                                   error = "Username is already taken, Please try again!";
-                                   return new ResponseEntity<Object>(error, HttpStatus.FORBIDDEN);
-                              }
-                         }
-                         return new ResponseEntity<Object>(response, HttpStatus.FORBIDDEN);
-
-                    }
-
-               }
-          } catch (Exception e) {
-               error = e.getMessage();
-               if (error.contains("ConstraintViolationException")) {
-
-                    error = "Updating Failed!. Username is already taken, Please try again!";
-                    return new ResponseEntity<Object>(error, HttpStatus.FORBIDDEN);
-               }
-          }
-
-          return new ResponseEntity<Object>(response, HttpStatus.FORBIDDEN);
      }
 
 }

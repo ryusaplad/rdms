@@ -10,7 +10,6 @@ $(document).ready(function () {
 
   $(document).on("change", "#status", function (e) {
     var status = $("#status").val();
-    console.log(status);
   });
   function fetchDocumentDataToModal(id) {
     $.ajax({
@@ -99,10 +98,8 @@ $(document).ready(function () {
         cache: false,
         beforeSend: function () {
           $(".saveEditDocument").attr("disabled", "disabled");
-          console.log("Please Wait");
         },
         success: function (res) {
-          console.log(res);
           resetFields(
             "#title",
             "#description",
@@ -112,8 +109,21 @@ $(document).ready(function () {
           );
           updateCard();
           $("#editDocumentModal").modal("hide");
+
+          $("#resultDiv").fadeOut(100);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
+          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+
+          $("#resultMessage").html("A Document has been successfully updated.");
         },
         error: function (err) {
+          var m = "";
+          if (err.responseText != null) {
+            m = err.responseText;
+          } else {
+            m = err.responseJSON.message;
+          }
           console.error(err.responseText);
           resetFields(
             "#titleEdit",
@@ -124,11 +134,21 @@ $(document).ready(function () {
           );
           updateCard();
           $("#editDocumentModal").modal("hide");
+
+          $("#resultDiv").fadeOut(1);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+          $("#resultMessage").html(
+            "Insertion/Updating Documents Failed Reason: " + m
+          );
         },
       });
     });
   }
-
+  $(".close").on("click", function () {
+    $("#resultDiv").fadeOut(100);
+  });
   $(document).on("click", ".addDocument", function (event) {
     event.preventDefault();
 
@@ -159,8 +179,19 @@ $(document).ready(function () {
         );
         updateCard();
         $("#addDocumentModal").modal("hide");
+        $("#resultDiv").fadeOut(100);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
+        $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+        $("#resultMessage").html("A Document has been successfully inserted.");
       },
       error: function (err) {
+        var m = "";
+        if (err.responseText != null) {
+          m = err.responseText;
+        } else {
+          m = err.responseJSON.message;
+        }
         console.error(err.responseText);
         resetFields(
           "#title",
@@ -171,6 +202,14 @@ $(document).ready(function () {
         );
         updateCard();
         $("#addDocumentModal").modal("hide");
+
+        $("#resultDiv").fadeOut(1);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(
+          "Insertion/Updating Documents Failed Reason: " + m
+        );
       },
     });
   });
@@ -185,11 +224,32 @@ $(document).ready(function () {
         success: function (res) {
           updateCard();
           $("#deleteDocumentModal").modal("hide");
+
+          $("#resultDiv").fadeOut(100);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
+          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+          $("#resultMessage").html("A Document has been successfully deleted.");
         },
         error: function (err) {
-          updateCard();
+          var m = "";
+          if (err.responseText != null) {
+            m = err.responseText;
+          } else {
+            m = err.responseJSON.message;
+          }
           console.log(err.responseText);
+          updateCard();
+
           $("#deleteDocumentModal").modal("hide");
+
+          $("#resultDiv").fadeOut(1);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+          $("#resultMessage").html(
+            "Failed to Delete Documents Failed Reason: " + m
+          );
         },
       });
     });

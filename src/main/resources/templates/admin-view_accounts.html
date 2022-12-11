@@ -196,13 +196,7 @@
                             </button>
                         </div>
                     </div>
-                    <!-- Removing Something -->
-
-                    <div th:if="${session.alertMessage != null}">
-                        <div th:remove=" ${#session.removeAttribute('alertMessage')}"></div>
-                        <div th:remove=" ${#session.removeAttribute('alertType')}"></div>
-                    </div>
-                    <!-- Removing Something -->
+                  
                     <div class="card mb-4">
                         <div th:if="${!hide}">
                             <div class="card-header">
@@ -464,7 +458,7 @@
     <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/js/popper.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-simple-demo.js}"> </script>
-    <script type="text/javascript" th:src="@{/js/account_adding.js}"></script>
+
     <script type="text/javascript" th:src="@{/js/manage_account_js-ajax-jquery/adding_account.js}"></script>
 </body>
 
