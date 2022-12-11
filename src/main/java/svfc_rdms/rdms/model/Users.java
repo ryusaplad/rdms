@@ -61,4 +61,14 @@ public class Users {
 
      @OneToMany(mappedBy = "requestTo")
      private List<RegistrarRequest> requestTo;
+
+     public Users(long userId, String name, String username, String password, String type, String status) {
+          this.userId = userId;
+          this.name = name;
+          this.username = username;
+          this.password = password;
+          this.type = type;
+          this.status = status;
+     }
+
 }

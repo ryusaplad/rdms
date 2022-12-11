@@ -324,12 +324,14 @@ $(document).ready(function () {
         }
       },
       error: function (e) {
-        $("#resultDiv").fadeOut(1);
-        $("#resultDiv").fadeIn(100);
-        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
-        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-        $("#resultMessage").html("Deletion Failed Reason: " + e.responseText);
-        $("#deleteModal").modal("hide");
+        if (e.responseText == !null) {
+          $("#resultDiv").fadeOut(1);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+          $("#resultMessage").html("Deletion Failed Reason: " + e.responseText);
+          $("#deleteModal").modal("hide");
+        } 
       },
     });
     $(document).on("click", ".undo", function (event) {

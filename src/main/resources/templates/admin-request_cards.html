@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Select Request</title>
+    <title>List Of Available Documents</title>
 
     <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
     <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
@@ -132,22 +132,26 @@
                         <div class="sb-sidenav-menu-heading">Manage Requests</div>
                         <a class="nav-link" href="/student_requests">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        Student Requests Lists
-                        <a class="nav-link" href="/registrar_requests">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Registrar Requests Lists
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Manage Documents</div>
-                        <a class="nav-link" href="/add-documents">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Add Documents
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Settings</div>
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
-                            Connection Settings
+                            Student Requests Lists
+                            <a class="nav-link" href="/registrar_requests">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Registrar Requests Lists
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Manage Documents</div>
+                            <a class="nav-link" href="admin-request">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                View Documents Cards
+                            </a>
+                            <a class="nav-link addDocument" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Add Documents
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Settings</div>
+                            <a class="nav-link" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
+                                Connection Settings
 
-                        </a>
+                            </a>
 
                     </div>
                 </div>
@@ -162,7 +166,7 @@
             <main>
 
                 <div class="container">
-                    <h1 class="mt-4">Select Requests</h1>
+                    <h1 class="mt-4">Documents</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                         <li class="breadcrumb-item active">Requests</li>
@@ -170,14 +174,14 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex flex-row-reverse">
-                                <div class=""><a href="/add-documents" class="btn btn-primary ">Add Documents</a></div>
+                                <div class=""><a href="" class="btn btn-primary addDocument">Add Documents</a></div>
 
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row card-secbody">
 
-                                <div class="col-4" th:each="documentList : ${documents}">
+                                <div class="col-lg-4 mb-2" th:each="documentList : ${documentsList}">
                                     <div class="card pagesCards">
                                         <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
 
@@ -185,40 +189,240 @@
                                                 <div class="imageDiv"
                                                     style="background-color: rgba(251, 251, 251, 0.15);">
                                                     <img th:src="@{'/image?id='+ ${documentList.documentId}}"
-                                                        src="images/documentImage" class="img-fluid" />
+                                                        src="images/documentImage" class="img-fluid"
+                                                        style="height: 270px;" />
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title" th:text="${documentList.title}"></h5>
-                                            <b class="text-black" style="white-space: pre;" th:text="${documentList.description}"></b>
-                                            <a th:href="@{'/admin/request/'+${#strings.toLowerCase(documentList.title)}}"
-                                                class="btn btn-primary">Request This Document</a>
-                                            <a th:href="@{'/delete-document-card?docid=' + ${documentList.documentId}}"
-                                                class="btn btn-danger">Delete</a>
+                                            <h5 class="card-title text-center" th:text="${documentList.title}"></h5>
+                                            <div class="row">
+                                                <div class="col-sm mt-2">
+                                            
+                                                    <a th:href="${documentList.documentId}" class="w-100 btn btn-primary editDocument">Edit</a>
+                                                </div>
+                                                <div class="col-sm mt-2">
+                                                    <a th:href="${documentList.documentId}" class="w-100 btn btn-danger deleteDocument">Delete</a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </main>
+                                            
+                                            </div>
+                                            </div>
+                                            
+                                            <!-- Add Document Modal -->
+                                            <div class="modal fade " id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="addDocumentModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="addDocumentModalLabel">Document Information</h5>
+                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="card">
+                                                                <form id="addDocumentForm" class="form-horizontal">
+                                                                    <div class=" card-body">
+                                            
+                                                                        <p><b class="text-danger">(*) all fields are required</b></p>
+                                                                        <label for="title">Title</label>
+                                                                        <input id="title" name="title" type="text" class="required form-control">
+                                                                        <label for="description">Description</label>
+                                                                        <textarea contenteditable="true" id="description" name="description" class="required form-control " rows="3"></textarea>
+                                                                        <label for="course">Image</label>
+                                            
+                                                                        <div class="row">
+                                                                            <div class="col-sm">
+                                                                                <label for="image">Upload Image
+                                                                                    *</label>
+                                                                                <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                                                        
+                                                                                    <input id="image" type="file" name="image" onchange="readURL(this,'save');"
+                                                                                        class="required form-control border-0   " accept="image/png,image/jpeg">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm">
+                                                                                <p class="font-italic text-dark text-center">Preview</p>
+                                                                                <div class="image-area">
+                                                                                    <img id="result" style="height: 270px; width: 100%;" src="#" alt=""
+                                                                                        class="img-fluid rounded shadow-sm mx-auto d-block border border-dark">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <p>(*) Mandatory</p>
+                                                                        </div>
+                                                                        </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                            <button type="submit" class="btn btn-primary saveDocument">Save</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+    <!-- Edit Document Modal-->
+    <div class="modal fade " id="editDocumentModal" tabindex="-1" role="dialog" aria-labelledby="editDocumentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDocumentModalLabel">Document Information</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <form id="updateDocumentForm" class="form-horizontal">
+                            <div class=" card-body">
+    
+                                <p><b class="text-danger">(*) all fields are required</b></p>
+    
+                                <label for="title">Title</label>
+                                <input id="titleEdit" name="title" type="text" class="required form-control">
+                                <label for="description">Description</label>
+                                <textarea contenteditable="true" id="descriptionEdit" name="description"
+                                    class="required form-control " maxlength="200" rows="3"></textarea>
+                                <label for="course">Image</label>
+    
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <label for="image">Upload Image
+                                            *</label>
+                                        <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+
+                                            <input id="imageEdit" type="file" name="image" onchange="readURL(this,'edit');"
+                                                class="required form-control border-0   " accept="image/png,image/jpeg">
+                                            </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <p class="font-italic text-dark text-center">Preview</p>
+                                                <div class="image-area">
+                                                    <img id="resultEdit" style="height: 270px; width: 100%;" src="#" alt=""
+                                                        class="img-fluid rounded shadow-sm mx-auto d-block border border-dark">
+                                                </div>
+                                            </div>
+
+                                </div>
+                                <label for="status">Status(Show/Hide)</label>
+
+                                <select id="status" name="status" class="form-select form-select-lg" aria-label=".form-select-lg example">
+                                    <option id="valueSelected">Select Status</option>
+                                    <option value="1">Show</option>
+                                    <option value="0">Hide</option>
+                                </select>
+                                <p>(*) Mandatory</p>
+                                </div>
+                                </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary saveEditDocument">Save changes</button>
+                                </div>
+                                </form>
+                                </div>
+                                </div>
+                                </div>
+                                
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteDocumentModal" tabindex="-1" role="dialog" aria-labelledby="deleteDocumentModalLabel"
+                                    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteDocumentModalLabel">Select Deleting Type</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                    style="border: 1px solid white; background-color:red; color:white;" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                
+                                                <ul>
+                                                </ul> </b>Are you sure?</b>, This document will be <u>Deleted Permanently</u>.
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-warning confirmDeleteDocument">Confirm</button>
+                                
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-        </div>
-
-    </div>
-
     <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{js/scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/latest.js}"></script>
     <script type="text/javascript" th:src="@{js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
+    <script type="text/javascript" th:src="@{js/manage_document_adding/manageAddingDocument.js}"> </script>
+    <script>
+        /*  ==========================================
+                SHOW UPLOADED IMAGE
+            * ========================================== */
+        var idName = "";
+        function readURL(input, action) {
 
+            if (action == "save") {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    console.log(reader);
+                    reader.onload = function (e) {
+                        $('#result')
+                            .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    idName = "#image";
+                }
+            } else {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    console.log(reader);
+                    reader.onload = function (e) {
+                        $('#resultEdit')
+                            .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    idName = "#imageEdit";
+                }
+            }
+
+
+        }
+
+        $(function () {
+
+            $(idName).on('change', function () {
+                readURL(image);
+            });
+        });
+
+        /*  ==========================================
+            SHOW UPLOADED IMAGE NAME
+        * ========================================== */
+        var image = document.getElementById(idName);
+        var infoArea = document.getElementById('upload-label');
+
+        image.addEventListener('change', showFileName);
+        function showFileName(event) {
+            var image = event.srcElement;
+            var fileName = image.files[0].name;
+            infoArea.textContent = 'File name: ' + fileName;
+        }
+
+</script>
 </body>
+
+
 
 </html>

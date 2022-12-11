@@ -1,4 +1,4 @@
-package svfc_rdms.rdms.service;
+package svfc_rdms.rdms.service.Admin;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 
 public interface AdminService {
@@ -25,18 +26,21 @@ public interface AdminService {
 
      int displayCountsByStatusAndType(String status, String type);
 
-     // Manage Document
-
-     Boolean findDocumentByTitle(String title);
+     List<StudentRequest> displayRequestByStatus(String status);
 
      Boolean saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo);
 
-     List<Documents> getAllFiles();
+     Boolean saveDocumentData(long id, MultipartFile multipartFile, Map<String, String> documentsInfo);
+
+     List<Documents> getAllDocuments();
+
+     List<String> getAllDocumentTitles();
 
      Optional<Documents> getFileById(long id);
 
      Boolean deleteFile(long id);
 
-  
+     // Get All Request of Students
+     List<StudentRequest> displayAllRequest();
 
 }

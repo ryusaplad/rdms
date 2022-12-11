@@ -1,8 +1,7 @@
-package svfc_rdms.rdms.controller;
+package svfc_rdms.rdms.controller.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,38 +9,35 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.AdminRepository;
-import svfc_rdms.rdms.repository.Admin_DocumentRepository;
-import svfc_rdms.rdms.serviceImpl.MainServiceImpl;
-import svfc_rdms.rdms.serviceImpl.StudentServiceImpl;
+import svfc_rdms.rdms.repository.Admin.AdminRepository;
+import svfc_rdms.rdms.repository.Document.DocumentRepository;
+import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Controller
 public class AdminController {
 
      @Autowired
-     MainServiceImpl mainService;
+     AdminServicesImpl mainService;
 
      @Autowired
      StudentServiceImpl studService;
 
      @Autowired
-     Admin_DocumentRepository docRepo;
+     DocumentRepository docRepo;
 
      @Autowired
      AdminRepository adminRepo;
@@ -98,6 +94,7 @@ public class AdminController {
                model.addAttribute("userIdFormat", idFormat);
                model.addAttribute("users", new Users());
                model.addAttribute("hide", showType);
+
                model.addAttribute("usersLists", mainService.diplayAllAccounts(status, accType));
 
           } catch (Exception e) {
@@ -171,10 +168,6 @@ public class AdminController {
                String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
                // changing status based on the input
                if (mainService.changeAccountStatus(capitalizeS, userId)) {
-
-                    String sessionMesssage = (capitalizeS.contains("Active")) ? "Undoing Successfully."
-                              : "Deleted Temporary.";
-
                     return "redirect:" + referer;
 
                }
@@ -186,38 +179,25 @@ public class AdminController {
      @GetMapping("/user/update")
      @ResponseBody
      public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
-          model.addAttribute("users", mainService.findOneUserById(id));
-          return mainService.findOneUserById(id);
+
+          List<Users> users = mainService.findOneUserById(id);
+
+          List<Users> usersList = new ArrayList<>();
+
+          for (Users user : users) {
+               usersList.add(new Users(user.getUserId(), user.getName(), user.getUsername(),
+                         user.getPassword(),
+                         user.getType(), user.getStatus()));
+
+          }
+          return usersList;
      }
      // Viewing - Adding Document
 
      @GetMapping("/admin-request")
      public String requestForAdmin(Model model) {
-          model.addAttribute("documents", mainService.getAllFiles());
+          model.addAttribute("documentsList", mainService.getAllDocuments());
           return "/admin-request_cards";
-     }
-
-     @GetMapping(value = "add-documents")
-     public String addDocumentForm(Model model) {
-
-          model.addAttribute("documents", new Documents());
-          return "/admin-add-document";
-     }
-
-     @RequestMapping(path = "/save-document-info", method = RequestMethod.POST, consumes = {
-               MediaType.MULTIPART_FORM_DATA_VALUE })
-     public String saveFile(@RequestParam("image") MultipartFile partFile, @RequestParam Map<String, String> params,
-               Model model) {
-          String resonseMessage = "";
-
-          if (partFile.getSize() > 0 && params != null) {
-               mainService.saveDocumentData(partFile, params);
-               resonseMessage = "File Uploaded";
-          } else {
-               resonseMessage = "Failed to upload file!";
-
-          }
-          return "redirect:/admin-request?message=" + resonseMessage;
      }
 
      @RequestMapping(value = "/delete-document-card", method = RequestMethod.GET)
@@ -240,10 +220,12 @@ public class AdminController {
           }
      }
 
+     // end documents managing
+
      // Test Student Request
      @GetMapping("/student_requests")
      public String viewAllRequests(Model model) {
-          List<StudentRequest> studentsRequest = studService.displayAllRequest();
+          List<StudentRequest> studentsRequest = mainService.displayAllRequest();
           List<StudentRequest_Dto> storeStudentRequest = new ArrayList<>();
 
           for (StudentRequest studReq : studentsRequest) {
@@ -259,68 +241,6 @@ public class AdminController {
           model.addAttribute("studentRequests", storeStudentRequest);
 
           return "/student_all_requests";
-     }
-
-     @GetMapping(value = "/admin/request/{document}")
-     public String requestForm(@PathVariable String document, HttpServletRequest request, Model model) {
-
-          try {
-               if (!mainService.findDocumentByTitle(document)) {
-                    return "redirect:" + "/student_request";
-               }
-               String description = docRepo.findByTitle(document).getDescription();
-               model.addAttribute("documentType", document);
-               model.addAttribute("description", description);
-          } catch (Exception e) {
-               System.out.println("error in global: " + e.getMessage());
-          }
-          return "/request-form";
-
-     }
-
-     @PostMapping("/admin/request/{document}/sent")
-     public String sentRequest(@PathVariable String document,
-               @RequestParam Map<String, String> params, Model model) {
-
-          try {
-
-               StudentRequest req = new StudentRequest();
-               Users user = new Users();
-
-               for (Map.Entry<String, String> entry : params.entrySet()) {
-                    if (entry.getKey().equals("userId")) {
-                         user = adminRepo.findUserIdByUsername(entry.getValue());
-                         req.setRequestBy(user);
-                    } else if (entry.getKey().equals("year")) {
-                         req.setYear(entry.getValue());
-                    } else if (entry.getKey().equals("course")) {
-                         req.setCourse(entry.getValue());
-                    } else if (entry.getKey().equals("semester")) {
-                         req.setSemester(entry.getValue());
-                    }
-               }
-               req.setMessage("HI");
-               req.setRequestDate("2022");
-               req.setRequestStatus("Pending");
-               req.setReleaseDate("2022");
-               req.setManageBy("admin");
-               if (mainService.findDocumentByTitle(document)) {
-                    req.setRequestDocument(docRepo.findByTitle(document));
-
-               }
-
-               // if (studService.saveRequest(req)) {
-               // model.addAttribute("message", "Request Successfully Sent.");
-               // return "/request-form";
-               // } else {
-               // model.addAttribute("message", "Request Failed to sent.");
-               // return "/request-form";
-               // }
-
-          } catch (Exception e) {
-               model.addAttribute("message", "Request Failed to sent, Reason: " + e.getMessage());
-          }
-          return "redirect:/student_requests";
      }
 
 }

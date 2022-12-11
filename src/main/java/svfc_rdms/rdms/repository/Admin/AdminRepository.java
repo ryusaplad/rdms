@@ -1,4 +1,4 @@
-package svfc_rdms.rdms.repository;
+package svfc_rdms.rdms.repository.Admin;
 
 import java.util.List;
 

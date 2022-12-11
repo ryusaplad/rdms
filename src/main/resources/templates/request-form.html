@@ -54,20 +54,21 @@
                                         th:text="${#strings.toUpperCase(documentType)}"></strong></h4>
                               <p><b class="text-danger">(*) all fields are required</b></p>
                               <p><b class="text-black" style="white-space: pre;" th:text="${description}"></b></p>
+                              <p><b class="text-danger">Please keep in mind that if you do not meet all of the
+                                        requirements, your request will be rejected.</b></p>
                               <h6 class="card-subtitle"></h6>
                               <form id="form" method="POST" th:action="'/admin/request/' + ${documentType} +'/sent'" class=" mt-5 form-floating">
                                    <h3>Information</h3>
                                    <div class="row">
                                         <div class="col-sm ">
                                              <div class="mt-2  form-floating">
-                                   
+
                                                   <input name="userId" type="text" class="form-control floatingInput" id="userId" placeholder="Student Id">
                                                   <label for="userId">Student Id *</label>
                                              </div>
-                                   
+
                                              <div class="mt-2 form-floating">
-                                                  <input id="studName" name="name" type="text" class="form-control floatingInput"
-                                                       placeholder="Student Name">
+                                                  <input id="studName" name="name" type="text" class="form-control floatingInput" placeholder="Student Name">
                                                   <label for="studName">Student Name *</label>
                                              </div>
                                              <div class=" mt-2 form-floating">
@@ -79,26 +80,26 @@
                                                        <option value="5TH YEAR">5TH YEAR</option>
                                                   </select>
                                                   <label for="year">Year *</label>
-                                                  </div>
-                                                  <div class="mt-2  form-floating">
-                                                  
-                                                       <select id="course" name="course" class="form-select">
-                                                            <option value="BSIT">BSIT</option>
-                                                            <option value="BPAD">BPAD</option>
-                                                            <option value="BSHM">BSHM</option>
-                                                       </select>
+                                             </div>
+                                             <div class="mt-2  form-floating">
+                                             
+                                                  <select id="course" name="course" class="form-select">
+                                                       <option value="BSIT">BSIT</option>
+                                                       <option value="BPAD">BPAD</option>
+                                                       <option value="BSHM">BSHM</option>
+                                                  </select>
                                                   <label for="course">Course *</label>
-                                                  </div>
-                                                  
-                                                  <div class="mt-2  form-floating">
-                                                  
-                                                       <select id="semester" name="semester" class="form-select">
-                                                            <option value="1ST SEMESTER">1ST SEMESTER</option>
-                                                            <option value="2ND SEMESTER">2ND SEMESTER</option>
+                                             </div>
+                                             
+                                             <div class="mt-2  form-floating">
+                                             
+                                                  <select id="semester" name="semester" class="form-select">
+                                                       <option value="1ST SEMESTER">1ST SEMESTER</option>
+                                                       <option value="2ND SEMESTER">2ND SEMESTER</option>
 
                                                   </select>
                                                   <label for="semester">Semester *</label>
-                                                  </div>
+                                             </div>
                                              <p>(*) Mandatory</p>
                                              <div class="row">
                                                   <div class="col">
@@ -149,19 +150,19 @@
                                                             <div class="col text-end">
                                                                  <button type="submit" class="btn saveFile btn-success w-50">Save
                                                                       File</button>
-                                                                           </div>
+                                                            </div>
 
                                                        </div>
-                                                       </div>
-                                                       </div>
-                                                       </form>
-                                                       </div>
+                                                  </div>
+                                                  </div>
+                                                  </form>
+                                                  </div>
                               </div>
-                              </div>
+                         </div>
                     </div>
                </div>
           </div>
-          </div>
+     </div>
 
      </div>
 

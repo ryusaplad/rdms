@@ -4,18 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import svfc_rdms.rdms.repository.AdminRepository;
-import svfc_rdms.rdms.repository.Admin_DocumentRepository;
-import svfc_rdms.rdms.serviceImpl.MainServiceImpl;
-import svfc_rdms.rdms.serviceImpl.StudentServiceImpl;
+import svfc_rdms.rdms.repository.Admin.AdminRepository;
+import svfc_rdms.rdms.repository.Document.DocumentRepository;
+import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Controller
 public class GlobalController {
 
      @Autowired
-     MainServiceImpl mainService;
+     AdminServicesImpl mainService;
      @Autowired
-     Admin_DocumentRepository docRepo;
+     DocumentRepository docRepo;
 
      @Autowired
      AdminRepository adminRepo;
