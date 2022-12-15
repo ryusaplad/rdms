@@ -8,10 +8,10 @@ import svfc_rdms.rdms.model.Users;
 public interface StudentService {
      boolean saveRequest(StudentRequest request);
 
-     List<StudentRequest> findRequestByUserID(long id);
-
-     List<Users> findUsernameByUserID(long id);
-
      Boolean findDocumentByTitle(String title);
+
+     List<StudentRequest> displayRequestByStudent(Users user);
+
+     Users getUserIdByUsername(String username);
 
 }

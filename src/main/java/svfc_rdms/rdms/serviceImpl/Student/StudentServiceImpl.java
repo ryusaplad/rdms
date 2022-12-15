@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
+import svfc_rdms.rdms.repository.Admin.AdminRepository;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Student.StudentService;
@@ -19,6 +20,9 @@ public class StudentServiceImpl implements StudentService {
 
      @Autowired
      DocumentRepository docRepo;
+
+     @Autowired
+     AdminRepository adminRepo; 
 
      @Override
      public boolean saveRequest(StudentRequest request) {
@@ -39,16 +43,17 @@ public class StudentServiceImpl implements StudentService {
           return false;
      }
 
+    
      @Override
-     public List<StudentRequest> findRequestByUserID(long id) {
+     public List<StudentRequest> displayRequestByStudent(Users user) {
 
-          return null;
+          return studRepo.findAllByRequestBy(user);
      }
 
-     @Override
-     public List<Users> findUsernameByUserID(long id) {
 
-          return null;
+     @Override
+     public Users getUserIdByUsername(String username) {
+          return adminRepo.findUserIdByUsername(username);
      }
 
 }

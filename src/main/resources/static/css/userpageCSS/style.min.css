@@ -9905,7 +9905,9 @@ select.form-select.form-control-line {
   display: inline-block;
   text-align: center;
 }
-.sidebar-nav ul .sidebar-item .sidebar-link.active,
+.sidebar-nav ul .sidebar-item .sidebar-link.active{
+  
+}
 .sidebar-nav ul .sidebar-item .sidebar-link:hover {
   opacity: 1;
   background-color: #2a2e33;
