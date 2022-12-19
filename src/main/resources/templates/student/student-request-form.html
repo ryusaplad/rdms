@@ -13,7 +13,6 @@
 
     <!-- Custom CSS -->
     <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
 
 
 
@@ -196,7 +195,7 @@
 
                                 <hr class="devider">
                                 <div th:if="${#session.getAttribute('username')!=null}">
-                                
+
                                     <label th:with="id=${#session.getAttribute('username')}"
                                         class="dropdown-item bg-success border border-1 b-2 text-white">Student Id
                                         :[[${id}]]</label>
@@ -307,10 +306,10 @@
                                 href="/student/dashboard" aria-expanded="false"><i class="fas fa-home"></i><span
                                     class="hide-menu">Home</span></a></li>
 
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark in"
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark"
                                 href="/student/request/documents" aria-expanded="false"><i class="fas fa-list"></i><span
                                     class="hide-menu">Requests</span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
+                            <ul aria-expanded="false" class="collapse  first-level in">
                                 <li class="sidebar-item"><a href="/student/my-requests" class="sidebar-link"><i
                                             class="fas fa-table"></i><span class="hide-menu"> My Requests
                                         </span></a></li>
@@ -372,65 +371,165 @@
             <!-- Container fluid  -->
             <!-- ============================================================== -->
 
-            <div class="container-fluid">
+            <div class="container-sm">
 
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">My Requests</h5>
-                        <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
+                <div th:if="${documentType} != null">
 
-                                        <th>Documents</th>
-                                        <th>Manage By</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Request Form - <strong id="documentTypeTitle"
+                                    th:text="${#strings.toUpperCase(documentType)}"></strong></h4>
+                            <p><b class="text-danger">(*) all fields are required</b></p>
+                            <p class=""> <b style="width:2px; white-space: pre-wrap; word-spacing: 1px; "
+                                    th:text="${description}"><br></b></p>
+                            <p><b class="text-danger">Please keep in mind that if you do not meet all of the
+                                    requirements, your request will be rejected.</b></p>
+                            <h6 class="card-subtitle">
 
+                            </h6>
+                            <form id="reqForm" class=" mt-5 form-floating">
+                                <h3>Information</h3>
+                                <h6 class="alert alert-warning  servererrorMessageAlert" style="display:none"
+                                    role="alert">
 
-                                    </tr>
-                                </thead>
+                                </h6>
+                                <div class="row">
+                                    <div class="col-sm ">
+                                        <div class="mt-2  form-floating"
+                                            th:if="${#session.getAttribute('username')!=null}" style="display:none">
 
-                                <tbody>
-                                    <tr th:each="studRequest : ${myrequest}">
+                                            <input name="studentId" type="text" class="form-control floatingInput"
+                                                id="studentId" th:value="${#session.getAttribute('username')}"
+                                                placeholder="Student Id" readonly>
+                                            <label for="userId">Student Id <span
+                                                    class="badge badge-secondary text-danger ">*</span>
+                                        </div>
 
+                                        <div class="mt-2 form-floating" th:if="${#session.getAttribute('name')!=null}"
+                                            style="display:none">
+                                            <input id="studName" name="name" type="text"
+                                                class="form-control floatingInput"
+                                                th:value="${#session.getAttribute('name')}" placeholder=" Student Name"
+                                                readonly>
+                                            <label for="studName">Student Name <span
+                                                    class="badge badge-secondary text-danger ">*</span>
+                                        </div>
+                                        <div class=" mt-2 form-floating">
+                                            <select id="year" name="year" class="form-select" placeholder="Year Level">
+                                                <option value="1ST YEAR">1ST YEAR</option>
+                                                <option value="2ND YEAR">2ND YEAR</option>
+                                                <option value="3RD YEAR">3RD YEAR</option>
+                                                <option value="4TH YEAR">4TH YEAR</option>
+                                                <option value="5TH YEAR">5TH YEAR</option>
+                                            </select>
+                                            <label for="year">Year <span
+                                                    class="badge badge-secondary text-danger ">*</span>
+                                        </div>
+                                        <div class="mt-2  form-floating">
 
-                                        <td th:text="${studRequest.requestDocument}"></td>
-                                        <td th:text="${studRequest.manageBy}"></td>
-                                        <td th:text="${studRequest.requestStatus}"></td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-primary w-100">Edit</a>
+                                            <select id="course" name="course" class="form-select">
+                                                <option value="BSIT">BSIT</option>
+                                                <option value="BPAD">BPAD</option>
+                                                <option value="BSHM">BSHM</option>
+                                            </select>
+                                            <label for="course">Course <span
+                                                    class="badge badge-secondary text-danger ">*</span>
+                                        </div>
+
+                                        <div class="mt-2  form-floating">
+
+                                            <select id="semester" name="semester" class="form-select">
+                                                <option value="1ST SEMESTER">1ST SEMESTER</option>
+                                                <option value="2ND SEMESTER">2ND SEMESTER</option>
+
+                                            </select>
+                                            <label for="semester">Semester <span
+                                                    class="badge badge-secondary text-danger ">*</span>
+                                        </div>
+
+                                        <div class="mt-2 form-floating">
+                                            <textarea id="message" name="message" class="form-control floatingInput"
+                                                maxlength="250" style="height:150px"></textarea>
+                                            <label id="messageLengthLabel" for="message">You can add message here with
+                                                maximum of (250
+                                                letters)</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm">
+                                        <h3>Requirements</h3>
+                                        <div class="alert alert-danger message errorMessageAlert" style="display:none"
+                                            role="alert">
+
+                                        </div>
+                                        <div class="container">
+
+                                            <div class="row mb-2 ">
+
+                                                <div class="col col-lg-9">
+
+                                                    <h5>Upload Needed Requirements here.
+                                                        <span class="badge badge-secondary text-danger">*</span>
+                                                    </h5>
                                                 </div>
-                                                <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-danger w-100">Delete</a>
 
+                                                <div class="col-lg-2 mb-2 text-end">
+
+                                                    <label for="files" class="btn addRequirementFile btn-primary"
+                                                        style="width:130px">
+                                                        Add
+                                                    </label>
+                                                    <div class="text-left" style="display:none">
+
+                                                        <input class="form-control" name="file[]" type="file" id="files"
+                                                            multiple />
+                                                    </div>
                                                 </div>
-                                                <div class="col-sm">
-                                                    <a data-bs-toggle="modal" data-bs-target="#detailModal"
-                                                        type="button" class="btn btn-success w-100">
-                                                        Details</a>
+                                                <div class="col-0 table-responsive ">
+                                                    <table class="table table-white table-bordered mt-2">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Action</th>
+                                                                <th scope="col">File Name</th>
+                                                                <th scope="col">File Size</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="fileInfoTable">
 
+                                                        </tbody>
+                                                    </table>
+
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <button id="savebtn"
+                                                                class="btn btn-success text-white w-100"
+                                                                disabled>Submit</button>
+                                                        </div>
+                                                        <div class="col">
+                                                            <button id="finalBtn"
+                                                                class="btn finalizedBtn btn-danger text-white w-100">Finalized</button>
+                                                        </div>
+                                                        <div class="col">
+                                                            <button id="resetBtn" type="reset"
+                                                                class="btn clearRequest text-white btn-warning w-100">Reset</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-
                                             </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
+                                        </div>
+                            </form>
                         </div>
-
                     </div>
                 </div>
-
-
             </div>
-
         </div>
 
 
+    </div>
+
+    </div>
+
+
 
 
     </div>
@@ -442,6 +541,36 @@
 
     </div>
 
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" data-backdrop="static"
+        aria-labelledbsaveRequesty="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i
+                            class='fas fa-question-circle text-primary'></i></i>Request Confirmation</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to submit the request?</p>
+                    <b class="text-danger">Note</b>
+                    <ul>
+
+                        <li>
+                            <p>Make sure that all of the requirements is correct.</p>
+                        </li>
+                        <li>
+                            <p>Please keep in mind that if you do not meet all of the
+                                requirements, your request will be rejected.</p>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary confirmRequestModal">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
@@ -449,13 +578,7 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-    <script>
-        /****************************************
-         *       Basic Table                   *
-         ****************************************/
-        $('#zero_config').DataTable();
-    </script>
+    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request.js}"></script>
 </body>
 
 </html>

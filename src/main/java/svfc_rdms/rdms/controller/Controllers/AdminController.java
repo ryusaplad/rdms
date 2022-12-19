@@ -180,17 +180,20 @@ public class AdminController {
      @ResponseBody
      public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
 
-          List<Users> users = mainService.findOneUserById(id);
+          Optional<Users> users = mainService.findOneUserById(id);
 
           List<Users> usersList = new ArrayList<>();
 
-          for (Users user : users) {
-               usersList.add(new Users(user.getUserId(), user.getName(), user.getUsername(),
-                         user.getPassword(),
-                         user.getType(), user.getStatus()));
-
+          if (users.isPresent()) {
+               users.stream().forEach(e -> {
+                    usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
+                              users.get().getPassword(),
+                              users.get().getType(), users.get().getStatus()));
+               });
+               return usersList;
           }
           return usersList;
+
      }
      // Viewing - Adding Document
 

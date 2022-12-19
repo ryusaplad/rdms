@@ -19,7 +19,7 @@ public interface AdminService {
 
      boolean findUserName(String username);
 
-     List<Users> findOneUserById(long userId);
+     Optional<Users> findOneUserById(long userId);
 
      boolean deleteData(long userId);
 

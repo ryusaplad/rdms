@@ -143,7 +143,7 @@ $(document).ready(function () {
             console.log(formData.type);
             if (formData.type == "Student") {
               setTimeout(function () {
-                window.location = "http://localhost:8091/student/dashboard";
+                window.location = "/student/dashboard";
               }, 1000);
             }
           } else {

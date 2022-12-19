@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RdmsApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(RdmsApplication.class, args);
+
 	}
 
 }

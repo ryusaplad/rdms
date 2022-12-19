@@ -28,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
                if (foundUser != null) {
 
                     if (foundUser.getStatus().equals("Active")) {
-                         session.setAttribute("studentName", foundUser.getName());
+                         session.setAttribute("name", foundUser.getName());
                          session.setAttribute("username", user.getUsername());
                          session.setAttribute("accountType", user.getType());
 

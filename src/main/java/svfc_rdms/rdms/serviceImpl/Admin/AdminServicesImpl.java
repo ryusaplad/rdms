@@ -41,8 +41,7 @@ public class AdminServicesImpl implements AdminService {
      @Override
      public boolean deleteData(long userId) {
 
-          if (findOneUserById(userId).size() > 0) {
-
+          if (findOneUserById(userId).isPresent()) {
                repository.deleteById(userId);
                return true;
           }
@@ -51,7 +50,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public boolean changeAccountStatus(String status, long userId) {
-          if (findOneUserById(userId).size() > 0) {
+          if (findOneUserById(userId).isPresent()) {
                repository.changeStatusOfUser(status, userId);
                return true;
           }
@@ -122,16 +121,23 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public boolean findUserName(String username) {
-          List<Users> users = (repository.findByUsername(username));
-          if (users.size() > 0) {
-               return true;
+          if (repository.findByUsername(username).isPresent()) {
+               Optional<Users> users = repository.findByUsername(username);
+               if (users.isPresent()) {
+                    return true;
+               }
           }
           return false;
+
      }
 
      @Override
-     public List<Users> findOneUserById(long userId) {
-          return repository.findByuserId(userId);
+     public Optional<Users> findOneUserById(long userId) {
+          Optional<Users> users = repository.findByuserId(userId);
+          if (users.isPresent()) {
+               return users;
+          }
+          return null;
      }
 
      @Override
@@ -152,8 +158,7 @@ public class AdminServicesImpl implements AdminService {
                String title = "";
                String description = "";
                Boolean status = true;
-               System.out.println("Size: " + multipartFile.getSize());
-               System.out.println("Size: " + documentsInfo.size());
+
                if (multipartFile.getSize() == 0) {
                     throw new ApiRequestException("Invalid Image, Documents Image Cannot be Empty");
                } else {

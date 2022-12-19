@@ -37,9 +37,14 @@ public class UserFiles {
      private String size;
      private String status; // saved/ pending/
      private String dateUploaded;
+     private String filePurpose; // Backup / Requirements
 
      @ManyToOne(cascade = CascadeType.ALL)
      @JoinColumn(name = "uploaded_by", referencedColumnName = "userId")
      private Users uploadedBy; // One User to many files
+
+     @ManyToOne(cascade = CascadeType.ALL)
+     @JoinColumn(name = "requestwith", referencedColumnName = "requestId")
+     private StudentRequest requestWith;
 
 }

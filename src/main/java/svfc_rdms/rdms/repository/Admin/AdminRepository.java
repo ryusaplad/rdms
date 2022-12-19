@@ -1,6 +1,7 @@
 package svfc_rdms.rdms.repository.Admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,13 +13,13 @@ import svfc_rdms.rdms.model.Users;
 
 public interface AdminRepository extends JpaRepository<Users, Long> {
 
-     public Users findUserIdByUsername(String username);
+     public Optional<Users> findUserIdByUsername(String username);
 
-     public List<Users> findByUsername(String username);
+     public Optional<Users> findByUsername(String username);
 
      public List<Users> findAllByStatusAndType(String status, String type);
 
-     public List<Users> findByuserId(long userId);
+     public Optional<Users> findByuserId(long userId);
 
      @Query("SELECT COUNT(u) FROM Users u WHERE status =:status AND type =:type ")
      int totalUsers(String status, String type);

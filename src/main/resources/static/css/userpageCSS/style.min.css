@@ -9619,7 +9619,7 @@ select.form-select.form-control-line {
 }
 .lds-ripple .lds-pos {
   position: absolute;
-  border: 2px solid #2962ff;
+  border: 2px solid red;
   opacity: 1;
   border-radius: 50%;
   animation: lds-ripple 1s cubic-bezier(0, 0.1, 0.5, 1) infinite;
@@ -9906,6 +9906,8 @@ select.form-select.form-control-line {
   text-align: center;
 }
 .sidebar-nav ul .sidebar-item .sidebar-link.active{
+  background-color: whitesmoke;
+   color:red;
   
 }
 .sidebar-nav ul .sidebar-item .sidebar-link:hover {
@@ -12288,3 +12290,121 @@ label {
     display: block !important;
   }
 }
+
+
+/* User Pages CSs */
+  .sidebar {
+            position: fixed;
+            top: 65px;
+            right: -550px;
+            width: 100%px;
+            height: auto;
+            background-color: gray;
+            color: black;
+            padding: 50px;
+            
+        }
+
+
+        .rightSidebarToggle {
+            height: 40px;
+            width: 50px;
+            background-color: gray;
+            color: white;
+            margin-top: 20px;
+            margin-left: -90px;
+            text-align: left;
+        }
+
+        .notificationCard {
+
+       
+            padding: 0;
+            margin-top: 10px;
+            overflow-y: scroll;
+            height: 200px;
+         
+        }
+
+        .ntcardMain {
+
+
+            overflow-y: scroll;
+            height: 200px;
+
+        }
+
+        .dtcard {
+            margin-top: -46px;
+        }
+
+        .dateTimeCard {
+         
+            margin-top: -50px;
+            border: 1px solid gray !important;
+            border-radius: 10px;
+          
+        }
+
+        /* Hide the cards on small screens */
+        @media screen and (max-width: 700px) {
+
+            .sidebar,
+            .rightSidebarToggle {
+
+                display: block;
+            }
+
+            .dtcard,
+            .ntcard {
+                display: none;
+
+            }
+        }
+
+
+
+        @media screen and (min-width: 700px) {
+
+            .sidebar,
+            .rightSidebarToggle {
+                display: none;
+            }
+
+            .dtcard,
+            .ntcard {
+                display: block;
+
+            }
+        }
+
+        /* Style the scrollbar for the element with the ID "my-element" */
+        .notificationCard::-webkit-scrollbar {
+            width: 5px;
+            height: 1px;
+            background-color: white;
+        }
+
+        .notificationCard::-webkit-scrollbar-thumb {
+            background-color: gray;
+            border-radius: 1px;
+        }
+
+        .notificationCard::-webkit-scrollbar-track {
+            background-color: white;
+        }
+
+        .ntcardMain::-webkit-scrollbar {
+            width: 5px;
+            height: 1px;
+            background-color: white;
+        }
+
+        .ntcardMain::-webkit-scrollbar-thumb {
+            background-color: gray;
+            border-radius: 1px;
+        }
+
+        .ntcardMain::-webkit-scrollbar-track {
+            background-color: white;
+        }
