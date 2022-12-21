@@ -1,22 +1,20 @@
 package svfc_rdms.rdms.controller.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
-import svfc_rdms.rdms.model.StudentRequest;
-import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
@@ -76,25 +74,7 @@ public class StudentController {
      @GetMapping("/student/my-requests")
      public String listOfStudentRequest(Model model, HttpSession session) {
           setSessionDefaultValue("username", null, null, session);
-          String username = "";
-          if (session.getAttribute("username") != null) {
-               username = session.getAttribute("username").toString();
-               Users user = studService.getUserIdByUsername(username).get();
-
-               List<StudentRequest> fetchStudentRequest = studService.displayRequestByStudent(user);
-               List<StudentRequest_Dto> studRequestResults = new ArrayList<>();
-
-               fetchStudentRequest.stream().forEach(req -> {
-                    studRequestResults.add(new StudentRequest_Dto(req.getRequestId(), req.getRequestBy().getUserId(),
-                              req.getRequestBy().getType(), req.getYear(),
-                              req.getCourse(), req.getSemester(), req.getRequestDocument().getTitle(),
-                              req.getMessage(), req.getRequestBy().getName(), req.getRequestDate(),
-                              req.getRequestStatus(), req.getReleaseDate(), req.getManageBy()));
-               });
-               model.addAttribute("myrequest", studRequestResults);
-               return "/student/student-request-list";
-          }
-          return "redirect:/student/dashboard";
+          return studService.displayStudentRequests(model, session);
      }
 
      @GetMapping(value = "/student/request/{document}")
@@ -105,13 +85,26 @@ public class StudentController {
                     return "redirect:" + "/student/request/documents";
                }
                String description = docRepo.findByTitle(document).get().getDescription();
+
                model.addAttribute("documentType", document);
                model.addAttribute("description", description);
+
           } catch (Exception e) {
                System.out.println("error in student controller: " + e.getMessage());
           }
           return "/student/student-request-form";
 
+     }
+
+     @GetMapping("/student/documents/image")
+     public void showImage(@Param("documentId") long id, HttpServletResponse response,
+               Optional<Documents> dOptional) {
+          studService.student_showImageFiles(id, response, dOptional);
+     }
+
+     @GetMapping("/admin/my-request/download")
+     public void downloadFile(@Param("id") long id, Model model, HttpServletResponse response) {
+          studService.student_DownloadFile(id, model, response);
      }
 
      public void setSessionDefaultValue(String variable, String compareTo, String newValue, HttpSession session) {

@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,9 +16,11 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
+import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.Admin.AdminRepository;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
+import svfc_rdms.rdms.repository.File.FileRepository;
+import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Admin.AdminService;
 
@@ -24,25 +28,27 @@ import svfc_rdms.rdms.service.Admin.AdminService;
 public class AdminServicesImpl implements AdminService {
 
      @Autowired
-     AdminRepository repository;
+     UsersRepository userRepository;
 
      @Autowired
      StudentRepository studRepo;
 
      @Autowired
      DocumentRepository docRepo;
+     @Autowired
+     FileRepository userRepo;
 
      @Override
      public List<Users> diplayAllAccounts(String status, String type) {
 
-          return repository.findAllByStatusAndType(status, type);
+          return userRepository.findAllByStatusAndType(status, type);
      }
 
      @Override
      public boolean deleteData(long userId) {
 
           if (findOneUserById(userId).isPresent()) {
-               repository.deleteById(userId);
+               userRepository.deleteById(userId);
                return true;
           }
           return false;
@@ -51,7 +57,7 @@ public class AdminServicesImpl implements AdminService {
      @Override
      public boolean changeAccountStatus(String status, long userId) {
           if (findOneUserById(userId).isPresent()) {
-               repository.changeStatusOfUser(status, userId);
+               userRepository.changeStatusOfUser(status, userId);
                return true;
           }
           return false;
@@ -62,6 +68,7 @@ public class AdminServicesImpl implements AdminService {
 
           String error = "";
           try {
+               PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
                     error = "Name cannot be empty! " + user.getName();
                     throw new ApiRequestException(error);
@@ -95,14 +102,17 @@ public class AdminServicesImpl implements AdminService {
 
                               throw new ApiRequestException(error);
                          } else {
-
-                              repository.saveAndFlush(user);
+                              String hashedPassword = passwordEncoder.encode(user.getPassword());
+                              user.setPassword(hashedPassword);
+                              userRepository.saveAndFlush(user);
                               ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
                               return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                          }
                     } else if (actions == 1) {
 
-                         repository.saveAndFlush(user);
+                         String hashedPassword = passwordEncoder.encode(user.getPassword());
+                         user.setPassword(hashedPassword);
+                         userRepository.saveAndFlush(user);
                          ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
                          return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                     }
@@ -121,8 +131,8 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public boolean findUserName(String username) {
-          if (repository.findByUsername(username).isPresent()) {
-               Optional<Users> users = repository.findByUsername(username);
+          if (userRepository.findByUsername(username).isPresent()) {
+               Optional<Users> users = userRepository.findByUsername(username);
                if (users.isPresent()) {
                     return true;
                }
@@ -133,7 +143,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public Optional<Users> findOneUserById(long userId) {
-          Optional<Users> users = repository.findByuserId(userId);
+          Optional<Users> users = userRepository.findByuserId(userId);
           if (users.isPresent()) {
                return users;
           }
@@ -142,7 +152,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public int displayCountsByStatusAndType(String status, String type) {
-          return repository.totalUsers(status, type);
+          return userRepository.totalUsers(status, type);
      }
 
      @Override
@@ -264,8 +274,17 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public Optional<Documents> getFileById(long id) {
+     public Optional<Documents> getFileDocumentById(long id) {
           Optional<Documents> fileOptional = docRepo.findById(id);
+          if (fileOptional.isPresent()) {
+               return fileOptional;
+          }
+          return Optional.empty();
+     }
+
+     @Override
+     public Optional<UserFiles> getFileById(long id) {
+          Optional<UserFiles> fileOptional = userRepo.findById(id);
           if (fileOptional.isPresent()) {
                return fileOptional;
           }

@@ -1,14 +1,18 @@
 package svfc_rdms.rdms.controller.Controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
+import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.Admin.AdminRepository;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
@@ -39,21 +43,18 @@ public class AdminController {
      @Autowired
      DocumentRepository docRepo;
 
-     @Autowired
-     AdminRepository adminRepo;
-
      // Get Mapping Method
      @GetMapping("/admin")
      public String dashboard_View(Model model) {
-          model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Students"));
-          model.addAttribute("totalFacilitators", mainService.displayCountsByStatusAndType("Active", "Facilitators"));
-          model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrars"));
-          model.addAttribute("totalTeachers", mainService.displayCountsByStatusAndType("Active", "Teachers"));
+          model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Student"));
+          model.addAttribute("totalFacilitators", mainService.displayCountsByStatusAndType("Active", "Facilitator"));
+          model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrar"));
+          model.addAttribute("totalTeachers", mainService.displayCountsByStatusAndType("Active", "Teacher"));
 
-          model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Teachers"));
-          model.addAttribute("totalDeletedFac", mainService.displayCountsByStatusAndType("Temporary", "Students"));
-          model.addAttribute("totalDeletedReg", mainService.displayCountsByStatusAndType("Temporary", "Facilitators"));
-          model.addAttribute("totalDeletedTeach", mainService.displayCountsByStatusAndType("Temporary", "Registrars"));
+          model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
+          model.addAttribute("totalDeletedFac", mainService.displayCountsByStatusAndType("Temporary", "Student"));
+          model.addAttribute("totalDeletedReg", mainService.displayCountsByStatusAndType("Temporary", "Facilitator"));
+          model.addAttribute("totalDeletedTeach", mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
 
           return "/admin-dashboard";
      }
@@ -183,11 +184,12 @@ public class AdminController {
           Optional<Users> users = mainService.findOneUserById(id);
 
           List<Users> usersList = new ArrayList<>();
-
           if (users.isPresent()) {
                users.stream().forEach(e -> {
+
                     usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
-                              users.get().getPassword(),
+                              users.get().getPassword().replace(users.get()
+                                        .getPassword(), ""),
                               users.get().getType(), users.get().getStatus()));
                });
                return usersList;
@@ -213,7 +215,7 @@ public class AdminController {
      public void showImage(@Param("documentId") long id, HttpServletResponse response,
                Optional<Documents> dOptional) {
 
-          dOptional = mainService.getFileById(id);
+          dOptional = mainService.getFileDocumentById(id);
           try {
                response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
                response.getOutputStream().write(dOptional.get().getImage());
@@ -224,6 +226,21 @@ public class AdminController {
      }
 
      // end documents managing
+
+     @GetMapping("/admin/documents/downloadfile")
+     public void downloadFile(@Param("id") long id, Model model, HttpServletResponse response) throws IOException {
+          Optional<UserFiles> temp = mainService.getFileById(id);
+          if (temp != null) {
+               UserFiles file = temp.get();
+               response.setContentType("application/octet-stream");
+               String headerKey = "Content-Disposition";
+               String headerValue = "attachment; filename = " + file.getName();
+               response.setHeader(headerKey, headerValue);
+               ServletOutputStream outputStream = response.getOutputStream();
+               outputStream.write(file.getData());
+               outputStream.close();
+          }
+     }
 
      // Test Student Request
      @GetMapping("/student_requests")

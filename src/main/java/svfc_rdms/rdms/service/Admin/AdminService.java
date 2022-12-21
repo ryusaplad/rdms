@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
+import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 
 public interface AdminService {
@@ -37,11 +38,15 @@ public interface AdminService {
 
      List<String> getAllDocumentTitles();
 
-     Optional<Documents> getFileById(long id);
+     Optional<Documents> getFileDocumentById(long id);
 
      Boolean deleteFile(long id);
 
      // Get All Request of Students
      List<StudentRequest> displayAllRequest();
+
+     // get all user files;
+
+     Optional<UserFiles> getFileById(long id);
 
 }

@@ -327,7 +327,7 @@
                         <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-user"></i><span
                                     class="hide-menu">My Profile
                                 </span></a></li>
-                        <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-power-off"></i><span
+                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i class="fas fa-power-off"></i><span
                                     class="hide-menu">Logout
                                 </span></a></li>
                     </ul>
@@ -388,7 +388,7 @@
                                             <a href="#!">
                                                 <div class="imageDiv mt-2 text-center"
                                                     style="background-color: rgba(251, 251, 251, 0.15);">
-                                                    <img th:src="@{'/image?id='+ ${documents.documentId}}"
+                                                    <img th:src="@{'/student/documents/image?id='+ ${documents.documentId}}"
                                                         src="images/documentImage" class="img-fluid"
                                                         style="height: 250px; width: 250px;" />
                                                 </div>

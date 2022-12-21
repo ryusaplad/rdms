@@ -85,11 +85,13 @@ $(document).ready(function () {
       var id = $("#documentTypeTitle").text();
       var studId = $("#studentId").val();
       var studName = $("#studName").val();
-      var studCourse = $("#course").val();
-      var studSemester = $("#semester").val();
-      var userMessage = $("#message").val();
-      formData.append("studentId", studId);
-      formData.append("studName", studName);
+        var studYear = $("#year").val();
+        var studCourse = $("#course").val();
+        var studSemester = $("#semester").val();
+        var userMessage = $("#message").val();
+        formData.append("studentId", studId);
+        formData.append("studName", studName);
+        formData.append("year", studYear);
       formData.append("course", studCourse);
       formData.append("semester", studSemester);
       formData.append("message", userMessage);

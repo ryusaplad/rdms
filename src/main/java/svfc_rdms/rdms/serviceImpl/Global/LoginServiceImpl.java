@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
@@ -22,28 +24,39 @@ public class LoginServiceImpl implements LoginService {
      @Override
      public ResponseEntity<String> login(Users user, HttpSession session, HttpServletResponse response) {
 
-          Users foundUser = loginRepo.findByUsernameAndPasswordAndType(user.getUsername(), user.getPassword(),
-                    user.getType());
-          try {
-               if (foundUser != null) {
+          String hashPassword = loginRepo.findPasswordByUsername(user.getUsername())
+                    .map(Users::getPassword)
+                    .orElseThrow(() -> new ApiRequestException("Invalid username or password"));
 
-                    if (foundUser.getStatus().equals("Active")) {
-                         session.setAttribute("name", foundUser.getName());
-                         session.setAttribute("username", user.getUsername());
-                         session.setAttribute("accountType", user.getType());
+          PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+          boolean isPasswordValid = passwordEncoder.matches(user.getPassword(), hashPassword);
+          if (isPasswordValid) {
+               Users foundUser = loginRepo.findByUsernameAndPasswordAndType(user.getUsername(),
+                         hashPassword,
+                         user.getType()).get();
+               try {
+                    if (foundUser != null) {
 
-                         return new ResponseEntity<>("success", HttpStatus.OK);
+                         if (foundUser.getStatus().equals("Active")) {
+                              session.setAttribute("name", foundUser.getName());
+                              session.setAttribute("username", user.getUsername());
+                              session.setAttribute("accountType", user.getType());
+
+                              return new ResponseEntity<>("success", HttpStatus.OK);
+                         } else {
+                              return new ResponseEntity<>("Sorry, This is account is not currently Active.",
+                                        HttpStatus.UNAUTHORIZED);
+                         }
                     } else {
-                         return new ResponseEntity<>("Sorry, This is account is not currently Active.",
-                                   HttpStatus.UNAUTHORIZED);
+                         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
                     }
-               } else {
-                    return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+               } catch (Exception e) {
+                    throw new ApiRequestException(e.getMessage());
                }
-          } catch (Exception e) {
-               throw new ApiRequestException(e.getMessage());
-          }
 
+          } else {
+               return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+          }
      }
 
 }

@@ -196,7 +196,7 @@
 
                                 <hr class="devider">
                                 <div th:if="${#session.getAttribute('username')!=null}">
-                                
+
                                     <label th:with="id=${#session.getAttribute('username')}"
                                         class="dropdown-item bg-success border border-1 b-2 text-white">Student Id
                                         :[[${id}]]</label>
@@ -328,7 +328,7 @@
                         <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-user"></i><span
                                     class="hide-menu">My Profile
                                 </span></a></li>
-                        <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-power-off"></i><span
+                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i class="fas fa-power-off"></i><span
                                     class="hide-menu">Logout
                                 </span></a></li>
                     </ul>
@@ -382,8 +382,7 @@
                                 <thead>
                                     <tr>
 
-                                        <th>Documents</th>
-                                        <th>Manage By</th>
+                                        <th>Request Document</th>
                                         <th>Status</th>
                                         <th>Actions</th>
 
@@ -394,22 +393,13 @@
                                 <tbody>
                                     <tr th:each="studRequest : ${myrequest}">
 
-
                                         <td th:text="${studRequest.requestDocument}"></td>
-                                        <td th:text="${studRequest.manageBy}"></td>
                                         <td th:text="${studRequest.requestStatus}"></td>
                                         <td>
                                             <div class="row">
-                                                <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-primary w-100">Edit</a>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-danger w-100">Delete</a>
 
-                                                </div>
                                                 <div class="col-sm">
-                                                    <a data-bs-toggle="modal" data-bs-target="#detailModal"
-                                                        type="button" class="btn btn-success w-100">
+                                                    <a th:href="${studRequest.requestId}" type="button" class="btn btn-success w-100 toggleDetailsModal">
                                                         Details</a>
 
                                                 </div>
@@ -441,7 +431,64 @@
 
 
     </div>
-
+    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
+        aria-labelledby="detailModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModal">
+                        <span id="titleVal">More Details</span>
+                    </h5>
+                    <button type="button" class="close" style="border: 1px solid white; background-color:red; color:white;"
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="font-weight-bold" id="requestidpar"></p>
+                    <p class="font-weight-bold" id="requestbyupar"></p>
+                    <p class="font-weight-bold" id="requestbynpar"></p>
+                    <p class="font-weight-bold" id="yearpar"></p>
+                    <p class="font-weight-bold" id="coursepar">
+    
+                    </p>
+                    <p class="font-weight-bold" id="sempar">
+                        <hr>
+                    <p class="font-weight-bold" id="docreqpar"></p>
+    
+                    <hr>
+                    <p class="font-weight-bold" id="reqstatuspar"></p>
+                    <hr>
+                    <p class="font-weight-bold" id="managebynpar"></p>
+                    <hr>
+                    <p class="font-weight-bold" id="datereqpar"></p>
+                    <p class="font-weight-bold" id="daterelpar"></p>
+                    <table class="table table-white">
+                        <thead>
+                            <tr>
+    
+                                <th>Action</th>
+                                <th>File Name</th>
+                            </tr>
+    
+                        </thead>
+                        <tbody class="tablebody">
+                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                <td>
+    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    
+                </div>
+                    
+                    </div>
+                    </div>
+                    </div>
     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
@@ -450,6 +497,7 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_list.js}"></script>
     <script>
         /****************************************
          *       Basic Table                   *

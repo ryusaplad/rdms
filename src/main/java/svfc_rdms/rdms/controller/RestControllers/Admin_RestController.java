@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.Admin.AdminRepository;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.File.FileUploadServiceImpl;
@@ -34,9 +33,6 @@ public class Admin_RestController {
 
      @Autowired
      DocumentRepository docRepo;
-
-     @Autowired
-     AdminRepository adminRepo;
 
      @Autowired
      StudentServiceImpl studService;
@@ -136,7 +132,7 @@ public class Admin_RestController {
      public ResponseEntity<Object> getAllDocument(@RequestParam("docId") long docId) {
 
           try {
-               Optional<Documents> documents = mainService.getFileById(docId);
+               Optional<Documents> documents = mainService.getFileDocumentById(docId);
 
                if (documents.isPresent()) {
                     ServiceResponse<Optional<Documents>> serviceResponse = new ServiceResponse<>("success",
