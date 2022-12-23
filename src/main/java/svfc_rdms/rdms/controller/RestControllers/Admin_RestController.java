@@ -105,7 +105,7 @@ public class Admin_RestController {
      public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId) {
 
           try {
-               if (mainService.deleteFile(documentId)) {
+               if (mainService.deleteDocumentFile(documentId)) {
                     return new ResponseEntity<Object>("success", HttpStatus.OK);
                } else {
                     return new ResponseEntity<Object>("Failed to delete document!", HttpStatus.BAD_REQUEST);

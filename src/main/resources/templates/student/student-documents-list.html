@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Student - My Requests</title>
+    <title>Student - My Documents</title>
 
     <!-- <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png"> -->
 
@@ -319,8 +319,8 @@
                                         </span></a></li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"><a href="/student/my-documents" class="sidebar-link"><i class="fas fa-folder"></i><span
-                                    class="hide-menu">My Documents
+                        <li class="sidebar-item"><a href="/student/my-documents" class="sidebar-link"><i
+                                    class="fas fa-folder"></i><span class="hide-menu">My Documents
                                 </span></a></li>
                         <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-bell"></i><span
                                     class="hide-menu">Notifications
@@ -328,8 +328,8 @@
                         <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-user"></i><span
                                     class="hide-menu">My Profile
                                 </span></a></li>
-                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i class="fas fa-power-off"></i><span
-                                    class="hide-menu">Logout
+                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i
+                                    class="fas fa-power-off"></i><span class="hide-menu">Logout
                                 </span></a></li>
                     </ul>
                 </nav>
@@ -382,39 +382,20 @@
                                 <thead>
                                     <tr>
 
-                                        <th>Request Document</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-
+                                        <th>Action</th>
+                                        <th>File</th>
+                                        <th>Upload By</th>
 
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    <tr th:each="studRequest : ${myrequest}">
-
-                                        <td th:text="${studRequest.requestDocument}"></td>
-                                        <td th:text="${studRequest.requestStatus}"></td>
-                                        <td>
-                                            <div class="row">
-
-                                                <div class="col-sm">
-                                                    <a th:href="${studRequest.requestId}" type="button" class="btn btn-success w-100 toggleDetailsModal">
-                                                        Details</a>
-
-                                                </div>
-                                                <div class="col-sm" th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a th:href="${studRequest.requestId}" type="button" class="btn btn-secondary w-100 toggleEditReqModal">
-                                                        Edit Files</a>
-
-                                                </div>
-                                                <div class="col-sm" th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a th:href="${studRequest.studentId}" type="button" class="btn btn-primary w-100 resubmitRequests">
-                                                        Re Submit</a>
-                                                
-                                                </div>
-                                            </div>
-                                        </td>
+                                    <tr th:each="file : ${files}">
+                                        <td><a th:href="@{'/student/files/download?id='} + ${file.fileId}" type="button"
+                                                class="btn btn-warning">
+                                                Download</a></td>
+                                        <td th:text="${file.name}"></td>
+                                        <td th:text="${file.uploadedBy}"></td>
                                     </tr>
                                 </tbody>
 
@@ -440,158 +421,7 @@
 
 
     </div>
-    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
-        aria-labelledby="detailModal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailModal">
-                        <span id="titleVal">More Details</span>
-                    </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="card-title">Requests Informations</h4>
-                    <div class="container-sm"></div>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>C/Y/SEM</th>
-                                <th>Requested</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td id="requestbyupar">
-                                </td>
-                                <td class="font-weight-bold" id="requestbynpar">
-                                </td>
-                                <td class="font-weight-bold" id="cysem">
-                                </td>
-                                <td class="font-weight-bold" id="docreqpar"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title">Request Status</h4>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Manage By</th>
-                                <th>Date Request</th>
-                                <th>Date Released</th>
-                                <th>Request Status</th>
-                            </tr>
 
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-weight-bold" id="managebynpar">Manage By</td>
-                                <td class="font-weight-bold" id="datereqpar">Date Request</td>
-                                <td class="font-weight-bold" id="daterelpar">Date Released</td>
-                                <td class="font-weight-bold" id="reqstatuspar">Request Status</td>
-                            </tr>
-                        </tbody>
-                        </table>
-                    <hr>
-                    <h4 class="card-title">Requirements</h4>
-                    <table class="table table-white table-responsive">
-                        <thead>
-                            <tr>
-
-                                <th>Action</th>
-                                <th>File Name</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="tablebody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-
-                                </td>
-                            </tr>
-                        </tbody>
-                        <input style="display:none" class="form-control" name="file[]" type="file" id="files" multiple />
-
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="editRequirements" tabindex="-1" aria-labelledby="editingModalLabel" aria-hidden="true"
-                        data-bs-backdrop="static" data-bs-keyboard="false">
-                        <div class="modal-dialog ">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    File Editing
-                                </div>
-                                <div class="modal-body">
-                                    <div id="editingAlert" style="display:none" class="alert alert-danger" role="alert">
-                    
-                                    </div>
-                                    <form id="reqUpForm">
-                                        <div class="mt-2  form-floating" style="display:none">
-                                            <input name="fileId" type="text" class="form-control floatingInput" id="fileId" readonly>
-                                            <label for="fileId">File Id<span class="badge badge-secondary text-danger ">*</span>
-                                            </label>
-                                        </div>
-                                        <div class="mt-2  form-floating" style="display:none">
-                                            <input name="file" type="text" class="form-control floatingInput" id="fileName" readonly>
-                                            <label for="fileName">Selected File<span class="badge badge-secondary text-danger ">*</span>
-                                            </label>
-                                        </div>
-
-                        <div id="inputFile" style="display:none">
-                            <input style="display:block" class="mt-2 form-control" name="file" type="file" id="fileData"
-                                accept=".jpg,.jpeg,.png" />
-                            <div class="row mt-3">
-                                <div class="col-sm">
-                                    <button type="button" class="btn btn-danger text-white w-100 saveChanges">Save</button>
-                                </div>
-                                <div class="col-sm">
-                                    <button type="reset" class="btn btn-secondary text-white  w-100 clearRequest">Clear</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr>
-                        <label for="files">Select File to update <span class="badge badge-secondary text-danger ">*</span>
-                        </label>
-                        
-                        <table class="table table-white w-100">
-                            <thead>
-                                <tr>
-                        
-                                    <th>Action</th>
-                                    <th>File Name</th>
-                                </tr>
-                        
-                            </thead>
-                            <tbody class="edit-file-table">
-                                <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                    <td>
-                        
-                                    </td>
-                                </tr>
-                            </tbody>
-                        
-                        </table>
-                        
-                        </form>
-                        
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary cancelUpdateBtn" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-            </div>
-            </div>
-            </div>
     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
@@ -600,7 +430,7 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_list.js}"></script>
+
     <script>
 
         $('#zero_config').DataTable();

@@ -6,136 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   
-    <title>Dashboard</title>
+
+    <title>Facilitator - Dashboard</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
+    <!-- <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png"> -->
+    <!-- <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png"> -->
+
     <!-- Custom CSS -->
-    <link href="../../assets/libs/flot/css/float-chart.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="../../dist/css/style.min.css" rel="stylesheet">
-   
-<style>
-    .sidebar {
-        position: fixed;
-        top: 65px;
-        right: 0;
-        width: 350px;
-        height: 85%;
-        background-color: gray;
-        color: black;
-        padding: 20px;
-      
-    }
+    <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
 
 
-    .rightSidebarToggle {
-        height: 40px;
-        width: 50px;
-        background-color: gray;
-        color: white;
-        margin-top: 50px;
-        margin-left: -60px;
-    }
-
-    .notificationCard {
-
-        padding: 0;
-        margin-top: 10px;
-        overflow-y: scroll;
-        height: 200px;
-
-    }
-
-
-    .dateTimeCard {
-        margin-top: -50px;
-        border: 1px solid gray !important;
-        border-radius: 10px;
-    }
-
-    /* Hide the cards on small screens */
-    @media screen and (max-width: 700px) {
-
-        .sidebar,.rightSidebarToggle {
-        
-            display: block;
-        }
-       
-        .dtcard,
-        .ntcard {
-            display: none;
-
-        }
-    }
-
-
-
-    @media screen and (min-width: 700px) {
-
-        .sidebar,
-        .rightSidebarToggle {
-            display: none;
-        }
-
-        .dtcard,
-        .ntcard {
-            display: block;
-
-        }
-    }
-
-    /* Style the scrollbar for the element with the ID "my-element" */
-    .notificationCard::-webkit-scrollbar {
-        width: 5px;
-        height: 1px;
-        background-color: white;
-    }
-
-    .notificationCard::-webkit-scrollbar-thumb {
-        background-color: gray;
-        border-radius: 1px;
-    }
-
-    .notificationCard::-webkit-scrollbar-track {
-        background-color: white;
-    }
-
-
-
-    
-</style>
-<script>
-    function toggleSidebar() {
-        var sidebar = document.querySelector('.sidebar');
-       
-        const dStyle = document.querySelector('.rightSidebarToggle');
-       
-
-        if (document.getElementById("btnIcon").className == "fas fa-angle-left text-white") {
-            document.getElementById("btnIcon").className = "fas fa-angle-right text-white";
-            $('.sidebar').animate({
-            right: '0'
-        }, 600, function () {
-        });
-        } else {
-            document.getElementById("btnIcon").className = "fas fa-angle-left text-white";
-            $('.sidebar').animate({
-            right: '-350px'
-        }, 600, function () {
-        });
-        }
-      
-       
-    }
-
-</script>
 </head>
 
 <body>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
+
     <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
@@ -154,29 +38,28 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header" data-logobg="skin5">
 
-                   
-                    <a class="navbar-brand" href="index.html">
+
+                    <a class="navbar-brand" href="/facilitator/dashboard">
 
 
                         <b class="logo-icon">
 
-                            <img height="50px" src="../../assets/images/svdfc-logo.png" alt="homepage"
-                                class="img-responsive light-logo" />
+                            <img height="50px" th:src="@{/images/svdfc-logo.png}" alt="homepage" class="img-responsive light-logo" />
 
                         </b>
 
                         <span class="logo-text text-dark logoText">
-                          SVFC - RDMS
+                            SVFC - RDMS
                         </span>
 
 
                     </a>
-                        <!-- ============================================================== -->
-                        <!-- ============================================================== -->
-                        <!-- Toggle which is visible on mobile only -->
-                        <!-- ============================================================== -->
-                        <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
-                                class="ti-menu ti-close"></i></a>
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                            class="ti-menu ti-close"></i></a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -313,7 +196,7 @@
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
                                     Change Profile Picture</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i
+                                <a class="dropdown-item" href="/logout"><i
                                         class="fa fa-power-off me-1 ms-1"></i> Logout</a>
                                 <div class="dropdown-divider"></div>
 
@@ -332,7 +215,7 @@
                 <!-- ============================================================== -->
                 <!-- Right Side Bar -->
                 <!-- ============================================================== -->
-             
+
                 <div class="row">
                     <div class="col-7">
                         <div class="card  dateTimeCard">
@@ -349,7 +232,7 @@
                         </div>
                     </div>
                     <div class="col">
-    
+
                         <div class="card ">
                             <div class="card-body">
                                 <h4 class="card-title ">Notifications</h4>
@@ -363,7 +246,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <div class="vr">
                                         <a href="javascript:void(0)" class="link border-top">
@@ -377,7 +260,7 @@
                                             <hr class="hr" />
                                         </a>
                                     </div>
-    
+
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -386,7 +269,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -396,7 +279,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -406,7 +289,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -416,7 +299,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -426,7 +309,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -436,7 +319,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -446,9 +329,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
-    
+
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -457,9 +340,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
-    
+
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -468,9 +351,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
-    
+
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -479,9 +362,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
-    
+
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -490,9 +373,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
-    
+
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -501,7 +384,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
@@ -511,9 +394,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-    
+
                                     </a>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -534,10 +417,10 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="pt-4">
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="index.html" aria-expanded="false"><i class="fas fa-home"></i><span
+                                href="/facilitator/dashboard" aria-expanded="false"><i class="fas fa-home"></i><span
                                     class="hide-menu">Home</span></a></li>
 
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-table"></i><span
+                        <li class="sidebar-item"><a href="/facilitator/studrequest" class="sidebar-link"><i class="fas fa-table"></i><span
                                     class="hide-menu"> View Requests
                                 </span></a></li>
                         <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-history"></i><span
@@ -627,7 +510,7 @@
                             </div>
                         </div>
                     </div>
-                   
+
 
                     <!-- Column -->
                 </div>
@@ -744,11 +627,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center">
-                This is not out work. ||
-                All Rights Reserved by Matrix-admin. Designed and Developed by <a
-                    href="https://www.wrappixel.com">WrapPixel</a>.
-            </footer>
+    
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
@@ -757,34 +636,13 @@
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-    <script src="../../assets/extra-libs/sparkline/sparkline.js"></script>
-    <!--Wave Effects -->
-    <script src="../../dist/js/waves.js"></script>
-    <!--Menu sidebar -->
-    <script src="../../dist/js/sidebarmenu.js"></script>
-    <!--Custom JavaScript -->
-    <script src="../../dist/js/custom.min.js"></script>
-    <!--This page JavaScript -->
-    <!-- <script src="../../dist/js/pages/dashboards/dashboard1.js"></script> -->
-    <!-- Charts js Files -->
-    <script src="../../assets/libs/flot/excanvas.js"></script>
-    <script src="../../assets/libs/flot/jquery.flot.js"></script>
-    <script src="../../assets/libs/flot/jquery.flot.pie.js"></script>
-    <script src="../../assets/libs/flot/jquery.flot.time.js"></script>
-    <script src="../../assets/libs/flot/jquery.flot.stack.js"></script>
-    <script src="../../assets/libs/flot/jquery.flot.crosshair.js"></script>
-    <script src="../../assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-    <script src="../../dist/js/pages/chart/chart-page-init.js"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/sparkline.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
 
 </body>
 

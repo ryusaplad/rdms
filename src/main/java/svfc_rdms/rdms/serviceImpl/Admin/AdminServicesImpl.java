@@ -3,6 +3,7 @@ package svfc_rdms.rdms.serviceImpl.Admin;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -283,8 +284,10 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public Optional<UserFiles> getFileById(long id) {
-          Optional<UserFiles> fileOptional = userRepo.findById(id);
+     public Optional<UserFiles> getFileById(String id) {
+          String stringValue = id.toString();
+          UUID uuidValue = UUID.fromString(stringValue);
+          Optional<UserFiles> fileOptional = userRepo.findById(uuidValue);
           if (fileOptional.isPresent()) {
                return fileOptional;
           }
@@ -292,8 +295,8 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public Boolean deleteFile(long id) {
-          if (id > 0) {
+     public Boolean deleteDocumentFile(long id) {
+          if (id > -1) {
                docRepo.deleteById(id);
                return true;
           }

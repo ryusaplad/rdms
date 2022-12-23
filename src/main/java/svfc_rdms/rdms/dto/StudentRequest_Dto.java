@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.dto;
 
+import java.util.UUID;
+
 public class StudentRequest_Dto {
 
      private long requestId;
@@ -20,7 +22,7 @@ public class StudentRequest_Dto {
      private String type;
 
      // UserFiles Data
-     private long fileId;
+     private UUID fileId;
      private byte[] data;
      private String fname;
      private String size;
@@ -72,7 +74,7 @@ public class StudentRequest_Dto {
 
      }
 
-     public StudentRequest_Dto(long fileId, byte[] data, String fname, String size, String status, String dateUploaded,
+     public StudentRequest_Dto(UUID fileId, byte[] data, String fname, String size, String status, String dateUploaded,
                String filePurpose, Long requestWith) {
           this.fileId = fileId;
           this.data = data;
@@ -140,7 +142,7 @@ public class StudentRequest_Dto {
           return type;
      }
 
-     public long getFileId() {
+     public UUID getFileId() {
           return fileId;
      }
 

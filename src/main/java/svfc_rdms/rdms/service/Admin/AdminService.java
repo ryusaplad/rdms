@@ -40,13 +40,13 @@ public interface AdminService {
 
      Optional<Documents> getFileDocumentById(long id);
 
-     Boolean deleteFile(long id);
+     Boolean deleteDocumentFile(long id);
 
      // Get All Request of Students
      List<StudentRequest> displayAllRequest();
 
      // get all user files;
 
-     Optional<UserFiles> getFileById(long id);
+     Optional<UserFiles> getFileById(String id);
 
 }

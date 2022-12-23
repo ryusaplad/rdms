@@ -146,6 +146,11 @@ $(document).ready(function () {
                 window.location = "/student/dashboard";
               }, 1000);
             }
+             if (formData.type == "Facilitator") {
+               setTimeout(function () {
+                 window.location = "/facilitator/dashboard";
+               }, 1000);
+             }
           } else {
             responseTextVal = response;
           }

@@ -3,9 +3,11 @@ package svfc_rdms.rdms.controller.RestControllers;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +35,49 @@ public class Student_RestController {
      @PostMapping("/student/request/{document}/sent")
      public ResponseEntity<String> studRequestSent(@RequestParam("studentId") String id,
                @RequestParam("file[]") Optional<MultipartFile[]> files, @PathVariable String document,
+               @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
+          validatePages(response, session);
+          return studService.saveRequest(id, files, document, params);
+     }
+
+     @PostMapping("/student/request/file/update")
+     public ResponseEntity<Object> updateFileRequirement(@RequestParam("file") Optional<MultipartFile> file,
                @RequestParam Map<String, String> params) {
 
-          return studService.saveRequest(id, files, document, params);
+          return studService.updateFileRequirement(file, params);
+     }
+
+     @GetMapping("/student/requests/resubmit")
+     public ResponseEntity<Object> resubmitStudentRequests(
+               @RequestParam("userId") long userId, HttpServletResponse response, HttpSession session) {
+
+          return studService.resubmitRequests("Pending", userId);
      }
 
      @GetMapping("/student/my-requests/fetch")
      public ResponseEntity<Object> getRequestInformation(@RequestParam("requestId") Long requestId,
-               HttpSession session) {
+               HttpServletResponse response, HttpSession session) {
+          validatePages(response, session);
           String username = session.getAttribute("username").toString();
           return studService.fetchRequestInformationToModals(username, requestId);
      }
 
+     public ResponseEntity<String> validatePages(HttpServletResponse response, HttpSession session) {
+          try {
+               response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+               response.setHeader("Pragma", "no-cache");
+               response.setDateHeader("Expires", 0);
+               if (session.getAttribute("username") == null ||
+                         session.getAttribute("accountType") == null
+                         || session.getAttribute("name") == null) {
+                    // If the session is not valid, redirect to the login page
+                    response.sendRedirect("/");
+
+               }
+               return new ResponseEntity<>("Pass", HttpStatus.OK);
+          } catch (Exception e) {
+               e.printStackTrace();
+          }
+          return new ResponseEntity<>("Failed", HttpStatus.UNAUTHORIZED);
+     }
 }

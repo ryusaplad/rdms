@@ -11,10 +11,11 @@ public interface FileService {
 
      List<UserFiles> getAllFiles();
 
-     Optional<UserFiles> getFileById(long id);
+     Optional<UserFiles> getFileById(String id);
 
      List<UserFiles> getFilesByRequestWith(StudentRequest sr);
 
+     List<UserFiles> getAllFilesByUser(long userId);
      Boolean deleteFile(long id);
 
      String formatFileUploadSize(long size);

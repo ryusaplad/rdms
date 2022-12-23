@@ -27,6 +27,7 @@ public interface StudentService {
 
      Optional<StudentRequest> findRequestById(Long requestId);
 
+
      List<StudentRequest> displayAllRequestByStudent(Users user);
 
      List<StudentRequest> displayAllRequestByStudentAndRequestId(Users user, long requestId);
@@ -41,6 +42,11 @@ public interface StudentService {
      void student_showImageFiles(long id, HttpServletResponse response,
                Optional<Documents> dOptional);
 
-     void student_DownloadFile(long id, Model model, HttpServletResponse response);
+     void student_DownloadFile(String id, Model model, HttpServletResponse response);
+
+     ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file,
+               Map<String, String> params);
+
+     ResponseEntity<Object> resubmitRequests(String status, long userId);
 
 }

@@ -1,10 +1,12 @@
 package svfc_rdms.rdms.serviceImpl.Student;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -88,8 +90,9 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
                List<String> excludedFiles = new ArrayList<>();
 
-               LocalDate dateNow = LocalDate.now();
-
+               LocalDateTime myDateObj = LocalDateTime.now();
+               DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
+               String formattedDate = myDateObj.format(myFormatObj);
                if (uploadedFiles.isPresent() || !requestId.isEmpty() || !document.isEmpty() || params.size() > 0) {
                     StudentRequest req = new StudentRequest();
                     Users user = new Users();
@@ -120,10 +123,10 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
                     });
 
-                    req.setRequestDate("2022");
+                    req.setRequestDate(formattedDate);
                     req.setRequestStatus("Pending");
-                    req.setReleaseDate("2022");
-                    req.setManageBy("admin");
+                    req.setReleaseDate("N/A");
+                    req.setManageBy("N/A");
 
                     if (findDocumentByTitle(document).isPresent()) {
                          if (documentRepository.findByTitle(document).isPresent()) {
@@ -138,7 +141,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                               userFiles.setData(filex.getBytes());
                               userFiles.setName(filex.getOriginalFilename());
                               userFiles.setSize(formatFileUploadSize(filex.getSize()));
-                              userFiles.setDateUploaded(dateNow.toString());
+                              userFiles.setDateUploaded(formattedDate);
                               userFiles.setStatus("Pending");
                               userFiles.setFilePurpose("requirement");
 
@@ -217,9 +220,10 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public Optional<UserFiles> getFileById(long id) {
-
-          Optional<UserFiles> fileOptional = fileRepository.findById(id);
+     public Optional<UserFiles> getFileById(String id) {
+          String stringValue = id.toString();
+          UUID uuidValue = UUID.fromString(stringValue);
+          Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
           if (fileOptional.isPresent()) {
                return fileOptional;
           }
@@ -274,7 +278,9 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
           });
           ufOptional.stream().forEach(files -> {
-               studentRequestCompress.add(new StudentRequest_Dto(files.getFileId(), files.getData(), files.getName(),
+               String stringValue = files.getFileId().toString();
+               UUID uuidValue = UUID.fromString(stringValue);
+               studentRequestCompress.add(new StudentRequest_Dto(uuidValue, files.getData(), files.getName(),
                          files.getSize(), files.getStatus(), files.getDateUploaded(), files.getFilePurpose(),
                          files.getRequestWith().getRequestId()));
           });
@@ -334,7 +340,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public void student_DownloadFile(long id, Model model, HttpServletResponse response) {
+     public void student_DownloadFile(String id, Model model, HttpServletResponse response) {
           try {
                Optional<UserFiles> temp = getFileById(id);
                if (temp != null) {
@@ -360,6 +366,76 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                return fileOptional;
           }
           return Optional.empty();
+
+     }
+
+     @Override
+     public List<UserFiles> getAllFilesByUser(long users) {
+
+          try {
+               if (users != -1) {
+                    Users uploader = usersRepository.findByuserId(users).get();
+                    List<UserFiles> studentFiles = fileRepository.findAllByUploadedBy(uploader);
+                    if (!studentFiles.isEmpty()) {
+                         return studentFiles;
+                    } else {
+                         throw new IllegalArgumentException("Student Files cannot be retrieve");
+                    }
+
+               }
+
+               return null;
+
+          } catch (Exception e) {
+               throw new IllegalArgumentException("Student Files cannot be retrieve, Reason: " + e.getMessage());
+          }
+     }
+
+     @Override
+     public ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file, Map<String, String> params) {
+          try {
+
+               if (file.get().getSize() != 0) {
+
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                         System.out.println("key: " + entry.getKey() + ": Value:" + entry.getValue());
+                         if (entry.getKey().equals("fileId")) {
+                              String stringValue = entry.getValue().toString();
+                              UUID uuidValue = UUID.fromString(stringValue);
+                              UserFiles userFiles = fileRepository.findById(uuidValue).get();
+                              userFiles.setFileId(uuidValue);
+                              userFiles.setData(file.get().getBytes());
+                              userFiles.setName(file.get().getOriginalFilename());
+                              userFiles.setSize(formatFileUploadSize(file.get().getSize()));
+                              fileRepository.save(userFiles);
+                         }
+                    }
+
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+               return new ResponseEntity<>("Please Select File!", HttpStatus.BAD_REQUEST);
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
+     }
+
+     @Override
+     public ResponseEntity<Object> resubmitRequests(String status, long userId) {
+          try {
+
+               Users user = usersRepository.findByuserId(userId).get();
+
+               StudentRequest studentRequest = studentRepository.findOneByRequestBy(user).get();
+
+               if (user != null && studentRequest != null) {
+
+                    studentRepository.studentRequestsResubmit(status, studentRequest.getRequestId());
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+               return new ResponseEntity<>("Invalid Information, Please Try Again!", HttpStatus.BAD_REQUEST);
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
 
      }
 

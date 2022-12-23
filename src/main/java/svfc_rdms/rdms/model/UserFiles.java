@@ -1,15 +1,17 @@
 package svfc_rdms.rdms.model;
 
+import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,13 +27,12 @@ import lombok.NoArgsConstructor;
 public class UserFiles {
 
      @Id
-     @SequenceGenerator(name = "file_sequence", sequenceName = "file_sequence", allocationSize = 1)
-     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_sequence")
-
-     private long fileId;
+     @GeneratedValue(generator = "uuid2")
+     @GenericGenerator(name = "uuid2", strategy = "uuid2")
+     @Column(columnDefinition = "BINARY(16)")
+     private UUID fileId;
 
      @Column(name = "file", columnDefinition = "LONGBLOB")
-
      private byte[] data;
      private String name;
      private String size;

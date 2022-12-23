@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -207,7 +205,7 @@ public class AdminController {
 
      @RequestMapping(value = "/delete-document-card", method = RequestMethod.GET)
      public String deleteFile(@RequestParam("docid") long documentId, Model model) {
-          String message = (mainService.deleteFile(documentId)) ? "Document Deleted" : "Not Deleted";
+          String message = (mainService.deleteDocumentFile(documentId)) ? "Document Deleted" : "Not Deleted";
           return "redirect:/admin-request?message=" + message;
      }
 
@@ -228,7 +226,7 @@ public class AdminController {
      // end documents managing
 
      @GetMapping("/admin/documents/downloadfile")
-     public void downloadFile(@Param("id") long id, Model model, HttpServletResponse response) throws IOException {
+     public void downloadFile(@Param("id") String id, Model model, HttpServletResponse response) throws IOException {
           Optional<UserFiles> temp = mainService.getFileById(id);
           if (temp != null) {
                UserFiles file = temp.get();
