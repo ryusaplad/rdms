@@ -70,7 +70,7 @@ $(document).ready(function () {
     var textMaxLength = 250;
     var messageLength = $(this).val().length;
     if (messageLength <= textMaxLength) {
-      $("#messageLengthLabel").text("(" + messageLength + "/250) letter Left");
+      $("#messageLengthLabel").text("(" + messageLength + "/250) ");
       messageLength = textMaxLength - messageLength;
     } else {
       $(this).val($(this).val().substring(0, 250));

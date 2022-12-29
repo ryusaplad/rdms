@@ -87,7 +87,7 @@ $(document).ready(function () {
   $(document).on("click", ".confirmProcess", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    updateStudentRequests(userId, "N/A", "Processing");
+    updateStudentRequests(userId, "N/A", "On-Going");
   });
   $(document).on("click", ".confirmReject", function (e) {
     e.preventDefault();
@@ -107,7 +107,10 @@ $(document).ready(function () {
       "&reason=" +
       reason;
     $.get(status, function (status) {
-      console.log(status);
+      if (status == "Success") {
+        $("#rejectModal").modal("hide");
+        window.location.reload();
+      }
     });
   }
 
@@ -115,10 +118,11 @@ $(document).ready(function () {
     var textMaxLength = 250;
     var messageLength = $(this).val().length;
     if (messageLength <= textMaxLength) {
-      $("#messageLengthLabel").text("(" + messageLength + "/250) letter Left");
+      $("#messageLengthLabel").text("(" + messageLength + "/250) ");
       messageLength = textMaxLength - messageLength;
     } else {
       $(this).val($(this).val().substring(0, 250));
     }
   });
+  
 });

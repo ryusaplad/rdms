@@ -420,6 +420,33 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
+     public ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params) {
+          try {
+
+               if (params.size() != 0) {
+                    StudentRequest studentRequest = findRequestById(requestId).get();
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                         if (entry.getKey().equals("year")) {
+                              studentRequest.setYear(entry.getValue());
+                         } else if (entry.getKey().equals("course")) {
+                              studentRequest.setCourse(entry.getValue());
+                         } else if (entry.getKey().equals("semester")) {
+                              studentRequest.setSemester(entry.getValue());
+                         } else if (entry.getKey().equals("message")) {
+                              studentRequest.setMessage(entry.getValue());
+                         }
+                    }
+                    studentRepository.save(studentRequest);
+
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+               return new ResponseEntity<>("Invalid Informations", HttpStatus.BAD_REQUEST);
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
+     }
+
+     @Override
      public ResponseEntity<Object> resubmitRequests(String status, long userId) {
           try {
 

@@ -44,7 +44,8 @@ public class FacilitatorServiceImpl implements FacilitatorService {
                     List<StudentRequest_Dto> studentRequests = new ArrayList<>();
 
                     fetchStudentRequest.stream().forEach(req -> {
-                         if (req.getRequestStatus().equals("Pending") || req.getRequestStatus().equals("Rejected")) {
+                         if (req.getRequestStatus().equals("Pending") ||
+                                   req.getRequestStatus().equals("Rejected")) {
                               studentRequests
                                         .add(new StudentRequest_Dto(req.getRequestId(), req.getRequestBy().getUserId(),
                                                   req.getRequestBy().getType(), req.getYear(),
@@ -65,6 +66,7 @@ public class FacilitatorServiceImpl implements FacilitatorService {
           }
 
      }
+
 
      @Override
      public boolean changeStatusAndManageByAndMessageOfRequests(String status, String manageBy, String message,

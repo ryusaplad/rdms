@@ -103,6 +103,56 @@ $(document).ready(function () {
       }
     });
   }
+  $(document).on("click", ".toggleEditInfosModal", function (e) {
+    e.preventDefault();
+    id = $(this).attr("href");
+    $("#editReqInfos").modal("toggle");
+  });
+  $(".saveInfoUpdate").on("click", function (e) {
+    e.preventDefault();
+    $("#reqInfoUpForm").submit();
+  });
+  // update infos form
+  $("#reqInfoUpForm").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/student/request/info/update?requestId=" + id,
+      type: "POST",
+      data: new FormData(this),
+      enctype: "multipart/form-data",
+      processData: false,
+      contentType: false,
+      cache: false,
+      beforeSend: function () {
+        $(".saveInfoUpdate").attr("disabled", true);
+      },
+      success: function (res) {
+        $(".clearRequest").click();
+        $(".saveInfoUpdate").attr("disabled", false);
+        $("#editingInfoAlert").empty();
+        $("#editingInfoAlert").removeClass("alert-danger");
+        $("#editingInfoAlert").addClass("alert-success");
+        $("#editingInfoAlert").text("Information Succesfully Updated");
+        $("#editingInfoAlert").show();
+        $("#reqInfoUpForm ").trigger("reset");
+        $("#messageLengthLabel").text(
+          "You can add message here with maximum of (250 letters)"
+        );
+        setTimeout(function () {
+          $("#editingInfoAlert").empty();
+          $("#editingInfoAlert").hide();
+        }, 10000);
+      },
+      error: function (err) {
+        $("#editingInfoAlert").empty();
+        $("#editingInfoAlert").removeClass("alert-success");
+        $("#editingInfoAlert").addClass("alert-danger");
+        $("#editingInfoAlert").text(err.responseText);
+        $("#editingInfoAlert").show();
+        $(".saveInfoUpdate").attr("disabled", false);
+      },
+    });
+  });
 
   $(document).on("click", ".editItem", function (e) {
     e.preventDefault();
@@ -146,6 +196,7 @@ $(document).ready(function () {
     $("#editingAlert").empty();
     $("#editingAlert").hide();
   });
+  //update request file form
   $("#reqUpForm").on("submit", function (e) {
     e.preventDefault();
     $.ajax({
@@ -186,15 +237,30 @@ $(document).ready(function () {
   });
   $(".resubmitRequests").on("click", function (e) {
     e.preventDefault();
+
+    $("#resubmitReqModal").modal("toggle");
     id = $(this).attr("href");
-    // var row = $(this).closest("tr");
-    // $(this).closest("tr").remove();
+  });
+  $(".confirmResubmit").on("click", function (e) {
+    e.preventDefault();
+
     link = "/student/requests/resubmit?userId=" + id;
 
     $.get(link, function (request) {
       if ((request = "Success")) {
-        alert("oh yeah!");
+        $("#resubmitReqModal").modal("hide");
+        window.location.reload();
       }
     });
+  });
+  $("#message").on("keyup", function (e) {
+    var textMaxLength = 250;
+    var messageLength = $(this).val().length;
+    if (messageLength <= textMaxLength) {
+      $("#messageLengthLabel").text("(" + messageLength + "/250) ");
+      messageLength = textMaxLength - messageLength;
+    } else {
+      $(this).val($(this).val().substring(0, 250));
+    }
   });
 });

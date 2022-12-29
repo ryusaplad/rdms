@@ -47,6 +47,13 @@ public class Student_RestController {
           return studService.updateFileRequirement(file, params);
      }
 
+     @PostMapping("/student/request/info/update")
+     public ResponseEntity<Object> updateInformationRequirement(
+               @RequestParam long requestId, @RequestParam Map<String, String> params) {
+
+          return studService.updateInformationRequirement(requestId, params);
+     }
+
      @GetMapping("/student/requests/resubmit")
      public ResponseEntity<Object> resubmitStudentRequests(
                @RequestParam("userId") long userId, HttpServletResponse response, HttpSession session) {
@@ -55,12 +62,13 @@ public class Student_RestController {
      }
 
      @GetMapping("/student/my-requests/fetch")
-     public ResponseEntity<Object> getRequestInformation(@RequestParam("requestId") Long requestId,
+     public ResponseEntity<Object> getUserFilesByRequestId(@RequestParam("requestId") Long requestId,
                HttpServletResponse response, HttpSession session) {
           validatePages(response, session);
           String username = session.getAttribute("username").toString();
           return studService.fetchRequestInformationToModals(username, requestId);
      }
+
 
      public ResponseEntity<String> validatePages(HttpServletResponse response, HttpSession session) {
           try {

@@ -47,6 +47,8 @@ public interface StudentService {
      ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file,
                Map<String, String> params);
 
+     ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params);
+
      ResponseEntity<Object> resubmitRequests(String status, long userId);
 
 }

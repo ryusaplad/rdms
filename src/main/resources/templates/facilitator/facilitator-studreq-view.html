@@ -515,7 +515,7 @@
                                                 </div>
                                                 <div class="col-sm">
                                                     <a th:href="@{${studRequest.studentId}}" type="button"
-                                                        class="btn btn-success w-100 text-white processBtn">
+                                                        class="btn btn-success  w-100 text-white processBtn" th:if="${studRequest.requestStatus =='Pending'}">
                                                         Approved</a>
                                                 </div>
                                                 <div class="col-sm" th:if="${studRequest.requestStatus !='Rejected'}">

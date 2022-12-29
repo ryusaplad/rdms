@@ -30,7 +30,7 @@ public class Facilitator_RestController {
      UsersRepository userRepository;
 
      @Autowired
-     FacilitatorServiceImpl facilitatorRepository;
+     FacilitatorServiceImpl facilitatorServiceImpl;
 
      @GetMapping("/facilitator/studentrequest/fetch")
      public ResponseEntity<Object> getRequestInformation(@RequestParam("s") Long userId,
@@ -54,11 +54,11 @@ public class Facilitator_RestController {
                HttpServletResponse response,
                HttpSession session) {
 
-          if (!status.isEmpty() || !status.isBlank()) {
+          if (!status.isEmpty() || !status.isBlank() || session.getAttribute("name") != null) {
                String manageBy = session.getAttribute("name").toString();
 
                // changing status based on the input
-               if (facilitatorRepository.changeStatusAndManageByAndMessageOfRequests(status, manageBy, message,
+               if (facilitatorServiceImpl.changeStatusAndManageByAndMessageOfRequests(status, manageBy, message,
                          userId)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                } else {
