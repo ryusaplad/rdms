@@ -49,6 +49,6 @@ public interface StudentService {
 
      ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params);
 
-     ResponseEntity<Object> resubmitRequests(String status, long userId);
+     ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId);
 
 }

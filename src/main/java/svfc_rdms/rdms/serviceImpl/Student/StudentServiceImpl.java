@@ -125,8 +125,8 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
                     req.setRequestDate(formattedDate);
                     req.setRequestStatus("Pending");
-                    req.setReleaseDate("N/A");
-                    req.setManageBy("N/A");
+                    req.setReleaseDate("");
+                    req.setManageBy("");
 
                     if (findDocumentByTitle(document).isPresent()) {
                          if (documentRepository.findByTitle(document).isPresent()) {
@@ -447,12 +447,12 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public ResponseEntity<Object> resubmitRequests(String status, long userId) {
+     public ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId) {
           try {
 
                Users user = usersRepository.findByuserId(userId).get();
 
-               StudentRequest studentRequest = studentRepository.findOneByRequestBy(user).get();
+               StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
 
                if (user != null && studentRequest != null) {
 

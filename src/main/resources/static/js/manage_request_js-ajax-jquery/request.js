@@ -1,8 +1,8 @@
 $(document).ready(function () {
   var formData = new FormData();
   var fileListArr;
-  var excludedFile = [];
   $("#files").change(function () {
+    formData = new FormData();
     $("#fileInfoTable").empty();
     var totalFiles = $("#files")[0].files.length;
     for (var x = 0; x < totalFiles; x++) {
@@ -85,13 +85,13 @@ $(document).ready(function () {
       var id = $("#documentTypeTitle").text();
       var studId = $("#studentId").val();
       var studName = $("#studName").val();
-        var studYear = $("#year").val();
-        var studCourse = $("#course").val();
-        var studSemester = $("#semester").val();
-        var userMessage = $("#message").val();
-        formData.append("studentId", studId);
-        formData.append("studName", studName);
-        formData.append("year", studYear);
+      var studYear = $("#year").val();
+      var studCourse = $("#course").val();
+      var studSemester = $("#semester").val();
+      var userMessage = $("#message").val();
+      formData.append("studentId", studId);
+      formData.append("studName", studName);
+      formData.append("year", studYear);
       formData.append("course", studCourse);
       formData.append("semester", studSemester);
       formData.append("message", userMessage);
@@ -199,9 +199,6 @@ $(document).ready(function () {
   $(".clearRequest").on("click", function () {
     $("#fileInfoTable").empty();
 
-    formData.forEach(function (value, key) {
-      console.log(key + ", " + value.name);
-    });
     formData = new FormData();
     $(".message").text("");
     $(".errorMessageAlert").hide();

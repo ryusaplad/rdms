@@ -56,9 +56,10 @@ public class Student_RestController {
 
      @GetMapping("/student/requests/resubmit")
      public ResponseEntity<Object> resubmitStudentRequests(
-               @RequestParam("userId") long userId, HttpServletResponse response, HttpSession session) {
+               @RequestParam("userId") long userId, @RequestParam("requestId") long requestId,
+               HttpServletResponse response, HttpSession session) {
 
-          return studService.resubmitRequests("Pending", userId);
+          return studService.resubmitRequests("Pending", userId, requestId);
      }
 
      @GetMapping("/student/my-requests/fetch")

@@ -4,59 +4,118 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Student - My Requests</title>
+    <title>Registrar - Students Requests</title>
 
     <!-- <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png"> -->
 
     <!-- Custom CSS -->
     <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
     <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
-
-
     <style>
-        .toggleDetailsModalDiv {
+        .file-upload {
+            background-color: #ffffff;
             width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .file-upload-btn {
+            width: 100%;
+            margin: 0;
+            color: #fff;
+            background: #DC143C;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            border-bottom: 4px solid #DC143C;
+            transition: all .2s ease;
+            outline: none;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .file-upload-btn:hover {
+            background: #dc143cbd;
+            color: #ffffff;
+            transition: all .2s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-btn:active {
+            border: 0;
+            transition: all .2s ease;
+        }
+
+
+        .file-upload-input {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-wrap {
+            margin-top: 20px;
+            border: 4px dashed #DC143C;
+            position: relative;
+        }
+
+        .file-dropping,
+        .file-upload-wrap:hover {
+            background-color: #dd7c8f;
+            border: 4px dashed #ffffff;
+        }
+
+        .image-title-wrap {
+            padding: 0 15px 15px 15px;
+            color: #222;
+        }
+
+        .drag-text {
+            text-align: center;
+        }
+
+        .drag-text h3 {
+            font-weight: 100;
+            text-transform: uppercase;
+            color: #DC143C;
+            padding: 60px 0;
+        }
+
+        .file-upload-image {
+            max-height: 200px;
+            max-width: 200px;
             margin: auto;
-            min-width: 50%;
-        }
-    
-        .actionBtns>.col-lg {
-            margin-top: 2px;
-        }
-    
-        @media screen and (max-width: 1118px) {
-            .toggleDetailsModalDiv {
-                width: 100%;
-                margin: 0;
-            }
-    
-            .actionBtns>.col-lg {
-                margin-top: 5px;
-            }
+            padding: 20px;
         }
     </style>
-
-
 </head>
 
+
+
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-        <path
-            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-    </symbol>
-    <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-        <path
-            d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-    </symbol>
-    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-        <path
-            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-    </symbol>
-</svg>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+    </svg>
+
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -78,8 +137,10 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header" data-logobg="skin5">
 
-
-                    <a class="navbar-brand" href="/student/dashboard">
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a class="navbar-brand" href="/registrar/dashboard">
 
 
                         <b class="logo-icon">
@@ -218,7 +279,6 @@
                                 </ul>
                             </ul>
                         </li>
-
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
@@ -229,19 +289,6 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                 aria-labelledby="navbarDropdown">
-
-                                <hr class="devider">
-                                <div th:if="${#session.getAttribute('username')!=null}">
-
-                                    <label th:with="id=${#session.getAttribute('username')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">Student Id
-                                        :[[${id}]]</label>
-                                    <label th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
-                                        Type
-                                        :[[${type}]]</label>
-                                </div>
-                                <hr class="devider">
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>
@@ -262,7 +309,6 @@
                         <!-- ============================================================== -->
                     </ul>
                 </div>
-
             </nav>
 
             <rside class="sidebar">
@@ -316,9 +362,39 @@
 
                                     </a>
                                     <hr class="hr" />
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
+                                        </div>
 
+                                    </a>
+                                    <hr class="hr" />
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
+                                        </div>
 
+                                    </a>
+                                    <hr class="hr" />
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
+                                        </div>
 
+                                    </a>
+                                    <hr class="hr" />
                                 </div>
                             </div>
                         </div>
@@ -332,7 +408,6 @@
         <!-- ============================================================== -->
         <!-- Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
-
         <aside class="left-sidebar" data-sidebarbg="skin5">
             <!-- Sidebar scroll-->
             <div class="scroll-sidebar">
@@ -340,23 +415,43 @@
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="pt-4">
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/student/dashboard" aria-expanded="false"><i class="fas fa-home"></i><span
+                                href="/registrar/dashboard" aria-expanded="false"><i class="fas fa-home"></i><span
                                     class="hide-menu">Home</span></a></li>
 
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark in"
-                                href="/student/request/documents" aria-expanded="false"><i class="fas fa-list"></i><span
-                                    class="hide-menu">Requests</span></a>
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark "
+                                href="javascript:void(0)" aria-expanded="false"><i class="fas fa-list"></i><span
+                                    class="hide-menu">Manage Requests</span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="/student/my-requests" class="sidebar-link"><i
-                                            class="fas fa-table"></i><span class="hide-menu"> My Requests
+                                <li class="sidebar-item"><a href="/registrar/studrequest" class="sidebar-link"><i
+                                            class="fas fa-table"></i><span class="hide-menu">Students Requests
                                         </span></a></li>
-                                <li class="sidebar-item"><a href="/student/request/documents" class="sidebar-link"><i
-                                            class="fas fa-folder-open"></i><span class="hide-menu"> Request Documents
+                                <li class="sidebar-item"><a href="#" class="sidebar-link active"><i
+                                            class=" far fa-paper-plane"></i><span class="hide-menu">Sent Requests
                                         </span></a></li>
+
                             </ul>
                         </li>
-                        <li class="sidebar-item"><a href="/student/my-documents" class="sidebar-link"><i class="fas fa-folder"></i><span
-                                    class="hide-menu">My Documents
+
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark "
+                                href="javascript:void(0)" aria-expanded="false"><i class=" fas fa-users"></i><span
+                                    class="hide-menu ">Manage Accounts</span></a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item"><a href="#" class="sidebar-link"><i
+                                            class=" fas fa-user-plus"></i><span class="hide-menu">Facilitators
+                                        </span></a></li>
+                                <li class="sidebar-item"><a href="#" class="sidebar-link"><i
+                                            class=" fas fa-user-plus"></i><span class="hide-menu"> Registrars
+                                        </span></a></li>
+
+                            </ul>
+                        </li>
+
+
+                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-history"></i><span
+                                    class="hide-menu">Activity Logs
+                                </span></a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-folder"></i><span
+                                    class="hide-menu"> My Files
                                 </span></a></li>
                         <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-bell"></i><span
                                     class="hide-menu">Notifications
@@ -364,21 +459,18 @@
                         <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-user"></i><span
                                     class="hide-menu">My Profile
                                 </span></a></li>
-                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i class="fas fa-power-off"></i><span
-                                    class="hide-menu">Logout
+                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i
+                                    class="fas fa-power-off"></i><span class="hide-menu">Logout
                                 </span></a></li>
-                    </ul>
+
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
             <!-- End Sidebar scroll-->
         </aside>
-
-
         <!-- ============================================================== -->
         <!-- End Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
-
         <!-- ============================================================== -->
         <!-- Page wrapper  -->
         <!-- ============================================================== -->
@@ -389,12 +481,12 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Request Document</h4>
+                        <h4 class="page-title">Dashboard</h4>
                         <div class="ms-auto text-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Request</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Documents List</li>
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
                                 </ol>
                             </nav>
                         </div>
@@ -407,18 +499,17 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-
             <div class="container-fluid">
-
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">My Requests</h5>
+                        <h5 class="card-title">Student Requests</h5>
                         <div class="table-responsive">
                             <table id="zero_config" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
 
-                                        <th>Request Document</th>
+                                        <th>Requested By</th>
+                                        <th>Request Date</th>
                                         <th>Status</th>
                                         <th>Actions</th>
 
@@ -426,44 +517,41 @@
                                     </tr>
                                 </thead>
 
-                                <tbody id="studRequestBody">
-                                    <tr th:each="studRequest : ${myrequest}">
+                                <tbody>
+                                    <tr th:each="studRequest : ${studentreq}">
 
-                                        <td style="width: 350px;" th:text="${studRequest.requestDocument}"></td>
-                                        <td style="width: 350px;" th:text="${studRequest.requestStatus}"></td>
+                                        <td th:text="${studRequest.requestBy}"></td>
+                                        <td th:text="${studRequest.requestDate}"></td>
+                                        <td th:text="${studRequest.requestStatus}"></td>
                                         <td>
-                                            <div class="row actionBtns">
+                                            <div class="row">
 
-                                                <div class="col-lg " th:if="${studRequest.requestStatus !='Approved'}">
-                                                    <a data-toggle="tooltip" data-placement="top" title="View Full Details" th:href="${studRequest.requestId}"
-                                                        type="button" class="btn btn-success w-100 toggleDetailsModal">
+                                                <div class="col-sm">
+                                                    <a th:href="@{'?s='+${studRequest.studentId}+'&req='+${studRequest.requestId}}"
+                                                        type="button" class="btn btn-primary w-100 toggleRequestDetail">
                                                         Details</a>
 
                                                 </div>
-                                                <div class="toggleDetailsModalDiv" th:if="${studRequest.requestStatus =='Approved'}">
-                                                    <a data-toggle="tooltip" data-placement="top" title="View Full Details" th:href="${studRequest.requestId}"
-                                                        type="button" class="btn btn-success w-100  toggleDetailsModal">
-                                                        Details</a>
+                                                <div class="col-sm" th:if="${studRequest.requestStatus =='Pending'}">
+                                                    <a th:href="@{${studRequest.studentId}}"
+                                                        th:data-value="@{${studRequest.requestId}}" type="button"
+                                                        class="btn btn-success  w-100 text-white processBtn">
+                                                        Approved</a>
                                                 </div>
-                                                <div data-toggle="tooltip" data-placement="top" title="Edit File Requirements" class="col-lg"
-                                                    th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a th:href="${studRequest.requestId}" type="button" class="btn btn-secondary w-100 toggleEditReqModal">
-                                                        Edit Files</a>
-
+                                                <div class="col-sm" th:if="${studRequest.requestStatus =='On-Going'}">
+                                                    <a th:href="@{${studRequest.studentId}}"
+                                                        th:data-value="@{${studRequest.requestId}}" type="button"
+                                                        class="btn btn-success  w-100 text-white completeBtn">
+                                                        Complete</a>
                                                 </div>
-                                                <div data-toggle="tooltip" data-placement="top" title="Edit (Year,Course,Sem,etc.)" class="col-lg"
-                                                    th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a th:href="${studRequest.requestId}" type="button" class="btn btn-secondary w-100 toggleEditInfosModal">
-                                                        Edit Info </a>
-                                                </div>
-                                                <div data-toggle="tooltip" data-placement="top" title="Resubmit Request" class="col-lg"
-                                                    th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a th:href="${studRequest.studentId}" th:data-value="${studRequest.requestId}" type="button"
-                                                        class="btn btn-primary w-100 resubmitRequests">
-                                                        Re Submit</a>
-
+                                                <div class="col-sm" th:if="${studRequest.requestStatus !='Rejected'}">
+                                                    <a th:href="@{${studRequest.studentId}}"
+                                                        th:data-value="@{${studRequest.requestId}}" type="button"
+                                                        class="btn btn-danger w-100 text-white  rejectBtn">
+                                                        Reject</a>
                                                 </div>
                                             </div>
+
                                         </td>
                                     </tr>
                                 </tbody>
@@ -473,33 +561,196 @@
 
                     </div>
                 </div>
-
-
             </div>
 
         </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="confirmModalModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalModalLabel">Process Confirmation</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mBody">
+                    <p>Are you sure you want to process this requests.?</p>
+                    <b> Note:</b>
+                    <p>This action cannot be undo this action, after submission.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="processHref" type="button" class="btn btn-danger confirmProcess">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="rejectModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="rejectModalModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalModalLabel">Rejecting Confirmation</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to reject this requests.?</p>
+                    <b> Note:</b>
+                    <p>This action cannot be undo this action, after submission.</p>
+                    <label>Specify Reason Here</label>
+                    <div class="mt-2 form-floating">
+                        <textarea id="reason" name="reason" class="form-control floatingInput" maxlength="250"
+                            style="height:150px"></textarea>
+                        <label id="messageLengthLabel" for="reason">You can add message here with maximum of (250
+                            letters)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="rejectHref" type="button" class="btn btn-danger text-white confirmReject">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="confirmCompleteModal" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-labelledby="confirmCompleteLabel" tabindex="-1">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCompleteLabel">Completition Confirmation</h5>
+                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to complete this requests.?</p>
+                    <b> Note:</b>
+                    <p>This action cannot be undo this action, after submission.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-warning confirmCompleteNext" data-bs-target="#completeModal"
+                        data-bs-toggle="modal" data-bs-dismiss="modal" data-value="">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="completeModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="completeModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeModalToggleLabel2">Finalizing Requests</h5>
+                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="display:none" class="f-alert">
+                        <div class="alert alert-danger d-flex align-items-center " role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                                <use xlink:href="#exclamation-triangle-fill" />
+                            </svg>
+                            <div id="f-alertM">
 
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="file-upload container-sm">
+                        <button class="file-upload-btn" type="button"
+                            onclick="$('.file-upload-input').trigger( 'click' )">Add
+                            Files</button>
+
+                        <div class="file-upload-wrap">
+                            <form id="f-reqs-upload">
+                                <input class="file-upload-input" type='file' id="rfile" name="rfile[]" multiple />
+                            </form>
+
+                            <div class="drag-text">
+                                <h3>Drag and drop a file or click add Files</h3>
+                            </div>
+                        </div>
+
+                        <table class="table table-white w-100">
+                            <thead>
+                                <tr>
+
+                                    <th>Action</th>
+                                    <th>File Name</th>
+                                    <th>Size</th>
+                                </tr>
+
+                            </thead>
+                            <tbody class="r-file-table">
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancelFinalizing"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-warning confirmCompleteFinal" data-value="">Finalized
+                        Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="finalizedCompletedModal" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-labelledby="confirmCompleteLabel" tabindex="-1">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCompleteLabel">Finalized Request</h5>
+                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="alert alert-success d-flex align-items-center w-100 h-100" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="50" height="50" role="img" aria-label="Success:">
+                            <use xlink:href="#check-circle-fill" />
+                        </svg>
+                        <div class="h2">
+                            Finalizing Completed.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success okCompleted" data-bs-dismiss="modal">Ok</button>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 
-
-    </div>
-
-
-    </div>
-    <!-- Modals -->
-    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"
-        aria-labelledby="detailModal" aria-hidden="true">
+    <div class="modal fade" id="reqDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="reqDetailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="detailModal">
+                    <h5 class="modal-title" id="reqDetailModal">
                         <span id="titleVal">More Details</span>
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close"
+                        style="border: 1px solid white; background-color:red; color:white;" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <h4 class="card-title">Requests Informations</h4>
@@ -508,9 +759,10 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>NAME</th>
+                                <th>Name</th>
                                 <th>C/Y/SEM</th>
-                                <th>DOC</th>
+                                <th>Document</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -522,32 +774,32 @@
                                 <td class="font-weight-bold" id="cysem">
                                 </td>
                                 <td class="font-weight-bold" id="docreqpar"></td>
+
                             </tr>
                         </tbody>
                     </table>
                     <hr>
-                    <div style="display:none" class="detail-alert">
-                    
-                    </div>
+                    <h4 class="card-title">Message</h4>
+                    <p id="mess"></p>
+                    <hr>
+                    <h4 class="card-title">Request Status</h4>
                     <table class="table table-primary table-responsive">
                         <thead>
                             <tr>
-                                <th>MANAGE BY</th>
-                                <th>Request</th>
-                                <th>Released</th>
+                                <th>Date Request</th>
+                                <th>Request Status</th>
+                                <th>Manage by</th>
                             </tr>
 
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="font-weight-bold" id="managebynpar">Manage By</td>
-                                <td class="font-weight-bold" id="datereqpar">Date Request</td>
-                                <td class="font-weight-bold" id="daterelpar">Date Released</td>
-                        
+                                <td class="font-weight-bold" id="datereqpar">N/A</td>
+                                <td class="font-weight-bold" id="reqstatuspar">N/A</td>
+                                <td class="font-weight-bold" id="manageby"></td>
                             </tr>
                         </tbody>
                     </table>
-
                     <hr>
                     <h4 class="card-title">Requirements</h4>
                     <table class="table table-white table-responsive">
@@ -566,191 +818,17 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <input style="display:none" class="form-control" name="file[]" type="file" id="files" multiple />
-
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary cancelFinalizing"
+                        data-bs-dismiss="modal">Close</button>
+
                 </div>
-            </div>
-            </div>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="editRequirements" tabindex="-1" aria-labelledby="editingModalLabel" aria-hidden="true"
-                data-bs-backdrop="static" data-bs-keyboard="false">
-                <div class="modal-dialog ">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            File Editing
-                        </div>
-                        <div class="modal-body">
-                            <div id="editingAlert" style="display:none" class="alert alert-danger" role="alert">
-            
-                            </div>
-                            <form id="reqUpForm">
-                                <div class="mt-2  form-floating" style="display:none">
-                                    <input name="fileId" type="text" class="form-control floatingInput" id="fileId" readonly>
-                                    <label for="fileId">File Id<span class="badge badge-secondary text-danger ">*</span>
-                                    </label>
-                                </div>
-                                <div class="mt-2  form-floating" style="display:none">
-                                    <input name="file" type="text" class="form-control floatingInput" id="fileName" readonly>
-                                    <label for="fileName">Selected File<span class="badge badge-secondary text-danger ">*</span>
-                                    </label>
-                                </div>
-
-                        <div id="inputFile" style="display:none">
-                            <input style="display:block" class="mt-2 form-control" name="file" type="file" id="fileData"
-                                accept=".jpg,.jpeg,.png" />
-                            <div class="row mt-3">
-                                <div class="col-sm">
-                                    <button type="button" class="btn btn-danger text-white w-100 saveChanges">Save</button>
-                                </div>
-                                <div class="col-sm">
-                                    <button type="reset" class="btn btn-secondary text-white  w-100 clearRequest">Clear</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr>
-                        <label for="files">Select File to update <span class="badge badge-secondary text-danger ">*</span>
-                        </label>
-
-                        <table class="table table-white w-100">
-                            <thead>
-                                <tr>
-
-                                    <th>Action</th>
-                                    <th>File Name</th>
-                                </tr>
-
-                            </thead>
-                            <tbody class="edit-file-table">
-                                <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                    <td>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelUpdateBtn" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-    <div class="modal fade" id="resubmitReqModal" tabindex="-1" aria-labelledby="resubmitReqModalLabel" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    Are you sure to re-submit the request?
-                </div>
-                <div class="modal-body">
-    
-                    <b class="text-danger">Note</b>
-                    <ul>
-    
-                        <li>
-                            <p>Make sure that all of the requirements is correct.</p>
-                        </li>
-                        <li>
-                            <p>Please keep in mind that if you do not meet all of the
-                                requirements, your request will be rejected.</p>
-                        </li>
-                    </ul>
-    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelResubmit" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary confirmResubmit">Confirm</button>
-                </div>
-            </div>
-        </div>
-                    </div>
-                    
-                    <div class="modal fade" id="editReqInfos" tabindex="-1" aria-labelledby="editingModalLabel" aria-hidden="true"
-                        data-bs-backdrop="static" data-bs-keyboard="false">
-                        <div class="modal-dialog ">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    Informations Editing
-                                </div>
-                                <div class="modal-body">
-                                    <div id="editingInfoAlert" style="display:none" class="alert alert-danger" role="alert">
-                    
-                                    </div>
-                                    <form id="reqInfoUpForm">
-                                        <div class="col-sm ">
-                                            <div class="mt-2  form-floating" th:if="${#session.getAttribute('username')!=null}"
-                                                style="display:none">
-                    
-                                                <input name="studentId" type="text" class="form-control floatingInput" id="studentId"
-                                                    th:value="${#session.getAttribute('username')}" placeholder="Student Id" readonly>
-                                                <label for="userId">Student Id <span class="badge badge-secondary text-danger ">*</span>
-                                            </div>
-                    
-                                            <div class="mt-2 form-floating" th:if="${#session.getAttribute('name')!=null}"
-                                                style="display:none">
-                                                <input id="studName" name="name" type="text" class="form-control floatingInput"
-                                                    th:value="${#session.getAttribute('name')}" placeholder=" Student Name" readonly>
-                                <label for="studName">Student Name <span class="badge badge-secondary text-danger ">*</span>
-                                    </div>
-                                    <div class=" mt-2 form-floating">
-                                        <select id="year" name="year" class="form-select" placeholder="Year Level">
-                                            <option value="1ST YEAR">1ST YEAR</option>
-                                            <option value="2ND YEAR">2ND YEAR</option>
-                                            <option value="3RD YEAR">3RD YEAR</option>
-                                            <option value="4TH YEAR">4TH YEAR</option>
-                                            <option value="5TH YEAR">5TH YEAR</option>
-                                        </select>
-                                        <label for="year">Year <span class="badge badge-secondary text-danger ">*</span>
-                                    </div>
-                                    <div class="mt-2  form-floating">
-                                
-                                        <select id="course" name="course" class="form-select">
-                                            <option value="BSIT">BSIT</option>
-                                            <option value="BPAD">BPAD</option>
-                                            <option value="BSHM">BSHM</option>
-                                        </select>
-                                        <label for="course">Course <span class="badge badge-secondary text-danger ">*</span>
-                                    </div>
-                                
-                                    <div class="mt-2  form-floating">
-                                
-                                        <select id="semester" name="semester" class="form-select">
-                                            <option value="1ST SEMESTER">1ST SEMESTER</option>
-                                            <option value="2ND SEMESTER">2ND SEMESTER</option>
-                                
-                                        </select>
-                                        <label for="semester">Semester <span class="badge badge-secondary text-danger ">*</span>
-                                    </div>
-                                
-                                    <div class="mt-2 form-floating">
-                                        <textarea id="message" name="message" class="form-control floatingInput" maxlength="250"
-                                            style="height:150px"></textarea>
-                                        <label id="messageLengthLabel" for="message">You can add message here with
-                                            maximum of (250
-                                            letters)</label>
-                                    </div>
-                                    </div>
-                                    </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary cancelInfoUpdate" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary saveInfoUpdate">Save
-                                            Changes</button>
-                                    </div>
             </div>
         </div>
     </div>
-
     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
-
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/sparkline.js}"></script>
@@ -758,9 +836,12 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_list.js}"></script>
+    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/f_r_request_list.js}"></script>
     <script>
+
         $('#zero_config').DataTable();
+
+
     </script>
 </body>
 

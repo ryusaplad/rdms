@@ -14,7 +14,7 @@ import svfc_rdms.rdms.model.Users;
 public interface StudentRepository extends JpaRepository<StudentRequest, Long> {
      List<StudentRequest> findAllByRequestBy(Users user);
      
-     Optional<StudentRequest> findOneByRequestBy(Users user);
+     Optional<StudentRequest> findOneByRequestByAndRequestId(Users user, long requestId);
      List<StudentRequest> findAllByRequestByAndRequestId(Users user, long requestId);
 
      @Modifying

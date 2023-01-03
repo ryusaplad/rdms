@@ -151,6 +151,11 @@ $(document).ready(function () {
                  window.location = "/facilitator/dashboard";
                }, 1000);
              }
+             if (formData.type == "Registrar") {
+               setTimeout(function () {
+                 window.location = "/registrar/dashboard";
+               }, 1000);
+             }
           } else {
             responseTextVal = response;
           }

@@ -1,11 +1,12 @@
 $(document).ready(function () {
   var id = "";
+  var rid = "";
   var link = "";
   var finalValue = "";
   $(document).on("click", ".toggleDetailsModal", function (e) {
     e.preventDefault();
     id = $(this).attr("href");
-
+    rid = $(this).attr("href");
     link = "/student/my-requests/fetch?requestId=" + id;
 
     $.get(link, function (request) {
@@ -51,10 +52,41 @@ $(document).ready(function () {
         );
 
         $("#docreqpar").text(request.data[0].requestDocument);
-        $("#reqstatuspar").text(request.data[0].requestStatus);
+
         $("#managebynpar").text(request.data[0].manageBy);
         $("#datereqpar").text(request.data[0].requestDate);
         $("#daterelpar").text(request.data[0].releaseDate);
+        var status = request.data[0].requestStatus;
+        var alertType = "";
+        var alertLabel = "";
+        var svgIcon = "";
+        if (status.toLowerCase() == "approved") {
+          alertType = "alert-success";
+          alertLabel = "Success:";
+          svgIcon = "#check-circle-fill";
+        } else {
+          alertType = "alert-danger";
+          alertLabel = "Danger:";
+          svgIcon = "#exclamation-triangle-fill";
+        }
+        var htmlDiv =
+          "  <div class='alert " +
+          alertType +
+          " d-flex align-items-center' role='alert'>" +
+          "<svg class='bi flex-shrink-0 me-2' width='20' height='20' role='img' aria-label='" +
+          alertLabel +
+          "'>" +
+          "<use xlink:href='" +
+          svgIcon +
+          "' /></svg>" +
+          "<h5 class='card-title'>" +
+          "Requests Status: " +
+          request.data[0].requestStatus +
+          "</h5>" +
+          "</div>";
+        $(".detail-alert").empty();
+        $(".detail-alert").append(htmlDiv);
+        $(".detail-alert").show();
       }
     });
     $("#detailModal").modal("toggle");
@@ -240,11 +272,12 @@ $(document).ready(function () {
 
     $("#resubmitReqModal").modal("toggle");
     id = $(this).attr("href");
+    rId = $(".resubmitRequests").data("value");
   });
   $(".confirmResubmit").on("click", function (e) {
     e.preventDefault();
 
-    link = "/student/requests/resubmit?userId=" + id;
+    link = "/student/requests/resubmit?userId=" + id + "&requestId=" + rId;
 
     $.get(link, function (request) {
       if ((request = "Success")) {
@@ -253,6 +286,7 @@ $(document).ready(function () {
       }
     });
   });
+
   $("#message").on("keyup", function (e) {
     var textMaxLength = 250;
     var messageLength = $(this).val().length;

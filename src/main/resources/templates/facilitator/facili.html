@@ -15,7 +15,6 @@
     <!-- Custom CSS -->
     <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
 
-
 </head>
 
 <body>
@@ -209,13 +208,13 @@
                 </div>
             </nav>
 
-            <rside class="sidebar">
-                <button class="rightSidebarToggle btn" onclick="toggleSidebar(); "><i id="btnIcon"
+            <rside style="right: -563px !important;" class="sidebar">
+                <button class="rightSidebarToggle btn" onclick="toggleSidebarf(); "><i id="btnIconf"
                         class="fas fa-angle-left text-white"></i></button>
                 <!-- ============================================================== -->
                 <!-- Right Side Bar -->
                 <!-- ============================================================== -->
-
+            
                 <div class="row">
                     <div class="col-7">
                         <div class="card  dateTimeCard">
@@ -231,8 +230,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-
+                    <div class="col-7">
                         <div class="card ">
                             <div class="card-body">
                                 <h4 class="card-title ">Notifications</h4>
@@ -246,21 +244,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-
+            
                                     </a>
-                                    <div class="vr">
-                                        <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                <div class="ms-2">
-                                                    <h5 class="mb-0">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                </div>
-                                            </div>
-                                            <hr class="hr" />
-                                        </a>
-                                    </div>
-
+                                    <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -269,8 +255,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-
+            
                                     </a>
+                                    <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -279,8 +266,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-
+            
                                     </a>
+                                    <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -289,8 +277,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-
+            
                                     </a>
+                                    <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -299,104 +288,9 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-
+            
                                     </a>
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                        </div>
-
-                                    </a>
-
+                                    <hr class="hr" />
                                 </div>
                             </div>
                         </div>
