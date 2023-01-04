@@ -18,5 +18,5 @@ public interface FileService {
      List<UserFiles> getAllFilesByUser(long userId);
      Boolean deleteFile(long id);
 
-     String formatFileUploadSize(long size);
+
 }

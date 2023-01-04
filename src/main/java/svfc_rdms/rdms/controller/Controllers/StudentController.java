@@ -24,28 +24,32 @@ import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Controller
 public class StudentController {
 
      @Autowired
-     AdminServicesImpl mainService;
+     private AdminServicesImpl mainService;
      @Autowired
-     StudentServiceImpl studService;
+     private StudentServiceImpl studService;
 
      @Autowired
-     DocumentRepository docRepo;
+     private GlobalServiceControllerImpl globalService;
 
      @Autowired
-     StudentRepository studRepo;
+     private DocumentRepository docRepo;
 
      @Autowired
-     UsersRepository userRepo;
+     private StudentRepository studRepo;
+
+     @Autowired
+     private UsersRepository userRepo;
 
      @GetMapping(value = "/student/dashboard")
      public String studentDashboard(HttpSession session, HttpServletResponse response) {
-          if (validatePages(response, session)) {
+          if (globalService.validatePages(response, session)) {
 
                return "/student/stud";
           }
@@ -55,7 +59,7 @@ public class StudentController {
      @GetMapping("/student/request/documents")
      public String fetchDocumentCards(HttpSession session, HttpServletResponse response, Model model) {
 
-          if (validatePages(response, session)) {
+          if (globalService.validatePages(response, session)) {
 
                List<Documents> documentList = mainService.getAllDocuments();
                model.addAttribute("documentsCards", documentList);
@@ -66,7 +70,7 @@ public class StudentController {
 
      @GetMapping("/student/my-requests")
      public String listOfStudentRequest(HttpServletResponse response, HttpSession session, Model model) {
-          if (validatePages(response, session)) {
+          if (globalService.validatePages(response, session)) {
                return studService.displayStudentRequests(model, session);
           }
           return null;
@@ -75,7 +79,7 @@ public class StudentController {
 
      @GetMapping("/student/my-documents")
      public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
-          if (validatePages(response, session) == true) {
+          if (globalService.validatePages(response, session) == true) {
                System.out.println("validate");
                Users user = userRepo.findUserIdByUsername(session.getAttribute("username").toString()).get();
                List<UserFiles> getAllFiles = studService.getAllFilesByUser(user.getUserId());
@@ -100,7 +104,7 @@ public class StudentController {
      @GetMapping(value = "/student/request/{document}")
      public String requestForm(@PathVariable String document, HttpServletRequest request, HttpServletResponse response,
                HttpSession session, Model model) {
-          validatePages(response, session);
+          globalService.validatePages(response, session);
           try {
                if (studService.findDocumentByTitle(document).isEmpty()) {
                     return "redirect:" + "/student/request/documents";
@@ -138,24 +142,5 @@ public class StudentController {
      // }
      // }
 
-     public boolean validatePages(HttpServletResponse response, HttpSession session) {
-          try {
-               response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-               response.setHeader("Pragma", "no-cache");
-               response.setDateHeader("Expires", 0);
-               if (session.getAttribute("username") == null ||
-                         session.getAttribute("accountType") == null
-                         || session.getAttribute("name") == null) {
-                    // If the session is not valid, redirect to the login page
-                    response.sendRedirect("/");
 
-               } else {
-                    return true;
-               }
-
-          } catch (Exception e) {
-               e.printStackTrace();
-          }
-          return false;
-     }
 }

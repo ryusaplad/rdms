@@ -189,6 +189,17 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                 aria-labelledby="navbarDropdown">
+                                <hr class="devider">
+                                <div th:if="${#session.getAttribute('username')!=null}">
+                                
+                                    <label th:with="name=${#session.getAttribute('name')}"
+                                        class="dropdown-item bg-success border border-1 b-2 text-white">Name
+                                        :[[${name}]]</label>
+                                    <label th:with="type=${#session.getAttribute('accountType')}"
+                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
+                                        Type
+                                        :[[${type}]]</label>
+                                </div>
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>

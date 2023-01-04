@@ -64,6 +64,11 @@ $(document).ready(function () {
           alertType = "alert-success";
           alertLabel = "Success:";
           svgIcon = "#check-circle-fill";
+        }
+        if (status.toLowerCase() == "pending") {
+          alertType = "alert-info";
+          alertLabel = "Pending:";
+          svgIcon = "#arrow-clockwise";
         } else {
           alertType = "alert-danger";
           alertLabel = "Danger:";
@@ -73,16 +78,14 @@ $(document).ready(function () {
           "  <div class='alert " +
           alertType +
           " d-flex align-items-center' role='alert'>" +
-          "<svg class='bi flex-shrink-0 me-2' width='20' height='20' role='img' aria-label='" +
+          "<svg class='bi flex-shrink-0 me-2' width='16' height='16' role='img' aria-label='" +
           alertLabel +
           "'>" +
           "<use xlink:href='" +
           svgIcon +
           "' /></svg>" +
-          "<h5 class='card-title'>" +
           "Requests Status: " +
           request.data[0].requestStatus +
-          "</h5>" +
           "</div>";
         $(".detail-alert").empty();
         $(".detail-alert").append(htmlDiv);

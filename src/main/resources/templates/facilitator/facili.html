@@ -184,8 +184,20 @@
                                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="../../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31">
                             </a>
+
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                 aria-labelledby="navbarDropdown">
+                                <hr class="devider">
+                                <div th:if="${#session.getAttribute('username')!=null}">
+                                
+                                    <label th:with="name=${#session.getAttribute('name')}"
+                                        class="dropdown-item bg-success border border-1 b-2 text-white">Name
+                                        :[[${name}]]</label>
+                                    <label th:with="type=${#session.getAttribute('accountType')}"
+                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
+                                        Type
+                                        :[[${type}]]</label>
+                                </div>
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>
@@ -195,8 +207,8 @@
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
                                     Change Profile Picture</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout"><i
-                                        class="fa fa-power-off me-1 ms-1"></i> Logout</a>
+                                <a class="dropdown-item" href="/logout"><i class="fa fa-power-off me-1 ms-1"></i>
+                                    Logout</a>
                                 <div class="dropdown-divider"></div>
 
                             </ul>
@@ -214,7 +226,7 @@
                 <!-- ============================================================== -->
                 <!-- Right Side Bar -->
                 <!-- ============================================================== -->
-            
+
                 <div class="row">
                     <div class="col-7">
                         <div class="card  dateTimeCard">
@@ -244,7 +256,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-            
+
                                     </a>
                                     <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
@@ -255,7 +267,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-            
+
                                     </a>
                                     <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
@@ -266,7 +278,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-            
+
                                     </a>
                                     <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
@@ -277,7 +289,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-            
+
                                     </a>
                                     <hr class="hr" />
                                     <a href="javascript:void(0)" class="link border-top">
@@ -288,7 +300,7 @@
                                                 <span class="mail-desc">Just a reminder that event</span>
                                             </div>
                                         </div>
-            
+
                                     </a>
                                     <hr class="hr" />
                                 </div>
@@ -521,7 +533,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-    
+
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

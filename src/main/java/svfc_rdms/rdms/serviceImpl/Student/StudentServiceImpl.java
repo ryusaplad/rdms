@@ -33,6 +33,7 @@ import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Document.DocumentService;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Student.StudentService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Service
 public class StudentServiceImpl implements StudentService, FileService, DocumentService {
@@ -45,8 +46,12 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
      @Autowired
      private UsersRepository usersRepository;
+
      @Autowired
      private FileRepository fileRepository;
+
+     @Autowired
+     private GlobalServiceControllerImpl globalService;
 
      @Override
      public String displayStudentRequests(Model model, HttpSession session) {
@@ -140,7 +145,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                               UserFiles userFiles = new UserFiles();
                               userFiles.setData(filex.getBytes());
                               userFiles.setName(filex.getOriginalFilename());
-                              userFiles.setSize(formatFileUploadSize(filex.getSize()));
+                              userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
                               userFiles.setDateUploaded(formattedDate);
                               userFiles.setStatus("Pending");
                               userFiles.setFilePurpose("requirement");
@@ -298,34 +303,6 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public String formatFileUploadSize(long size) {
-
-          final long kilo = 1024;
-          final long mega = kilo * kilo;
-          final long giga = mega * kilo;
-          final long tera = giga * kilo;
-
-          double kb = size / kilo;
-          double mb = kb / kilo;
-          double gb = mb / kilo;
-          double tb = gb / kilo;
-          String formatedSize = "";
-          if (size < kilo) {
-               formatedSize = size + " Bytes";
-          } else if (size >= kilo && size < mega) {
-               formatedSize = String.format("%.2f", kb) + " KB";
-          } else if (size >= mega && size < giga) {
-               formatedSize = String.format("%.2f", mb) + " MB";
-          } else if (size >= giga && size < tera) {
-               formatedSize = String.format("%.2f", gb) + " GB";
-          } else if (size >= tera) {
-               formatedSize = String.format("%.2f", tb) + " TB";
-          }
-          return formatedSize;
-
-     }
-
-     @Override
      public void student_showImageFiles(long id, HttpServletResponse response,
                Optional<Documents> dOptional) {
 
@@ -406,7 +383,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                               userFiles.setFileId(uuidValue);
                               userFiles.setData(file.get().getBytes());
                               userFiles.setName(file.get().getOriginalFilename());
-                              userFiles.setSize(formatFileUploadSize(file.get().getSize()));
+                              userFiles.setSize(globalService.formatFileUploadSize(file.get().getSize()));
                               fileRepository.save(userFiles);
                          }
                     }

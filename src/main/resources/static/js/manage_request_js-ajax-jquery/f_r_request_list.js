@@ -102,6 +102,7 @@ $(document).ready(function () {
   // Finalized Requests with uploaded files
 
   $("#rfile").change(function () {
+    formData = new FormData();
     $(".r-file-table").empty();
     var totalFiles = $("#rfile")[0].files.length;
     for (var x = 0; x < totalFiles; x++) {

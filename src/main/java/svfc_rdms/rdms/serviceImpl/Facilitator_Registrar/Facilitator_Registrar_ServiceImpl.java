@@ -3,12 +3,9 @@ package svfc_rdms.rdms.serviceImpl.Facilitator_Registrar;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -29,6 +26,7 @@ import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Facilitator_Registrar.Facilitator_Registrar_Service;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Service
@@ -42,11 +40,15 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
 
      @Autowired
      private UsersRepository usersRepository;
+
      @Autowired
      private FileRepository fileRepository;
 
      @Autowired
      private StudentServiceImpl studentService;
+
+     @Autowired
+     private GlobalServiceControllerImpl globalService;
 
      @Override
      public String displayAllStudentRequest(String userType, Model model) {
@@ -120,10 +122,10 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
           } else {
                message = studentRequest.getMessage() + "\n" + message;
           }
-          String manageByFromDatabase = removeDuplicateInManageBy(studentRequest.getManageBy().replace("N/A,", ""));
+          String manageByFromDatabase = globalService.removeDuplicateInManageBy(studentRequest.getManageBy());
 
           if (!manageByFromDatabase.trim().isEmpty()) {
-               manageBy = removeDuplicateInManageBy(studentRequest.getManageBy().replace("N/A,", "") + "," + manageBy);
+               manageBy = globalService.removeDuplicateInManageBy(studentRequest.getManageBy() + "," + manageBy);
           }
 
           if (user != null && studentRequest != null) {
@@ -134,24 +136,7 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
           return false;
      }
 
-     public String removeDuplicateInManageBy(String manageBy) {
-          String[] manageByArray = manageBy.split(",");
-          for (int i = 0; i < manageByArray.length; i++) {
-               manageByArray[i] = manageByArray[i].trim();
-          }
-          Set<String> set = new HashSet<>(Arrays.asList(manageByArray));
-          String[] arrayWithoutDuplicates = set.toArray(new String[0]);
 
-          String stringwithoutDuplicate = "";
-
-          for (String string : arrayWithoutDuplicates) {
-               stringwithoutDuplicate += string + ",";
-          }
-
-          int index = stringwithoutDuplicate.toString().lastIndexOf(",");
-
-          return stringwithoutDuplicate.substring(0, index);
-     }
 
      @Override
      public ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
@@ -185,7 +170,7 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
 
                          userFiles.setData(filex.getBytes());
                          userFiles.setName(filex.getOriginalFilename());
-                         userFiles.setSize(studentService.formatFileUploadSize(filex.getSize()));
+                         userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
                          userFiles.setDateUploaded(formattedDate);
                          userFiles.setStatus("Approved");
                          userFiles.setFilePurpose("dfs");
@@ -203,5 +188,6 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
           }
 
      }
+
 
 }
