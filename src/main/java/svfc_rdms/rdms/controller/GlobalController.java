@@ -14,8 +14,17 @@ public class GlobalController {
           // Set the Cache-Control, Pragma, and Expires headers to prevent caching of the
           // login page
           String accType = "";
-          if (session.getAttribute("accountType") != null && session.getAttribute("accountType").equals("Student")) {
-               accType = session.getAttribute("accountType").toString().toLowerCase();
+          String validAccountType[] = { "Student", "Registrar", "Admin" };
+
+          if (session.getAttribute("accountType") != null) {
+
+               for (String validAcc : validAccountType) {
+                    if (validAcc.contains(session.getAttribute("accountType").toString())) {
+                         accType = validAcc.toLowerCase();
+                         break;
+                    }
+               }
+
                return "redirect:/" + accType + "/dashboard";
           }
           response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -29,10 +38,10 @@ public class GlobalController {
           session.removeAttribute("studentName");
           session.removeAttribute("accountType");
           session.removeAttribute("username");
+          session.removeAttribute("name");
           session.invalidate();
 
           return "redirect:/";
      }
-
 
 }

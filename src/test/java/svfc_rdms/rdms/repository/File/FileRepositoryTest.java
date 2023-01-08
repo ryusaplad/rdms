@@ -33,7 +33,7 @@ public class FileRepositoryTest {
           List<StudentRequest> srOption = studRepo.findAllByRequestByAndRequestId(user, 15);
 
           srOption.stream().forEach(e -> {
-               System.out.println(e.getRequestId());
+
                StudentRequest studentRequest = studRepo.findById(e.getRequestId()).get();
                List<UserFiles> ufOptional = studService.getFilesByRequestWith(studentRequest);
                ufOptional.stream().forEach(ec -> {

@@ -11,6 +11,7 @@ $(document).ready(function () {
 
     $.get(link, function (request) {
       $(".tablebody").empty();
+      $(".receievedDoc").empty();
       var dlAnchor = "";
       if (request.status == "success") {
         for (var x = 1; x < request.data.length; x++) {
@@ -26,19 +27,40 @@ $(document).ready(function () {
             finalValue = newValue + secondValue;
           }
 
-          dlAnchor =
-            "<tr>" +
-            "<td>" +
-            "<a href = '/student/files/download?id=" +
-            request.data[x].fileId +
-            "'class='btn btn-danger text-white'>Download</a>" +
-            "</td>" +
-            "<td>" +
-            finalValue +
-            "</td>" +
-            "</tr > ";
-
-          $(".tablebody").append(dlAnchor);
+          if (request.data[x].status == "Pending") {
+            dlAnchor =
+              "<tr>" +
+              "<td>" +
+              "<a href = '/student/files/download?id=" +
+              request.data[x].fileId +
+              "'class='btn btn-danger text-white'>Download</a>" +
+              "</td>" +
+              "<td>" +
+              finalValue +
+              "</td>" +
+              "<td>" +
+              request.data[x].uploaderName +
+              "</td>" +
+              "</tr > ";
+            $(".tablebody").append(dlAnchor);
+          } else if (request.data[x].status == "Approved") {
+            dlAnchor =
+              "<tr>" +
+              "<td>" +
+              "<a href = '/student/files/download?id=" +
+              request.data[x].fileId +
+              "'class='btn btn-danger text-white'>Download</a>" +
+              "</td>" +
+              "<td>" +
+              finalValue +
+              "</td>" +
+              "<td>" +
+              request.data[x].uploaderName +
+              "</td>" +
+              "</tr > ";
+            $(".receievedDocumentTable").show();
+            $(".receievedDoc").append(dlAnchor);
+          }
         }
 
         $("#requestbyupar").text(request.data[0].requestBy);
@@ -57,6 +79,8 @@ $(document).ready(function () {
         $("#datereqpar").text(request.data[0].requestDate);
         $("#daterelpar").text(request.data[0].releaseDate);
         var status = request.data[0].requestStatus;
+        var message =
+          request.data[0].requestStatus + ", " + request.data[0].reply;
         var alertType = "";
         var alertLabel = "";
         var svgIcon = "";
@@ -64,11 +88,12 @@ $(document).ready(function () {
           alertType = "alert-success";
           alertLabel = "Success:";
           svgIcon = "#check-circle-fill";
-        }
-        if (status.toLowerCase() == "pending") {
+          message = request.data[0].requestStatus;
+        } else if (status.toLowerCase() == "pending") {
           alertType = "alert-info";
           alertLabel = "Pending:";
           svgIcon = "#arrow-clockwise";
+          message = request.data[0].requestStatus;
         } else {
           alertType = "alert-danger";
           alertLabel = "Danger:";
@@ -84,8 +109,8 @@ $(document).ready(function () {
           "<use xlink:href='" +
           svgIcon +
           "' /></svg>" +
-          "Requests Status: " +
-          request.data[0].requestStatus +
+          "Requests " +
+          message +
           "</div>";
         $(".detail-alert").empty();
         $(".detail-alert").append(htmlDiv);

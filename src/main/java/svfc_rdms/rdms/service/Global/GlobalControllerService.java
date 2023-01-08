@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 
 public interface GlobalControllerService {
 
-     public boolean validatePages(HttpServletResponse response, HttpSession session);
+     public boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session);
 
      public String formatFileUploadSize(long size);
 

@@ -71,7 +71,8 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                                                   req.getRequestBy().getType(), req.getYear(),
                                                   req.getCourse(), req.getSemester(),
                                                   req.getRequestDocument().getTitle(),
-                                                  req.getMessage(), req.getRequestBy().getName(), req.getRequestDate(),
+                                                  req.getMessage(), req.getReply(), req.getRequestBy().getName(),
+                                                  req.getRequestDate(),
                                                   req.getRequestStatus(), req.getReleaseDate(), req.getManageBy()));
                          });
                          model.addAttribute("myrequest", studentRequests);
@@ -103,7 +104,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                     Users user = new Users();
 
                     for (Map.Entry<String, String> entry : params.entrySet()) {
-                         System.out.println("Key:" + entry.getKey() + ":" + entry.getValue());
+
                          if (entry.getKey().equals("studentId")) {
                               user = usersRepository.findUserIdByUsername(entry.getValue()).get();
                               req.setRequestBy(user);
@@ -122,9 +123,8 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                               req.setMessage(entry.getValue());
                          }
                     }
-                    System.out.println("Excluded Files");
+
                     excludedFiles.stream().forEach(e -> {
-                         System.out.println(e);
 
                     });
 
@@ -278,7 +278,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                studentRequestCompress.add(new StudentRequest_Dto(e.getRequestId(), e.getRequestBy().getUserId(),
                          e.getRequestBy().getUsername(), e.getRequestBy().getName(),
                          e.getRequestBy().getType(), e.getYear(), e.getCourse(), e.getSemester(),
-                         e.getRequestDocument().getTitle(), e.getMessage(),
+                         e.getRequestDocument().getTitle(), e.getMessage(), e.getReply(),
                          e.getRequestDate(), e.getRequestStatus(), e.getReleaseDate(), e.getManageBy()));
 
           });
@@ -287,7 +287,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                UUID uuidValue = UUID.fromString(stringValue);
                studentRequestCompress.add(new StudentRequest_Dto(uuidValue, files.getData(), files.getName(),
                          files.getSize(), files.getStatus(), files.getDateUploaded(), files.getFilePurpose(),
-                         files.getRequestWith().getRequestId()));
+                         files.getRequestWith().getRequestId(), files.getUploadedBy().getName()));
           });
           ServiceResponse<List<StudentRequest_Dto>> serviceResponse = new ServiceResponse<>("success",
                     studentRequestCompress);
@@ -356,7 +356,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                     if (!studentFiles.isEmpty()) {
                          return studentFiles;
                     } else {
-                         throw new IllegalArgumentException("Student Files cannot be retrieve");
+                         return new ArrayList<>();
                     }
 
                }
@@ -364,7 +364,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                return null;
 
           } catch (Exception e) {
-               throw new IllegalArgumentException("Student Files cannot be retrieve, Reason: " + e.getMessage());
+               return new ArrayList<>();
           }
      }
 
@@ -375,7 +375,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                if (file.get().getSize() != 0) {
 
                     for (Map.Entry<String, String> entry : params.entrySet()) {
-                         System.out.println("key: " + entry.getKey() + ": Value:" + entry.getValue());
+
                          if (entry.getKey().equals("fileId")) {
                               String stringValue = entry.getValue().toString();
                               UUID uuidValue = UUID.fromString(stringValue);

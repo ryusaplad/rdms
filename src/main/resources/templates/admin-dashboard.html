@@ -57,21 +57,7 @@
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Actions</div>
-                        <!-- Manage Facilitator -->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#faciDropDown"
-                            aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Manage Facilitator
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="faciDropDown" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
-                                <a class="nav-link" href="/facilitator/deleted-accounts">Deleted Facilitators</a>
-                                <a class="nav-link" href="#">Facilitators Page</a>
-                            </nav>
-                        </div>
+                    
                         <!-- Manage Registrar -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#regDropDown"
                             aria-expanded="false" aria-controls="collapseLayouts">
@@ -167,14 +153,7 @@
                     Total Users
                     <hr>
                     <div class="row">
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card bg-success text-white mb-4">
-                                <div class="card-body">Facilitators</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <div class="small text-white" th:text="${totalFacilitators}"></div>
-                                </div>
-                            </div>
-                        </div>
+                    
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">Registrar</div>
@@ -199,14 +178,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card bg-danger text-white mb-4">
-                                <div class="card-body">Deleted: Facilitators</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <div class="small text-white" th:text="${totalDeletedFac}"></div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-danger text-white mb-4">
                                 <div class="card-body">Deleted: Registrars</div>
@@ -285,23 +257,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm">
-                                <div class="card pagesCards">
-                                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                        <a href="#!">
-                                            <div class="imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
-                                                <img th:src="@{images/facilitatorImagetest.jpg}"
-                                                    src="images/facilitator" class="img-fluid" />
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="card-body ">
-                                        <h5 class="card-title">Facilitator Page</h5>
-                                        <p class="card-text">This is the view of facilitator.</p>
-                                        <a href="#!" class="btn btn-primary">Check</a>
-                                    </div>
-                                </div>
-                            </div>
+                        
                             <div class="col-sm">
                                 <div class="card pagesCards">
                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">

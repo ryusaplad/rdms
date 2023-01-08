@@ -21,13 +21,14 @@ $(document).ready(function () {
     }
 
     var link =
-      "/facilitator/studentrequest/fetch?s=" +
+      "/registrar/studentrequest/fetch?s=" +
       paramMap.s +
       "&req=" +
       paramMap.req;
 
     $.get(link, function (request) {
       $(".tablebody").empty();
+      $(".sentDocsBody").empty();
       var dlAnchor = "";
       if (request.status == "success") {
         for (var x = 1; x < request.data.length; x++) {
@@ -37,25 +38,46 @@ $(document).ready(function () {
             findDot,
             request.data[x].fname.length
           );
+
           if (newValue.length > 15) {
             finalValue = newValue.substring(0, 15) + ".." + secondValue;
           } else {
             finalValue = newValue + secondValue;
           }
-
-          dlAnchor =
-            "<tr>" +
-            "<td>" +
-            "<a href = '/student/files/download?id=" +
-            request.data[x].fileId +
-            "'class='btn btn-danger text-white'>Download</a>" +
-            "</td>" +
-            "<td>" +
-            finalValue +
-            "</td>" +
-            "</tr > ";
-
-          $(".tablebody").append(dlAnchor);
+          if (request.data[x].status == "Pending") {
+            dlAnchor =
+              "<tr>" +
+              "<td>" +
+              "<a href = '/student/files/download?id=" +
+              request.data[x].fileId +
+              "'class='btn btn-danger text-white'>Download</a>" +
+              "</td>" +
+              "<td>" +
+              finalValue +
+              "</td>" +
+              "<td>" +
+              request.data[x].uploaderName +
+              "</td>" +
+              "</tr > ";
+            $(".tablebody").append(dlAnchor);
+          } else if (request.data[x].status == "Approved") {
+            dlAnchor =
+              "<tr>" +
+              "<td>" +
+              "<a href = '/student/files/download?id=" +
+              request.data[x].fileId +
+              "'class='btn btn-danger text-white'>Download</a>" +
+              "</td>" +
+              "<td>" +
+              finalValue +
+              "</td>" +
+              "<td>" +
+              request.data[x].uploaderName +
+              "</td>" +
+              "</tr > ";
+            $(".sentDocumentTable").show();
+            $(".sentDocsBody").append(dlAnchor);
+          }
         }
 
         $("#requestbyupar").text(request.data[0].requestBy);
@@ -72,7 +94,36 @@ $(document).ready(function () {
         $("#reqstatuspar").text(request.data[0].requestStatus);
         $("#datereqpar").text(request.data[0].requestDate);
         $("#manageby").text(request.data[0].manageBy);
-        $("#mess").text(request.data[0].message);
+        $(".messHeader").empty();
+        $(".messHeader").show();
+        $("#mess").text();
+        if (request.data[0].reply != null) {
+          if (
+            request.data[0].reply.length > 0 &&
+            request.data[0].manageBy.length > 0
+          ) {
+            var htmlP =
+              " <p id='mess'>From: " +
+              request.data[0].name +
+              ":(" +
+              request.data[0].message +
+              ")</p>" +
+              "<p id='reply'>From: " +
+              request.data[0].manageBy +
+              ":(" +
+              request.data[0].reply +
+              ")</p>";
+            $(".messHeader").append(htmlP);
+          } else {
+            var htmlP =
+              " <p id='mess'>From: " +
+              request.data[0].name +
+              ":(" +
+              request.data[0].message +
+              ")</p>";
+            $(".messHeader").append(htmlP);
+          }
+        }
       }
     });
     $("#reqDetailModal").modal("toggle");
@@ -244,7 +295,7 @@ $(document).ready(function () {
   });
   function updateStudentRequests(userId, reason, status) {
     var status =
-      "/facilitator/studentreq/change/" +
+      "/registrar/studentreq/change/" +
       status +
       "/?userId=" +
       userId +

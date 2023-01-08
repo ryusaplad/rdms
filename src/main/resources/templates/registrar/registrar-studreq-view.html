@@ -291,7 +291,7 @@
                                 aria-labelledby="navbarDropdown">
                                 <hr class="devider">
                                 <div th:if="${#session.getAttribute('username')!=null}">
-                                
+
                                     <label th:with="name=${#session.getAttribute('name')}"
                                         class="dropdown-item bg-success border border-1 b-2 text-white">Name
                                         :[[${name}]]</label>
@@ -447,11 +447,15 @@
                                 href="javascript:void(0)" aria-expanded="false"><i class=" fas fa-users"></i><span
                                     class="hide-menu ">Manage Accounts</span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="#" class="sidebar-link"><i
-                                            class=" fas fa-user-plus"></i><span class="hide-menu">Facilitators
+                                <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-user-plus"></i><span
+                                            class="hide-menu">Students
+                                        </span></a></li>
+                                <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-user-plus"></i><span class="hide-menu">
+                                            Registrars
                                         </span></a></li>
                                 <li class="sidebar-item"><a href="#" class="sidebar-link"><i
-                                            class=" fas fa-user-plus"></i><span class="hide-menu"> Registrars
+                                            class=" fas fa-user-plus"></i><span class="hide-menu">
+                                            Teachers
                                         </span></a></li>
 
                             </ul>
@@ -555,7 +559,7 @@
                                                         class="btn btn-success  w-100 text-white completeBtn">
                                                         Complete</a>
                                                 </div>
-                                                <div class="col-sm" th:if="${studRequest.requestStatus !='Rejected'}">
+                                                <div class="col-sm" th:if="${studRequest.requestStatus !='On-Going' && studRequest.requestStatus !='Approved'}">
                                                     <a th:href="@{${studRequest.studentId}}"
                                                         th:data-value="@{${studRequest.requestId}}" type="button"
                                                         class="btn btn-danger w-100 text-white  rejectBtn">
@@ -586,14 +590,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmModalModalLabel">Process Confirmation</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mBody">
                     <p>Are you sure you want to process this requests.?</p>
                     <b> Note:</b>
-                    <p>This action cannot be undo this action, after submission.</p>
+                    <p>This action cannot be undo, after submission.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -608,14 +610,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="rejectModalModalLabel">Rejecting Confirmation</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to reject this requests.?</p>
                     <b> Note:</b>
-                    <p>This action cannot be undo this action, after submission.</p>
+                    <p>This action cannot be undo, after submission.</p>
                     <label>Specify Reason Here</label>
                     <div class="mt-2 form-floating">
                         <textarea id="reason" name="reason" class="form-control floatingInput" maxlength="250"
@@ -639,13 +639,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmCompleteLabel">Completition Confirmation</h5>
-                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to complete this requests.?</p>
                     <b> Note:</b>
-                    <p>This action cannot be undo this action, after submission.</p>
+                    <p>This action cannot be undo, after submission.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -757,11 +756,7 @@
                     <h5 class="modal-title" id="reqDetailModal">
                         <span id="titleVal">More Details</span>
                     </h5>
-                    <button type="button" class="close"
-                        style="border: 1px solid white; background-color:red; color:white;" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <h4 class="card-title">Requests Informations</h4>
@@ -790,8 +785,10 @@
                         </tbody>
                     </table>
                     <hr>
-                    <h4 class="card-title">Message</h4>
-                    <p id="mess"></p>
+                        <h4 class="card-title ">Message</h4>
+                        <div class="messHeader" style="display:none;overflow-y: scroll;">
+                        
+                        </div>
                     <hr>
                     <h4 class="card-title">Request Status</h4>
                     <table class="table table-primary table-responsive">
@@ -812,13 +809,14 @@
                         </tbody>
                     </table>
                     <hr>
-                    <h4 class="card-title">Requirements</h4>
-                    <table class="table table-white table-responsive">
+                    <h4 class="card-title">Receieved Requirements</h4>
+                    <table class="table table-white table-responsive receiveRequirementsTable" style="overflow-y: scroll; height: 100px;">
                         <thead>
                             <tr>
 
-                                <th>Action</th>
+                                <th>Download</th>
                                 <th>File Name</th>
+                                <th>Uploaded By</th>
                             </tr>
 
                         </thead>
@@ -826,6 +824,25 @@
                             <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
                                 <td>
 
+                                </td>
+                                </tr>
+                                </tbody>
+                                </table>
+                                <h4 class="card-title">Sent Documents</h4>
+                                <table class="table table-white table-responsive sentDocumentTable"
+                                    style="overflow-y: scroll; height: 100px; display:none">
+                                    <thead>
+                                        <tr>
+                                
+                                            <th>Download</th>
+                                            <th>File Name</th>
+                                            <th>Uploaded By</th>
+                                        </tr>
+                                
+                                    </thead>
+                                    <tbody class="sentDocsBody">
+                                        <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                            <td>
                                 </td>
                             </tr>
                         </tbody>
@@ -847,7 +864,7 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/f_r_request_list.js}"></script>
+    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/r_request_list.js}"></script>
     <script>
 
         $('#zero_config').DataTable();

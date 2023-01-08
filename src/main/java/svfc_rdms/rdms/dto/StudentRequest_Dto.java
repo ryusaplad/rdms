@@ -10,6 +10,7 @@ public class StudentRequest_Dto {
      private String semester;
      private String requestDocument;
      private String message;
+     private String reply;
      private String requestDate;
      private String requestStatus;
      private String releaseDate;
@@ -30,11 +31,13 @@ public class StudentRequest_Dto {
      private String dateUploaded;
      private String filePurpose;
      private Long uploadedBy;
+     private String uploaderName;
      private Long requestWith;
 
      public StudentRequest_Dto(long requestId, long studentId, String accountType, String year, String course,
                String semester, String requestDocument,
-               String message, String requestBy, String requestDate, String requestStatus, String releaseDate,
+               String message, String reply, String requestBy, String requestDate, String requestStatus,
+               String releaseDate,
                String manageBy) {
           this.requestId = requestId;
           this.studentId = studentId;
@@ -44,6 +47,7 @@ public class StudentRequest_Dto {
           this.semester = semester;
           this.requestDocument = requestDocument;
           this.message = message;
+          this.reply = reply;
           this.requestBy = requestBy;
           this.requestDate = requestDate;
           this.requestStatus = requestStatus;
@@ -55,7 +59,7 @@ public class StudentRequest_Dto {
      public StudentRequest_Dto(long requestId, long studentId, String requestBy, String name, String accountType,
                String year, String course,
                String semester, String requestDocument,
-               String message, String requestDate, String requestStatus, String releaseDate,
+               String message, String reply, String requestDate, String requestStatus, String releaseDate,
                String manageBy) {
           this.requestId = requestId;
           this.studentId = studentId;
@@ -65,6 +69,7 @@ public class StudentRequest_Dto {
           this.semester = semester;
           this.requestDocument = requestDocument;
           this.message = message;
+          this.reply = reply;
           this.requestBy = requestBy;
           this.name = name;
           this.requestDate = requestDate;
@@ -75,7 +80,7 @@ public class StudentRequest_Dto {
      }
 
      public StudentRequest_Dto(UUID fileId, byte[] data, String fname, String size, String status, String dateUploaded,
-               String filePurpose, Long requestWith) {
+               String filePurpose, Long requestWith, String uploadedBy) {
           this.fileId = fileId;
           this.data = data;
           this.fname = fname;
@@ -84,6 +89,7 @@ public class StudentRequest_Dto {
           this.dateUploaded = dateUploaded;
           this.filePurpose = filePurpose;
           this.requestWith = requestWith;
+          this.uploaderName = uploadedBy;
      }
 
      public long getRequestId() {
@@ -110,6 +116,9 @@ public class StudentRequest_Dto {
           return message;
      }
 
+     public String getReply() {
+          return reply;
+     }
      public String getRequestDate() {
           return requestDate;
      }
@@ -174,8 +183,12 @@ public class StudentRequest_Dto {
           return uploadedBy;
      }
 
+     public String getUploaderName() {
+          return uploaderName;
+     }
      public Long getRequestWith() {
           return requestWith;
      }
+
 
 }

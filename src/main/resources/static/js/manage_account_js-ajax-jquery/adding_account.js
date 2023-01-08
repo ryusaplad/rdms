@@ -26,12 +26,6 @@ function validateAddingForm(
       alert2.innerText = "Student Username Invalid!";
       return false;
     }
-  } else if (title.includes("Facilitator")) {
-    if (!accountUserName.includes("f-")) {
-      alert2.style.display = "block";
-      alert2.innerText = "Facilitator Username Invalid!";
-      return false;
-    }
   } else if (title.includes("Registrar")) {
     if (!accountUserName.includes("r-")) {
       alert2.style.display = "block";

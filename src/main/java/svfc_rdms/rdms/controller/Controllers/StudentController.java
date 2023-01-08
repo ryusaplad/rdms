@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.UserFiles;
@@ -49,28 +50,29 @@ public class StudentController {
 
      @GetMapping(value = "/student/dashboard")
      public String studentDashboard(HttpSession session, HttpServletResponse response) {
-          if (globalService.validatePages(response, session)) {
+
+          if (globalService.validatePages("student", response, session)) {
 
                return "/student/stud";
           }
-          return null;
+          return "redirect:/";
      }
 
      @GetMapping("/student/request/documents")
      public String fetchDocumentCards(HttpSession session, HttpServletResponse response, Model model) {
 
-          if (globalService.validatePages(response, session)) {
+          if (globalService.validatePages("student", response, session)) {
 
                List<Documents> documentList = mainService.getAllDocuments();
                model.addAttribute("documentsCards", documentList);
                return "/student/student-request-cards";
           }
-          return null;
+          return "redirect:/";
      }
 
      @GetMapping("/student/my-requests")
      public String listOfStudentRequest(HttpServletResponse response, HttpSession session, Model model) {
-          if (globalService.validatePages(response, session)) {
+          if (globalService.validatePages("student", response, session)) {
                return studService.displayStudentRequests(model, session);
           }
           return null;
@@ -79,11 +81,17 @@ public class StudentController {
 
      @GetMapping("/student/my-documents")
      public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
-          if (globalService.validatePages(response, session) == true) {
-               System.out.println("validate");
+
+          if (globalService.validatePages("student", response, session)) {
+
                Users user = userRepo.findUserIdByUsername(session.getAttribute("username").toString()).get();
                List<UserFiles> getAllFiles = studService.getAllFilesByUser(user.getUserId());
                List<UserFiles_Dto> userFiles = new ArrayList<>();
+
+               if (getAllFiles.size() < 0) {
+                    model.addAttribute("files", userFiles);
+                    return "/student/student-documents-list";
+               }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
                     UUID uuidValue = UUID.fromString(stringValue);
@@ -99,12 +107,13 @@ public class StudentController {
 
           }
           return null;
+
      }
 
      @GetMapping(value = "/student/request/{document}")
      public String requestForm(@PathVariable String document, HttpServletRequest request, HttpServletResponse response,
                HttpSession session, Model model) {
-          globalService.validatePages(response, session);
+          globalService.validatePages("student", response, session);
           try {
                if (studService.findDocumentByTitle(document).isEmpty()) {
                     return "redirect:" + "/student/request/documents";
@@ -130,17 +139,16 @@ public class StudentController {
      }
 
      @GetMapping("/student/files/download")
-     public void downloadFile(@Param("id") String id, Model model, HttpServletResponse response) {
-
-          studService.student_DownloadFile(id, model, response);
+     public void downloadFile(@Param("id") String id, Model model, HttpServletResponse response, HttpSession session) {
+          try {
+               if (globalService.validatePages("student", response, session)) {
+                    studService.student_DownloadFile(id, model, response);
+            }
+            response.sendRedirect("/");
+       } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+       }
      }
-
-     // public void setSessionDefaultValue(String variable, String compareTo, String
-     // newValue, HttpSession session) {
-     // if (session.getAttribute(variable) == compareTo) {
-     // session.setAttribute(variable, newValue);
-     // }
-     // }
 
 
 }

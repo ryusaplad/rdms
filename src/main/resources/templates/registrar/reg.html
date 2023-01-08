@@ -191,7 +191,7 @@
                                 aria-labelledby="navbarDropdown">
                                 <hr class="devider">
                                 <div th:if="${#session.getAttribute('username')!=null}">
-                                
+
                                     <label th:with="name=${#session.getAttribute('name')}"
                                         class="dropdown-item bg-success border border-1 b-2 text-white">Name
                                         :[[${name}]]</label>
@@ -209,8 +209,8 @@
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
                                     Change Profile Picture</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout"><i
-                                        class="fa fa-power-off me-1 ms-1"></i> Logout</a>
+                                <a class="dropdown-item" href="/logout"><i class="fa fa-power-off me-1 ms-1"></i>
+                                    Logout</a>
                                 <div class="dropdown-divider"></div>
 
                             </ul>
@@ -222,96 +222,96 @@
                 </div>
             </nav>
 
-                <rside class="sidebar">
-                    <button class="rightSidebarToggle btn" onclick="toggleSidebar(); "><i id="btnIcon"
-                            class="fas fa-angle-left text-white"></i></button>
-                    <!-- ============================================================== -->
-                    <!-- Right Side Bar -->
-                    <!-- ============================================================== -->
-                
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="card  dateTimeCard">
-                                <div class="card-body">
-                                    <h4 class="card-title">Date / Time</h4>
-                                    <hr class="hr" />
-                                    <div class="todo-widget text-center" style="height:20px;">
-                                        <h5>Today is Monday</h5>
-                                    </div>
-                                    <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                        <h5>00/00/2022</h5>
-                                    </div>
+            <rside class="sidebar">
+                <button class="rightSidebarToggle btn" onclick="toggleSidebar(); "><i id="btnIcon"
+                        class="fas fa-angle-left text-white"></i></button>
+                <!-- ============================================================== -->
+                <!-- Right Side Bar -->
+                <!-- ============================================================== -->
+            
+                <div class="row">
+                    <div class="col-7">
+                        <div class="card  dateTimeCard">
+                            <div class="card-body">
+                                <h4 class="card-title">Date / Time</h4>
+                                <hr class="hr" />
+                                <div class="todo-widget text-center" style="height:20px;">
+                                    <h5>Today is Monday</h5>
+                                </div>
+                                <div class="todo-widget text-black-50 text-center" style="height:20px;">
+                                    <h5>00/00/2022</h5>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7">
-                
-                            <div class="card ">
-                                <div class="card-body">
-                                    <h4 class="card-title ">Notifications</h4>
+                    </div>
+                    <div class="col-7">
+            
+                        <div class="card ">
+                            <div class="card-body">
+                                <h4 class="card-title ">Notifications</h4>
+                                <hr class="hr" />
+                                <div class="notificationCard">
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
+                                        </div>
+            
+                                    </a>
                                     <hr class="hr" />
-                                    <div class="notificationCard">
-                                        <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                <div class="ms-2">
-                                                    <h5 class="mb-0">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                </div>
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
                                             </div>
-                
-                                        </a>
-                                        <hr class="hr" />
-                                        <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                <div class="ms-2">
-                                                    <h5 class="mb-0">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                </div>
-                                            </div>
-                                        
-                                        </a>
-                                        <hr class="hr" />
-                                        <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                <div class="ms-2">
-                                                    <h5 class="mb-0">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                </div>
-                                            </div>
-                                        
-                                        </a>
-                                        <hr class="hr" />
-                                        <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                <div class="ms-2">
-                                                    <h5 class="mb-0">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                </div>
-                                            </div>
-                                        
-                                        </a>
-                                        <hr class="hr" />
-                                        <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                <div class="ms-2">
-                                                    <h5 class="mb-0">Event today</h5>
-                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                </div>
-                                            </div>
-                                        
-                                        </a>
-                                        <hr class="hr" />
                                         </div>
+            
+                                    </a>
+                                    <hr class="hr" />
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
                                         </div>
+            
+                                    </a>
+                                    <hr class="hr" />
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
                                         </div>
+            
+                                    </a>
+                                    <hr class="hr" />
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
                                         </div>
+            
+                                    </a>
+                                    <hr class="hr" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                </rside>
+            </rside>
         </header>
         <!-- ============================================================== -->
         <!-- End Topbar header -->
@@ -339,7 +339,7 @@
                                 <li class="sidebar-item"><a href="#" class="sidebar-link active"><i
                                             class=" far fa-paper-plane"></i><span class="hide-menu">Sent Requests
                                         </span></a></li>
-                            
+
                             </ul>
                         </li>
 
@@ -348,10 +348,13 @@
                                     class="hide-menu ">Manage Accounts</span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
                                 <li class="sidebar-item"><a href="#" class="sidebar-link"><i
-                                            class=" fas fa-user-plus"></i><span class="hide-menu">Facilitators
+                                            class=" fas fa-user-plus"></i><span class="hide-menu">Students
                                         </span></a></li>
                                 <li class="sidebar-item"><a href="#" class="sidebar-link"><i
                                             class=" fas fa-user-plus"></i><span class="hide-menu"> Registrars
+                                        </span></a></li>
+                                <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-user-plus"></i><span class="hide-menu">
+                                            Teachers
                                         </span></a></li>
 
                             </ul>

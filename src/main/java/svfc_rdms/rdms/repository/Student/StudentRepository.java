@@ -19,8 +19,8 @@ public interface StudentRepository extends JpaRepository<StudentRequest, Long> {
 
      @Modifying
      @Transactional
-     @Query("UPDATE StudentRequest req SET req.requestStatus =:status,req.manageBy =:manageBy,req.message =:message WHERE req.requestId =:requestId")
-     void changeStatusAndManagebyAndMessageOfRequests(String status, String manageBy, String message, long requestId);
+     @Query("UPDATE StudentRequest req SET req.requestStatus =:status,req.manageBy =:manageBy,req.reply =:reply WHERE req.requestId =:requestId")
+     void changeStatusAndManagebyAndMessageOfRequests(String status, String manageBy, String reply, long requestId);
 
      @Modifying
      @Transactional

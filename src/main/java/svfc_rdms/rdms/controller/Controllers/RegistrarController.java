@@ -9,41 +9,33 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import svfc_rdms.rdms.serviceImpl.Facilitator_Registrar.Facilitator_Registrar_ServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
 
 @Controller
-public class Facilitator_RegistrarController {
+public class RegistrarController {
+
      @Autowired
-     private Facilitator_Registrar_ServiceImpl faci_regs_ServiceImpl;
+     private Registrar_ServiceImpl regs_ServiceImpl;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
 
-     @GetMapping(value = "/facilitator/dashboard")
-     public String facilitatorDashboard(HttpSession session, HttpServletResponse response) {
-          if (globalService.validatePages(response, session)) {
-               return "/facilitator/facili";
-          }
-
-          return null;
-     }
-
      @GetMapping(value = "/registrar/dashboard")
      public String registrarDashboard(HttpSession session, HttpServletResponse response) {
-          if (globalService.validatePages(response, session)) {
+          if (globalService.validatePages("registrar", response, session)) {
                return "/registrar/reg";
           }
-          return null;
+          return "redirect:/";
      }
 
      @GetMapping(value = "/{userType}/studrequest")
      public String studentRequests(@PathVariable String userType, HttpSession session, HttpServletResponse response,
                Model model) {
-          if (globalService.validatePages(response, session)) {
-               return faci_regs_ServiceImpl.displayAllStudentRequest(userType, model);
+          if (globalService.validatePages(userType, response, session)) {
+               return regs_ServiceImpl.displayAllStudentRequest(userType, model);
           }
-          return null;
+          return "redirect:/";
 
      }
 }

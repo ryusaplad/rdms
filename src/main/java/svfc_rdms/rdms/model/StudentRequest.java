@@ -26,42 +26,29 @@ public class StudentRequest {
       @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_request_sequence")
       private long requestId;
 
-      // the name of requestor is in the requestBy
+
       private String year;
       private String course;
-      private String semester; // What semester the document needed?
+      private String semester;
 
       @ManyToOne
       @JoinColumn(name = "request_document", referencedColumnName = "documentId")
-      private Documents requestDocument; // what document? / COM/COR/ID/GRADES/ using by id of document
+      private Documents requestDocument;
 
 
       private String message;
+      private String reply;
 
-      private String requestDate; // what date request has been sent
-      private String requestStatus; // Pending/ On-Going / Completed / Deleted //
+      private String requestDate;
+      private String requestStatus;
 
       private String releaseDate;
 
-      /*
-       * the purpose of this, when the one who manage the request and send the request
-       * to other person like registrar or teacher
-       * the manageBy will be overwrite
-       * 
-       * Ex:
-       * if the facilitator manage the student request
-       * the manageby will be "Manage By Facilitator"
-       * 
-       * and If the facilitator send the request to the registrar
-       * the manageBy will change to Manage by Facilitator , Registrar
-       * 
-       * Same to the teacher.
-       */
-      private String manageBy; // who are the users manage the request
+      private String manageBy;
 
       @ManyToOne
       @JoinColumn(name = "request_by", referencedColumnName = "userId")
-      private Users requestBy; // One User to many Request
+      private Users requestBy;
 
       public StudentRequest(long requestId, String year, String course, String semester, String requestDocument,
                   String message, Users requestBy, String requestDate, String requestStatus, String releaseDate,

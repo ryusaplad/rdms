@@ -27,23 +27,20 @@ public class Users {
      @Id
      @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
-     // Primary Id
+
      private long userId;
-     /* 100 Characters */
+
      private String name;
-     /* Must be 5 characters and cannot be duplicate */
-     // admin / student - C/c / facilitator-F/f / registrar - R/r / teacher - T/t
+
      @Column(unique = true)
      private String username;
-     /*
-      * must be 8 character password with
-      * any special character and lower case and uppercase
-      */
+
      private String password;
-     // admin / student/ facilitator/ registrar/ teacher
+
      private String type;
-     // temporarily remove / permanently deleted / active
+
      private String status;
+
      @Column(name = "profile_image", columnDefinition = "LONGBLOB", nullable = true)
      private byte profilePicture;
 

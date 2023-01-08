@@ -45,14 +45,12 @@ public class AdminController {
      @GetMapping("/admin")
      public String dashboard_View(Model model) {
           model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Student"));
-          model.addAttribute("totalFacilitators", mainService.displayCountsByStatusAndType("Active", "Facilitator"));
           model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrar"));
           model.addAttribute("totalTeachers", mainService.displayCountsByStatusAndType("Active", "Teacher"));
 
-          model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
-          model.addAttribute("totalDeletedFac", mainService.displayCountsByStatusAndType("Temporary", "Student"));
-          model.addAttribute("totalDeletedReg", mainService.displayCountsByStatusAndType("Temporary", "Facilitator"));
-          model.addAttribute("totalDeletedTeach", mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
+          model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Student"));
+          model.addAttribute("totalDeletedReg", mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
+          model.addAttribute("totalDeletedTeach", mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
 
           return "/admin-dashboard";
      }
@@ -65,11 +63,7 @@ public class AdminController {
                String idFormat = "";
                boolean showType = false;
                String status = "";
-               if (userType.equals("facilitators")) {
-                    accType = "Facilitator";
-                    idFormat = "F- / f-";
-                    status = "Active";
-               } else if (userType.equals("registrars")) {
+               if (userType.equals("registrars")) {
                     accType = "Registrar";
                     idFormat = "R- / r-";
                     status = "Active";
@@ -105,17 +99,14 @@ public class AdminController {
 
      // Deleted pages
      @GetMapping("/{userType}/deleted-accounts")
-     public String deletedFacilitators_View(@PathVariable String userType, Model model) {
+     public String deletedAccounts_View(@PathVariable String userType, Model model) {
 
           String title = "";
           boolean hideToggle = false;
           String dataStatus = "Temporary";
           String accountType = userType;
 
-          if (accountType.equals("facilitator")) {
-               title = "Deleted Facilitator Accounts";
-               hideToggle = true;
-          } else if (accountType.equals("registrar")) {
+          if (accountType.equals("registrar")) {
                title = "Deleted Registrar Accounts";
                hideToggle = true;
           } else if (accountType.equals("teacher")) {
@@ -251,7 +242,8 @@ public class AdminController {
                          .add(new StudentRequest_Dto(studReq.getRequestId(), studReq.getRequestBy().getUserId(),
                                    studReq.getRequestBy().getType(), studReq.getYear(),
                                    studReq.getCourse(), studReq.getSemester(), studReq.getRequestDocument().getTitle(),
-                                   studReq.getMessage(), studReq.getRequestBy().getName(), studReq.getRequestDate(),
+                                   studReq.getMessage(), studReq.getReply(), studReq.getRequestBy().getName(),
+                                   studReq.getRequestDate(),
                                    studReq.getRequestStatus(), studReq.getReleaseDate(), studReq.getManageBy()));
 
           }

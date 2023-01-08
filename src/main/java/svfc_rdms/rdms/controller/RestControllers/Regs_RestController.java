@@ -22,11 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.serviceImpl.Facilitator_Registrar.Facilitator_Registrar_ServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @RestController
-public class Faci_Regs_RestController {
+public class Regs_RestController {
 
      @Autowired
      StudentServiceImpl studentServiceImpl;
@@ -35,7 +35,7 @@ public class Faci_Regs_RestController {
      UsersRepository userRepository;
 
      @Autowired
-     Facilitator_Registrar_ServiceImpl faci_regs_ServiceImpl;
+     Registrar_ServiceImpl regs_ServiceImpl;
 
      @GetMapping("/{userType}/studentrequest/fetch")
      public ResponseEntity<Object> getRequestInformation(@PathVariable String userType, @RequestParam("s") Long userId,
@@ -65,7 +65,7 @@ public class Faci_Regs_RestController {
                HttpServletResponse response,
                HttpSession session) {
           List<String> validUserType = new ArrayList<>();
-          validUserType.add("facilitator");
+          validUserType.add("admin");
           validUserType.add("registrar");
           if (userType.isEmpty() || userType.isBlank() || !validUserType.contains(userType)) {
                throw new ApiRequestException("Invalid User.");
@@ -74,7 +74,7 @@ public class Faci_Regs_RestController {
                     String manageBy = session.getAttribute("name").toString();
 
                     // changing status based on the input
-                    if (faci_regs_ServiceImpl.changeStatusAndManageByAndMessageOfRequests(status, manageBy, message,
+                    if (regs_ServiceImpl.changeStatusAndManageByAndMessageOfRequests(status, manageBy, message,
                               userId, requestId)) {
                          return new ResponseEntity<>("Success", HttpStatus.OK);
                     } else {
@@ -91,7 +91,7 @@ public class Faci_Regs_RestController {
                @RequestParam("rfile[]") Optional<MultipartFile[]> files,
                @RequestParam Map<String, String> params, HttpSession session) {
 
-          return faci_regs_ServiceImpl.finalizedRequestsWithFiles(userId, requestId, files, params, session);
+          return regs_ServiceImpl.finalizedRequestsWithFiles(userId, requestId, files, params, session);
 
      }
 }

@@ -9,10 +9,10 @@ function usernameChangerBySelection() {
   let getSelected = accountType.options[accountType.selectedIndex].value;
   if (getSelected == "Student") {
     document.getElementById("username").placeholder = "Student Id";
+  } else if (getSelected == "Registrar") {
+    document.getElementById("username").placeholder = "Registrar Id";
   } else if (getSelected == "Teacher") {
     document.getElementById("username").placeholder = "Teacher Id";
-  } else if (getSelected == "Facilitator") {
-    document.getElementById("username").placeholder = "Facilitator Id";
   } else if (getSelected == "Administrator") {
     document.getElementById("username").placeholder = "Admin Id";
   }
@@ -42,7 +42,7 @@ $(document).ready(function () {
         1,
         "Something is not right."
       );
-      console.log("lol");
+
       return false;
     } else {
       accTypeMessage.style = "display:none";
@@ -52,15 +52,16 @@ $(document).ready(function () {
           displayMessage(userMessage, userError, 2, getSelected);
           return false;
         }
-      } else if (getSelected == "Teacher") {
-        if (!user.includes("t-")) {
+      } else if (getSelected == "Registrar") {
+        if (!user.includes("r-")) {
           displayMessage(userMessage, userError, 2, getSelected);
 
           return false;
         }
-      } else if (getSelected == "Facilitator") {
-        if (!user.includes("f-")) {
+      } else if (getSelected == "Teacher") {
+        if (!user.includes("t-")) {
           displayMessage(userMessage, userError, 2, getSelected);
+
           return false;
         }
       } else if (getSelected == "Administrator") {
@@ -87,10 +88,10 @@ $(document).ready(function () {
       if (accountType == "Student") {
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
-      } else if (accountType == "Teacher") {
+      } else if (accountType == "Registrar") {
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
-      } else if (accountType == "Facilitator") {
+      } else if (accountType == "Teacher") {
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
       } else if (accountType == "Administrator") {
@@ -146,16 +147,12 @@ $(document).ready(function () {
                 window.location = "/student/dashboard";
               }, 1000);
             }
-             if (formData.type == "Facilitator") {
-               setTimeout(function () {
-                 window.location = "/facilitator/dashboard";
-               }, 1000);
-             }
-             if (formData.type == "Registrar") {
-               setTimeout(function () {
-                 window.location = "/registrar/dashboard";
-               }, 1000);
-             }
+
+            if (formData.type == "Registrar") {
+              setTimeout(function () {
+                window.location = "/registrar/dashboard";
+              }, 1000);
+            }
           } else {
             responseTextVal = response;
           }

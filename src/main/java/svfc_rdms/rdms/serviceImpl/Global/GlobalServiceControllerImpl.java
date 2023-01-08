@@ -15,7 +15,7 @@ import svfc_rdms.rdms.service.Global.GlobalControllerService;
 public class GlobalServiceControllerImpl implements GlobalControllerService {
 
      @Override
-     public boolean validatePages(HttpServletResponse response, HttpSession session) {
+     public boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session) {
           try {
                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
                response.setHeader("Pragma", "no-cache");
@@ -23,11 +23,14 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                if (session.getAttribute("username") == null ||
                          session.getAttribute("accountType") == null
                          || session.getAttribute("name") == null) {
-                    // If the session is not valid, redirect to the login page
-                    response.sendRedirect("/");
+                    return false;
 
                } else {
-                    return true;
+
+                    boolean verifyAccountType = (session.getAttribute("accountType").toString()
+                              .toLowerCase().equals(validAccount)) ? true : false;
+
+                    return verifyAccountType;
                }
 
           } catch (Exception e) {

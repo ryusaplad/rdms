@@ -30,7 +30,7 @@ public class StudentRepositoryTest {
 
      @Test
      void testPreventionForDuplicationStringFromTheArrays() {
-          String manageBy = " Facilitator " + " , " + " Registrar " + " , " + "  Registrar ";
+          String manageBy = " Registrar " + " , " + "  Registrar ";
           String[] manageByArray = manageBy.split(",");
           for (int i = 0; i < manageByArray.length; i++) {
                manageByArray[i] = manageByArray[i].trim();

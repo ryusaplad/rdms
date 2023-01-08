@@ -89,9 +89,6 @@ public class AdminServicesImpl implements AdminService {
                          user.setType("Student");
                     } else if (userIdFormat.contains("F-")) {
 
-                         user.setType("Facilitator");
-                    } else if (userIdFormat.contains("R-")) {
-
                          user.setType("Registrar");
                     } else if (userIdFormat.contains("T-")) {
 

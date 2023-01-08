@@ -1,4 +1,4 @@
-package svfc_rdms.rdms.serviceImpl.Facilitator_Registrar;
+package svfc_rdms.rdms.serviceImpl.Registrar;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,12 +25,12 @@ import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
-import svfc_rdms.rdms.service.Facilitator_Registrar.Facilitator_Registrar_Service;
+import svfc_rdms.rdms.service.Registrar.Registrar_Service;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Service
-public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_Service {
+public class Registrar_ServiceImpl implements Registrar_Service {
 
      @Autowired
      private StudentRepository studentRepository;
@@ -59,8 +59,7 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
 
                if (userType.isEmpty() || userType.isBlank()) {
                     return "redirect:/";
-               } else if (userType.equals("facilitator")) {
-                    link = "/facilitator/facilitator-studreq-view";
+
                } else if (userType.equals("registrar")) {
                     link = "/registrar/registrar-studreq-view";
                } else {
@@ -70,35 +69,18 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
                     List<StudentRequest_Dto> studentRequests = new ArrayList<>();
 
                     fetchStudentRequest.stream().forEach(req -> {
-                         if (userType.equals("facilitator")) {
-                              if (req.getRequestStatus().equals("Pending") ||
-                                        req.getRequestStatus().equals("Rejected")) {
-                                   studentRequests
-                                             .add(new StudentRequest_Dto(req.getRequestId(),
-                                                       req.getRequestBy().getUserId(),
-                                                       req.getRequestBy().getType(), req.getYear(),
-                                                       req.getCourse(), req.getSemester(),
-                                                       req.getRequestDocument().getTitle(),
-                                                       req.getMessage(), req.getRequestBy().getName(),
-                                                       req.getRequestDate(),
-                                                       req.getRequestStatus(), req.getReleaseDate(),
-                                                       req.getManageBy()));
-                              }
 
-                         } else {
+                         studentRequests
+                                   .add(new StudentRequest_Dto(req.getRequestId(),
+                                             req.getRequestBy().getUserId(),
+                                             req.getRequestBy().getType(), req.getYear(),
+                                             req.getCourse(), req.getSemester(),
+                                             req.getRequestDocument().getTitle(),
+                                             req.getMessage(), req.getReply(), req.getRequestBy().getName(),
+                                             req.getRequestDate(),
+                                             req.getRequestStatus(), req.getReleaseDate(),
+                                             req.getManageBy()));
 
-                              studentRequests
-                                        .add(new StudentRequest_Dto(req.getRequestId(),
-                                                  req.getRequestBy().getUserId(),
-                                                  req.getRequestBy().getType(), req.getYear(),
-                                                  req.getCourse(), req.getSemester(),
-                                                  req.getRequestDocument().getTitle(),
-                                                  req.getMessage(), req.getRequestBy().getName(),
-                                                  req.getRequestDate(),
-                                                  req.getRequestStatus(), req.getReleaseDate(),
-                                                  req.getManageBy()));
-
-                         }
                     });
                     model.addAttribute("studentreq", studentRequests);
                     return link;
@@ -118,9 +100,12 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
           StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
 
           if (message.equals("N/A")) {
-               message = studentRequest.getMessage();
-          } else {
-               message = studentRequest.getMessage() + "\n" + message;
+               message = studentRequest.getReply();
+          } else if (studentRequest.getReply() != null) {
+               if (studentRequest.getReply().length() > 0) {
+                    message = studentRequest.getReply() + "," + message;
+               }
+
           }
           String manageByFromDatabase = globalService.removeDuplicateInManageBy(studentRequest.getManageBy());
 
@@ -129,14 +114,14 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
           }
 
           if (user != null && studentRequest != null) {
-               studentRepository.changeStatusAndManagebyAndMessageOfRequests(status, manageBy,
+
+               studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
+                         manageBy,
                          message, studentRequest.getRequestId());
                return true;
           }
           return false;
      }
-
-
 
      @Override
      public ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
@@ -160,14 +145,15 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
                     if (entry.getKey().contains("excluded")) {
                          excludedFiles.add(entry.getValue());
                     }
-                    System.out.println(entry.getKey() + ": " + entry.getValue());
+
                }
-               UserFiles userFiles = new UserFiles();
+
                Users manageBy = usersRepository.findByUsername(session.getAttribute("username").toString()).get();
 
                for (MultipartFile filex : files.get()) {
-                    if (!excludedFiles.contains(filex.getOriginalFilename())) {
 
+                    if (!excludedFiles.contains(filex.getOriginalFilename())) {
+                         UserFiles userFiles = new UserFiles();
                          userFiles.setData(filex.getBytes());
                          userFiles.setName(filex.getOriginalFilename());
                          userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
@@ -188,6 +174,5 @@ public class Facilitator_Registrar_ServiceImpl implements Facilitator_Registrar_
           }
 
      }
-
 
 }

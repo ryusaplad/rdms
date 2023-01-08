@@ -51,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
                          return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
                     }
                } catch (Exception e) {
-                    throw new ApiRequestException(e.getMessage());
+                    return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
                }
 
           } else {
