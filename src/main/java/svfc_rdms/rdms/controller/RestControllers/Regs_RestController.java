@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
-import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
@@ -54,7 +53,7 @@ public class Regs_RestController {
 
      @GetMapping("/registrar/user/update")
      @ResponseBody
-     public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
+     public List<Users> returnUserById(@RequestParam("userId") long id) {
 
           Optional<Users> users = regs_ServiceImpl.findOneUserById(id);
 
@@ -98,72 +97,41 @@ public class Regs_RestController {
 
      @GetMapping(value = "/registrar/getAllAccounts")
      public ResponseEntity<Object> getAllUser(@RequestParam("account-type") String accountType) {
-
-          List<Users> users = regs_ServiceImpl.diplayAllAccountsByType(accountType);
-
-          List<Users> storedAccountsWithoutImage = new ArrayList<>();
-
-          for (Users user : users) {
-               storedAccountsWithoutImage
-                         .add(new Users(user.getUserId(), user.getName(), user.getUsername(),
-                                   user.getPassword(),
-                                   user.getType(), user.getStatus()));
-
-          }
-          users = storedAccountsWithoutImage;
-          ServiceResponse<List<Users>> serviceResponse = new ServiceResponse<>("success", users);
-
-          return new ResponseEntity<Object>(serviceResponse, HttpStatus.OK);
-
+          return regs_ServiceImpl.displayAllUserAccountByType(accountType);
      }
 
-     @GetMapping("/{userType}/studentrequest/fetch")
-     public ResponseEntity<Object> getRequestInformation(@PathVariable String userType, @RequestParam("s") Long userId,
+     @GetMapping("/registrar/studentrequest/fetch")
+     public ResponseEntity<Object> getRequestInformation(
+               @RequestParam("s") Long userId,
                @RequestParam("req") Long requestId,
-               HttpServletResponse response, HttpSession session) {
-          if (userType.isEmpty() || userType.isBlank()) {
-               throw new ApiRequestException("Invalid User.");
-          } else {
-               Optional<Users> user = userRepository.findByuserId(userId);
-               if (user.isPresent()) {
-                    Users getUser = user.get();
-                    String username = getUser.getUsername();
-                    return studentServiceImpl.fetchRequestInformationToModals(username, requestId);
-               } else {
-                    throw new ApiRequestException("Can't get the users.");
-               }
-          }
+               HttpServletResponse response,
+               HttpSession session) {
 
+          Optional<Users> user = userRepository.findByuserId(userId);
+          if (!user.isPresent()) {
+               throw new ApiRequestException(
+                         "Failed to get user informations, Please Try Again!. Please contact the administrator for further assistance.");
+          }
+          String username = user.get().getUsername();
+          return studentServiceImpl.fetchRequestInformationToModals(username, requestId);
      }
 
-     @GetMapping(value = "/{userType}/studentreq/change/{status}")
+     @GetMapping(value = "/registrar/studentreq/change/{status}")
      @ResponseBody
-     public ResponseEntity<Object> changeRequestInformations(@PathVariable String userType,
+     public ResponseEntity<Object> changeRequestInformations(
                @PathVariable("status") String status,
-               @RequestParam("userId") long userId, @RequestParam("requestId") long requestId,
+               @RequestParam("userId") long userId,
+               @RequestParam("requestId") long requestId,
                @RequestParam("reason") String message,
                HttpServletResponse response,
                HttpSession session) {
-          List<String> validUserType = new ArrayList<>();
-          validUserType.add("admin");
-          validUserType.add("registrar");
-          if (userType.isEmpty() || userType.isBlank() || !validUserType.contains(userType)) {
-               throw new ApiRequestException("Invalid User.");
-          } else {
-               if (!status.isEmpty() || !status.isBlank() || session.getAttribute("name") != null) {
-                    String manageBy = session.getAttribute("name").toString();
 
-                    // changing status based on the input
-                    if (regs_ServiceImpl.changeStatusAndManageByAndMessageOfRequests(status, manageBy, message,
-                              userId, requestId)) {
-                         return new ResponseEntity<>("Success", HttpStatus.OK);
-                    } else {
-                         throw new ApiRequestException("Failed to change requests status.");
-                    }
-               }
+          if (!regs_ServiceImpl.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
+                    session)) {
+               throw new ApiRequestException(
+                         "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
           }
-
-          return new ResponseEntity<>("failed to change status, invalid data.", HttpStatus.BAD_REQUEST);
+          return new ResponseEntity<>("Success", HttpStatus.OK);
      }
 
      @PostMapping("/registrar/studentreq/finalized")

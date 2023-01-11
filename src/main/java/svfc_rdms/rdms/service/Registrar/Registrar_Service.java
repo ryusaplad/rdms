@@ -14,12 +14,15 @@ import svfc_rdms.rdms.model.Users;
 
 public interface Registrar_Service {
 
+
       String displayAllStudentRequest(String userType, Model model);
 
       String displayAllFilesByUserId(HttpSession session, Model model);
 
-      boolean changeStatusAndManageByAndMessageOfRequests(String status, String manageBy, String message, long userId,
-                  long requestId);
+      ResponseEntity<Object> displayAllUserAccountByType(String userType);
+
+      boolean changeStatusAndManageByAndMessageOfRequests(String status, String message, long userId,
+                  long requestId, HttpSession session);
 
       // Manage Request
       ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
@@ -29,7 +32,7 @@ public interface Registrar_Service {
       // Manage Accounts
       ResponseEntity<Object> saveUsersAccount(Users user, int actions);
 
-      List<Users> diplayAllAccountsByType(String type);
+      List<Users> getAllAccountsByType(String userType);
 
       boolean findUserName(String username);
 

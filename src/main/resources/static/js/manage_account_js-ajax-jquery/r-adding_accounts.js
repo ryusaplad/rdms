@@ -9,6 +9,9 @@ function validateAddingForm(
   accountPassword,
   confirmPassword
 ) {
+  accountPassword = accountPassword.replace(/\s/g, "");
+  confirmPassword = confirmPassword.replace(/\s/g, "");
+
   if (accountName == "" || accountName.length < 1) {
     alert1.style.display = "block";
     alert1.innerText = "Name cannot be empty!";
@@ -252,9 +255,9 @@ $(document).ready(function () {
           $.each(result.data, function (count, user) {
             if (user.status.toLowerCase() == "temporary") {
               htmlTable =
-                " <tr><td>" +
+                "<tr><td style='width: 300px;'>" +
                 user.name +
-                "</td><td>" +
+                "</td><td style='width: 300px;'>" +
                 user.status +
                 "</td><td>" +
                 "<div class='row'>" +
@@ -274,76 +277,120 @@ $(document).ready(function () {
             } else {
               if (user.type != "Teacher") {
                 htmlTable =
-                  " <tr><td>" +
+                  "<tr><td style='width: 300px;'>" +
                   user.name +
-                  "</td><td>" +
+                  "</td><td style='width: 300px;'>" +
                   user.status +
                   "</td><td>" +
-                  "<div class='row'>" +
-                  "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  `
+                  <div class="btn-group dropstart">
+                      <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
+                          aria-expanded="false">
+                          Action
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                              <a href="/registrar/user/update/?userId=` +
                   user.userId +
-                  "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a href='" +
+                  `"type="button" class="edit   dropdown-item link text-primary">Edit</a>
+                        </li>
+                          <li>
+                              <a id="delete" href="` +
                   user.userId +
-                  "'type='button'class='delete btn btn-danger w-100'>Delete</a>" +
-                  "</div></div>" +
+                  `" type="button"
+                                  class="delete dropdown-item  text-danger">Delete</a>
+                          </li>
+                      </ul>
+                  </div>` +
                   "</td></tr>";
                 actions =
-                  "<div class='row'>" +
-                  "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  `
+                  <div class="btn-group dropstart">
+                      <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
+                          aria-expanded="false">
+                          Action
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                              <a href="/registrar/user/update/?userId=` +
                   user.userId +
-                  "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a href='" +
+                  `
+                                  "type="button" class="edit dropdown-item link text-primary">Edit</a>
+                        </li>
+                          <li>
+                              <a id="delete" href="` +
                   user.userId +
-                  "'type='button'class='delete btn btn-danger w-100'>Delete</a>" +
-                  "</div></div>";
+                  `" type="button"
+                                  class="delete dropdown-item  text-danger">Delete</a>
+                          </li>
+                      </ul>
+                  </div>`;
               } else {
                 htmlTable =
-                  " <tr><td>" +
+                  " <tr><td style='width: 300px;'>" +
                   user.name +
-                  "</td><td>" +
+                  "</td><td style='width: 300px;'>" +
                   user.status +
-                  "</td><td>" +
-                  "<div class='row'>" +
-                  "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  "</td><td style='width:5%'>" +
+                  `
+                  <div class="btn-group dropstart">
+                      <button  type="button" class="btn btn-danger text-white" data-bs-toggle="dropdown"
+                          aria-expanded="false">
+                          Action
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                              <a href="/registrar/user/update/?userId=` +
                   user.userId +
-                  "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a href='" +
+                  `
+                                  "type="button" class="edit  dropdown-item link text-primary">Edit</a>
+                        </li>
+                         
+                          <li ><a id="send_requests"
+                                href="` +
                   user.userId +
-                  "'type='button'class='delete btn btn-danger w-100'>Delete</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a id='send_requests' href='" +
+                  `" type="button"
+                                  class="sendRequests  dropdown-item link text-success">
+                                  Requests</a></li>
+                                   <li>
+                              <a id="delete" href="` +
                   user.userId +
-                  "' type='button' class='sendRequests btn btn-success text-white w-100'>Send Requests</a>" +
-                  "</div></div>" +
+                  `" type="button"
+                                  class="delete dropdown-item  text-danger">Delete</a>
+                          </li>
+                      </ul>
+                  </div>` +
                   "</td></tr>";
+
                 actions =
-                  "<div class='row'>" +
-                  "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  `
+                  <div class="btn-group dropstart">
+                      <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
+                          aria-expanded="false">
+                          Action
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                              <a href="/registrar/user/update/?userId=` +
                   user.userId +
-                  "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a href='" +
+                  `
+                                  "type="button" class="edit  dropdown-item link text-primary">Edit</a>
+                        </li>
+                         
+                           <li ><a id="send_requests"
+                                href="` +
                   user.userId +
-                  "'type='button'class='delete btn btn-danger w-100'>Delete</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a id='send_requests' href='" +
+                  `" type="button"
+                                  class="sendRequests  dropdown-item link text-success">
+                                  Requests</a></li>
+                                   <li>
+                              <a id="delete" href="` +
                   user.userId +
-                  "' type='button' class='sendRequests btn btn-success text-white w-100'>Send Requests</a>" +
-                  "</div></div>";
+                  `" type="button"
+                                  class="delete dropdown-item  text-danger">Delete</a>
+                          </li>
+                      </ul>
+                  </div>`;
               }
             }
             $("#tableBody").append(htmlTable);
@@ -359,7 +406,7 @@ $(document).ready(function () {
           $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
           $("#resultMessage").html(userType + " Deletion Failed :(");
           $("#resultDiv").fadeIn(100);
-          $("#deleteModal").modal("hide");
+          $("#deleteTempModalConfirm").modal("hide");
         }
       },
       error: function (e) {
@@ -373,7 +420,7 @@ $(document).ready(function () {
         $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
         $("#resultMessage").html(e + ' <a class="link" href="#">Contact</a>');
         $("#resultDiv").fadeIn(100);
-        $("#deleteModal").modal("hide");
+        $("#deleteTempModalConfirm").modal("hide");
       },
     });
 
@@ -396,7 +443,7 @@ $(document).ready(function () {
       url: tempStatus,
       type: "GET",
       success: function (status) {
-        $("#deleteModal").modal("hide");
+        $("#deleteTempModalConfirm").modal("hide");
         ajaxGet(userType);
         $("#resultDiv").hide();
         $("#resultDiv").fadeIn(100);
@@ -404,7 +451,7 @@ $(document).ready(function () {
         $("#resultMessage").html("The account has been temporarily removed.");
       },
       error: function (error) {
-        $("#deleteModal").modal("hide");
+        $("#deleteTempModalConfirm").modal("hide");
         $("#resultDiv").hide();
         $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
         $("#resultMessage").html(
@@ -422,7 +469,7 @@ $(document).ready(function () {
       url: permStatus,
       type: "GET",
       success: function (status) {
-        $("#deleteModal").modal("hide");
+        $("#deleteModalConfirm").modal("hide");
         ajaxGet(userType);
         $("#resultDiv").hide();
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
@@ -431,7 +478,7 @@ $(document).ready(function () {
       },
       error: function (error) {
         console.log(error);
-        $("#deleteModal").modal("hide");
+        $("#deleteModalConfirm").modal("hide");
         $("#resultDiv").hide();
         $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
         $("#resultMessage").html(
@@ -474,7 +521,7 @@ $(document).ready(function () {
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
         $("#resultMessage").html("The account has been successfully restored.");
         $("#resultDiv").fadeIn(100);
-        $("#undoModal").modal("hide");
+        $("#undoModalConfirm").modal("hide");
       },
       error: function (error) {
         $("#resultDiv").hide();

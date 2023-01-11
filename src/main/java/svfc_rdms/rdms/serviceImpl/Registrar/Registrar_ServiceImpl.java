@@ -102,8 +102,62 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
      }
 
      @Override
-     public boolean changeStatusAndManageByAndMessageOfRequests(String status, String manageBy, String message,
-               long userId, long requestId) {
+     public String displayAllFilesByUserId(HttpSession session, Model model) {
+
+          Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
+          if (user.getUserId() != -1) {
+
+               List<UserFiles> getAllFiles = getAllFilesByUser(user.getUserId());
+               List<UserFiles_Dto> userFiles = new ArrayList<>();
+
+               if (getAllFiles == null) {
+                    model.addAttribute("files", userFiles);
+                    return "/registrar/documents-list";
+               }
+               getAllFiles.stream().forEach(file -> {
+                    String stringValue = file.getFileId().toString();
+                    UUID uuidValue = UUID.fromString(stringValue);
+                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
+                              + file.getUploadedBy().getName();
+                    userFiles.add(new UserFiles_Dto(
+                              uuidValue, file.getName(), file.getSize(),
+                              file.getStatus(),
+                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
+               });
+               model.addAttribute("files", userFiles);
+               return "/registrar/documents-list";
+
+          }
+
+          return null;
+
+     }
+
+     @Override
+     public ResponseEntity<Object> displayAllUserAccountByType(String type) {
+          List<Users> users = getAllAccountsByType(type);
+
+          if (users != null || !users.isEmpty()) {
+               List<Users> storedAccountsWithoutImage = new ArrayList<>();
+
+               for (Users user : users) {
+                    storedAccountsWithoutImage
+                              .add(new Users(user.getUserId(), user.getName(), user.getUsername(),
+                                        user.getPassword(),
+                                        user.getType(), user.getStatus()));
+
+               }
+               users = storedAccountsWithoutImage;
+               ServiceResponse<List<Users>> serviceResponse = new ServiceResponse<>("success", users);
+               return new ResponseEntity<Object>(serviceResponse, HttpStatus.OK);
+          }
+
+          return new ResponseEntity<Object>("Failed to retrieve user accounts.", HttpStatus.BAD_REQUEST);
+     }
+
+     @Override
+     public boolean changeStatusAndManageByAndMessageOfRequests(String status, String message,
+               long userId, long requestId, HttpSession session) {
           Users user = usersRepository.findByuserId(userId).get();
           StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
 
@@ -117,20 +171,25 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
           } else if (message == null || message.isEmpty()) {
                message = "";
           }
-          String manageByFromDatabase = globalService.removeDuplicateInManageBy(studentRequest.getManageBy());
+          if (!status.isEmpty() || !status.isBlank() || session.getAttribute("name") != null) {
+               String manageBy = session.getAttribute("name").toString();
+               String manageByFromDatabase = globalService.removeDuplicateInManageBy(studentRequest.getManageBy());
 
-          if (!manageByFromDatabase.trim().isEmpty()) {
-               manageBy = globalService.removeDuplicateInManageBy(studentRequest.getManageBy() + "," + manageBy);
-          }
+               if (!manageByFromDatabase.trim().isEmpty()) {
+                    manageBy = globalService.removeDuplicateInManageBy(studentRequest.getManageBy() + "," + manageBy);
+               }
 
-          if (user != null && studentRequest != null) {
+               if (user != null && studentRequest != null) {
 
-               studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
-                         manageBy,
-                         message, studentRequest.getRequestId());
-               return true;
+                    studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
+                              manageBy,
+                              message, studentRequest.getRequestId());
+                    return true;
+               }
+
           }
           return false;
+
      }
 
      @Override
@@ -186,7 +245,7 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
      }
 
      @Override
-     public List<Users> diplayAllAccountsByType(String type) {
+     public List<Users> getAllAccountsByType(String type) {
           return usersRepository.findAllByType(type);
      }
 
@@ -195,7 +254,7 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
 
           String error = "";
           try {
-
+               user.setPassword(user.getPassword().replaceAll("\\s", ""));
                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
                     error = "Name cannot be empty! " + user.getName();
@@ -358,35 +417,5 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
           return null;
      }
 
-     @Override
-     public String displayAllFilesByUserId(HttpSession session, Model model) {
 
-          Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
-          if (user.getUserId() != -1) {
-
-               List<UserFiles> getAllFiles = getAllFilesByUser(user.getUserId());
-               List<UserFiles_Dto> userFiles = new ArrayList<>();
-
-               if (getAllFiles == null) {
-                    model.addAttribute("files", userFiles);
-                    return "/registrar/documents-list";
-               }
-               getAllFiles.stream().forEach(file -> {
-                    String stringValue = file.getFileId().toString();
-                    UUID uuidValue = UUID.fromString(stringValue);
-                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
-                              + file.getUploadedBy().getName();
-                    userFiles.add(new UserFiles_Dto(
-                              uuidValue, file.getName(), file.getSize(),
-                              file.getStatus(),
-                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
-               });
-               model.addAttribute("files", userFiles);
-               return "/registrar/documents-list";
-
-          }
-
-          return null;
-
-     }
 }

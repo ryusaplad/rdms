@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $(".sendRequests").on("click", function (event) {
+  $(document).on("click", ".sendRequests", function (event) {
     event.preventDefault();
     alert("working");
   });
