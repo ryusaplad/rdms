@@ -2,18 +2,28 @@ package svfc_rdms.rdms.serviceImpl.Global;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.model.UserFiles;
+import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.service.Global.GlobalControllerService;
 
 @Service
 public class GlobalServiceControllerImpl implements GlobalControllerService {
 
+     @Autowired
+     private FileRepository fileRepository;
      @Override
      public boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session) {
           try {
@@ -86,4 +96,27 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
 
           return stringwithoutDuplicate.substring(0, index);
      }
+
+     @Override
+     public void DownloadFile(String id, Model model, HttpServletResponse response) {
+          try {
+               String stringValue = id.toString();
+               UUID uuidValue = UUID.fromString(stringValue);
+               Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
+               Optional<UserFiles> temp = fileOptional;
+               if (temp != null) {
+                    UserFiles file = temp.get();
+                    response.setContentType("application/octet-stream");
+                    String headerKey = "Content-Disposition";
+                    String headerValue = "attachment; filename = " + file.getName();
+                    response.setHeader(headerKey, headerValue);
+                    ServletOutputStream outputStream = response.getOutputStream();
+                    outputStream.write(file.getData());
+                    outputStream.close();
+               }
+          } catch (Exception e) {
+               throw new ApiRequestException("Failed to download Reason: " + e.getMessage());
+          }
+     }
+
 }

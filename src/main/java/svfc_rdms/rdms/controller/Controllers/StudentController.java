@@ -1,9 +1,7 @@
 package svfc_rdms.rdms.controller.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,11 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
-import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.Documents;
-import svfc_rdms.rdms.model.UserFiles;
-import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
@@ -84,29 +78,10 @@ public class StudentController {
 
           if (globalService.validatePages("student", response, session)) {
 
-               Users user = userRepo.findUserIdByUsername(session.getAttribute("username").toString()).get();
-               List<UserFiles> getAllFiles = studService.getAllFilesByUser(user.getUserId());
-               List<UserFiles_Dto> userFiles = new ArrayList<>();
-
-               if (getAllFiles.size() < 0) {
-                    model.addAttribute("files", userFiles);
-                    return "/student/student-documents-list";
-               }
-               getAllFiles.stream().forEach(file -> {
-                    String stringValue = file.getFileId().toString();
-                    UUID uuidValue = UUID.fromString(stringValue);
-                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
-                              + file.getUploadedBy().getName();
-                    userFiles.add(new UserFiles_Dto(
-                              uuidValue, file.getName(), file.getSize(),
-                              file.getStatus(),
-                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
-               });
-               model.addAttribute("files", userFiles);
-               return "/student/student-documents-list";
+               return studService.displayAllFilesByUserId(session, model);
 
           }
-          return null;
+          return "redirect:/";
 
      }
 
@@ -137,18 +112,5 @@ public class StudentController {
           studService.student_showImageFiles(id, response, dOptional);
 
      }
-
-     @GetMapping("/student/files/download")
-     public void downloadFile(@Param("id") String id, Model model, HttpServletResponse response, HttpSession session) {
-          try {
-               if (globalService.validatePages("student", response, session)) {
-                    studService.student_DownloadFile(id, model, response);
-            }
-            response.sendRedirect("/");
-       } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage());
-       }
-     }
-
 
 }

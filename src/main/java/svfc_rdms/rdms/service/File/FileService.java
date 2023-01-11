@@ -16,6 +16,7 @@ public interface FileService {
      List<UserFiles> getFilesByRequestWith(StudentRequest sr);
 
      List<UserFiles> getAllFilesByUser(long userId);
+
      Boolean deleteFile(long id);
 
 

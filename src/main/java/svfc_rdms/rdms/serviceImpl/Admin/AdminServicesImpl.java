@@ -46,6 +46,11 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
+     public List<Users> diplayAllAccountsByType(String type) {
+          return userRepository.findAllByType(type);
+     }
+     
+     @Override
      public boolean deleteData(long userId) {
 
           if (findOneUserById(userId).isPresent()) {
@@ -69,6 +74,7 @@ public class AdminServicesImpl implements AdminService {
 
           String error = "";
           try {
+
                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
                     error = "Name cannot be empty! " + user.getName();
@@ -81,18 +87,25 @@ public class AdminServicesImpl implements AdminService {
                          || user.getPassword().isEmpty()) {
                     error = "Password cannot be empty" + user.getPassword();
                     throw new ApiRequestException(error);
+               } else if (user.getUsername().length() > 255 || user.getName().length() > 255
+                         || user.getPassword().length() > 255) {
+                    throw new ApiRequestException("Data/Information is too long, Please Try Again!");
                } else {
                     String userIdFormat = user.getUsername().toUpperCase();
                     user.setStatus("Active");
                     if (userIdFormat.contains("C")) {
 
                          user.setType("Student");
-                    } else if (userIdFormat.contains("F-")) {
+                    } else if (userIdFormat.contains("R-")) {
 
                          user.setType("Registrar");
                     } else if (userIdFormat.contains("T-")) {
 
                          user.setType("Teacher");
+                    } else {
+                         error = "Account Type Invalid, Please try again!";
+
+                         throw new ApiRequestException(error);
                     }
                     if (actions == 0) {
                          if (findUserName(userIdFormat.toLowerCase())) {
@@ -122,7 +135,6 @@ public class AdminServicesImpl implements AdminService {
                     error = "Username is already taken, Please try again!";
                     throw new ApiRequestException(error);
                }
-
           }
           throw new ApiRequestException(error);
      }
@@ -305,5 +317,6 @@ public class AdminServicesImpl implements AdminService {
 
           return studRepo.findAll();
      }
+
 
 }

@@ -94,6 +94,11 @@ $(document).ready(function () {
           alertLabel = "Pending:";
           svgIcon = "#arrow-clockwise";
           message = request.data[0].requestStatus;
+        } else if (status.toLowerCase() == "on-going") {
+          alertType = "alert-info";
+          alertLabel = "Pending:";
+          svgIcon = "#arrow-clockwise";
+          message = request.data[0].requestStatus;
         } else {
           alertType = "alert-danger";
           alertLabel = "Danger:";

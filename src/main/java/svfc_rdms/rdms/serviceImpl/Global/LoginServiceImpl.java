@@ -48,14 +48,14 @@ public class LoginServiceImpl implements LoginService {
                                         HttpStatus.UNAUTHORIZED);
                          }
                     } else {
-                         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+                         return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
                     }
                } catch (Exception e) {
-                    return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
                }
 
           } else {
-               return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+               return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
           }
      }
 

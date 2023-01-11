@@ -48,4 +48,8 @@ public class UserFiles {
      @JoinColumn(name = "requestwith", referencedColumnName = "requestId")
      private StudentRequest requestWith;
 
+     @ManyToOne(cascade = CascadeType.ALL)
+     @JoinColumn(name = "reg_requestwith", referencedColumnName = "requestId")
+     private RegistrarRequest regRequestsWith;
+
 }

@@ -42,13 +42,13 @@ public interface StudentService {
      void student_showImageFiles(long id, HttpServletResponse response,
                Optional<Documents> dOptional);
 
-     void student_DownloadFile(String id, Model model, HttpServletResponse response);
-
      ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file,
                Map<String, String> params);
 
      ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params);
 
      ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId);
+
+     String displayAllFilesByUserId(HttpSession session, Model model);
 
 }

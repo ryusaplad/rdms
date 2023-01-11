@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -20,8 +19,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.ExceptionHandler.FileNotFoundException;
+import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
+import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
@@ -317,25 +319,6 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public void student_DownloadFile(String id, Model model, HttpServletResponse response) {
-          try {
-               Optional<UserFiles> temp = getFileById(id);
-               if (temp != null) {
-                    UserFiles file = temp.get();
-                    response.setContentType("application/octet-stream");
-                    String headerKey = "Content-Disposition";
-                    String headerValue = "attachment; filename = " + file.getName();
-                    response.setHeader(headerKey, headerValue);
-                    ServletOutputStream outputStream = response.getOutputStream();
-                    outputStream.write(file.getData());
-                    outputStream.close();
-               }
-          } catch (Exception e) {
-               throw new ApiRequestException("Failed to download Reason: " + e.getMessage());
-          }
-     }
-
-     @Override
      public Optional<Documents> getFileDocumentById(long id) {
 
           Optional<Documents> fileOptional = documentRepository.findById(id);
@@ -347,24 +330,23 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public List<UserFiles> getAllFilesByUser(long users) {
+     public List<UserFiles> getAllFilesByUser(long userId) throws FileNotFoundException {
 
           try {
-               if (users != -1) {
-                    Users uploader = usersRepository.findByuserId(users).get();
+               if (userId != -1) {
+                    Users uploader = usersRepository.findByuserId(userId).get();
                     List<UserFiles> studentFiles = fileRepository.findAllByUploadedBy(uploader);
                     if (!studentFiles.isEmpty()) {
                          return studentFiles;
-                    } else {
-                         return new ArrayList<>();
                     }
 
                }
 
                return null;
 
-          } catch (Exception e) {
-               return new ArrayList<>();
+          } catch (IllegalArgumentException e) {
+               throw new UserNotFoundException("Can't display files because, Reason: User " + userId + " not found.",
+                         e);
           }
      }
 
@@ -440,6 +422,38 @@ public class StudentServiceImpl implements StudentService, FileService, Document
           } catch (Exception e) {
                throw new ApiRequestException(e.getMessage());
           }
+
+     }
+
+     @Override
+     public String displayAllFilesByUserId(HttpSession session, Model model) {
+
+          Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
+          if (user.getUserId() != -1) {
+
+               List<UserFiles> getAllFiles = getAllFilesByUser(user.getUserId());
+               List<UserFiles_Dto> userFiles = new ArrayList<>();
+
+               if (getAllFiles == null) {
+                    model.addAttribute("files", userFiles);
+                    return "/student/documents-list";
+               }
+               getAllFiles.stream().forEach(file -> {
+                    String stringValue = file.getFileId().toString();
+                    UUID uuidValue = UUID.fromString(stringValue);
+                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
+                              + file.getUploadedBy().getName();
+                    userFiles.add(new UserFiles_Dto(
+                              uuidValue, file.getName(), file.getSize(),
+                              file.getStatus(),
+                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
+               });
+               model.addAttribute("files", userFiles);
+               return "/student/documents-list";
+
+          }
+
+          return null;
 
      }
 

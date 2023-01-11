@@ -11,15 +11,18 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
@@ -29,13 +32,90 @@ import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 public class Regs_RestController {
 
      @Autowired
-     StudentServiceImpl studentServiceImpl;
+     private StudentServiceImpl studentServiceImpl;
 
      @Autowired
-     UsersRepository userRepository;
+     private UsersRepository userRepository;
 
      @Autowired
-     Registrar_ServiceImpl regs_ServiceImpl;
+     private Registrar_ServiceImpl regs_ServiceImpl;
+
+     @PostMapping(value = "/registrar/save/user-account")
+     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
+
+          return regs_ServiceImpl.saveUsersAccount(user, 0);
+     }
+
+     @PostMapping(value = "/registrar/save/update-account")
+     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
+
+          return regs_ServiceImpl.saveUsersAccount(user, 1);
+     }
+
+     @GetMapping("/registrar/user/update")
+     @ResponseBody
+     public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
+
+          Optional<Users> users = regs_ServiceImpl.findOneUserById(id);
+
+          List<Users> usersList = new ArrayList<>();
+          if (users.isPresent()) {
+               users.stream().forEach(e -> {
+
+                    usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
+                              users.get().getPassword().replace(users.get()
+                                        .getPassword(), ""),
+                              users.get().getType(), users.get().getStatus()));
+               });
+               return usersList;
+          }
+          return usersList;
+
+     }
+
+     @GetMapping(value = "/registrar/user/change/{status}")
+
+     public ResponseEntity<Object> changeStatus(@PathVariable("status") String status,
+               @RequestParam("userId") long userId) {
+          System.out.println("Status: " + status);
+          if (status.equals("permanently")) {
+               if (regs_ServiceImpl.deleteData(userId)) {
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+          } else if (status.equals("temporary")) {
+               if (regs_ServiceImpl.changeAccountStatus("Temporary", userId)) {
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+          } else if (status.equals("active")) {
+               if (regs_ServiceImpl.changeAccountStatus("Active", userId)) {
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+          }
+          throw new ApiRequestException(
+                    "You are performing invalid action. Please contact the administrator for further assistance.");
+
+     }
+
+     @GetMapping(value = "/registrar/getAllAccounts")
+     public ResponseEntity<Object> getAllUser(@RequestParam("account-type") String accountType) {
+
+          List<Users> users = regs_ServiceImpl.diplayAllAccountsByType(accountType);
+
+          List<Users> storedAccountsWithoutImage = new ArrayList<>();
+
+          for (Users user : users) {
+               storedAccountsWithoutImage
+                         .add(new Users(user.getUserId(), user.getName(), user.getUsername(),
+                                   user.getPassword(),
+                                   user.getType(), user.getStatus()));
+
+          }
+          users = storedAccountsWithoutImage;
+          ServiceResponse<List<Users>> serviceResponse = new ServiceResponse<>("success", users);
+
+          return new ResponseEntity<Object>(serviceResponse, HttpStatus.OK);
+
+     }
 
      @GetMapping("/{userType}/studentrequest/fetch")
      public ResponseEntity<Object> getRequestInformation(@PathVariable String userType, @RequestParam("s") Long userId,

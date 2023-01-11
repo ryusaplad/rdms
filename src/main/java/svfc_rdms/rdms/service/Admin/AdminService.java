@@ -16,6 +16,8 @@ public interface AdminService {
 
      List<Users> diplayAllAccounts(String status, String type);
 
+     List<Users> diplayAllAccountsByType(String type);
+
      ResponseEntity<Object> saveUsersAccount(Users user, int actions);
 
      boolean findUserName(String username);

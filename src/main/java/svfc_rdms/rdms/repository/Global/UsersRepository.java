@@ -18,6 +18,8 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
      public List<Users> findAllByStatusAndType(String status, String type);
 
+     public List<Users> findAllByType(String type);
+
      public Optional<Users> findByuserId(long userId);
 
      @Query("SELECT COUNT(u) FROM Users u WHERE status =:status AND type =:type ")

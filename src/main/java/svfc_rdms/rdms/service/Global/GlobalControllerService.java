@@ -3,12 +3,16 @@ package svfc_rdms.rdms.service.Global;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.ui.Model;
+
 public interface GlobalControllerService {
 
-     public boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session);
+     boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session);
 
-     public String formatFileUploadSize(long size);
+     String formatFileUploadSize(long size);
 
-     public String removeDuplicateInManageBy(String manageBy);
+     String removeDuplicateInManageBy(String manageBy);
+
+      void DownloadFile(String id, Model model, HttpServletResponse response);
 
 }

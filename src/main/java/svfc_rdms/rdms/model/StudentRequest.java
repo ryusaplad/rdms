@@ -50,21 +50,6 @@ public class StudentRequest {
       @JoinColumn(name = "request_by", referencedColumnName = "userId")
       private Users requestBy;
 
-      public StudentRequest(long requestId, String year, String course, String semester, String requestDocument,
-                  String message, Users requestBy, String requestDate, String requestStatus, String releaseDate,
-                  String manageBy) {
-            this.requestId = requestId;
-            this.year = year;
-            this.course = course;
-            this.semester = semester;
-            requestDocument = this.requestDocument.getTitle();
-            this.message = message;
-            this.requestBy = requestBy;
-            this.requestDate = requestDate;
-            this.requestStatus = requestStatus;
-            this.releaseDate = releaseDate;
-            this.manageBy = manageBy;
 
-      }
 
 }

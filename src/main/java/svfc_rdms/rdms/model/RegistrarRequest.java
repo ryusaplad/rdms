@@ -1,6 +1,5 @@
 package svfc_rdms.rdms.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,8 +27,6 @@ public class RegistrarRequest {
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "registrar_request_sequence")
      private long requestId;
      private String requestMessage; // can add message
-     @Column(name = "file", columnDefinition = "LONGBLOB")
-     private byte file;
      @ManyToOne
      @JoinColumn(name = "request_by", referencedColumnName = "userId")
      private Users requestBy; // One User to many Request
