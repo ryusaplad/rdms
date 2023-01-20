@@ -347,8 +347,10 @@ $(document).ready(function () {
                         </li>
                          
                           <li ><a id="send_requests"
-                                href="` +
+                                href="userId=` +
                   user.userId +
+                  "&to=" +
+                  user.name +
                   `" type="button"
                                   class="sendRequests  dropdown-item link text-success">
                                   Requests</a></li>
@@ -378,8 +380,10 @@ $(document).ready(function () {
                         </li>
                          
                            <li ><a id="send_requests"
-                                href="` +
+                                 href="userId=` +
                   user.userId +
+                  "&to=" +
+                  user.name +
                   `" type="button"
                                   class="sendRequests  dropdown-item link text-success">
                                   Requests</a></li>
@@ -488,6 +492,7 @@ $(document).ready(function () {
       },
     });
   });
+
   $(document).on("click", ".edit", function (event) {
     event.preventDefault();
 

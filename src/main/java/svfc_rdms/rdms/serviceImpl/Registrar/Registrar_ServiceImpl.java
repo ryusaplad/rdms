@@ -1,6 +1,5 @@
 package svfc_rdms.rdms.serviceImpl.Registrar;
 
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,12 +24,14 @@ import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
+import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Registrar.Registrar_Service;
@@ -51,6 +52,9 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
 
      @Autowired
      private FileRepository fileRepository;
+
+     @Autowired
+     private RegRepository regsRepository;
 
      @Autowired
      private StudentServiceImpl studentService;
@@ -417,5 +421,61 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
           return null;
      }
 
+     @Override
+     public ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params) {
+          try {
+               LocalDateTime myDateObj = LocalDateTime.now();
+               DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
+               String requestedDate = myDateObj.format(myFormatObj);
+
+               String username = "";
+               Users to = findOneUserById(userId).get();
+               Users from = new Users();
+               if ((username = session.getAttribute("username").toString()) != null) {
+                    from = usersRepository.findByUsername(username).get();
+               }
+
+               RegistrarRequest registrarRequests = new RegistrarRequest();
+               Optional<RegistrarRequest> optionalRegRequest = getRegistrarRequest(to);
+               if (to != null) {
+                    if (!optionalRegRequest.isEmpty()) {
+                         registrarRequests = optionalRegRequest.get();
+                    } else {
+                         if (!params.isEmpty()) {
+                              for (Map.Entry<String, String> parameters : params.entrySet()) {
+                                   String key = parameters.getKey().toLowerCase();
+                                   if (key.equals("from")) {
+                                        registrarRequests.setRequestBy(from);
+                                   } else if (key.equals("to")) {
+                                        registrarRequests.setRequestTo(to);
+                                   } else if (key.equals("message")) {
+                                        registrarRequests.setRequestMessage(parameters.getValue());
+                                   }
+                              }
+                              registrarRequests.setRequestStatus("pending");
+                              registrarRequests.setRequestDate(requestedDate);
+                              regsRepository.save(registrarRequests);
+                         }
+                    }
+
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+          } catch (Exception e) {
+               throw new ApiRequestException(
+                         "Failed to sent request, Please Try Again!. Please contact the administrator for further assistance.");
+          }
+          throw new ApiRequestException(
+                    "Failed to sent request, Please Try Again!. Please contact the administrator for further assistance.");
+     }
+
+     @Override
+     public Optional<RegistrarRequest> getRegistrarRequest(Users user) {
+
+          Optional<RegistrarRequest> registrarRequests = regsRepository.findOneByRequestBy(user);
+          if (user != null && !registrarRequests.isEmpty()) {
+               return registrarRequests;
+          }
+          return Optional.empty();
+     }
 
 }

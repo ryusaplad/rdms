@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.Users;
 
 public interface Registrar_Service {
@@ -28,6 +29,11 @@ public interface Registrar_Service {
       ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
                   Optional<MultipartFile[]> files, Map<String, String> params,
                   HttpSession session);
+
+      // Requests for Teachers
+      Optional<RegistrarRequest> getRegistrarRequest(Users user);
+
+      ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params);
 
       // Manage Accounts
       ResponseEntity<Object> saveUsersAccount(Users user, int actions);

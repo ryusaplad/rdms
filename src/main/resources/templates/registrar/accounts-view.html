@@ -473,16 +473,18 @@
                                                         type="button"
                                                         class="edit dropdown-item link text-primary">Edit</a>
                                                 </li>
+                                            
 
-                                                <li th:if="${userList.type}=='Teacher' AND ${userList.status}=='Active'">
-                                                    <a id="send_requests" th:href="${userList.userId}" type="button"
-                                                        class="sendRequests dropdown-item link text-success">
-                                                        Requests</a>
-                                                </li>
+                                                    <li th:if="${userList.type}=='Teacher' AND ${userList.status}=='Active'">
+                                                        <a id="send_requests" th:href="@{/userId(userId=${userList.userId},sendTo=${userList.name})}" type="button"
+                                                            class="sendRequests dropdown-item link text-success">
+                                                            Requests</a>
+                                                        </li>
+                                            
                                                 <li th:if="${userList.status}=='Active'">
                                                     <a id="delete" th:href="${userList.userId}" type="button" class="delete  dropdown-item  text-danger">Delete</a>
                                                 </li>
-                                                </ul>
+                                            </ul>
                                         </div>
                                         <div th:if="${userList.status}=='Temporary'"><a th:href="${userList.userId}" type="button"
                                                 class="undo  btn btn-warning text-white">Undo</a></div>
@@ -690,41 +692,46 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="deleteModalConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalConfirmLabel"
-                        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalConfirmLabel">Performing Action Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <b>Are you sure?</b>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-warning deletePermanently">Yes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="deleteTempModalConfirm" tabindex="-1" role="dialog"
-                        aria-labelledby="deleteTempModalConfirmLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteTempModalConfirmLabel">Performing Action Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <b>Are you sure?</b>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-warning deleteTemporarily">Yes</button>
+    <div class="modal fade" id="deleteModalConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalConfirmLabel"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalConfirmLabel">Performing Action Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <b>Are you sure?</b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning deletePermanently">Yes</button>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="deleteTempModalConfirm" tabindex="-1" role="dialog"
+        aria-labelledby="deleteTempModalConfirmLabel" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTempModalConfirmLabel">Performing Action Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <b>Are you sure?</b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning deleteTemporarily">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- request modal for registrar -->
+    <div class="modal fade" id="requestsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="requestsModal" aria-hidden="true">
     </div>
     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>

@@ -142,4 +142,17 @@ public class Regs_RestController {
           return regs_ServiceImpl.finalizedRequestsWithFiles(userId, requestId, files, params, session);
 
      }
+
+     @GetMapping("/session/{sessionKey}")
+     public ResponseEntity<String> getSessionValue(@PathVariable("sessionKey") String sessionKey, HttpSession session) {
+          return new ResponseEntity<>((String) session.getAttribute(sessionKey), HttpStatus.OK);
+     }
+
+     // Manage Requests for teachers.
+     @PostMapping("/registrar/send/requests")
+     public ResponseEntity<String> sendRequestsToTeacher(@RequestParam long userId,HttpSession session,
+               @RequestParam Map<String, String> params) {
+
+          return regs_ServiceImpl.sendRequestToTeacher(userId, session, params);
+     }
 }
