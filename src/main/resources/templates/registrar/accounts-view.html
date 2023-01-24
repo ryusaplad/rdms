@@ -343,7 +343,7 @@
                                         class="sidebar-link"><i class="fas fa-table"></i><span
                                             class="hide-menu">Students Requests
                                         </span></a></li>
-                                <li title="Sent Requests" class="sidebar-item"><a href="#"
+                                <li title="Sent Requests" class="sidebar-item"><a href="/registrar/sent-requests"
                                         class="sidebar-link active"><i class=" far fa-paper-plane"></i><span
                                             class="hide-menu">Sent Requests
                                         </span></a></li>
@@ -476,7 +476,7 @@
                                             
 
                                                     <li th:if="${userList.type}=='Teacher' AND ${userList.status}=='Active'">
-                                                        <a id="send_requests" th:href="@{/userId(userId=${userList.userId},sendTo=${userList.name})}" type="button"
+                                                        <a id="send_requests" th:href="@{/(userId=${userList.userId},sendTo=${userList.name})}" type="button"
                                                             class="sendRequests dropdown-item link text-success">
                                                             Requests</a>
                                                         </li>

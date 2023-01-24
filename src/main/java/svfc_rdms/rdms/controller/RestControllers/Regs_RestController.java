@@ -76,7 +76,6 @@ public class Regs_RestController {
 
      public ResponseEntity<Object> changeStatus(@PathVariable("status") String status,
                @RequestParam("userId") long userId) {
-          System.out.println("Status: " + status);
           if (status.equals("permanently")) {
                if (regs_ServiceImpl.deleteData(userId)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -154,5 +153,12 @@ public class Regs_RestController {
                @RequestParam Map<String, String> params) {
 
           return regs_ServiceImpl.sendRequestToTeacher(userId, session, params);
+     }
+
+     @GetMapping("/registrar/sent-requests-view")
+     public ResponseEntity<Object> viewRequestsToTeacher(@RequestParam long requestId, HttpSession session,
+               @RequestParam Map<String, String> params) {
+
+          return regs_ServiceImpl.viewRegistrarRequests(requestId);
      }
 }

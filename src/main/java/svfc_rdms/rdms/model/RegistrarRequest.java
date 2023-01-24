@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +27,9 @@ public class RegistrarRequest {
      @SequenceGenerator(name = "registrar_request_sequence", sequenceName = "registrar_request_sequence", allocationSize = 1)
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "registrar_request_sequence")
      private long requestId;
+     private String requestTitle;
+
+     @Column(columnDefinition = "text")
      private String requestMessage; // can add message
      @ManyToOne
      @JoinColumn(name = "request_by", referencedColumnName = "userId")

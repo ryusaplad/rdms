@@ -16,6 +16,7 @@ import svfc_rdms.rdms.model.Users;
 public interface Registrar_Service {
 
 
+      // Manage Students Request
       String displayAllStudentRequest(String userType, Model model);
 
       String displayAllFilesByUserId(HttpSession session, Model model);
@@ -25,15 +26,19 @@ public interface Registrar_Service {
       boolean changeStatusAndManageByAndMessageOfRequests(String status, String message, long userId,
                   long requestId, HttpSession session);
 
-      // Manage Request
+
       ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
                   Optional<MultipartFile[]> files, Map<String, String> params,
                   HttpSession session);
 
       // Requests for Teachers
-      Optional<RegistrarRequest> getRegistrarRequest(Users user);
+      Optional<RegistrarRequest> getRegistrarRequest(long requestsId);
 
       ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params);
+
+      String displayAllRequestsByStatus(Model model);
+
+      ResponseEntity<Object> viewRegistrarRequests(long requestsId);
 
       // Manage Accounts
       ResponseEntity<Object> saveUsersAccount(Users user, int actions);

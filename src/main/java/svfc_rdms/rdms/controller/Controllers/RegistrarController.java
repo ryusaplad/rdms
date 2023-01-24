@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
@@ -92,6 +91,14 @@ public class RegistrarController {
           }
           return "redirect:/";
 
+     }
+
+     @GetMapping("/registrar/sent-requests")
+     public String viewSentRequests(HttpServletResponse response, HttpSession session, Model model) {
+          if (globalService.validatePages("registrar", response, session)) {
+               return regs_ServiceImpl.displayAllRequestsByStatus(model);
+          }
+          return "redirect:/";
      }
 
 }

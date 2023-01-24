@@ -7,7 +7,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Registrar - Students Requests</title>
+    <title>Registrar - Sent Requests</title>
 
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/svdfc-logo.png}">
 
@@ -15,107 +15,15 @@
     <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
     <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
     <style>
-        .file-upload {
-            background-color: #ffffff;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .file-upload-btn {
-            width: 100%;
-            margin: 0;
-            color: #fff;
-            background: #DC143C;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            border-bottom: 4px solid #DC143C;
-            transition: all .2s ease;
-            outline: none;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .file-upload-btn:hover {
-            background: #dc143cbd;
-            color: #ffffff;
-            transition: all .2s ease;
-            cursor: pointer;
-        }
-
-        .file-upload-btn:active {
-            border: 0;
-            transition: all .2s ease;
-        }
-
-
-        .file-upload-input {
-            position: absolute;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            outline: none;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-upload-wrap {
-            margin-top: 20px;
-            border: 4px dashed #DC143C;
-            position: relative;
-        }
-
-        .file-dropping,
-        .file-upload-wrap:hover {
-            background-color: #dd7c8f;
-            border: 4px dashed #ffffff;
-        }
-
-        .image-title-wrap {
-            padding: 0 15px 15px 15px;
-            color: #222;
-        }
-
-        .drag-text {
-            text-align: center;
-        }
-
-        .drag-text h3 {
-            font-weight: 100;
-            text-transform: uppercase;
-            color: #DC143C;
-            padding: 60px 0;
-        }
-
-        .file-upload-image {
-            max-height: 200px;
-            max-width: 200px;
-            margin: auto;
-            padding: 20px;
+        .tableBody tr,
+        .link:hover {
+            border: 1px solid black !important;
         }
     </style>
 </head>
 
 
-
 <body>
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-        </symbol>
-        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-        </symbol>
-        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-        </symbol>
-    </svg>
-
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -443,10 +351,8 @@
                                         class="sidebar-link active"><i class=" far fa-paper-plane"></i><span
                                             class="hide-menu">Sent Requests
                                         </span></a></li>
-
                             </ul>
                         </li>
-
                         <li title="Manage Accounts" class="sidebar-item"> <a
                                 class="sidebar-link has-arrow waves-effect waves-dark " href="javascript:void(0)"
                                 aria-expanded="false"><i class=" fas fa-users"></i><span class="hide-menu ">Manage
@@ -456,7 +362,6 @@
                                         class="sidebar-link"><i class=" fas fa-user-plus"></i><span
                                             class="hide-menu">Students
                                         </span></a></li>
-
                                 <li title="Teachers" class="sidebar-item"><a href="/registrar/teacher/accounts"
                                         class="sidebar-link"><i class=" fas fa-user-plus"></i><span class="hide-menu">
                                             Teachers
@@ -464,8 +369,6 @@
 
                             </ul>
                         </li>
-
-
                         <li title="Activity Logs" class="sidebar-item"><a href="#" class="sidebar-link"><i
                                     class="fas fa-history"></i><span class="hide-menu">Activity Logs
                                 </span></a></li>
@@ -500,13 +403,12 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Student Requests</h4>
+                        <h4 class="page-title">Sent Requests</h4>
                         <div class="ms-auto text-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/registrar/dashboard">Home</a></li>
-                                    <li class="breadcrumb-item" aria-current="page">Manage Requests</li>
-                                    <li class="breadcrumb-item active" aria-current="page">Student Requests</li>
+                                    <li class="breadcrumb-item"><a href="#">Requests</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Sent Requests</li>
                                 </ol>
                             </nav>
                         </div>
@@ -520,68 +422,47 @@
             <!-- Container fluid  -->
             <!-- ============================================================== -->
             <div class="container-fluid">
+
+
+
+
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Student Requests</h5>
-                        <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered text-center">
-                                <thead>
-                                    <tr>
-
-                                        <th>Requested By</th>
-                                        <th>Request Date</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                    <ul class="l">
 
 
-                                    </tr>
-                                </thead>
+                    </ul>
+                    <table id="zero_config" class="table  text-center table-bordered ">
+                        <thead>
+                            <tr>
+                                <th>Title/Message</th>
+                                <th data-orderable="false">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr th:each="requests : ${requests_list}" style="text-align:left; ">
+                                <td class="border link" style="cursor:pointer" th:data-value="${requests.requestId}">
+                                    <strong style="opacity:.75;" th:text="${requests.requestTitle}"></strong>
+                                    <strong style="opacity:.50;"
+                                        th:text="${requests.requestMessage.length() > 120 ? requests.requestMessage.substring(0,120)+'...' : requests.requestMessage}"></strong>
+                                </td>
+                                <td>
+                                    <div class="row text-center">
+                                        <div class="col-1"><a href="#"><i class="fas fa-edit text-primary"></i></a>
+                                        </div>
+                                        <div class="col-1">
+                                            <a href="#"><i class="fas fa-trash-alt text-danger"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
 
-                                <tbody>
-                                    <tr th:each="studRequest : ${studentreq}">
+                        </tbody>
+                    </table>
 
-                                        <td th:text="${studRequest.requestBy}"></td>
-                                        <td th:text="${studRequest.requestDate}"></td>
-                                        <td th:text="${studRequest.requestStatus}"></td>
-                                        <td>
-                                            <div class="row">
 
-                                                <div class="col-sm">
-                                                    <a th:href="@{'?s='+${studRequest.studentId}+'&req='+${studRequest.requestId}}"
-                                                        type="button" class="btn btn-primary w-100 toggleRequestDetail">
-                                                        Details</a>
-
-                                                </div>
-                                                <div class="col-sm" th:if="${studRequest.requestStatus =='Pending'}">
-                                                    <a th:href="@{${studRequest.studentId}}"
-                                                        th:data-value="@{${studRequest.requestId}}" type="button"
-                                                        class="btn btn-success  w-100 text-white processBtn">
-                                                        Approved</a>
-                                                </div>
-                                                <div class="col-sm" th:if="${studRequest.requestStatus =='On-Going'}">
-                                                    <a th:href="@{${studRequest.studentId}}"
-                                                        th:data-value="@{${studRequest.requestId}}" type="button"
-                                                        class="btn btn-success  w-100 text-white completeBtn">
-                                                        Complete</a>
-                                                </div>
-                                                <div class="col-sm"
-                                                    th:if="${studRequest.requestStatus !='On-Going' && studRequest.requestStatus !='Approved' && studRequest.requestStatus !='Rejected'}">
-                                                    <a th:href="@{${studRequest.studentId}}"
-                                                        th:data-value="@{${studRequest.requestId}}" type="button"
-                                                        class="btn btn-danger w-100 text-white  rejectBtn">
-                                                        Reject</a>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                    </div>
                 </div>
+
+
             </div>
 
         </div>
@@ -589,280 +470,8 @@
         <!-- End Page wrapper  -->
         <!-- ============================================================== -->
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="confirmModalModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalModalLabel">Process Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body mBody">
-                    <p>Are you sure you want to process this requests.?</p>
-                    <b> Note:</b>
-                    <p>This action cannot be undo, after submission.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a id="processHref" type="button" class="btn btn-danger confirmProcess">Confirm</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="rejectModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="rejectModalModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rejectModalModalLabel">Rejecting Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to reject this requests.?</p>
-                    <b> Note:</b>
-                    <p>This action cannot be undo, after submission.</p>
-                    <label>Specify Reason Here</label>
-                    <div class="mt-2 form-floating">
-                        <textarea id="reason" name="reason" class="form-control floatingInput" maxlength="250"
-                            style="height:150px"></textarea>
-                        <label id="messageLengthLabel" for="reason">You can add message here with maximum of (250
-                            letters)
-                        </label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a id="rejectHref" type="button" class="btn btn-danger text-white confirmReject">Confirm</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="modalView">
 
-    <div class="modal fade" id="confirmCompleteModal" aria-hidden="true" data-bs-backdrop="static"
-        data-bs-keyboard="false" aria-labelledby="confirmCompleteLabel" tabindex="-1">
-        <div class="modal-dialog  modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmCompleteLabel">Completition Confirmation</h5>
-                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to complete this requests.?</p>
-                    <b> Note:</b>
-                    <p>This action cannot be undo, after submission.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-warning confirmCompleteNext" data-bs-target="#completeModal"
-                        data-bs-toggle="modal" data-bs-dismiss="modal" data-value="">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="completeModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="completeModalToggleLabel2" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="completeModalToggleLabel2">Finalizing Requests</h5>
-                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div style="display:none" class="f-alert">
-                        <div class="alert alert-danger d-flex align-items-center " role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-                                <use xlink:href="#exclamation-triangle-fill" />
-                            </svg>
-                            <div id="f-alertM">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="file-upload container-sm">
-                        <button class="file-upload-btn" type="button"
-                            onclick="$('.file-upload-input').trigger( 'click' )">Add
-                            Files</button>
-
-                        <div class="file-upload-wrap">
-                            <form id="f-reqs-upload">
-                                <input class="file-upload-input" type='file' id="rfile" name="rfile[]" multiple />
-                            </form>
-
-                            <div class="drag-text">
-                                <h3>Drag and drop a file or click add Files</h3>
-                            </div>
-                        </div>
-
-                        <table class="table table-white w-100">
-                            <thead>
-                                <tr>
-
-                                    <th>Action</th>
-                                    <th>File Name</th>
-                                    <th>Size</th>
-                                </tr>
-
-                            </thead>
-                            <tbody class="r-file-table">
-
-                            </tbody>
-
-                        </table>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelFinalizing"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-warning confirmCompleteFinal" data-value="">Finalized
-                        Request</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="finalizedCompletedModal" aria-hidden="true" data-bs-backdrop="static"
-        data-bs-keyboard="false" aria-labelledby="confirmCompleteLabel" tabindex="-1">
-        <div class="modal-dialog  modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmCompleteLabel">Finalized Request</h5>
-                    <button type="button" class="btn-close cancelFinalizing" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="alert alert-success d-flex align-items-center w-100 h-100" role="alert">
-                        <svg class="bi flex-shrink-0 me-2" width="50" height="50" role="img" aria-label="Success:">
-                            <use xlink:href="#check-circle-fill" />
-                        </svg>
-                        <div class="h2">
-                            Finalizing Completed.
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success okCompleted" data-bs-dismiss="modal">Ok</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" id="reqDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="reqDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reqDetailModal">
-                        <span id="titleVal">More Details</span>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="card-title">Requests Informations</h4>
-                    <div class="container-sm"></div>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>C/Y/SEM</th>
-                                <th>Document</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td id="requestbyupar">
-                                </td>
-                                <td class="font-weight-bold" id="requestbynpar">
-                                </td>
-                                <td class="font-weight-bold" id="cysem">
-                                </td>
-                                <td class="font-weight-bold" id="docreqpar"></td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title ">Message</h4>
-                    <div class="messHeader" style="display:none;overflow-y: scroll;">
-
-                    </div>
-                    <hr>
-                    <h4 class="card-title">Request Status</h4>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Date Request</th>
-                                <th>Request Status</th>
-                                <th>Manage by</th>
-                            </tr>
-
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-weight-bold" id="datereqpar">N/A</td>
-                                <td class="font-weight-bold" id="reqstatuspar">N/A</td>
-                                <td class="font-weight-bold" id="manageby"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title">Receieved Requirements</h4>
-                    <table class="table table-white table-responsive receiveRequirementsTable"
-                        style="overflow-y: scroll; height: 100px;">
-                        <thead>
-                            <tr>
-
-                                <th>Download</th>
-                                <th>File Name</th>
-                                <th>Uploaded By</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="tablebody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h4 class="card-title">Sent Documents</h4>
-                    <table class="table table-white table-responsive sentDocumentTable"
-                        style="overflow-y: scroll; height: 100px; display:none">
-                        <thead>
-                            <tr>
-
-                                <th>Download</th>
-                                <th>File Name</th>
-                                <th>Uploaded By</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="sentDocsBody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelFinalizing"
-                        data-bs-dismiss="modal">Close</button>
-
-                </div>
-            </div>
-        </div>
     </div>
     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
@@ -872,11 +481,9 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/r_request_list.js}"></script>
+    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/r-sent_requests.js}"></script>
     <script>
-
         $('#zero_config').DataTable();
-
 
     </script>
 </body>

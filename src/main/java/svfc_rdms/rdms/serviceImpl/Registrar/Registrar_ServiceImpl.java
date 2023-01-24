@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
+import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
@@ -428,39 +429,55 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
                String requestedDate = myDateObj.format(myFormatObj);
 
-               String username = "";
-               Users to = findOneUserById(userId).get();
-               Users from = new Users();
-               if ((username = session.getAttribute("username").toString()) != null) {
-                    from = usersRepository.findByUsername(username).get();
-               }
+               String username = Optional.ofNullable(session.getAttribute("username")).orElse("").toString();
 
-               RegistrarRequest registrarRequests = new RegistrarRequest();
-               Optional<RegistrarRequest> optionalRegRequest = getRegistrarRequest(to);
-               if (to != null) {
-                    if (!optionalRegRequest.isEmpty()) {
-                         registrarRequests = optionalRegRequest.get();
-                    } else {
-                         if (!params.isEmpty()) {
-                              for (Map.Entry<String, String> parameters : params.entrySet()) {
-                                   String key = parameters.getKey().toLowerCase();
-                                   if (key.equals("from")) {
-                                        registrarRequests.setRequestBy(from);
-                                   } else if (key.equals("to")) {
-                                        registrarRequests.setRequestTo(to);
-                                   } else if (key.equals("message")) {
-                                        registrarRequests.setRequestMessage(parameters.getValue());
-                                   }
-                              }
-                              registrarRequests.setRequestStatus("pending");
-                              registrarRequests.setRequestDate(requestedDate);
-                              regsRepository.save(registrarRequests);
-                         }
+               Users teacher = findOneUserById(userId).get();
+
+               Users registrar = usersRepository.findByUsername(username).get();
+
+               if (!params.isEmpty()) {
+                    RegistrarRequest registrarRequest = new RegistrarRequest();
+                    registrarRequest.setRequestBy(registrar);
+                    registrarRequest.setRequestTo(teacher);
+                    String from = params.get("from");
+                    String to = params.get("to");
+                    String message = params.get("message");
+                    String title = params.get("title");
+
+                    if (from.isBlank() || to.isBlank()) {
+                         return new ResponseEntity<>("Message sender/reciever cannot be empty. Please try again!.",
+                                   HttpStatus.BAD_REQUEST);
                     }
 
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                    if (title.isBlank()) {
+                         return new ResponseEntity<>("Title cannot be empty. Please add a requests title.",
+                                   HttpStatus.BAD_REQUEST);
+                    } else if (title.length() > 50) {
+                         return new ResponseEntity<>("Title Length Invalid. Please try again!.",
+                                   HttpStatus.BAD_REQUEST);
+                    }
+                    if (message.isBlank()) {
+                         return new ResponseEntity<>("Message cannot be empty. Please add a message.",
+                                   HttpStatus.BAD_REQUEST);
+                    } else if (message.length() > 10000) {
+                         return new ResponseEntity<>("Message Length Invalid. Please try again!.",
+                                   HttpStatus.BAD_REQUEST);
+                    }
+                    if (!from.isBlank() && !to.isBlank() && !message.isBlank() && !title.isBlank()
+                              && textSizeChecker(message, 10000) && textSizeChecker(title, 50)) {
+                         registrarRequest.setRequestBy(registrar);
+                         registrarRequest.setRequestTo(teacher);
+                         registrarRequest.setRequestTitle(title);
+                         registrarRequest.setRequestMessage(message);
+                         registrarRequest.setRequestStatus("pending");
+                         registrarRequest.setRequestDate(requestedDate);
+                         regsRepository.save(registrarRequest);
+                         return new ResponseEntity<>("Success", HttpStatus.OK);
+                    }
+
                }
           } catch (Exception e) {
+
                throw new ApiRequestException(
                          "Failed to sent request, Please Try Again!. Please contact the administrator for further assistance.");
           }
@@ -468,14 +485,59 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                     "Failed to sent request, Please Try Again!. Please contact the administrator for further assistance.");
      }
 
-     @Override
-     public Optional<RegistrarRequest> getRegistrarRequest(Users user) {
+     public boolean textSizeChecker(String text, int max) {
+          if (text.length() > max) {
+               return false;
+          }
+          return true;
+     }
 
-          Optional<RegistrarRequest> registrarRequests = regsRepository.findOneByRequestBy(user);
-          if (user != null && !registrarRequests.isEmpty()) {
+     @Override
+     public Optional<RegistrarRequest> getRegistrarRequest(long requestsId) {
+
+          Optional<RegistrarRequest> registrarRequests = regsRepository.findOneByRequestId(requestsId);
+          if (requestsId > -1 && !registrarRequests.isEmpty()) {
                return registrarRequests;
           }
           return Optional.empty();
+     }
+
+     @Override
+     public String displayAllRequestsByStatus(Model model) {
+          List<RegistrarRequest> regRequests = regsRepository.findAllByRequestStatus("pending");
+          List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
+
+          if (regRequests != null) {
+               regRequests.forEach(request -> {
+
+                    filteredRequests.add(new RegistrarRequest_DTO(request.getRequestId(), request.getRequestTitle(),
+                              request.getRequestMessage(), request.getRequestBy().getName(),
+                              request.getRequestTo().getName(), request.getRequestDate(), request.getDateOfUpdate(),
+                              request.getRequestStatus()));
+
+               });
+               System.out.println("Working List");
+               model.addAttribute("requests_list", filteredRequests);
+               return "/registrar/registrar-requests";
+          }
+          return "/registrar/registrar-requests";
+
+     }
+
+     @Override
+     public ResponseEntity<Object> viewRegistrarRequests(long requestsId) {
+          Optional<RegistrarRequest> req = getRegistrarRequest(requestsId);
+          if (req.isPresent()) {
+               RegistrarRequest regReq = req.get();
+               RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
+                         regReq.getRequestId(),
+                         regReq.getRequestTitle(), regReq.getRequestMessage(), regReq.getRequestBy().getName(),
+                         regReq.getRequestTo().getName(), regReq.getRequestDate(),
+                         regReq.getDateOfUpdate(), regReq.getRequestStatus());
+               return new ResponseEntity<Object>(regDto, HttpStatus.OK);
+          } else {
+               throw new ApiRequestException("No data found for the given requests ID");
+          }
      }
 
 }

@@ -264,7 +264,7 @@ $(document).ready(function () {
                 "<div class='col-sm'>" +
                 "<a href='" +
                 user.userId +
-                "' type='button' class='undo  btn btn-danger w-100'>Undo</a>" +
+                "' type='button' class='undo  btn btn-warning  text-white w-100'>Undo</a>" +
                 "</div> </div>" +
                 "</td></tr>";
               actions =
@@ -272,7 +272,7 @@ $(document).ready(function () {
                 "<div class='col-sm'>" +
                 "<a href='" +
                 user.userId +
-                "' type='button' class='undo btn btn-danger text-white w-100'>Undo</a>" +
+                "' type='button' class='undo btn btn-warning  text-white w-100'>Undo</a>" +
                 "</div> </div>";
             } else {
               if (user.type != "Teacher") {
@@ -380,9 +380,9 @@ $(document).ready(function () {
                         </li>
                          
                            <li ><a id="send_requests"
-                                 href="userId=` +
+                                 href="/?userId=` +
                   user.userId +
-                  "&to=" +
+                  "&sendTo=" +
                   user.name +
                   `" type="button"
                                   class="sendRequests  dropdown-item link text-success">
