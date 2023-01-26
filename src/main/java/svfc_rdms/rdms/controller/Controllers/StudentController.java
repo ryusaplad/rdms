@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
-import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
@@ -35,12 +33,6 @@ public class StudentController {
 
      @Autowired
      private DocumentRepository docRepo;
-
-     @Autowired
-     private StudentRepository studRepo;
-
-     @Autowired
-     private UsersRepository userRepo;
 
      @GetMapping(value = "/student/dashboard")
      public String studentDashboard(HttpSession session, HttpServletResponse response) {

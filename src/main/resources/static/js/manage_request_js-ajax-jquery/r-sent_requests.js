@@ -30,7 +30,7 @@ $(document).ready(function () {
         <h5 class="modal-title" id="sentReqInfoLabel">` +
           data.requestTitle +
           `</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body s-2">
     
@@ -48,18 +48,33 @@ $(document).ready(function () {
           <pre style="white-space: pre-wrap;"> ` +
           data.requestMessage +
           `</pre>
+
+          <div class="card">
+          <hr>
+  <strong>Files</strong>
+  <div class="card-body text-start">
+   <div class="row">
+   <div class="col">
+  
+   <a class="btn btn-light border border-light text-dark"href="#">
+    <i class="far fa-file"></i> Lol.pdf
+   </a>
+   </div>
+   </div>
+  </div>
+</div>
            <code>Date/Time: ` +
           data.requestDate +
           `</code>
          
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>`;
-        console.log(data);
+
         $(".modalView").append(htmlModal);
         $("#sentReqInfo").modal("toggle");
       },
@@ -67,5 +82,8 @@ $(document).ready(function () {
         console.log(error.responseText);
       },
     });
+  });
+  $(document).on("click", ".clearModal", function (e) {
+    $(".modalView").empty();
   });
 });

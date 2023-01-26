@@ -153,6 +153,12 @@ $(document).ready(function () {
                 window.location = "/registrar/dashboard";
               }, 1000);
             }
+            alert(formData.type);
+            if (formData.type == "Teacher") {
+              setTimeout(function () {
+                window.location = "/teacher/dashboard";
+              }, 1000);
+            }
           } else {
             responseTextVal = response;
           }

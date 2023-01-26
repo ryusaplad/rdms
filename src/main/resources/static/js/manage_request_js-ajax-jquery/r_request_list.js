@@ -1,5 +1,6 @@
 $(document).ready(function () {
   var htmlTable = "";
+  var htmlModal = "";
   var formData = new FormData();
   var fileListArr;
   var finalValue = "";
@@ -7,6 +8,7 @@ $(document).ready(function () {
   var rId = "";
   $(document).on("click", ".toggleRequestDetail", function (e) {
     e.preventDefault();
+    $(".modalView").empty();
     var href = $(this).attr("href");
 
     var queryString = href.split("?")[1];
@@ -26,122 +28,370 @@ $(document).ready(function () {
       "&req=" +
       paramMap.req;
 
-    $.get(link, function (request) {
-      $(".tablebody").empty();
-      $(".sentDocsBody").empty();
-      var dlAnchor = "";
-      if (request.status == "success") {
-        for (var x = 1; x < request.data.length; x++) {
-          var findDot = request.data[x].fname.indexOf(".");
-          var newValue = request.data[x].fname.substring(0, findDot);
-          var secondValue = request.data[x].fname.substring(
-            findDot,
-            request.data[x].fname.length
+    htmlModal = `
+        <div class="modal fade" id="reqDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="reqDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reqDetailModal">
+                        <span id="titleVal">More Details</span>
+                    </h5>
+                    <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="card-title">Requests Informations</h4>
+                    <div class="container-sm"></div>
+                    <table class="table table-primary table-responsive">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>C/Y/SEM</th>
+                                <th>Document</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="requestbyupar">
+                                </td>
+                                <td class="font-weight-bold" id="requestbynpar">
+                                </td>
+                                <td class="font-weight-bold" id="cysem">
+                                </td>
+                                <td class="font-weight-bold" id="docreqpar"></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <h4 class="card-title ">Message</h4>
+                    <div class="messHeader" style="display:none;overflow-y: scroll;">
+
+                    </div>
+                    <hr>
+                    <h4 class="card-title">Request Status</h4>
+                    <table class="table table-primary table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Date Request</th>
+                                <th>Request Status</th>
+                                <th>Manage by</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-weight-bold" id="datereqpar">N/A</td>
+                                <td class="font-weight-bold" id="reqstatuspar">N/A</td>
+                                <td class="font-weight-bold" id="manageby"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <h4 class="card-title">Receieved Requirements</h4>
+                    <table class="table table-white table-responsive receiveRequirementsTable"
+                        style="overflow-y: scroll; height: 100px;">
+                        <thead>
+                            <tr>
+
+                                <th>Download</th>
+                                <th>File Name</th>
+                                <th>Uploaded By</th>
+                            </tr>
+
+                        </thead>
+                        <tbody class="tablebody">
+                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                <td>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4 class="card-title">Sent Documents</h4>
+                    <table class="table table-white table-responsive sentDocumentTable"
+                        style="overflow-y: scroll; height: 100px; display:none">
+                        <thead>
+                            <tr>
+
+                                <th>Download</th>
+                                <th>File Name</th>
+                                <th>Uploaded By</th>
+                            </tr>
+
+                        </thead>
+                        <tbody class="sentDocsBody">
+                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancelFinalizing clearModal"
+                        data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+      `;
+    $(".modalView").append(htmlModal);
+
+    $.ajax({
+      url: link,
+      type: "GET",
+      success: function (result) {
+        $(".tablebody").empty();
+        $(".sentDocsBody").empty();
+        var dlAnchor = "";
+        if (result.status == "success") {
+          for (var x = 1; x < result.data.length; x++) {
+            var findDot = result.data[x].fname.indexOf(".");
+            var newValue = result.data[x].fname.substring(0, findDot);
+            var secondValue = result.data[x].fname.substring(
+              findDot,
+              result.data[x].fname.length
+            );
+
+            if (newValue.length > 15) {
+              finalValue = newValue.substring(0, 15) + ".." + secondValue;
+            } else {
+              finalValue = newValue + secondValue;
+            }
+            if (result.data[x].status == "Pending") {
+              dlAnchor =
+                "<tr>" +
+                "<td>" +
+                "<a href = '/student/files/download?id=" +
+                result.data[x].fileId +
+                "'class='btn btn-danger text-white'>Download</a>" +
+                "</td>" +
+                "<td>" +
+                finalValue +
+                "</td>" +
+                "<td>" +
+                result.data[x].uploaderName +
+                "</td>" +
+                "</tr > ";
+              $(".tablebody").append(dlAnchor);
+            } else if (result.data[x].status == "Approved") {
+              dlAnchor =
+                "<tr>" +
+                "<td>" +
+                "<a href = '/student/files/download?id=" +
+                result.data[x].fileId +
+                "'class='btn btn-danger text-white'>Download</a>" +
+                "</td>" +
+                "<td>" +
+                finalValue +
+                "</td>" +
+                "<td>" +
+                result.data[x].uploaderName +
+                "</td>" +
+                "</tr > ";
+              $(".sentDocumentTable").show();
+              $(".sentDocsBody").append(dlAnchor);
+            }
+          }
+
+          $("#requestbyupar").text(result.data[0].requestBy);
+          $("#requestbynpar").text(result.data[0].name);
+          $("#cysem").text(
+            result.data[0].course +
+              "," +
+              result.data[0].year +
+              "," +
+              result.data[0].semester.substring(0, 3)
           );
 
-          if (newValue.length > 15) {
-            finalValue = newValue.substring(0, 15) + ".." + secondValue;
-          } else {
-            finalValue = newValue + secondValue;
-          }
-          if (request.data[x].status == "Pending") {
-            dlAnchor =
-              "<tr>" +
-              "<td>" +
-              "<a href = '/student/files/download?id=" +
-              request.data[x].fileId +
-              "'class='btn btn-danger text-white'>Download</a>" +
-              "</td>" +
-              "<td>" +
-              finalValue +
-              "</td>" +
-              "<td>" +
-              request.data[x].uploaderName +
-              "</td>" +
-              "</tr > ";
-            $(".tablebody").append(dlAnchor);
-          } else if (request.data[x].status == "Approved") {
-            dlAnchor =
-              "<tr>" +
-              "<td>" +
-              "<a href = '/student/files/download?id=" +
-              request.data[x].fileId +
-              "'class='btn btn-danger text-white'>Download</a>" +
-              "</td>" +
-              "<td>" +
-              finalValue +
-              "</td>" +
-              "<td>" +
-              request.data[x].uploaderName +
-              "</td>" +
-              "</tr > ";
-            $(".sentDocumentTable").show();
-            $(".sentDocsBody").append(dlAnchor);
+          $("#docreqpar").text(result.data[0].requestDocument);
+          $("#reqstatuspar").text(result.data[0].requestStatus);
+          $("#datereqpar").text(result.data[0].requestDate);
+          $("#manageby").text(result.data[0].manageBy);
+          $(".messHeader").empty();
+          $(".messHeader").show();
+          $("#mess").text();
+          if (result.data[0].reply != null) {
+            if (
+              result.data[0].reply.length > 0 &&
+              result.data[0].manageBy.length > 0
+            ) {
+              var htmlP =
+                " <p id='mess'>From: " +
+                result.data[0].name +
+                ":(" +
+                result.data[0].message +
+                ")</p>" +
+                "<p id='reply'>From: " +
+                result.data[0].manageBy +
+                ":(" +
+                result.data[0].reply +
+                ")</p>";
+              $(".messHeader").append(htmlP);
+            } else {
+              var htmlP =
+                " <p id='mess'>From: " +
+                result.data[0].name +
+                ":(" +
+                result.data[0].message +
+                ")</p>";
+              $(".messHeader").append(htmlP);
+            }
           }
         }
-
-        $("#requestbyupar").text(request.data[0].requestBy);
-        $("#requestbynpar").text(request.data[0].name);
-        $("#cysem").text(
-          request.data[0].course +
-            "," +
-            request.data[0].year +
-            "," +
-            request.data[0].semester.substring(0, 3)
-        );
-
-        $("#docreqpar").text(request.data[0].requestDocument);
-        $("#reqstatuspar").text(request.data[0].requestStatus);
-        $("#datereqpar").text(request.data[0].requestDate);
-        $("#manageby").text(request.data[0].manageBy);
-        $(".messHeader").empty();
-        $(".messHeader").show();
-        $("#mess").text();
-        if (request.data[0].reply != null) {
-          if (
-            request.data[0].reply.length > 0 &&
-            request.data[0].manageBy.length > 0
-          ) {
-            var htmlP =
-              " <p id='mess'>From: " +
-              request.data[0].name +
-              ":(" +
-              request.data[0].message +
-              ")</p>" +
-              "<p id='reply'>From: " +
-              request.data[0].manageBy +
-              ":(" +
-              request.data[0].reply +
-              ")</p>";
-            $(".messHeader").append(htmlP);
-          } else {
-            var htmlP =
-              " <p id='mess'>From: " +
-              request.data[0].name +
-              ":(" +
-              request.data[0].message +
-              ")</p>";
-            $(".messHeader").append(htmlP);
-          }
-        }
-      }
+        $("#reqDetailModal").modal("toggle");
+      },
+      error: function (error) {},
     });
-    $("#reqDetailModal").modal("toggle");
   });
   $(document).on("click", ".processBtn", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    $("#processHref").attr("href", userId);
     usId = userId;
 
+    htmlModal =
+      `
+      <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="confirmModalModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalModalLabel">Process Confirmation</h5>
+                    <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mBody">
+                    <p>Are you sure you want to process this requests.?</p>
+                    <b> Note:</b>
+                    <p>This action cannot be undo, after submission.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>
+                    <a id="processHref" href=` +
+      usId +
+      ` type="button" class="btn btn-danger confirmProcess clearModal">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    $(".modalView").append(htmlModal);
     $("#confirmModal").modal("toggle");
   });
   $(document).on("click", ".completeBtn", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    $(".confirmCompleteFinal").attr("data-value", userId);
+
     rId = $(".completeBtn").data("value");
+    usId = userId;
+    htmlModal =
+      `
+     <div class="modal fade" id="confirmCompleteModal" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-labelledby="confirmCompleteLabel" tabindex="-1">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCompleteLabel">Completition Confirmation</h5>
+                    <button type="button" class="btn-close cancelFinalizing clearModal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to complete this requests.?</p>
+                    <b> Note:</b>
+                    <p>This action cannot be undo, after submission.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-warning confirmCompleteNext" data-value=` +
+      usId +
+      `>Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    `;
+    $(".modalView").append(htmlModal);
     $("#confirmCompleteModal").modal("toggle");
+  });
+
+  $(document).on("click", ".confirmCompleteNext", function (e) {
+    e.preventDefault();
+
+    htmlModal =
+      `
+    <div class="modal fade" id="completeModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="completeModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered  modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeModalToggleLabel2">Finalizing Requests</h5>
+                    <button type="button" class="btn-close cancelFinalizing clearModal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="display:none" class="f-alert">
+                        <div class="alert alert-danger d-flex align-items-center " role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                                <use xlink:href="#exclamation-triangle-fill" />
+                            </svg>
+                            <div id="f-alertM">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="file-upload container-sm">
+                        <button class="file-upload-btn" type="button"
+                            onclick="$('.file-upload-input').trigger( 'click' )">Add
+                            Files</button>
+
+                        <div class="file-upload-wrap">
+                            <form id="f-reqs-upload">
+                                <input class="file-upload-input" type='file' id="rfile" name="rfile[]" multiple />
+                            </form>
+
+                            <div class="drag-text">
+                                <h3>Drag and drop a file or click add Files</h3>
+                            </div>
+                        </div>
+
+                        <table class="table table-white w-100">
+                            <thead>
+                                <tr>
+
+                                    <th>Action</th>
+                                    <th>File Name</th>
+                                    <th>Size</th>
+                                </tr>
+
+                            </thead>
+                            <tbody class="r-file-table">
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary cancelFinalizing clearModal"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-warning confirmCompleteFinal" data-value=` +
+      usId +
+      `>Finalized
+                        Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    $(".modalView").empty();
+    $(".modalView").append(htmlModal);
+    $("#completeModal").modal("toggle");
   });
 
   $(document).on("click", ".confirmCompleteFinal", function (e) {
@@ -152,7 +402,7 @@ $(document).ready(function () {
 
   // Finalized Requests with uploaded files
 
-  $("#rfile").change(function () {
+  $(document).change("#rfile", function () {
     formData = new FormData();
     $(".r-file-table").empty();
     var totalFiles = $("#rfile")[0].files.length;
@@ -206,6 +456,9 @@ $(document).ready(function () {
     $(".f-alert").hide();
     $("#f-alertM").text("");
   });
+  $(document).on("click", ".clearModal", function (e) {
+    $(".modalView").empty();
+  });
   function formatFileSize(bytes) {
     var decimalPoint = 0;
     if (bytes == 0) return "0 Bytes";
@@ -216,14 +469,15 @@ $(document).ready(function () {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
 
-  $(".file-upload-wrap").bind("dragover", function () {
+  $(document).bind("dragover", ".file-upload-wrap", function () {
     $(".file-upload-wrap").addClass("file-dropping");
   });
-  $(".file-upload-wrap").bind("dragleave", function () {
+  $(document).bind("dragleave", ".file-upload-wrap", function () {
     $(".file-upload-wrap").removeClass("file-dropping");
   });
-  $("#f-reqs-upload").on("submit", function (e) {
+  $(document).on("submit", "#f-reqs-upload", function (e) {
     e.preventDefault();
+
     for (let [key, val] of formData.entries()) {
       console.log(key, val);
     }
@@ -246,6 +500,36 @@ $(document).ready(function () {
         $(".r-file-table").empty();
         $(".confirmCompleteFinal").attr("disabled", false);
         $("#completeModal").modal("hide");
+        htmlModal = `
+         <div class="modal fade" id="finalizedCompletedModal" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-labelledby="confirmCompleteLabel" tabindex="-1">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCompleteLabel">Finalized Request</h5>
+                    <button type="button" class="btn-close cancelFinalizing clearModal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="alert alert-success d-flex align-items-center w-100 h-100" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="50" height="50" role="img" aria-label="Success:">
+                            <use xlink:href="#check-circle-fill" />
+                        </svg>
+                        <div class="h2">
+                            Finalizing Completed.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success okCompleted clearModal" data-bs-dismiss="modal">Ok</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        `;
+        $(".modalView").append(htmlModal);
         $("#finalizedCompletedModal").modal("toggle");
         setTimeout(function () {
           $("#finalizedCompletedModal").hide();
@@ -274,7 +558,40 @@ $(document).ready(function () {
     e.preventDefault();
     var userId = $(this).attr("href");
     rId = $(".rejectBtn").data("value");
-    $("#rejectHref").attr("href", userId);
+    htmlModal =
+      `
+     <div class="modal fade" id="rejectModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="rejectModalModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalModalLabel">Rejecting Confirmation</h5>
+                    <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to reject this requests.?</p>
+                    <b> Note:</b>
+                    <p>This action cannot be undo, after submission.</p>
+                    <label>Specify Reason Here</label>
+                    <div class="mt-2 form-floating">
+                        <textarea id="reason" name="reason" class="form-control floatingInput" maxlength="250"
+                            style="height:150px"></textarea>
+                        <label id="messageLengthLabel" for="reason">You can add message here with maximum of (250
+                            letters)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>
+                    <a id="rejectHref" href=` +
+      userId +
+      ` type="button" class="btn btn-danger text-white confirmReject">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    $(".modalView").append(htmlModal);
     $("#rejectModal").modal("toggle");
   });
 

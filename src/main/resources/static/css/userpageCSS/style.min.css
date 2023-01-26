@@ -12304,6 +12304,17 @@ label {
             padding: 50px;
             
         }
+          .sidebar-t {
+            position: fixed;
+            top: 65px;
+            right: -569px;
+            width: 100%px;
+            height: auto;
+            background-color: gray;
+            color: black;
+            padding: 50px;
+            
+        }
 
 
         .rightSidebarToggle {
@@ -12346,10 +12357,10 @@ label {
         /* Hide the cards on small screens */
         @media screen and (max-width: 700px) {
 
-            .sidebar,
+            .sidebar,.sidebar-t,
             .rightSidebarToggle {
 
-                display: block;
+                display: block; 
             }
 
             .dtcard,
@@ -12363,7 +12374,7 @@ label {
 
         @media screen and (min-width: 700px) {
 
-            .sidebar,
+            .sidebar,.sidebar-t,
             .rightSidebarToggle {
                 display: none;
             }

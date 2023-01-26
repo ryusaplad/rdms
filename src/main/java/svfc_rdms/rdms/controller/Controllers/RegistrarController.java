@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
@@ -26,8 +25,7 @@ public class RegistrarController {
      @Autowired
      private AdminServicesImpl mainService;
 
-     @Autowired
-     private UsersRepository userRepository;
+   
      @GetMapping(value = "/registrar/dashboard")
      public String registrarDashboard(HttpSession session, HttpServletResponse response) {
           if (globalService.validatePages("registrar", response, session)) {

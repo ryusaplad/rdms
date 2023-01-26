@@ -227,6 +227,7 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                for (MultipartFile filex : files.get()) {
 
                     if (!excludedFiles.contains(filex.getOriginalFilename())) {
+                         System.out.println(filex.getOriginalFilename());
                          UserFiles userFiles = new UserFiles();
                          userFiles.setData(filex.getBytes());
                          userFiles.setName(filex.getOriginalFilename());
@@ -485,12 +486,7 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                     "Failed to sent request, Please Try Again!. Please contact the administrator for further assistance.");
      }
 
-     public boolean textSizeChecker(String text, int max) {
-          if (text.length() > max) {
-               return false;
-          }
-          return true;
-     }
+
 
      @Override
      public Optional<RegistrarRequest> getRegistrarRequest(long requestsId) {
@@ -534,10 +530,20 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                          regReq.getRequestTitle(), regReq.getRequestMessage(), regReq.getRequestBy().getName(),
                          regReq.getRequestTo().getName(), regReq.getRequestDate(),
                          regReq.getDateOfUpdate(), regReq.getRequestStatus());
+
                return new ResponseEntity<Object>(regDto, HttpStatus.OK);
+
           } else {
                throw new ApiRequestException("No data found for the given requests ID");
           }
+     }
+
+     private boolean textSizeChecker(String text, int max) {
+          if (text.length() > max) {
+               return false;
+          }
+
+          return true;
      }
 
 }
