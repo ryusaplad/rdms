@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.serviceImpl.Global;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -106,10 +108,12 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                Optional<UserFiles> temp = fileOptional;
                if (temp != null) {
                     UserFiles file = temp.get();
-                    response.setContentType("application/octet-stream");
-                    String headerKey = "Content-Disposition";
-                    String headerValue = "attachment; filename = " + file.getName();
-                    response.setHeader(headerKey, headerValue);
+
+                    if (response.getHeader("Content-Disposition") == null) {
+                         response.setContentType("application/octet-stream");
+                         response.setHeader("Content-Disposition",
+                                   "attachment; filename = " + file.getName().replace(",", "."));
+                    }
                     ServletOutputStream outputStream = response.getOutputStream();
                     outputStream.write(file.getData());
                     outputStream.close();
@@ -117,6 +121,14 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           } catch (Exception e) {
                throw new ApiRequestException("Failed to download Reason: " + e.getMessage());
           }
+     }
+
+     @Override
+     public String formattedDate() {
+          LocalDateTime myDateObj = LocalDateTime.now();
+          DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
+          String formattedDate = myDateObj.format(myFormatObj);
+          return formattedDate;
      }
 
 }

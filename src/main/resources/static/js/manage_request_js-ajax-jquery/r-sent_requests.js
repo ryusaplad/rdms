@@ -1,8 +1,12 @@
 $(document).ready(function () {
+  var mainHtmlModal = "";
+  var htmlModal = "";
+
+  var htmlBtn = "";
+
   $(document).on("click", ".link", function (e) {
     e.preventDefault();
 
-    var htmlModal = "";
     $(this)
       .addClass("bg-light")
       .css(
@@ -21,35 +25,146 @@ $(document).ready(function () {
       type: "GET",
       url: "/registrar/sent-requests-view?requestId=" + dataVal,
       success: function (data) {
-        htmlModal =
+        if (data[0].requestStatus == "pending") {
+          htmlBtn =
+            `   <button type="button" class="btn btn-success text-white clearModal response" data-value="` +
+            dataVal +
+            `" data-bs-dismiss="modal">Response</button>`;
+          htmlModal = "";
+        } else if (data[0].requestStatus == "recordonly") {
+          htmlBtn = "";
+          htmlModal += `
+          <div class="card">
+          <hr>
+  <strong>Files</strong>
+  <div class="card-body text-start">
+   <div class="row">`;
+          for (let dataIndex = 1; dataIndex < data.length; dataIndex++) {
+            let fileName = data[dataIndex].name;
+            let fileExtension = fileName.substring(fileName.lastIndexOf("."));
+            if (fileName.length > 10 - fileExtension.length) {
+              fileName =
+                fileName.substring(0, 10 - fileExtension.length) +
+                "..." +
+                fileExtension;
+            }
+
+            htmlModal +=
+              `
+    <div  class="col m-1">
+      <a href="/registrar/files/download?id=` +
+              data[dataIndex].fileId +
+              `" class="btn btn-light border border-light text-dark" title="` +
+              data[dataIndex].name +
+              `">
+        <i class="far fa-file"></i> ` +
+              fileName +
+              `
+      </a>
+    </div>
+  `;
+          }
+        } else if (data[0].requestStatus == "messsageonly") {
+          htmlBtn = "";
+          htmlModal =
+            `<h4>-- Message -- </h4><pre>` + data[0].teacherMessage + `</pre>`;
+        } else if (data[0].requestStatus == "completed") {
+          htmlBtn = "";
+          htmlModal =
+            `<h4>-- Message -- </h4><pre>` + data[0].teacherMessage + `</pre>`;
+          htmlModal += `
+          <div class="card">
+          <hr>
+  <strong>Files</strong>
+  <div class="card-body text-start">
+   <div class="row">`;
+          for (let dataIndex = 1; dataIndex < data.length; dataIndex++) {
+            let fileName = data[dataIndex].name;
+            let fileExtension = fileName.substring(fileName.lastIndexOf("."));
+            if (fileName.length > 10 - fileExtension.length) {
+              fileName =
+                fileName.substring(0, 10 - fileExtension.length) +
+                "..." +
+                fileExtension;
+            }
+
+            htmlModal +=
+              `
+    <div  class="col m-1">
+      <a href="/registrar/files/download?id=` +
+              data[dataIndex].fileId +
+              `" class="btn btn-light border border-light text-dark" title="` +
+              data[dataIndex].name +
+              `">
+        <i class="far fa-file"></i> ` +
+              fileName +
+              `
+      </a>
+    </div>
+  `;
+          }
+
+          htmlModal += `
+   </div>
+  </div>
+</div>
+          `;
+        } else {
+          htmlBtn = "";
+          htmlModal =
+            `<h4>-- Message -- </h4><pre>` + data[0].teacherMessage + `</pre>`;
+        }
+
+        mainHtmlModal =
           `
 <div class="modal fade" id="sentReqInfo" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="sentReqInfoLabel">` +
-          data.requestTitle +
+          data[0].requestTitle +
           `</h5>
         <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body s-2">
     
           <code>Title: ` +
-          data.requestTitle +
+          data[0].requestTitle +
           `</code>
          |
-         <code>From: ` +
-          data.requestBy +
+         <code>To: ` +
+          data[0].requestTo +
           `</code> 
          
-          |<code>To: ` +
-          data.requestTo +
-          `</code>
           <pre style="white-space: pre-wrap;"> ` +
-          data.requestMessage +
-          `</pre>
+          data[0].requestMessage +
+          `</pre>` +
+          htmlModal +
+          `<code>Date/Time: ` +
+          data[0].requestDate +
+          `</code>
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
+     ` +
+          htmlBtn +
+          `
+      </div>
+    </div>
+  </div>
+</div>`;
 
-          <div class="card">
+        $(".modalView").append(mainHtmlModal);
+        $("#sentReqInfo").modal("toggle");
+      },
+      error: function (error) {
+        console.log(error.responseText);
+      },
+    });
+  });
+
+  /*  <div class="card">
           <hr>
   <strong>Files</strong>
   <div class="card-body text-start">
@@ -62,27 +177,7 @@ $(document).ready(function () {
    </div>
    </div>
   </div>
-</div>
-           <code>Date/Time: ` +
-          data.requestDate +
-          `</code>
-         
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>`;
-
-        $(".modalView").append(htmlModal);
-        $("#sentReqInfo").modal("toggle");
-      },
-      error: function (error) {
-        console.log(error.responseText);
-      },
-    });
-  });
+</div> */
   $(document).on("click", ".clearModal", function (e) {
     $(".modalView").empty();
   });

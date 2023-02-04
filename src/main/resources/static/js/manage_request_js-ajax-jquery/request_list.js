@@ -74,7 +74,6 @@ $(document).ready(function () {
         );
 
         $("#docreqpar").text(request.data[0].requestDocument);
-
         $("#managebynpar").text(request.data[0].manageBy);
         $("#datereqpar").text(request.data[0].requestDate);
         $("#daterelpar").text(request.data[0].releaseDate);

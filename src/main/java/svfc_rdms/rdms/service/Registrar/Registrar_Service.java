@@ -36,7 +36,7 @@ public interface Registrar_Service {
 
       ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params);
 
-      String displayAllRequestsByStatus(Model model);
+      String displayAllRequests(HttpSession session, Model model);
 
       ResponseEntity<Object> viewRegistrarRequests(long requestsId);
 

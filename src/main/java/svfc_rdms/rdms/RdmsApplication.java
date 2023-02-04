@@ -8,7 +8,7 @@ public class RdmsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RdmsApplication.class, args);
-
+		
 	}
 
 }

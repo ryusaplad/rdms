@@ -98,9 +98,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
                List<String> excludedFiles = new ArrayList<>();
 
-               LocalDateTime myDateObj = LocalDateTime.now();
-               DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
-               String formattedDate = myDateObj.format(myFormatObj);
+
                if (uploadedFiles.isPresent() || !requestId.isEmpty() || !document.isEmpty() || params.size() > 0) {
                     StudentRequest req = new StudentRequest();
                     Users user = new Users();
@@ -130,7 +128,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
                     });
 
-                    req.setRequestDate(formattedDate);
+                    req.setRequestDate(globalService.formattedDate());
                     req.setRequestStatus("Pending");
                     req.setReleaseDate("");
                     req.setManageBy("");
@@ -148,7 +146,7 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                               userFiles.setData(filex.getBytes());
                               userFiles.setName(filex.getOriginalFilename());
                               userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
-                              userFiles.setDateUploaded(formattedDate);
+                              userFiles.setDateUploaded(globalService.formattedDate());
                               userFiles.setStatus("Pending");
                               userFiles.setFilePurpose("requirement");
 

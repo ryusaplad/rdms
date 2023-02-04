@@ -87,7 +87,6 @@ $(document).ready(function () {
     });
   });
   $("#requestsModal").on("shown.bs.modal", function () {
-    console.log("hi");
     $("#titleValue").focus();
   });
   // Form

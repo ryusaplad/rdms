@@ -215,7 +215,8 @@ $(document).ready(function () {
           $(".messHeader").empty();
           $(".messHeader").show();
           $("#mess").text();
-          if (result.data[0].reply != null) {
+          
+          if (result.data[0].reply.length != 0) {
             if (
               result.data[0].reply.length > 0 &&
               result.data[0].manageBy.length > 0
@@ -232,16 +233,17 @@ $(document).ready(function () {
                 result.data[0].reply +
                 ")</p>";
               $(".messHeader").append(htmlP);
-            } else {
-              var htmlP =
-                " <p id='mess'>From: " +
-                result.data[0].name +
-                ":(" +
-                result.data[0].message +
-                ")</p>";
-              $(".messHeader").append(htmlP);
             }
+          } else {
+            var htmlP =
+              " <p id='mess'>From: " +
+              result.data[0].name +
+              ":(" +
+              result.data[0].message +
+              ")</p>";
+            $(".messHeader").append(htmlP);
           }
+         
         }
         $("#reqDetailModal").modal("toggle");
       },

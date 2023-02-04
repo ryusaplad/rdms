@@ -1,7 +1,5 @@
 package svfc_rdms.rdms.serviceImpl.Registrar;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -205,12 +203,10 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                if (files.isEmpty()) {
                     throw new ApiRequestException("Please upload file.");
                }
-               LocalDateTime myDateObj = LocalDateTime.now();
-               DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
-               String formattedDate = myDateObj.format(myFormatObj);
+
                Users user = usersRepository.findByuserId(userId).get();
                StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
-               studentRequest.setReleaseDate(formattedDate);
+               studentRequest.setReleaseDate(globalService.formattedDate());
                studentRequest.setRequestStatus("Approved");
                List<String> excludedFiles = new ArrayList<>();
                studentRepository.save(studentRequest);
@@ -232,7 +228,7 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                          userFiles.setData(filex.getBytes());
                          userFiles.setName(filex.getOriginalFilename());
                          userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
-                         userFiles.setDateUploaded(formattedDate);
+                         userFiles.setDateUploaded(globalService.formattedDate());
                          userFiles.setStatus("Approved");
                          userFiles.setFilePurpose("dfs");
                          userFiles.setUploadedBy(manageBy);
@@ -426,9 +422,8 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
      @Override
      public ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params) {
           try {
-               LocalDateTime myDateObj = LocalDateTime.now();
-               DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
-               String requestedDate = myDateObj.format(myFormatObj);
+
+               String requestedDate = globalService.formattedDate();
 
                String username = Optional.ofNullable(session.getAttribute("username")).orElse("").toString();
 
@@ -486,8 +481,6 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
                     "Failed to sent request, Please Try Again!. Please contact the administrator for further assistance.");
      }
 
-
-
      @Override
      public Optional<RegistrarRequest> getRegistrarRequest(long requestsId) {
 
@@ -499,39 +492,71 @@ public class Registrar_ServiceImpl implements Registrar_Service, FileService {
      }
 
      @Override
-     public String displayAllRequestsByStatus(Model model) {
-          List<RegistrarRequest> regRequests = regsRepository.findAllByRequestStatus("pending");
+     public String displayAllRequests(HttpSession session, Model model) {
           List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
+          try {
 
-          if (regRequests != null) {
-               regRequests.forEach(request -> {
+               String username = session.getAttribute("username").toString();
+               if (!username.isBlank() || !username.isEmpty() || username.length() > -1) {
+                    Optional<Users> user = usersRepository.findByUsername(username);
 
-                    filteredRequests.add(new RegistrarRequest_DTO(request.getRequestId(), request.getRequestTitle(),
-                              request.getRequestMessage(), request.getRequestBy().getName(),
-                              request.getRequestTo().getName(), request.getRequestDate(), request.getDateOfUpdate(),
-                              request.getRequestStatus()));
+                    if (user.isPresent()) {
+                         List<RegistrarRequest> regRequests = regsRepository.findAllByRequestBy(user.get());
+                         if (regRequests != null) {
+                              regRequests.forEach(request -> {
 
-               });
-               System.out.println("Working List");
-               model.addAttribute("requests_list", filteredRequests);
-               return "/registrar/registrar-requests";
+                                   filteredRequests.add(
+                                             new RegistrarRequest_DTO(request.getRequestId(), request.getRequestTitle(),
+                                                       request.getRequestMessage(), request.getTeacherMessage(),
+                                                       request.getRequestBy().getName(),
+                                                       request.getRequestTo().getName(), request.getRequestDate(),
+                                                       request.getDateOfUpdate(),
+                                                       request.getRequestStatus()));
+
+                              });
+
+                              model.addAttribute("requests_list", filteredRequests);
+                              return "/registrar/registrar-requests";
+                         }
+                    }
+
+               }
+          } catch (Exception e) {
+               return "/registrar/reg";
           }
+          model.addAttribute("requests_list", filteredRequests);
           return "/registrar/registrar-requests";
-
      }
 
      @Override
      public ResponseEntity<Object> viewRegistrarRequests(long requestsId) {
           Optional<RegistrarRequest> req = getRegistrarRequest(requestsId);
+          List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
+
           if (req.isPresent()) {
+               List<UserFiles> regRequestFiles = fileRepository.findAllByRegRequestsWith(req.get());
                RegistrarRequest regReq = req.get();
                RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
                          regReq.getRequestId(),
-                         regReq.getRequestTitle(), regReq.getRequestMessage(), regReq.getRequestBy().getName(),
+                         regReq.getRequestTitle(), regReq.getRequestMessage(), regReq.getTeacherMessage(),
+                         regReq.getRequestBy().getName(),
                          regReq.getRequestTo().getName(), regReq.getRequestDate(),
                          regReq.getDateOfUpdate(), regReq.getRequestStatus());
+               registrarDtoCompressor.add(regDto);
 
-               return new ResponseEntity<Object>(regDto, HttpStatus.OK);
+               if (regRequestFiles != null) {
+                    regRequestFiles.forEach(userFiles -> {
+
+                         registrarDtoCompressor.add(new RegistrarRequest_DTO(
+                                   userFiles.getFileId(), userFiles.getName(),
+                                   userFiles.getSize(),
+                                   userFiles.getStatus(), userFiles.getDateUploaded(),
+                                   userFiles.getFilePurpose(),
+                                   userFiles.getUploadedBy().getName()));
+                    });
+
+               }
+               return new ResponseEntity<Object>(registrarDtoCompressor, HttpStatus.OK);
 
           } else {
                throw new ApiRequestException("No data found for the given requests ID");

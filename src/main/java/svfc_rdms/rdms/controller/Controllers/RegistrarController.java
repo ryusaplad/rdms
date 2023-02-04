@@ -94,7 +94,7 @@ public class RegistrarController {
      @GetMapping("/registrar/sent-requests")
      public String viewSentRequests(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("registrar", response, session)) {
-               return regs_ServiceImpl.displayAllRequestsByStatus(model);
+               return regs_ServiceImpl.displayAllRequests(session, model);
           }
           return "redirect:/";
      }

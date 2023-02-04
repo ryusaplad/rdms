@@ -74,13 +74,18 @@ a {
 }
 
 .image-holder {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1)),
-    url("../images/abst.jpeg") no-repeat;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.7) 100%), 
+    url("../images/abst.jpg") no-repeat;
   background-size: cover;
   filter: drop-shadow(8px 8px #fff);
 }
 .image-holder img {
+  opacity : 0.5;
+  filter: brightness(0.7);
+}
+.image-holder img {
   display: none;
+   
 }
 
 .form-inner {
@@ -251,25 +256,20 @@ p {
     margin-bottom: 30px;
   }
 }
-@media (max-width: 767px) {
-  .wrapper .form-inner {
-    height: auto;
-  }
-  .wrapper .image-holder {
-    height: auto;
-  }
+.form-inner {
+  padding-top: 10.36vh;
+  padding-left: 4vw;
+  padding-right: 4vw;
+}
 
-  .image-holder img {
-    display: block;
-  }
+.form-control {
+  width: 100%;
+  height: 45px;
+}
 
-  .form-inner {
-    padding: 30px 20px;
-  }
-
-  button {
-    width: 100%;
-  }
+button {
+  width: 100%;
+  height: 46px;
 }
 .endText {
   position: absolute;
@@ -279,12 +279,23 @@ p {
 }
 
 @media screen and (max-width: 1329px) {
+  .endText {
+ 
+  position: absolute;
+  bottom: 150px !important;
+  left: 16px;
+  font-size: 18px;
+ 
+}
   .endText span {
+     
     font-size: 30px !important;
-    text-shadow: 5px 5px 2px black !important;
+   
   }
   .bottomText span {
-    text-shadow: 4px 4px 2px black !important;
+    bottom: 50px !important;
+
+   
   }
 }
 .logo {
@@ -300,13 +311,15 @@ p {
   position: absolute;
   bottom: 45px;
   left: 16px;
-  font-size: 25px;
+  font-size: 24px;
   color: white;
+  font-family: "roboto","sans-serif";
 }
 .scText {
   font-size: 18px;
   font-family: "Old English";
   text-align: center;
+  
 }
 .messageForStudent strong {
   font-style: italic;

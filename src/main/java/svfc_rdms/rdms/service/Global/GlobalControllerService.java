@@ -7,12 +7,14 @@ import org.springframework.ui.Model;
 
 public interface GlobalControllerService {
 
-     boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session);
+      boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session);
 
-     String formatFileUploadSize(long size);
+      String formatFileUploadSize(long size);
 
-     String removeDuplicateInManageBy(String manageBy);
+      String removeDuplicateInManageBy(String manageBy);
 
       void DownloadFile(String id, Model model, HttpServletResponse response);
+
+      String formattedDate();
 
 }

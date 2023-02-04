@@ -18,6 +18,14 @@ function usernameChangerBySelection() {
   }
 }
 $(document).ready(function () {
+  $("#username").focus();
+  $("html,body").animate(
+    {
+      scrollTop: $("#username").offset().top,
+    },
+    1
+  );
+
   function validate() {
     let accountType = document.getElementById("accType");
     let user = document.getElementById("username").value.toLowerCase();
@@ -25,26 +33,31 @@ $(document).ready(function () {
     let getSelected = accountType.options[accountType.selectedIndex].value;
     if (user.length <= 0) {
       displayMessage(userMessage, userError, 1, "Username");
+      $(".userInput").addClass("is-invalid");
       return false;
     } else {
       hideMessage(userMessage, userError);
     }
     if (pass.length <= 0) {
+      $(".userInput").removeClass("is-invalid");
+      $(".passInput").addClass("is-invalid");
       displayMessage(passMessage, passError, 1, "Password");
       return false;
     } else {
       hideMessage(passMessage, passError);
     }
     if (getSelected == "Account Type") {
-      displayMessage(
-        accTypeMessage,
-        accTypeError,
-        1,
-        "Something is not right."
-      );
+      $(".passInput").removeClass("is-invalid");
+      $(".typeInput").addClass("is-invalid");
+      displayMessage(accTypeMessage, accTypeError, 1, "Account Type");
 
       return false;
     } else {
+      $(".userInput").removeClass("is-invalid");
+      $(".passInput").removeClass("is-invalid");
+      $(".typeInput").removeClass("is-invalid");
+
+      $(".typeInput").addClass("is-invalid");
       accTypeMessage.style = "display:none";
       accTypeError.innerText = " ";
       if (getSelected == "Student") {
@@ -74,6 +87,8 @@ $(document).ready(function () {
         hideMessage(userMessage, userError);
       }
     }
+    $(".userInput").removeClass("is-invalid");
+    $(".typeInput").removeClass("is-invalid");
 
     return true;
   }
@@ -86,15 +101,19 @@ $(document).ready(function () {
       return false;
     } else if (errorType == 2) {
       if (accountType == "Student") {
+        $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
       } else if (accountType == "Registrar") {
+        $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
       } else if (accountType == "Teacher") {
+        $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
       } else if (accountType == "Administrator") {
+        $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
         errorMessage.innerText = accountType + " Account Type Invalid";
       }
@@ -126,7 +145,7 @@ $(document).ready(function () {
       password: inputValues[1],
       type: inputValues[2],
     };
-
+    var loginMessageAlert = "";
     if (validate() == true) {
       $.ajax({
         url: "/login",
@@ -135,12 +154,27 @@ $(document).ready(function () {
         data: JSON.stringify(formData),
         beforeSend: function () {
           $(".loginBtn").attr("disabled", true);
+          $("#loginMessageDiv").empty();
+          loginMessageAlert = `
+        
+  <div class="alert alert-success mt-2" role="alert">
+                <strong class="loginMessage"> <i class="fa fa-warning"></i>
+                  <div class="spinner-border spinner-border-sm" role="status">
+  <span class="visually-hidden">Loading...</span>
+          
+</div>
+
+                </strong>
+                Please Wait...
+                </div>
+          `;
+          $("#loginMessageDiv").append(loginMessageAlert);
         },
         success: function (response) {
           var responseTextVal = "";
-          console.log(response);
+
           if (response == "success") {
-            responseTextVal = "Login SuccessFul!..please wait";
+            responseTextVal = "Login SuccessFul!, Redirecting..";
             console.log(formData.type);
             if (formData.type == "Student") {
               setTimeout(function () {
@@ -153,7 +187,7 @@ $(document).ready(function () {
                 window.location = "/registrar/dashboard";
               }, 1000);
             }
-            alert(formData.type);
+
             if (formData.type == "Teacher") {
               setTimeout(function () {
                 window.location = "/teacher/dashboard";
@@ -163,24 +197,38 @@ $(document).ready(function () {
             responseTextVal = response;
           }
           $("#loginMessageDiv").empty();
-          var loginMessageAlert =
-            '<div class="alert alert-success mt-2" role="alert">' +
-            '<strong class="loginMessage">' +
+          loginMessageAlert =
+            `
+            <div class="alert alert-success text-center mt-2" role="alert">
+          <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <strong class="loginMessage"> <i class="fa fa-warning"></i>
+                ` +
             responseTextVal +
-            "</strong>" +
-            "</div>";
+            ` 
+                </strong>
+                </div>
+          `;
           $("#loginMessageDiv").append(loginMessageAlert);
           $(".loginBtn").attr("disabled", false);
         },
         error: function (error) {
           console.log(error);
           $("#loginMessageDiv").empty();
-          var loginMessageAlert =
-            '<div class="alert alert-danger mt-2" role="alert">' +
-            '<strong class="loginMessage"> <i class="fa fa-warning"></i> ' +
+          loginMessageAlert =
+            `
+
+            <div class="alert alert-danger text-center mt-2" role="alert">
+      
+
+                <strong class="loginMessage">     
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                ` +
             error.responseText +
-            "</strong>" +
-            "</div>";
+            ` 
+                </strong>
+                </div>
+          `;
+
           $("#loginMessageDiv").append(loginMessageAlert);
           $(".loginBtn").attr("disabled", false);
         },
@@ -189,4 +237,5 @@ $(document).ready(function () {
       console.log("Login Failed");
     }
   });
+   
 });

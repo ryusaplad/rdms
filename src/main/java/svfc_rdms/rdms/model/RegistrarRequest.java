@@ -31,6 +31,10 @@ public class RegistrarRequest {
 
      @Column(columnDefinition = "text")
      private String requestMessage; // can add message
+
+     @Column(columnDefinition = "text")
+     private String teacherMessage; // can add message
+
      @ManyToOne
      @JoinColumn(name = "request_by", referencedColumnName = "userId")
      private Users requestBy; // One User to many Request
