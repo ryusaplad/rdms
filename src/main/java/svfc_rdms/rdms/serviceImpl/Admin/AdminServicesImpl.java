@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.serviceImpl.Admin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,14 +15,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Admin.AdminService;
 
@@ -36,8 +40,12 @@ public class AdminServicesImpl implements AdminService {
 
      @Autowired
      DocumentRepository docRepo;
+
      @Autowired
      FileRepository userRepo;
+
+     @Autowired
+     RegRepository regsRepository;
 
      @Override
      public List<Users> diplayAllAccounts(String status, String type) {
@@ -49,7 +57,7 @@ public class AdminServicesImpl implements AdminService {
      public List<Users> diplayAllAccountsByType(String type) {
           return userRepository.findAllByType(type);
      }
-     
+
      @Override
      public boolean deleteData(long userId) {
 
@@ -314,9 +322,44 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public List<StudentRequest> displayAllRequest() {
-
           return studRepo.findAll();
      }
 
+     @Override
+     public ResponseEntity<Object> viewAllRegistrarRequests(long requestsId) {
+          List<RegistrarRequest> req = regsRepository.findAll();
+          List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
+          if (req != null) {
+               req.forEach(regRequests -> {
+                    List<UserFiles> regRequestFiles = userRepo.findAllByRegRequestsWith(regRequests);
+
+                    RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
+                              regRequests.getRequestId(),
+                              regRequests.getRequestTitle(), regRequests.getRequestMessage(),
+                              regRequests.getTeacherMessage(),
+                              regRequests.getRequestBy().getName(),
+                              regRequests.getRequestTo().getName(), regRequests.getRequestDate(),
+                              regRequests.getDateOfUpdate(), regRequests.getRequestStatus());
+                    registrarDtoCompressor.add(regDto);
+
+                    if (regRequestFiles != null) {
+                         regRequestFiles.forEach(userFiles -> {
+                              registrarDtoCompressor.add(new RegistrarRequest_DTO(
+                                        userFiles.getFileId(), userFiles.getName(),
+                                        userFiles.getSize(),
+                                        userFiles.getStatus(), userFiles.getDateUploaded(),
+                                        userFiles.getFilePurpose(),
+                                        userFiles.getUploadedBy().getName()));
+                         });
+
+                    }
+               });
+               return new ResponseEntity<Object>(registrarDtoCompressor, HttpStatus.OK);
+
+          } else {
+               throw new ApiRequestException("No data found for the given requests ID");
+          }
+
+     }
 
 }

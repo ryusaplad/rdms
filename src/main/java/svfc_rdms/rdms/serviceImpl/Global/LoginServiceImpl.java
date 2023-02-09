@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.serviceImpl.Global;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -22,7 +24,8 @@ public class LoginServiceImpl implements LoginService {
      LoginRepository loginRepo;
 
      @Override
-     public ResponseEntity<String> login(Users user, HttpSession session, HttpServletResponse response) {
+     public ResponseEntity<String> login(Users user, String rememberMe, HttpSession session,
+               HttpServletResponse response) {
 
           String hashPassword = loginRepo.findPasswordByUsername(user.getUsername())
                     .map(Users::getPassword)
@@ -31,13 +34,26 @@ public class LoginServiceImpl implements LoginService {
           PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
           boolean isPasswordValid = passwordEncoder.matches(user.getPassword(), hashPassword);
           if (isPasswordValid) {
-               Users foundUser = loginRepo.findByUsernameAndPasswordAndType(user.getUsername(),
+               Optional<Users> optional_User = loginRepo.findByUsernameAndPasswordAndType(user.getUsername(),
                          hashPassword,
-                         user.getType()).get();
+                         user.getType());
                try {
+                    Users foundUser = optional_User.get();
                     if (foundUser != null) {
 
                          if (foundUser.getStatus().equals("Active")) {
+                              System.out.println(rememberMe);
+                              if (rememberMe.equals("true")) {
+                                   session.setAttribute("session_username", user.getUsername());
+                                   session.setAttribute("session_password", user.getPassword());
+                                   session.setAttribute("session_accType", user.getType());
+                                   session.setAttribute("session_remember", rememberMe);
+                              } else {
+                                   session.removeAttribute("session_username");
+                                   session.removeAttribute("session_password");
+                                   session.removeAttribute("session_accType");
+                                   session.removeAttribute("session_remember");
+                              }
                               session.setAttribute("name", foundUser.getName());
                               session.setAttribute("username", user.getUsername());
                               session.setAttribute("accountType", user.getType());
@@ -54,7 +70,9 @@ public class LoginServiceImpl implements LoginService {
                     return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
                }
 
-          } else {
+          } else
+
+          {
                return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
           }
      }

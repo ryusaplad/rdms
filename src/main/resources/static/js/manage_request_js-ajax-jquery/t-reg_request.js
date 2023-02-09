@@ -194,8 +194,8 @@ $(document).ready(function () {
       <div class="col-6">
       <label  for="message">Message</label>
       <div class="mt-2 form-floating">
-      <textarea id="messageVal" name="message" class="form-control floatingInput" maxlength="250" style="height:150px" required></textarea> 
-      <label id="messageLengthLabel" style="height:10px;" class="w-100" for="message">maximum of (250 letters)</label>
+      <textarea id="messageVal" name="message" class="form-control floatingInput" maxlength="1000" style="height:150px" required></textarea> 
+      <label id="messageLengthLabel" style="height:10px;" class="w-100" for="message">maximum of (1000 letters)</label>
       </div>
       </div>
       
@@ -305,7 +305,7 @@ $(document).ready(function () {
     $(".sentConfirm").prop("disabled", true);
     $("#messageVal").prop("readonly", false);
     $("#messageVal").removeClass("border border-danger");
-    $("#messageLengthLabel").text("maximum of (250 letters)");
+    $("#messageLengthLabel").text("maximum of (1000 letters)");
 
     $(".addRequirementFile").removeClass("disabled");
 
@@ -355,19 +355,19 @@ $(document).ready(function () {
   });
 
   $(document).on("keyup", "#messageVal", function (e) {
-    var textMaxLength = 250;
+    var textMaxLength = 1000;
     var messageLength = $(this).val().length;
     if (messageLength == 0) {
-      $("#messageLengthLabel").text("maximum of (250 letters)");
+      $("#messageLengthLabel").text("maximum of (1000 letters)");
       $(".sentConfirm").prop("disabled", true);
     } else {
       if (messageLength <= textMaxLength) {
-        $("#messageLengthLabel").text("(" + messageLength + "/250) ");
+        $("#messageLengthLabel").text("(" + messageLength + "/1000) ");
         messageLength = textMaxLength - messageLength;
         $("#messageVal").removeClass("border border-danger");
       } else {
         $("#messageVal").addClass("border border-danger");
-        $(this).val($(this).val().substring(0, 250));
+        $(this).val($(this).val().substring(0, 1000));
       }
     }
   });

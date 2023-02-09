@@ -20,7 +20,7 @@ function validateAddingForm(
     alert2.style.display = "block";
     alert2.innerText = "Username cannot be empty!";
     return false;
-  } else if (title.includes("Students")) {
+  } else if (title.includes("Student")) {
     if (!accountUserName.includes("c-")) {
       alert2.style.display = "block";
       alert2.innerText = "Student Username Invalid!";
@@ -144,7 +144,7 @@ $(document).ready(function () {
         confirmPassword
       )
     ) {
-      url = "saveUserAcc";
+      url = "/admin/saveUserAcc";
       ajaxPost(url);
     }
   });
@@ -175,7 +175,7 @@ $(document).ready(function () {
         confirmPassword
       )
     ) {
-      url = "updateUserAcc";
+      url = "/admin/updateUserAcc";
       ajaxPost(url);
     }
   });
@@ -256,7 +256,8 @@ $(document).ready(function () {
   function ajaxGet(userType, stat) {
     $.ajax({
       type: "GET",
-      url: "/getAllUser?account-type=" + userType.trim() + "&status=" + stat,
+      url:
+        "/admin/getAllUser?account-type=" + userType.trim() + "&status=" + stat,
       success: function (result) {
         if (result.status == "success") {
           var table = $("#zero_config").DataTable();
@@ -309,7 +310,7 @@ $(document).ready(function () {
                   "</td><td>" +
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  "<a href='/admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -322,7 +323,7 @@ $(document).ready(function () {
                 actions =
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  "<a href='/admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -346,7 +347,7 @@ $(document).ready(function () {
                   "</td><td>" +
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  "<a href='/admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -355,16 +356,11 @@ $(document).ready(function () {
                   user.userId +
                   "'type='button'class='delete btn btn-danger w-100'>Delete</a>" +
                   "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a id='send_requests' href='" +
-                  user.userId +
-                  "' type='button' class='sendRequests btn btn-success text-white w-100'>Send Requests</a>" +
-                  "</div></div>" +
                   "</td></tr>";
                 actions =
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/user/update/?userId=" +
+                  "<a href='/admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -372,12 +368,7 @@ $(document).ready(function () {
                   "<a href='" +
                   user.userId +
                   "'type='button'class='delete btn btn-danger w-100'>Delete</a>" +
-                  "</div>" +
-                  "<div class='col-sm'>" +
-                  "<a id='send_requests' href='" +
-                  user.userId +
-                  "' type='button' class='sendRequests btn btn-success text-white w-100'>Send Requests</a>" +
-                  "</div></div>";
+                  "</div> </div>";
               }
             }
             $("#tableBody").append(htmlTable);
@@ -387,9 +378,9 @@ $(document).ready(function () {
                 user.userId,
                 user.name,
                 user.username,
+                "********",
                 user.type,
                 user.status,
-                "********",
                 actions,
               ])
               .draw();
@@ -428,7 +419,7 @@ $(document).ready(function () {
 
     $(".undoAccount").on("click", function (event) {
       userId = $(".undo").data("value");
-      var undoStatus = "/user/active/?userId=" + userId;
+      var undoStatus = "/admin/user/active/?userId=" + userId;
       $.ajax({
         url: undoStatus,
         type: "GET",
@@ -483,7 +474,7 @@ $(document).ready(function () {
 
     $(".deleteTemporarily").on("click", function (event) {
       userId = $(".delete").data("value");
-      var tempStatus = "/user/temporary/?userId=" + userId;
+      var tempStatus = "/admin/user/temporary/?userId=" + userId;
 
       $.ajax({
         url: tempStatus,
@@ -511,7 +502,7 @@ $(document).ready(function () {
 
     $(".deletePermanently").on("click", function (event) {
       userId = $(".delete").data("value");
-      var permStatus = "/user/delete/?userId=" + userId;
+      var permStatus = "/admin/user/delete/?userId=" + userId;
 
       $.ajax({
         url: permStatus,
@@ -524,13 +515,11 @@ $(document).ready(function () {
           $("#resultMessage").html("The account has been deleted permanently.");
           $("#resultDiv").fadeIn(100);
         },
-        error: function (xhr, ajaxOptions, thrownError) {
+        error: function (error) {
           $("#deleteModal").modal("hide");
           $("#resultDiv").hide();
           $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#resultMessage").html(
-            thrownError + '<a class="link" href="#">Contact</a>'
-          );
+          $("#resultMessage").html(error.responseText);
           $("#resultDiv").fadeIn(100);
         },
       });

@@ -2,7 +2,6 @@ $(document).ready(function () {
   var mainHtmlModal = "";
   var htmlModal = "";
 
-
   $(document).on("click", ".link", function (e) {
     e.preventDefault();
 
@@ -22,7 +21,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "GET",
-      url: "/registrar/sent-requests-view?requestId=" + dataVal,
+      url: "/admin/all-requests-view?requestId=" + dataVal,
       success: function (data) {
         if (data[0].requestStatus == "pending") {
           htmlModal = "";
@@ -83,7 +82,7 @@ $(document).ready(function () {
             htmlModal +=
               `
     <div  class="col m-1">
-      <a href="/registrar/files/download?id=` +
+      <a href="/admin/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +
               data[dataIndex].name +
@@ -153,20 +152,6 @@ $(document).ready(function () {
     });
   });
 
-  /*  <div class="card">
-          <hr>
-  <strong>Files</strong>
-  <div class="card-body text-start">
-   <div class="row">
-   <div class="col">
-  
-   <a class="btn btn-light border border-light text-dark"href="#">
-    <i class="far fa-file"></i> Lol.pdf
-   </a>
-   </div>
-   </div>
-  </div>
-</div> */
   $(document).on("click", ".clearModal", function (e) {
     $(".modalView").empty();
   });

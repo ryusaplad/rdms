@@ -8,5 +8,5 @@ import org.springframework.http.ResponseEntity;
 import svfc_rdms.rdms.model.Users;
 
 public interface LoginService {
-     ResponseEntity<String> login(Users user, HttpSession session, HttpServletResponse response);
+     ResponseEntity<String> login(Users user, String rememberMe, HttpSession session, HttpServletResponse response);
 }

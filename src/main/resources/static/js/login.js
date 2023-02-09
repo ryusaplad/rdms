@@ -17,8 +17,14 @@ function usernameChangerBySelection() {
     document.getElementById("username").placeholder = "Admin Id";
   }
 }
+var checkboxValue = false;
+$("#rememberMe").change(function () {
+  checkboxValue = $(this).is(":checked");
+});
+
 $(document).ready(function () {
   $("#username").focus();
+
   $("html,body").animate(
     {
       scrollTop: $("#username").offset().top,
@@ -147,8 +153,13 @@ $(document).ready(function () {
     };
     var loginMessageAlert = "";
     if (validate() == true) {
+      if ($("#rememberMe").is(":checked")) {
+        checkboxValue = true;
+      } else {
+        checkboxValue = false;
+      }
       $.ajax({
-        url: "/login",
+        url: "/login?rememberMe=" + checkboxValue,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(formData),
@@ -191,6 +202,11 @@ $(document).ready(function () {
             if (formData.type == "Teacher") {
               setTimeout(function () {
                 window.location = "/teacher/dashboard";
+              }, 1000);
+            }
+            if (formData.type == "School_Admin") {
+              setTimeout(function () {
+                window.location = "/admin/dashboard";
               }, 1000);
             }
           } else {
@@ -237,5 +253,4 @@ $(document).ready(function () {
       console.log("Login Failed");
     }
   });
-   
 });

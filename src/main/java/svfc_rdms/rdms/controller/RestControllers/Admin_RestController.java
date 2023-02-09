@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
+import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.File.FileUploadServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
@@ -35,24 +42,30 @@ public class Admin_RestController {
      DocumentRepository docRepo;
 
      @Autowired
+     UsersRepository userRepo;
+
+     @Autowired
+     RegRepository regsRepository;
+
+     @Autowired
      StudentServiceImpl studService;
 
      @Autowired
      FileUploadServiceImpl studFileService;
 
-     @PostMapping(value = "/saveUserAcc")
+     @PostMapping(value = "/admin/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
 
           return mainService.saveUsersAccount(user, 0);
      }
 
-     @PostMapping(value = "/updateUserAcc")
+     @PostMapping(value = "/admin/updateUserAcc")
      public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
 
           return mainService.saveUsersAccount(user, 1);
      }
 
-     @GetMapping(value = "/getAllUser")
+     @GetMapping(value = "/admin/getAllUser")
      public ResponseEntity<Object> getAllUser(@RequestParam("account-type") String accountType,
                @RequestParam("status") String status) {
 
@@ -74,7 +87,23 @@ public class Admin_RestController {
 
      }
 
-     @GetMapping("/update-document-cards")
+     @GetMapping("/admin/dashboard/studentrequest/fetch")
+     public ResponseEntity<Object> getRequestInformation(
+               @RequestParam("s") Long userId,
+               @RequestParam("req") Long requestId,
+               HttpServletResponse response,
+               HttpSession session) {
+
+          Optional<Users> user = userRepo.findByuserId(userId);
+          if (!user.isPresent()) {
+               throw new ApiRequestException(
+                         "Failed to get user informations, Please Try Again!. Please contact the administrator for further assistance.");
+          }
+          String username = user.get().getUsername();
+          return studService.fetchRequestInformationToModals(username, requestId);
+     }
+
+     @GetMapping("/admin/update-document-cards")
      public ResponseEntity<Object> resetDocumentCards() {
 
           try {
@@ -93,7 +122,7 @@ public class Admin_RestController {
           }
      }
 
-     @PostMapping("/save-document-info")
+     @PostMapping("/admin/save-document-info")
      public void saveDocument(@RequestParam("image") MultipartFile partFile,
                @RequestParam Map<String, String> params) {
 
@@ -101,7 +130,7 @@ public class Admin_RestController {
 
      }
 
-     @DeleteMapping("/delete-document-info")
+     @DeleteMapping("/admin/delete-document-info")
      public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId) {
 
           try {
@@ -119,7 +148,7 @@ public class Admin_RestController {
           }
      }
 
-     @PostMapping("/update-document-info")
+     @PostMapping("/admin/update-document-info")
      public void updateDocument(@RequestParam("docId") long id,
                @RequestParam("image") MultipartFile partFile,
                @RequestParam Map<String, String> params) {
@@ -128,7 +157,7 @@ public class Admin_RestController {
 
      }
 
-     @GetMapping(value = "/fetch-document-to-modal")
+     @GetMapping(value = "/admin/fetch-document-to-modal")
      public ResponseEntity<Object> getAllDocument(@RequestParam("docId") long docId) {
 
           try {
@@ -149,4 +178,27 @@ public class Admin_RestController {
 
      }
 
+     @GetMapping(value = "/admin/user/delete")
+
+     public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request) {
+          try {
+               if (mainService.deleteData(userId)) {
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+               }
+          } catch (Exception e) {
+               if (e.getMessage().contains("ConstraintViolationException")) {
+                    throw new ApiRequestException(
+                              "Users with requests cannot be permanently deleted.");
+               }
+
+          }
+          return new ResponseEntity<>("Failed", HttpStatus.OK);
+     }
+
+     @GetMapping("/admin/all-requests-view")
+     public ResponseEntity<Object> viewAllRegistrarRequests(@RequestParam long requestId, HttpSession session,
+               @RequestParam Map<String, String> params) {
+
+          return mainService.viewAllRegistrarRequests(requestId);
+     }
 }

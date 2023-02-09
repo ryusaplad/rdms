@@ -67,13 +67,13 @@ $(document).ready(function () {
   });
 
   $("#message").on("keyup", function (e) {
-    var textMaxLength = 250;
+    var textMaxLength = 1000;
     var messageLength = $(this).val().length;
     if (messageLength <= textMaxLength) {
-      $("#messageLengthLabel").text("(" + messageLength + "/250) ");
+      $("#messageLengthLabel").text("(" + messageLength + "/1000) ");
       messageLength = textMaxLength - messageLength;
     } else {
-      $(this).val($(this).val().substring(0, 250));
+      $(this).val($(this).val().substring(0, 1000));
     }
   });
   $("#reqForm").submit(function (event) {
@@ -133,8 +133,8 @@ $(document).ready(function () {
       message = "Please Select File";
       $(".message").text(message);
       $(".errorMessageAlert").show();
-    } else if (userMessage.length > 250) {
-      message = "Invalid Message length, must be 250 letters below.";
+    } else if (userMessage.length > 1000) {
+      message = "Invalid Message length, must be 1000 letters below.";
       $(".servererrorMessageAlert").text(message);
       $(".servererrorMessageAlert").show();
     } else {

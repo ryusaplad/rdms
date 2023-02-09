@@ -117,8 +117,8 @@ public class StudentServiceImpl implements StudentService, FileService, Document
                          } else if (entry.getKey().contains("excluded")) {
                               excludedFiles.add(entry.getValue());
                          } else if (entry.getKey().contains("message")) {
-                              if (entry.getValue().length() > 250) {
-                                   throw new ApiRequestException("Invalid Message length, must be 250 letters below.");
+                              if (entry.getValue().length() > 1000) {
+                                   throw new ApiRequestException("Invalid Message length, must be 1000 letters below.");
                               }
                               req.setMessage(entry.getValue());
                          }

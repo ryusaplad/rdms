@@ -4,5 +4,5 @@ public enum ValidAccounts {
      STUDENT,
      REGISTRAR,
      TEACHER,
-     ADMIN;
+     SCHOOL_ADMIN;
 }

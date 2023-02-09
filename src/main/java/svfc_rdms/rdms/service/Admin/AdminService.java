@@ -47,6 +47,9 @@ public interface AdminService {
      // Get All Request of Students
      List<StudentRequest> displayAllRequest();
 
+     // Get All Request of registrars
+     ResponseEntity<Object> viewAllRegistrarRequests(long requestsId);
+
      // get all user files;
 
      Optional<UserFiles> getFileById(String id);

@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,8 +36,9 @@ public class StudentRequest {
       @JoinColumn(name = "request_document", referencedColumnName = "documentId")
       private Documents requestDocument;
 
-
+      @Column(columnDefinition = "text")
       private String message;
+      @Column(columnDefinition = "text")
       private String reply;
 
       private String requestDate;

@@ -7,19 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>All Requests</title>
+    <title>Students Requests - RDMS</title>
 
-    <link th:href="@{css/dashboardStyle.css}" rel="stylesheet" />
-    <link th:href="@{css/simple_data_tables.css}" rel="stylesheet" />
+    <link th:href="@{/css/dashboardStyle.css}" rel="stylesheet" />
+    <link th:href="@{/css/simple_data_tables.css}" rel="stylesheet" />
 
-    <script type="text/javascript" th:src="@{js/all.js}"></script>
+    <script type="text/javascript" th:src="@{/js/all.js}"></script>
 
 </head>
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="/admin">Admin - RDMS</a>
+        <a class="navbar-brand ps-3" href="/admin/dashboard">Admin - RDMS</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-dark text-white w-100"><span class=" fa-solid fa-bell"></span></button>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false"><img thsrc="@{images/userImages.png}" src="images/userImage.png" alt=""
+                    aria-expanded="false"><img thsrc="@{images/userImages.png}" src="/images/userImage.png" alt=""
                         srcset="" class="rounded img-responsive border border-white rounded-circle"
                         style=" width:35px"></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -52,26 +52,11 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="/admin">
+                        <a class="nav-link" href="/admin/dashboard">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Actions</div>
-                        <!-- Manage Facilitator -->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#faciDropDown"
-                            aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Manage Facilitator
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="faciDropDown" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/facilitators">View / Add Facilitator</a>
-                                <a class="nav-link" href="/facilitator/deleted-accounts">Deleted Facilitators</a>
-                                <a class="nav-link" href="#">Facilitators Page</a>
-                            </nav>
-                        </div>
                         <!-- Manage Registrar -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#regDropDown"
                             aria-expanded="false" aria-controls="collapseLayouts">
@@ -82,10 +67,10 @@
                         <div class="collapse" id="regDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/registrars">View / Add Registrar</a>
+                                <a class="nav-link" href="/admin/registrars">View / Add Registrar</a>
 
-                                <a class="nav-link" href="/registrar/deleted-accounts">Deleted Registrars</a>
-                                <a class="nav-link" href="#">Registrars Page</a>
+                                <a class="nav-link" href="/admin/registrar/deleted-accounts">Deleted Registrars</a>
+
 
                             </nav>
                         </div>
@@ -99,11 +84,11 @@
                         <div class="collapse" id="teachDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/teachers">View / Add Teachers</a>
+                                <a class="nav-link" href="/admin/teachers">View / Add Teachers</a>
 
 
-                                <a class="nav-link" href="/teacher/deleted-accounts">Deleted Teachers</a>
-                                <a class="nav-link" href="#">Teachers Page</a>
+                                <a class="nav-link" href="/admin/teacher/deleted-accounts">Deleted Teachers</a>
+
                             </nav>
                         </div>
                         <!-- Manage Students -->
@@ -116,41 +101,37 @@
                         <div class="collapse" id="studDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/students">View / Add Students</a>
-                                <a class="nav-link" href="/student/deleted-accounts">Deleted Students</a>
-                                <a class="nav-link" href="#">Students Page</a>
+                                <a class="nav-link" href="/admin/students">View / Add Students</a>
+                                <a class="nav-link" href="/admin/student/deleted-accounts">Deleted Students</a>
+
                             </nav>
                         </div>
 
 
                         <div class="sb-sidenav-menu-heading">Auditory</div>
-                        <a class="nav-link" href="/admin_logs">
+                        <a class="nav-link" href="/admin/logs">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             All Activity Logs
                         </a>
                         <div class="sb-sidenav-menu-heading">Manage Requests</div>
-                        <a class="nav-link" href="/student_requests">
+                        <a class="nav-link" href="/admin/student_requests">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Student Requests Lists
-                            <a class="nav-link" href="/registrar_requests">
+                            <a class="nav-link" href="/admin/registrar_requests">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Registrar Requests Lists
                             </a>
-                        <div class="sb-sidenav-menu-heading">Manage Documents</div>
-                    <a class="nav-link" href="admin-request">
-                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        View Documents Cards
-                    </a>
-                    <a class="nav-link addDocument" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Add Documents
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Settings</div>
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
-                            Connection Settings
+                            <div class="sb-sidenav-menu-heading">Manage Documents</div>
+                            <a class="nav-link" href="/admin/documents-list">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                View Documents Cards
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Settings</div>
+                            <a class="nav-link" href="/admin/settings">
+                                <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
+                                Settings
 
-                        </a>
+                            </a>
 
                     </div>
                 </div>
@@ -166,12 +147,12 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Student Requests</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item active">Student Requests</li>
                     </ol>
 
                     <div class="card mb-4">
-                    
+
                         <div class="card-body">
                             <table id="datatablesSimple" class="text-center">
                                 <thead>
@@ -196,22 +177,9 @@
                                         <td th:text="${studRequest.manageBy}"></td>
                                         <td th:text="${studRequest.requestStatus}"></td>
                                         <td>
-                                            <div class="row">
-                                                <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-primary w-100">Edit</a>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <a href="#" type="button" class="btn btn-danger w-100">Delete</a>
-
-                                                </div>
-                                                <div class="col-sm">
-                                                    <a data-bs-toggle="modal" data-bs-target="#detailModal"
-                                                        type="button" class="btn btn-success w-100">
-                                                        Details</a>
-
-                                                </div>
-
-                                            </div>
+                                            <a th:href="@{'?s='+${studRequest.studentId}+'&req='+${studRequest.requestId}}"
+                                                type="button" class="btn btn-success w-100 toggleRequestDetail">
+                                                Details</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -224,49 +192,16 @@
         </div>
 
     </div>
-    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="detailModal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailModal">
-                        <span id="titleVal">More Details</span>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="font-weight-bold">Request ID : 0</p>
-                    <p class="font-weight-bold">Request By: C-000000</p>
-                    <p class="font-weight-bold">Student Name: John Doe</p>
-                    <p class="font-weight-bold">Year: 4th year</p>
-                    <p class="font-weight-bold">Course: Bachelor of Science in Information Technology (BSIT)</p>
-                    <hr>
-                    <p class="font-weight-bold">Request Documents: COM, COR</p>
-                    <p class="font-weight-bold">Requirement Status:(Incomplete/Complete/Invalid)</p>
-                    <hr>
-                    <p class="font-weight-bold">Status : Pending/Ongoing/Compeleted</p>
-                    <hr>
-                    <p class="font-weight-bold">Manage By: Facilitator</p>
-                    <hr>
-                    <p class="font-weight-bold">Date of Request: 00/00/2022</p>
-                    <p class="font-weight-bold">Date of Released: 00/00/2022</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <div class="modalView">
 
-                </div>
-
-            </div>
-        </div>
     </div>
-
-    <script type="text/javascript" th:src="@{js/bootstrap.bundle.js}"></script>
-    <script type="text/javascript" th:src="@{js/scripts.js}"></script>
-    <script type="text/javascript" th:src="@{js/latest.js}"></script>
-    <script type="text/javascript" th:src="@{js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{js/popper.js}"></script>
-    <script type="text/javascript" th:src="@{js/datatables-simple-demo.js}"> </script>
-
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/latest.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datatables-simple-demo.js}"> </script>
+    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/admin-stud-requestslist.js}"></script>
 </body>
 
 </html>

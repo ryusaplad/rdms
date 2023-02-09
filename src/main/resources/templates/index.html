@@ -12,12 +12,17 @@
   <!-- STYLE CSS -->
   <link th:href="@{css/style.css}" rel="stylesheet" />
   <link th:href="@{css/bootstrap.css}" rel="stylesheet" />
-<!-- Custom CSS -->
-<link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
 
 </head>
 
 <body>
+  <div class="preloader">
+    <div class="lds-ripple">
+      <div class="lds-pos"></div>
+      <div class="lds-pos"></div>
+    </div>
+  </div>
+
   <div class="wrapper">
     <div class="image-holder">
       <img th:src="@{images/abst.jpeg}" src="images/abst.jpg" alt="Background" />
@@ -33,15 +38,16 @@
     <div class="form-inner ">
       <form id="loginForm">
 
-        <div class="text-center ">
+        <div class="text-center">
           <img th:src="@{images/svfclog.png}" class=" logo responsive rounded-circle" alt="School Logo">
           <h5 class="scText">St. Vincent De Ferrer College of Camarin Inc.</h5>
         </div>
 
         <div class="form-group">
           <label for="">Username:</label>
-          <input type="text" class="form-control userInput " name="username" placeholder="Username" id="username"></input>
-          
+          <input type="text" class="form-control userInput " th:value="${#session.getAttribute('session_username')}"
+            name="username" placeholder="Username" id="username"></input>
+
           <div class="text-end invalid-feedback userMessage" style="display: none;">
             <strong class="userError"> </strong>
           </div>
@@ -51,7 +57,8 @@
 
         <div class="form-group">
           <label for="">Password:</label>
-          <input type="password" class="form-control passInput" name="password" placeholder="Password" id="password"></input>
+          <input type="password" class="form-control passInput" th:value="${#session.getAttribute('session_password')}"
+            name="password" placeholder="Password" id="password"></input>
           <div class="text-end invalid-feedback passMessage" style="display: none;">
             <strong class="passError"> </strong>
           </div>
@@ -59,15 +66,39 @@
         <div class="form-group">
           <label for="">Account Type:</label>
           <select name="type" id="accType" class="form-control typeInput" onchange="usernameChangerBySelection();">
-            <option disabled selected>Account Type</option>
-            <option value="Student">Student</option>
+            <th:block th:if="${#session.getAttribute('session_remember') != 'true'}">
+              <option disabled selected>--Login As--</option>
+              <option value="Student">Student</option>
+            </th:block>
+            <th:block th:if="${#session.getAttribute('session_remember') == 'true'}">
+              <th:block th:if="${#session.getAttribute('session_accType')!='School_Admin'}">
+                <option selected th:value="${#session.getAttribute('session_accType')}"
+                  th:text="${#session.getAttribute('session_accType')}">
+                  --Login As--
+            
+                </option>
+              </th:block>
+              <th:block th:if="${#session.getAttribute('session_accType')=='School_Admin'}">
+                <option selected th:value="School_Admin">
+                  School Admin
+                </option>
+                <option value="Student">Student</option>
+              </th:block>
+            </th:block>
             <option value="Registrar">Registrar</option>
             <option value="Teacher">Teacher</option>
-            <option value="Administrator">Administrator</option>
+            <option value="School_Admin">School Admin</option>
           </select>
-<div class="text-end invalid-feedback accTypeMessage" style="display: none;">
+          <div class="text-end invalid-feedback accTypeMessage" style="display: none;">
             <strong class="accTypeError"> </strong>
           </div>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" th:checked="${#session.getAttribute('session_remember')=='true' ? true : false}"
+            name="rememberMe" type="checkbox" id="rememberMe">
+          <label class="form-check-label" for="rememberMe">
+            Remember Me
+          </label>
         </div>
         <input class="btn btn-dark w-100 loginBtn" type="submit"></input>
         <div id="loginMessageDiv" class="form-group">
@@ -78,9 +109,15 @@
     </div>
   </div>
   <script type="text/javascript" th:src="@{js/jquery.js}"></script>
-  <script type="text/javascript" th:src="@{js/bootstrap.js}"></script>
   <script type="text/javascript" th:src="@{js/popper.js}"></script>
   <script type="text/javascript" th:src="@{js/login.js}"></script>
+  <script id="scriptX">
+    $(document).ready(function () {
+
+      $(".preloader").fadeOut();
+      $("#scriptX").empty();
+    });
+  </script>
 </body>
 
 </html>

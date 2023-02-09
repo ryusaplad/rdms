@@ -10,7 +10,7 @@
     <title th:text="${title}"></title>
 
     <link th:href="@{/css/dashboardStyle.css}" rel="stylesheet" />
-<link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
+    <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
 
     <script type="text/javascript" th:src="@{/js/all.js}"></script>
 
@@ -19,7 +19,7 @@
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="/admin">Admin - RDMS</a>
+        <a class="navbar-brand ps-3" href="/admin/dashboard">Admin - RDMS</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
@@ -52,12 +52,12 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="/admin">
+                        <a class="nav-link" href="/admin/dashboard">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Actions</div>
-                    
+
                         <!-- Manage Registrar -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#regDropDown"
                             aria-expanded="false" aria-controls="collapseLayouts">
@@ -68,10 +68,10 @@
                         <div class="collapse" id="regDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/registrars">View / Add Registrar</a>
+                                <a class="nav-link" href="/admin/registrars">View / Add Registrar</a>
 
-                                <a class="nav-link" href="/registrar/deleted-accounts">Deleted Registrars</a>
-                                <a class="nav-link" href="#">Registrars Page</a>
+                                <a class="nav-link" href="/admin/registrar/deleted-accounts">Deleted Registrars</a>
+
                             </nav>
                         </div>
                         <!-- Manage Teachers -->
@@ -84,9 +84,9 @@
                         <div class="collapse" id="teachDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/teachers">View / Add Teachers</a>
-                                <a class="nav-link" href="/teacher/deleted-accounts">Deleted Teachers</a>
-                                <a class="nav-link" href="#">Teachers Page</a>
+                                <a class="nav-link" href="/admin/teachers">View / Add Teachers</a>
+                                <a class="nav-link" href="/admin/teacher/deleted-accounts">Deleted Teachers</a>
+
                             </nav>
                         </div>
                         <!-- Manage Students -->
@@ -99,41 +99,41 @@
                         <div class="collapse" id="studDropDown" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/students">View / Add Students</a>
-                                <a class="nav-link" href="/student/deleted-accounts">Deleted Students</a>
-                                <a class="nav-link" href="#">Students Page</a>
+                                <a class="nav-link" href="/admin/students">View / Add Students</a>
+                                <a class="nav-link" href="/admin/student/deleted-accounts">Deleted Students</a>
+
                             </nav>
                         </div>
 
 
                         <div class="sb-sidenav-menu-heading">Auditory</div>
-                        <a class="nav-link" href="/admin_logs">
+                        <a class="nav-link" href="/admin/logs">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             All Activity Logs
                         </a>
                         <div class="sb-sidenav-menu-heading">Manage Requests</div>
-                        <a class="nav-link" href="/student_requests">
+                        <a class="nav-link" href="/admin/student_requests">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        Student Requests Lists
-                        <a class="nav-link" href="/registrar_requests">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Registrar Requests Lists
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Manage Documents</div>
-                    <a class="nav-link" href="admin-request">
-                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        View Documents Cards
-                    </a>
-                    <a class="nav-link addDocument" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Add Documents
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Settings</div>
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
-                            Connection Settings
+                            Student Requests Lists
+                            <a class="nav-link" href="/admin/registrar_requests">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Registrar Requests Lists
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Manage Documents</div>
+                            <a class="nav-link" href="/admin/documents-list">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                View Documents Cards
+                            </a>
+                            <a class="nav-link addDocument" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Add Documents
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Settings</div>
+                            <a class="nav-link" href="/admin/settings">
+                                <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
+                                Settings
 
-                        </a>
+                            </a>
 
                     </div>
                 </div>
@@ -151,7 +151,7 @@
 
                     <h1 id="main-title" class="mt-4" th:text="${title}"></h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item active" th:text="${title}"></li>
                     </ol>
                     <div th:if="${session.alertType=='error'}">
@@ -173,13 +173,13 @@
                         </div>
                     </div>
                     <!-- Error Display by ajax -->
-                <div id="resultDiv" style="display:none">
-                    <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong id="resultMessage"></strong>
-                        <button type="button" class="btn-close btn-close-alert  " aria-label="Close"></button>
+                    <div id="resultDiv" style="display:none">
+                        <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong id="resultMessage"></strong>
+                            <button type="button" class="btn-close btn-close-alert  " aria-label="Close"></button>
                         </div>
-                        </div>
-                  
+                    </div>
+
                     <div class="card mb-4">
                         <div th:if="${!hide}">
                             <div class="card-header">
@@ -221,7 +221,7 @@
                                             <div th:if="${!hide}">
                                                 <div class="row">
                                                     <div class="col-sm">
-                                                        <a th:href="@{/user/update/(userId=${userList.userId})}"
+                                                        <a th:href="@{/admin/user/update/(userId=${userList.userId})}"
                                                             type="button" class="edit btn btn-primary w-100">Edit</a>
                                                     </div>
                                                     <div class="col-sm">

@@ -1,13 +1,12 @@
 package svfc_rdms.rdms.controller.Controllers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -20,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
-import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Controller
@@ -41,8 +43,14 @@ public class AdminController {
      @Autowired
      DocumentRepository docRepo;
 
+     @Autowired
+     GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     RegRepository registrarRepo;
+
      // Get Mapping Method
-     @GetMapping("/admin")
+     @GetMapping("/admin/dashboard")
      public String dashboard_View(Model model) {
           model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Student"));
           model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrar"));
@@ -52,10 +60,10 @@ public class AdminController {
           model.addAttribute("totalDeletedReg", mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
           model.addAttribute("totalDeletedTeach", mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
 
-          return "/admin-dashboard";
+          return "/admin/admin-dashboard";
      }
 
-     @GetMapping("/{userType}")
+     @GetMapping("/admin/{userType}")
      public String accountsViews(@PathVariable("userType") String userType, Model model) {
           try {
 
@@ -87,18 +95,17 @@ public class AdminController {
                model.addAttribute("userIdFormat", idFormat);
                model.addAttribute("users", new Users());
                model.addAttribute("hide", showType);
-
                model.addAttribute("usersLists", mainService.diplayAllAccounts(status, accType));
 
           } catch (Exception e) {
                System.out.println("Error: " + e.getMessage());
           }
 
-          return "/admin-view_accounts";
+          return "/admin/admin-view_accounts";
      }
 
      // Deleted pages
-     @GetMapping("/{userType}/deleted-accounts")
+     @GetMapping("/admin/{userType}/deleted-accounts")
      public String deletedAccounts_View(@PathVariable String userType, Model model) {
 
           String title = "";
@@ -126,28 +133,18 @@ public class AdminController {
                model.addAttribute("users", null);
                model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
           } else {
-               return "redirect:" + "/admin-view_accounts?error=Invalid User Type";
+               return "redirect:" + "/admin/" + userType + "/deleted-accounts?error=Invalid User Type";
           }
-          return "/admin-view_accounts";
+          return "/admin/admin-view_accounts";
      }
 
-     @GetMapping("/admin_logs")
+     @GetMapping("/admin/logs")
      public String viewAdminLogs() {
-          return "/admin_logs";
+          return "/admin/admin_logs";
      }
 
-     @GetMapping(value = "/user/delete/")
-     @ResponseBody
-     public String deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request) {
-          String referer = request.getHeader("Referer");
-          if (mainService.deleteData(userId)) {
-               return "redirect:" + referer;
-          } else {
-          }
-          return "redirect:" + referer;
-     }
 
-     @GetMapping(value = "/user/{status}")
+     @GetMapping(value = "/admin/user/{status}")
      @ResponseBody
      public String changeStatus(@PathVariable("status") String status, @RequestParam("userId") long userId,
 
@@ -166,7 +163,7 @@ public class AdminController {
           return "redirect:" + referer;
      }
 
-     @GetMapping("/user/update")
+     @GetMapping("/admin/user/update")
      @ResponseBody
      public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
 
@@ -188,19 +185,19 @@ public class AdminController {
      }
      // Viewing - Adding Document
 
-     @GetMapping("/admin-request")
+     @GetMapping("/admin/documents-list")
      public String requestForAdmin(Model model) {
           model.addAttribute("documentsList", mainService.getAllDocuments());
-          return "/admin-request_cards";
+          return "/admin/admin-request_cards";
      }
 
-     @RequestMapping(value = "/delete-document-card", method = RequestMethod.GET)
+     @RequestMapping(value = "/admin/delete-document-card", method = RequestMethod.GET)
      public String deleteFile(@RequestParam("docid") long documentId, Model model) {
           String message = (mainService.deleteDocumentFile(documentId)) ? "Document Deleted" : "Not Deleted";
-          return "redirect:/admin-request?message=" + message;
+          return "redirect:/documents-list?message=" + message;
      }
 
-     @GetMapping("/image")
+     @GetMapping("/admin/image")
      public void showImage(@Param("documentId") long id, HttpServletResponse response,
                Optional<Documents> dOptional) {
 
@@ -216,24 +213,10 @@ public class AdminController {
 
      // end documents managing
 
-     @GetMapping("/admin/documents/downloadfile")
-     public void downloadFile(@Param("id") String id, Model model, HttpServletResponse response) throws IOException {
-          Optional<UserFiles> temp = mainService.getFileById(id);
-          if (temp != null) {
-               UserFiles file = temp.get();
-               response.setContentType("application/octet-stream");
-               String headerKey = "Content-Disposition";
-               String headerValue = "attachment; filename = " + file.getName();
-               response.setHeader(headerKey, headerValue);
-               ServletOutputStream outputStream = response.getOutputStream();
-               outputStream.write(file.getData());
-               outputStream.close();
-          }
-     }
 
      // Test Student Request
-     @GetMapping("/student_requests")
-     public String viewAllRequests(Model model) {
+     @GetMapping("/admin/student_requests")
+     public String viewAllStudentRequests(Model model) {
           List<StudentRequest> studentsRequest = mainService.displayAllRequest();
           List<StudentRequest_Dto> storeStudentRequest = new ArrayList<>();
 
@@ -250,7 +233,39 @@ public class AdminController {
 
           model.addAttribute("studentRequests", storeStudentRequest);
 
-          return "/student_all_requests";
+          return "/admin/student_all_requests";
+     }
+
+     @GetMapping("/admin/registrar_requests")
+     public String viewAllRegistrarRequests(HttpSession session, HttpServletResponse response,
+               Model model) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
+               List<RegistrarRequest> regRequests = registrarRepo.findAll();
+               if (regRequests != null) {
+                    regRequests.forEach(request -> {
+
+                         filteredRequests.add(
+                                   new RegistrarRequest_DTO(request.getRequestId(), request.getRequestTitle(),
+                                             request.getRequestMessage(), request.getTeacherMessage(),
+                                             request.getRequestBy().getName(),
+                                             request.getRequestTo().getName(), request.getRequestDate(),
+                                             request.getDateOfUpdate(),
+                                             request.getRequestStatus()));
+
+                    });
+
+                    model.addAttribute("registrar_requests", filteredRequests);
+                    return "/admin/registrar_all_requests";
+               }
+          }
+          return "redirect:/";
+
+     }
+
+     @GetMapping("/admin/settings")
+     public String settingViews() {
+          return "/admin/admin-settings";
      }
 
 }

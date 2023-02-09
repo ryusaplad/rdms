@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +22,8 @@ public class GlobalController {
      private GlobalServiceControllerImpl globalService;
 
      @GetMapping(value = "/")
-     public String loginPage(HttpSession session, HttpServletResponse response) {
+     public String loginPage(HttpSession session, HttpServletResponse response,
+               Model model) {
           // Set the Cache-Control, Pragma, and Expires headers to prevent caching of the
           // login page
           String accType = "";
@@ -36,9 +38,13 @@ public class GlobalController {
                          break;
                     }
                }
+               if (accType.contains("admin")) {
+                    accType = "admin";
+               }
 
                return "redirect:/" + accType + "/dashboard";
           }
+
           response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
           response.setHeader("Pragma", "no-cache");
           response.setDateHeader("Expires", 0);
@@ -46,12 +52,20 @@ public class GlobalController {
      }
 
      @GetMapping(value = "/logout")
-     public String logout(HttpSession session) {
+     public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
           session.removeAttribute("studentName");
           session.removeAttribute("accountType");
           session.removeAttribute("username");
           session.removeAttribute("name");
-          session.invalidate();
+
+          if (session.getAttribute("session_remember") != null) {
+               if (session.getAttribute("session_remember").equals("false")) {
+                    session.invalidate();
+
+               } else {
+                    System.out.println(session.getAttribute("session_remember").toString());
+               }
+          }
 
           return "redirect:/";
      }
@@ -84,6 +98,5 @@ public class GlobalController {
 
           }
      }
-
 
 }

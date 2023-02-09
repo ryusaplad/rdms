@@ -200,7 +200,7 @@ $(document).ready(function () {
         $("#editingInfoAlert").show();
         $("#reqInfoUpForm ").trigger("reset");
         $("#messageLengthLabel").text(
-          "You can add message here with maximum of (250 letters)"
+          "You can add message here with maximum of (1000 letters)"
         );
         setTimeout(function () {
           $("#editingInfoAlert").empty();
@@ -320,13 +320,13 @@ $(document).ready(function () {
   });
 
   $("#message").on("keyup", function (e) {
-    var textMaxLength = 250;
+    var textMaxLength = 1000;
     var messageLength = $(this).val().length;
     if (messageLength <= textMaxLength) {
-      $("#messageLengthLabel").text("(" + messageLength + "/250) ");
+      $("#messageLengthLabel").text("(" + messageLength + "/1000) ");
       messageLength = textMaxLength - messageLength;
     } else {
-      $(this).val($(this).val().substring(0, 250));
+      $(this).val($(this).val().substring(0, 1000));
     }
   });
 });
