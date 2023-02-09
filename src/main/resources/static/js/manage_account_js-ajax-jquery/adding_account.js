@@ -98,7 +98,9 @@ function validateAddingForm(
 
 $(document).ready(function () {
   var title = $("#main-title").text();
-  var stat = "";
+  var stat = title;
+  var userType = "";
+  var userId = "";
   if (title != null) {
     if (title.toLowerCase().includes("deleted")) {
       stat = "Temporary";
@@ -111,6 +113,7 @@ $(document).ready(function () {
       stat = "Active";
       title = title.replace("Accounts", "").replace(" ", "");
       ajaxGet(title, stat);
+      userType = title;
     }
   }
 
@@ -253,11 +256,10 @@ $(document).ready(function () {
     $("#resultDiv").fadeOut(100);
   });
 
-  function ajaxGet(userType, stat) {
+  function ajaxGet(type, stat) {
     $.ajax({
       type: "GET",
-      url:
-        "/admin/getAllUser?account-type=" + userType.trim() + "&status=" + stat,
+      url: "/admin/getAllUser?account-type=" + type.trim() + "&status=" + stat,
       success: function (result) {
         if (result.status == "success") {
           var table = $("#zero_config").DataTable();
@@ -390,7 +392,7 @@ $(document).ready(function () {
           $("#resultDiv").fadeIn(100);
 
           $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#resultMessage").html(userType + " Deletion Failed :(");
+          $("#resultMessage").html(type + " Deletion Failed :(");
           $("#deleteModal").modal("hide");
         }
       },
@@ -409,123 +411,117 @@ $(document).ready(function () {
         $("#deleteModal").modal("hide");
       },
     });
-    $(document).on("click", ".undo", function (event) {
-      event.preventDefault();
-      var userId = $(this).attr("href");
-
-      $("#undoModal").modal("toggle");
-      $(".undo").attr("data-value", userId);
-    });
-
-    $(".undoAccount").on("click", function (event) {
-      userId = $(".undo").data("value");
-      var undoStatus = "/admin/user/active/?userId=" + userId;
-      $.ajax({
-        url: undoStatus,
-        type: "GET",
-        success: function (status) {
-          ajaxGet(userType, stat);
-          $("#resultDiv").hide();
-
-          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
-          $("#resultMessage").html(
-            "The account has been successfully restored."
-          );
-          $("#resultDiv").fadeIn(100);
-          $("#undoModal").modal("hide");
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          console.log(thrownError);
-          $("#resultDiv").hide();
-          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-
-          $("#resultMessage").html(
-            "An error occurred while restoring the account."
-          );
-          $("#resultDiv").fadeIn(100);
-        },
-      });
-    });
-    //updating modal
-    $(document).on("click", ".edit", function (event) {
-      event.preventDefault();
-
-      var href = $(this).attr("href");
-      $.get(href, function (user) {
-        $("#userIdEdit").val(user[0].userId);
-        $("#nameEdit").val(user[0].name);
-        $("#usernameEdit").val(user[0].username);
-        $("#passwordEdit").val(user[0].password);
-        $("#confirmPassEdit").val(user[0].password);
-
-        $("#updateModal").modal("toggle");
-      });
-    });
-
-    //deleting modal
-    $(document).on("click", ".delete", function (event) {
-      event.preventDefault();
-      var userId = $(this).attr("href");
-
-      $("#deleteModal").modal("toggle");
-      $(".delete").attr("data-value", userId);
-      $(".delete").attr("data-value", userId);
-    });
-
-    $(".deleteTemporarily").on("click", function (event) {
-      userId = $(".delete").data("value");
-      var tempStatus = "/admin/user/temporary/?userId=" + userId;
-
-      $.ajax({
-        url: tempStatus,
-        type: "GET",
-        success: function (status) {
-          $("#deleteModal").modal("hide");
-          ajaxGet(userType, stat);
-          $("#resultDiv").hide();
-          $("#resultDiv").fadeIn(100);
-          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
-          $("#resultMessage").html("The account has been temporarily removed.");
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          console.log(thrownError);
-          $("#deleteModal").modal("hide");
-          $("#resultDiv").hide();
-          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#resultMessage").html(
-            "An error occurred while temporarily removing the account."
-          );
-          $("#resultDiv").fadeIn(100);
-        },
-      });
-    });
-
-    $(".deletePermanently").on("click", function (event) {
-      userId = $(".delete").data("value");
-      var permStatus = "/admin/user/delete/?userId=" + userId;
-
-      $.ajax({
-        url: permStatus,
-        type: "GET",
-        success: function (status) {
-          $("#deleteModal").modal("hide");
-          ajaxGet(userType, stat);
-          $("#resultDiv").hide();
-          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
-          $("#resultMessage").html("The account has been deleted permanently.");
-          $("#resultDiv").fadeIn(100);
-        },
-        error: function (error) {
-          $("#deleteModal").modal("hide");
-          $("#resultDiv").hide();
-          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#resultMessage").html(error.responseText);
-          $("#resultDiv").fadeIn(100);
-        },
-      });
-    });
-    $(".btn-close-alert").on("click", function () {
-      $("#resultDiv").hide();
-    });
   }
+  $(document).on("click", ".undo", function (event) {
+    event.preventDefault();
+    userId = $(this).attr("href");
+
+    $("#undoModal").modal("toggle");
+    $(".undo").attr("data-value", userId);
+  });
+
+  $(".undoAccount").on("click", function (event) {
+    userId = $(".undo").data("value");
+    var undoStatus = "/admin/user/active/?userId=" + userId;
+    $.ajax({
+      url: undoStatus,
+      type: "GET",
+      success: function (status) {
+        ajaxGet(userType, stat);
+        $("#resultDiv").hide();
+
+        $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+        $("#resultMessage").html("The account has been successfully restored.");
+        $("#resultDiv").fadeIn(100);
+        $("#undoModal").modal("hide");
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        $("#resultDiv").hide();
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+
+        $("#resultMessage").html(
+          "An error occurred while restoring the account."
+        );
+        $("#resultDiv").fadeIn(100);
+      },
+    });
+  });
+  //updating modal
+  $(document).on("click", ".edit", function (event) {
+    event.preventDefault();
+
+    var href = $(this).attr("href");
+    $.get(href, function (user) {
+      $("#userIdEdit").val(user[0].userId);
+      $("#nameEdit").val(user[0].name);
+      $("#usernameEdit").val(user[0].username);
+      $("#passwordEdit").val(user[0].password);
+      $("#confirmPassEdit").val(user[0].password);
+
+      $("#updateModal").modal("toggle");
+    });
+  });
+
+  //deleting modal
+  $(document).on("click", ".delete", function (event) {
+    event.preventDefault();
+    userId = $(this).attr("href");
+
+    $("#deleteModal").modal("toggle");
+  });
+
+  $(".deleteTemporarily").on("click", function (event) {
+    var tempStatus = "/admin/user/temporary/?userId=" + userId;
+
+    $.ajax({
+      url: tempStatus,
+      type: "GET",
+      success: function (status) {
+        $("#deleteModal").modal("hide");
+        ajaxGet(userType, stat);
+        $("#resultDiv").hide();
+        $("#resultDiv").fadeIn(100);
+        $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+        $("#resultMessage").html("The account has been temporarily removed.");
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        $("#deleteModal").modal("hide");
+        $("#resultDiv").hide();
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(
+          "An error occurred while temporarily removing the account."
+        );
+        $("#resultDiv").fadeIn(100);
+      },
+    });
+  });
+
+  $(document).on("click", ".deletePermanently", function (event) {
+    var permStatus = "/admin/user/delete/?userId=" + userId;
+
+    $.ajax({
+      url: permStatus,
+      type: "GET",
+      success: function (status) {
+        $("#deleteModal").modal("hide");
+        ajaxGet(userType, stat);
+        $("#resultDiv").hide();
+        $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+        $("#resultMessage").html("The account has been deleted permanently.");
+        $("#resultDiv").fadeIn(100);
+      },
+      error: function (error) {
+        $("#deleteModal").modal("hide");
+        $("#resultDiv").hide();
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(error.responseText);
+        $("#resultDiv").fadeIn(100);
+      },
+    });
+  });
+  $(".btn-close-alert").on("click", function () {
+    $("#resultDiv").hide();
+  });
 });

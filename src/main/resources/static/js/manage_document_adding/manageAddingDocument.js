@@ -1,12 +1,14 @@
 $(document).ready(function () {
+  alert;
   var htmlModal = "";
   var modalView = $(".modalView");
   var cards = "";
   var id = "";
+  var docId = "";
   $(document).on("click", ".editDocument", function (event) {
     event.preventDefault();
 
-    var docId = $(this).attr("href");
+    docId = $(this).attr("href");
     id = docId;
     $.ajax({
       type: "GET",
@@ -97,10 +99,18 @@ $(document).ready(function () {
             "src",
             "data:image/jpg;base64," + result.data.image
           );
+          focusToElement();
         }
       },
       error: function (e) {
-        console.log(e);
+        $("#resultDiv").fadeOut(1);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(
+          "Failed to get the data, Please try again later!."
+        );
+        focusToElement();
       },
     });
   });
@@ -113,13 +123,18 @@ $(document).ready(function () {
     cards = "";
     $.ajax({
       type: "GET",
-      url: "/update-document-cards",
+      url: "/admin/update-document-cards",
+      beforeSend: function () {
+        $(".card-secbody").hide();
+        $(".mainLoaderDiv").show();
+      },
       success: function (result) {
         if (result.status == "success") {
+          $(".mainLoaderDiv").hide();
+          $(".card-secbody").show();
           $(".card-secbody").empty();
 
           $.each(result.data, function (count, documents) {
-            console.log(documents);
             var cards =
               '<div class="col-lg-4 mb-2">' +
               '    <div class="card pagesCards">' +
@@ -148,7 +163,13 @@ $(document).ready(function () {
         }
       },
       error: function (e) {
-        console.log("error: " + e);
+        $("#resultDiv").fadeOut(1);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(
+          "Document Loading Failed, Please try again later!."
+        );
       },
     });
   }
@@ -188,15 +209,9 @@ $(document).ready(function () {
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
 
         $("#resultMessage").html("A Document has been successfully updated.");
+        focusToElement();
       },
       error: function (err) {
-        var m = "";
-        if (err.responseText != null) {
-          m = err.responseText;
-        } else {
-          m = err.responseJSON.message;
-        }
-        console.error(err.responseText);
         resetFields(
           "#titleEdit",
           "#descriptionEdit",
@@ -212,8 +227,9 @@ $(document).ready(function () {
         $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
         $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
         $("#resultMessage").html(
-          "Insertion/Updating Documents Failed Reason: " + m
+          "Insertion/Updating Documents Failed Reason: " + err.responseText
         );
+        focusToElement();
       },
     });
   });
@@ -318,13 +334,6 @@ $(document).ready(function () {
         $("#resultMessage").html("A Document has been successfully inserted.");
       },
       error: function (err) {
-        var m = "";
-        if (err.responseText != null) {
-          m = err.responseText;
-        } else {
-          m = err.responseJSON.message;
-        }
-        console.error(err.responseText);
         resetFields(
           "#title",
           "#description",
@@ -340,53 +349,15 @@ $(document).ready(function () {
         $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
         $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
         $("#resultMessage").html(
-          "Insertion/Updating Documents Failed Reason: " + m
+          "Insertion/Updating Documents Failed Reason: " + err.responseText
         );
       },
     });
   });
 
-  function deleteDocument(docId) {
-    $(document).on("click", ".confirmDeleteDocument", function (event) {
-      event.preventDefault();
-
-      $.ajax({
-        url: "/admin/delete-document-info?docId=" + docId,
-        type: "DELETE",
-        success: function (res) {
-          updateCard();
-          $("#deleteDocumentModal").modal("hide");
-
-          $("#resultDiv").fadeOut(100);
-          $("#resultDiv").fadeIn(100);
-          $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
-          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
-          $("#resultMessage").html("A Document has been successfully deleted.");
-        },
-        error: function (err) {
-          var m = "";
-          if (err.responseText != null) {
-            m = err.responseText;
-          } else {
-            m = err.responseJSON.message;
-          }
-          console.log(err.responseText);
-          updateCard();
-
-          $("#deleteDocumentModal").modal("hide");
-
-          $("#resultDiv").fadeOut(1);
-          $("#resultDiv").fadeIn(100);
-          $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
-          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#obal").html("Failed to Delete Documents Failed Reason: " + m);
-        },
-      });
-    });
-  }
   $(document).on("click", ".deleteDocument", function (event) {
     event.preventDefault();
-    var docId = $(this).attr("href");
+    docId = $(this).attr("href");
     modalView.empty();
     htmlModal = `
       <div class="modal fade" id="deleteDocumentModal" tabindex="-1" role="dialog" aria-labelledby="deleteDocumentModalLabel"
@@ -417,8 +388,49 @@ $(document).ready(function () {
     `;
     modalView.append(htmlModal);
     $("#deleteDocumentModal").modal("toggle");
-    deleteDocument(docId);
   });
+  $(document).on("click", ".confirmDeleteDocument", function (event) {
+    event.preventDefault();
+
+    $.ajax({
+      url: "/admin/delete-document-info?docId=" + docId,
+      type: "DELETE",
+      success: function (res) {
+        updateCard();
+        $("#deleteDocumentModal").modal("hide");
+
+        $("#resultDiv").fadeOut(100);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
+        $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+        $("#resultMessage").html("A Document has been successfully deleted.");
+        focusToElement();
+      },
+
+      error: function (err) {
+        updateCard();
+
+        $("#deleteDocumentModal").modal("hide");
+        console.log(err.responseText);
+        $("#resultDiv").fadeOut(1);
+        $("#resultDiv").fadeIn(100);
+        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(
+          "Failed to Delete Documents Failed Reason: " + err.responseText
+        );
+        focusToElement();
+      },
+    });
+  });
+  function focusToElement() {
+    $("html, body").animate(
+      {
+        scrollTop: $("#mainx").offset().top,
+      },
+      3
+    );
+  }
   $(document).on("click", ".clearModal", function (e) {
     e.preventDefault();
     modalView.empty();

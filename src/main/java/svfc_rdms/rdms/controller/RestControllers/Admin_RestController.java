@@ -137,14 +137,16 @@ public class Admin_RestController {
                if (mainService.deleteDocumentFile(documentId)) {
                     return new ResponseEntity<Object>("success", HttpStatus.OK);
                } else {
-                    return new ResponseEntity<Object>("Failed to delete document!", HttpStatus.BAD_REQUEST);
-               }
-          } catch (Exception e) {
-               if (e.getMessage().contains("exist")) {
                     return new ResponseEntity<Object>("Invalid Document ID, Must be valid Document Id.",
                               HttpStatus.BAD_REQUEST);
                }
-               return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+          } catch (Exception e) {
+               if (e.getMessage().contains("ConstraintViolationException")) {
+                    throw new ApiRequestException("You cannot delete the document, if someone has requested it.");
+               } else {
+                    throw new ApiRequestException("Document Deletion Failed, Please try again.");
+               }
+
           }
      }
 

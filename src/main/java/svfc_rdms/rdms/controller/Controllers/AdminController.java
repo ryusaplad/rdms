@@ -51,134 +51,153 @@ public class AdminController {
 
      // Get Mapping Method
      @GetMapping("/admin/dashboard")
-     public String dashboard_View(Model model) {
-          model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Student"));
-          model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrar"));
-          model.addAttribute("totalTeachers", mainService.displayCountsByStatusAndType("Active", "Teacher"));
+     public String dashboard_View(HttpServletResponse response, HttpSession session, Model model) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Student"));
+               model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrar"));
+               model.addAttribute("totalTeachers", mainService.displayCountsByStatusAndType("Active", "Teacher"));
 
-          model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Student"));
-          model.addAttribute("totalDeletedReg", mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
-          model.addAttribute("totalDeletedTeach", mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
+               model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Student"));
+               model.addAttribute("totalDeletedReg",
+                         mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
+               model.addAttribute("totalDeletedTeach",
+                         mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
 
-          return "/admin/admin-dashboard";
+               return "/admin/admin_dashboard";
+          }
+          return "redirect:/";
      }
 
      @GetMapping("/admin/{userType}")
-     public String accountsViews(@PathVariable("userType") String userType, Model model) {
-          try {
+     public String accountsViews(@PathVariable("userType") String userType, HttpServletResponse response,
+               HttpSession session, Model model) {
 
-               String accType = "";
-               String idFormat = "";
-               boolean showType = false;
-               String status = "";
-               if (userType.equals("registrars")) {
-                    accType = "Registrar";
-                    idFormat = "R- / r-";
-                    status = "Active";
-               } else if (userType.equals("teachers")) {
-                    accType = "Teacher";
-                    idFormat = "T- / t-";
-                    status = "Active";
-               } else if (userType.equals("students")) {
-                    accType = "Student";
-                    idFormat = "C- / c-";
-                    status = "Active";
-               } else {
+          if (globalService.validatePages("school_admin", response, session)) {
+               try {
 
-                    accType = "Invalid";
-                    idFormat = "";
-                    status = "";
-                    showType = true;
+                    String accType = "";
+                    String idFormat = "";
+                    boolean showType = false;
+                    String status = "";
+                    if (userType.equals("registrars")) {
+                         accType = "Registrar";
+                         idFormat = "R- / r-";
+                         status = "Active";
+                    } else if (userType.equals("teachers")) {
+                         accType = "Teacher";
+                         idFormat = "T- / t-";
+                         status = "Active";
+                    } else if (userType.equals("students")) {
+                         accType = "Student";
+                         idFormat = "C- / c-";
+                         status = "Active";
+                    } else {
 
+                         accType = "Invalid";
+                         idFormat = "";
+                         status = "";
+                         showType = true;
+
+                    }
+                    model.addAttribute("title", accType + " Accounts");
+                    model.addAttribute("userIdFormat", idFormat);
+                    model.addAttribute("users", new Users());
+                    model.addAttribute("hide", showType);
+                    model.addAttribute("usersLists", mainService.diplayAllAccounts(status, accType));
+
+               } catch (Exception e) {
+                    return "redirect:/";
                }
-               model.addAttribute("title", accType + " Accounts");
-               model.addAttribute("userIdFormat", idFormat);
-               model.addAttribute("users", new Users());
-               model.addAttribute("hide", showType);
-               model.addAttribute("usersLists", mainService.diplayAllAccounts(status, accType));
 
-          } catch (Exception e) {
-               System.out.println("Error: " + e.getMessage());
+               return "/admin/admin_view_accounts";
           }
-
-          return "/admin/admin-view_accounts";
+          return "redirect:/";
      }
 
      // Deleted pages
      @GetMapping("/admin/{userType}/deleted-accounts")
-     public String deletedAccounts_View(@PathVariable String userType, Model model) {
+     public String deletedAccounts_View(@PathVariable String userType, HttpServletResponse response,
+               HttpSession session, Model model) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               String title = "";
+               boolean hideToggle = false;
+               String dataStatus = "Temporary";
+               String accountType = userType;
 
-          String title = "";
-          boolean hideToggle = false;
-          String dataStatus = "Temporary";
-          String accountType = userType;
+               if (accountType.equals("registrar")) {
+                    title = "Deleted Registrar Accounts";
+                    hideToggle = true;
+               } else if (accountType.equals("teacher")) {
+                    title = "Deleted Teacher Accounts";
+                    hideToggle = true;
+               } else if (accountType.equals("student")) {
+                    title = "Deleted Student Accounts";
+                    hideToggle = true;
+               } else {
+                    hideToggle = false;
 
-          if (accountType.equals("registrar")) {
-               title = "Deleted Registrar Accounts";
-               hideToggle = true;
-          } else if (accountType.equals("teacher")) {
-               title = "Deleted Teacher Accounts";
-               hideToggle = true;
-          } else if (accountType.equals("student")) {
-               title = "Deleted Student Accounts";
-               hideToggle = true;
-          } else {
-               hideToggle = false;
-
+               }
+               if (hideToggle) {
+                    accountType = accountType.substring(1).toUpperCase() + accountType.substring(1) + "s";
+                    model.addAttribute("title", title);
+                    model.addAttribute("hide", hideToggle);
+                    model.addAttribute("users", null);
+                    model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
+               } else {
+                    return "redirect:" + "/admin/" + userType + "/deleted-accounts?error=Invalid User Type";
+               }
+               return "/admin/admin_view_accounts";
           }
-          if (hideToggle) {
-               accountType = accountType.substring(1).toUpperCase() + accountType.substring(1) + "s";
-               model.addAttribute("title", title);
-               model.addAttribute("hide", hideToggle);
-               model.addAttribute("users", null);
-               model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
-          } else {
-               return "redirect:" + "/admin/" + userType + "/deleted-accounts?error=Invalid User Type";
-          }
-          return "/admin/admin-view_accounts";
+          return "redirect:/";
      }
 
      @GetMapping("/admin/logs")
      public String viewAdminLogs() {
-          return "/admin/admin_logs";
+          return "/admin/admin_global_logs";
      }
-
 
      @GetMapping(value = "/admin/user/{status}")
      @ResponseBody
      public String changeStatus(@PathVariable("status") String status, @RequestParam("userId") long userId,
 
-               HttpServletRequest request) {
-          String referer = request.getHeader("Referer");
+               HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               String referer = request.getHeader("Referer");
 
-          if (!status.isEmpty() || !status.isBlank()) {
-               String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
-               // changing status based on the input
-               if (mainService.changeAccountStatus(capitalizeS, userId)) {
-                    return "redirect:" + referer;
+               if (!status.isEmpty() || !status.isBlank()) {
+                    String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
+                    // changing status based on the input
+                    if (mainService.changeAccountStatus(capitalizeS, userId)) {
+                         return "redirect:" + referer;
 
+                    }
                }
-          }
 
-          return "redirect:" + referer;
+               return "redirect:" + referer;
+          }
+          return "redirect:/";
      }
 
      @GetMapping("/admin/user/update")
      @ResponseBody
-     public List<Users> returnUserById(@RequestParam("userId") long id, Model model) {
-
-          Optional<Users> users = mainService.findOneUserById(id);
-
+     public List<Users> returnUserById(@RequestParam("userId") long id, HttpServletResponse response,
+               HttpSession session, Model model) {
           List<Users> usersList = new ArrayList<>();
-          if (users.isPresent()) {
-               users.stream().forEach(e -> {
+          if (globalService.validatePages("school_admin", response, session)) {
+               Optional<Users> users = mainService.findOneUserById(id);
 
-                    usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
-                              users.get().getPassword().replace(users.get()
-                                        .getPassword(), ""),
-                              users.get().getType(), users.get().getStatus()));
-               });
-               return usersList;
+               if (users.isPresent()) {
+                    users.stream().forEach(e -> {
+
+                         usersList.add(
+                                   new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
+                                             users.get().getPassword().replace(users.get()
+                                                       .getPassword(), ""),
+                                             users.get().getType(), users.get().getStatus()));
+                    });
+                    return usersList;
+               }
+
           }
           return usersList;
 
@@ -186,15 +205,23 @@ public class AdminController {
      // Viewing - Adding Document
 
      @GetMapping("/admin/documents-list")
-     public String requestForAdmin(Model model) {
+     public String requestForAdmin(HttpServletResponse response, HttpSession session, Model model) {
           model.addAttribute("documentsList", mainService.getAllDocuments());
-          return "/admin/admin-request_cards";
+          if (globalService.validatePages("school_admin", response, session)) {
+               return "/admin/admin_requests_cards";
+          }
+          return "redirect:/";
      }
 
      @RequestMapping(value = "/admin/delete-document-card", method = RequestMethod.GET)
-     public String deleteFile(@RequestParam("docid") long documentId, Model model) {
-          String message = (mainService.deleteDocumentFile(documentId)) ? "Document Deleted" : "Not Deleted";
-          return "redirect:/documents-list?message=" + message;
+     public String deleteFile(@RequestParam("docid") long documentId, HttpServletResponse response, HttpSession session,
+               Model model) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               String message = (mainService.deleteDocumentFile(documentId)) ? "Document Deleted" : "Not Deleted";
+               return "redirect:/documents-list?message=" + message;
+          }
+          return "redirect:/";
+
      }
 
      @GetMapping("/admin/image")
@@ -213,27 +240,30 @@ public class AdminController {
 
      // end documents managing
 
-
      // Test Student Request
      @GetMapping("/admin/student_requests")
-     public String viewAllStudentRequests(Model model) {
+     public String viewAllStudentRequests(HttpServletResponse response, HttpSession session, Model model) {
           List<StudentRequest> studentsRequest = mainService.displayAllRequest();
           List<StudentRequest_Dto> storeStudentRequest = new ArrayList<>();
+          if (globalService.validatePages("school_admin", response, session)) {
+               for (StudentRequest studReq : studentsRequest) {
+                    storeStudentRequest
+                              .add(new StudentRequest_Dto(studReq.getRequestId(), studReq.getRequestBy().getUserId(),
+                                        studReq.getRequestBy().getType(), studReq.getYear(),
+                                        studReq.getCourse(), studReq.getSemester(),
+                                        studReq.getRequestDocument().getTitle(),
+                                        studReq.getMessage(), studReq.getReply(), studReq.getRequestBy().getName(),
+                                        studReq.getRequestDate(),
+                                        studReq.getRequestStatus(), studReq.getReleaseDate(), studReq.getManageBy()));
 
-          for (StudentRequest studReq : studentsRequest) {
-               storeStudentRequest
-                         .add(new StudentRequest_Dto(studReq.getRequestId(), studReq.getRequestBy().getUserId(),
-                                   studReq.getRequestBy().getType(), studReq.getYear(),
-                                   studReq.getCourse(), studReq.getSemester(), studReq.getRequestDocument().getTitle(),
-                                   studReq.getMessage(), studReq.getReply(), studReq.getRequestBy().getName(),
-                                   studReq.getRequestDate(),
-                                   studReq.getRequestStatus(), studReq.getReleaseDate(), studReq.getManageBy()));
+               }
 
+               model.addAttribute("studentRequests", storeStudentRequest);
+
+               return "/admin/admin_student_all_requests";
           }
+          return "redirect:/";
 
-          model.addAttribute("studentRequests", storeStudentRequest);
-
-          return "/admin/student_all_requests";
      }
 
      @GetMapping("/admin/registrar_requests")
@@ -256,7 +286,7 @@ public class AdminController {
                     });
 
                     model.addAttribute("registrar_requests", filteredRequests);
-                    return "/admin/registrar_all_requests";
+                    return "/admin/admin_registrar_all_requests";
                }
           }
           return "redirect:/";
@@ -264,8 +294,12 @@ public class AdminController {
      }
 
      @GetMapping("/admin/settings")
-     public String settingViews() {
-          return "/admin/admin-settings";
+     public String settingViews(HttpServletResponse response, HttpSession session, Model model) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               return "/admin/admin_settings";
+          }
+          return "redirect:/";
+
      }
 
 }

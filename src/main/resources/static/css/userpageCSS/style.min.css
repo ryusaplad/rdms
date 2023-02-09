@@ -12442,3 +12442,17 @@ label {
         #message[title] {
             text-decoration: none;
         }
+
+        .imageDiv>img{
+  width: 100%;
+  height: 200px;
+}
+.pagesCards{
+  border:1px solid black;
+  box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);
+}
+.pagesCards >.card-body> a{
+  width: 100%;
+
+ 
+}
