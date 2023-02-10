@@ -1,7 +1,5 @@
 package svfc_rdms.rdms.serviceImpl.Student;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,6 @@ import svfc_rdms.rdms.ExceptionHandler.FileNotFoundException;
 import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
-import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
@@ -34,11 +31,11 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Document.DocumentService;
 import svfc_rdms.rdms.service.File.FileService;
-import svfc_rdms.rdms.service.Student.StudentService;
+import svfc_rdms.rdms.service.Student.Student_RequestService;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Service
-public class StudentServiceImpl implements StudentService, FileService, DocumentService {
+public class Student_RequestServiceImpl implements Student_RequestService, FileService, DocumentService {
 
      @Autowired
      private StudentRepository studentRepository;
@@ -54,6 +51,38 @@ public class StudentServiceImpl implements StudentService, FileService, Document
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Override
+     public Optional<Documents> getFileDocumentById(long id) {
+
+          Optional<Documents> fileOptional = documentRepository.findById(id);
+          if (fileOptional.isPresent()) {
+               return fileOptional;
+          }
+          return Optional.empty();
+
+     }
+
+     @Override
+     public List<UserFiles> getAllFilesByUser(long userId) throws FileNotFoundException {
+
+          try {
+               if (userId != -1) {
+                    Users uploader = usersRepository.findByuserId(userId).get();
+                    List<UserFiles> studentFiles = fileRepository.findAllByUploadedBy(uploader);
+                    if (!studentFiles.isEmpty()) {
+                         return studentFiles;
+                    }
+
+               }
+
+               return null;
+
+          } catch (IllegalArgumentException e) {
+               throw new UserNotFoundException("Can't display files because, Reason: User " + userId + " not found.",
+                         e);
+          }
+     }
 
      @Override
      public String displayStudentRequests(Model model, HttpSession session) {
@@ -97,7 +126,6 @@ public class StudentServiceImpl implements StudentService, FileService, Document
           try {
 
                List<String> excludedFiles = new ArrayList<>();
-
 
                if (uploadedFiles.isPresent() || !requestId.isEmpty() || !document.isEmpty() || params.size() > 0) {
                     StudentRequest req = new StudentRequest();
@@ -253,52 +281,47 @@ public class StudentServiceImpl implements StudentService, FileService, Document
      }
 
      @Override
-     public Optional<StudentRequest> findRequestById(Long requestId) {
-          Optional<StudentRequest> findReq = studentRepository.findById(requestId);
-          if (findReq.isPresent()) {
-               return findReq;
-          }
-          return Optional.empty();
-     }
-
-     @Override
      public ResponseEntity<Object> fetchRequestInformationToModals(String username,
                Long requestId) {
-          Users user = displayAllRequestByStudent(username).get();
+          Optional<Users> optional_User = displayAllRequestByStudent(username);
 
           List<StudentRequest_Dto> studentRequestCompress = new ArrayList<>();
 
-          // get request in database
-          List<StudentRequest> stOptional = displayAllRequestByStudentAndRequestId(user, requestId);
-          // passtothe student request
-          StudentRequest studentRequest = findRequestById(requestId).get();
-          // getFiles by student request id
-          List<UserFiles> ufOptional = getFilesByRequestWith(studentRequest);
-          stOptional.stream().forEach(e -> {
-               studentRequestCompress.add(new StudentRequest_Dto(e.getRequestId(), e.getRequestBy().getUserId(),
-                         e.getRequestBy().getUsername(), e.getRequestBy().getName(),
-                         e.getRequestBy().getType(), e.getYear(), e.getCourse(), e.getSemester(),
-                         e.getRequestDocument().getTitle(), e.getMessage(), e.getReply(),
-                         e.getRequestDate(), e.getRequestStatus(), e.getReleaseDate(), e.getManageBy()));
+          Optional<StudentRequest> optional_StudentRequest = studentRepository.findById(requestId);
 
-          });
-          ufOptional.stream().forEach(files -> {
-               String stringValue = files.getFileId().toString();
-               UUID uuidValue = UUID.fromString(stringValue);
-               studentRequestCompress.add(new StudentRequest_Dto(uuidValue, files.getData(), files.getName(),
-                         files.getSize(), files.getStatus(), files.getDateUploaded(), files.getFilePurpose(),
-                         files.getRequestWith().getRequestId(), files.getUploadedBy().getName()));
-          });
-          ServiceResponse<List<StudentRequest_Dto>> serviceResponse = new ServiceResponse<>("success",
-                    studentRequestCompress);
+          if (optional_StudentRequest.isPresent() && optional_User.isPresent()) {
+               Users user = optional_User.get();
+               List<StudentRequest> studentRequest = displayAllRequestByStudentAndRequestId(user, requestId);
+               List<UserFiles> ufOptional = getFilesByRequestWith(optional_StudentRequest.get());
+               studentRequest.stream().forEach(e -> {
+                    studentRequestCompress.add(new StudentRequest_Dto(e.getRequestId(), e.getRequestBy().getUserId(),
+                              e.getRequestBy().getUsername(), e.getRequestBy().getName(),
+                              e.getRequestBy().getType(), e.getYear(), e.getCourse(), e.getSemester(),
+                              e.getRequestDocument().getTitle(), e.getMessage(), e.getReply(),
+                              e.getRequestDate(), e.getRequestStatus(), e.getReleaseDate(), e.getManageBy()));
 
-          if (!stOptional.isEmpty()) {
-               return new ResponseEntity<Object>(serviceResponse, HttpStatus.OK);
+               });
+               ufOptional.stream().forEach(files -> {
+                    String stringValue = files.getFileId().toString();
+                    UUID uuidValue = UUID.fromString(stringValue);
+                    studentRequestCompress.add(new StudentRequest_Dto(uuidValue, files.getData(), files.getName(),
+                              files.getSize(), files.getStatus(), files.getDateUploaded(), files.getFilePurpose(),
+                              files.getRequestWith().getRequestId(), files.getUploadedBy().getName()));
+               });
+               ServiceResponse<List<StudentRequest_Dto>> serviceResponse = new ServiceResponse<>("success",
+                         studentRequestCompress);
+               if (!studentRequest.isEmpty()) {
+                    return new ResponseEntity<Object>(serviceResponse, HttpStatus.OK);
+
+               } else {
+
+                    return new ResponseEntity<Object>("Failed To Retrieve Data.", HttpStatus.BAD_REQUEST);
+
+               }
 
           } else {
 
                return new ResponseEntity<Object>("Failed To Retrieve Data.", HttpStatus.BAD_REQUEST);
-
           }
      }
 
@@ -314,145 +337,6 @@ public class StudentServiceImpl implements StudentService, FileService, Document
           } catch (Exception e) {
                throw new ApiRequestException("Failed to load image Reason: " + e.getMessage());
           }
-     }
-
-     @Override
-     public Optional<Documents> getFileDocumentById(long id) {
-
-          Optional<Documents> fileOptional = documentRepository.findById(id);
-          if (fileOptional.isPresent()) {
-               return fileOptional;
-          }
-          return Optional.empty();
-
-     }
-
-     @Override
-     public List<UserFiles> getAllFilesByUser(long userId) throws FileNotFoundException {
-
-          try {
-               if (userId != -1) {
-                    Users uploader = usersRepository.findByuserId(userId).get();
-                    List<UserFiles> studentFiles = fileRepository.findAllByUploadedBy(uploader);
-                    if (!studentFiles.isEmpty()) {
-                         return studentFiles;
-                    }
-
-               }
-
-               return null;
-
-          } catch (IllegalArgumentException e) {
-               throw new UserNotFoundException("Can't display files because, Reason: User " + userId + " not found.",
-                         e);
-          }
-     }
-
-     @Override
-     public ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file, Map<String, String> params) {
-          try {
-
-               if (file.get().getSize() != 0) {
-
-                    for (Map.Entry<String, String> entry : params.entrySet()) {
-
-                         if (entry.getKey().equals("fileId")) {
-                              String stringValue = entry.getValue().toString();
-                              UUID uuidValue = UUID.fromString(stringValue);
-                              UserFiles userFiles = fileRepository.findById(uuidValue).get();
-                              userFiles.setFileId(uuidValue);
-                              userFiles.setData(file.get().getBytes());
-                              userFiles.setName(file.get().getOriginalFilename());
-                              userFiles.setSize(globalService.formatFileUploadSize(file.get().getSize()));
-                              fileRepository.save(userFiles);
-                         }
-                    }
-
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
-               }
-               return new ResponseEntity<>("Please Select File!", HttpStatus.BAD_REQUEST);
-          } catch (Exception e) {
-               throw new ApiRequestException(e.getMessage());
-          }
-     }
-
-     @Override
-     public ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params) {
-          try {
-
-               if (params.size() != 0) {
-                    StudentRequest studentRequest = findRequestById(requestId).get();
-                    for (Map.Entry<String, String> entry : params.entrySet()) {
-                         if (entry.getKey().equals("year")) {
-                              studentRequest.setYear(entry.getValue());
-                         } else if (entry.getKey().equals("course")) {
-                              studentRequest.setCourse(entry.getValue());
-                         } else if (entry.getKey().equals("semester")) {
-                              studentRequest.setSemester(entry.getValue());
-                         } else if (entry.getKey().equals("message")) {
-                              studentRequest.setMessage(entry.getValue());
-                         }
-                    }
-                    studentRepository.save(studentRequest);
-
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
-               }
-               return new ResponseEntity<>("Invalid Informations", HttpStatus.BAD_REQUEST);
-          } catch (Exception e) {
-               throw new ApiRequestException(e.getMessage());
-          }
-     }
-
-     @Override
-     public ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId) {
-          try {
-
-               Users user = usersRepository.findByuserId(userId).get();
-
-               StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
-
-               if (user != null && studentRequest != null) {
-
-                    studentRepository.studentRequestsResubmit(status, studentRequest.getRequestId());
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
-               }
-               return new ResponseEntity<>("Invalid Information, Please Try Again!", HttpStatus.BAD_REQUEST);
-          } catch (Exception e) {
-               throw new ApiRequestException(e.getMessage());
-          }
-
-     }
-
-     @Override
-     public String displayAllFilesByUserId(HttpSession session, Model model) {
-
-          Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
-          if (user.getUserId() != -1) {
-
-               List<UserFiles> getAllFiles = getAllFilesByUser(user.getUserId());
-               List<UserFiles_Dto> userFiles = new ArrayList<>();
-
-               if (getAllFiles == null) {
-                    model.addAttribute("files", userFiles);
-                    return "/student/documents-list";
-               }
-               getAllFiles.stream().forEach(file -> {
-                    String stringValue = file.getFileId().toString();
-                    UUID uuidValue = UUID.fromString(stringValue);
-                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
-                              + file.getUploadedBy().getName();
-                    userFiles.add(new UserFiles_Dto(
-                              uuidValue, file.getName(), file.getSize(),
-                              file.getStatus(),
-                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
-               });
-               model.addAttribute("files", userFiles);
-               return "/student/documents-list";
-
-          }
-
-          return null;
-
      }
 
 }

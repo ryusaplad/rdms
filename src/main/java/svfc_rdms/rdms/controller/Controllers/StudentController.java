@@ -18,15 +18,20 @@ import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
-import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Student.Student_RequirementServiceImpl;
 
 @Controller
 public class StudentController {
 
      @Autowired
      private AdminServicesImpl mainService;
+
      @Autowired
-     private StudentServiceImpl studService;
+     private Student_RequestServiceImpl requestServiceImpl;
+
+     @Autowired
+     private Student_RequirementServiceImpl requirementServiceImpl;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
@@ -59,7 +64,7 @@ public class StudentController {
      @GetMapping("/student/my-requests")
      public String listOfStudentRequest(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("student", response, session)) {
-               return studService.displayStudentRequests(model, session);
+               return requestServiceImpl.displayStudentRequests(model, session);
           }
           return null;
 
@@ -70,7 +75,7 @@ public class StudentController {
 
           if (globalService.validatePages("student", response, session)) {
 
-               return studService.displayAllFilesByUserId(session, model);
+               return requirementServiceImpl.displayAllFilesByUserId(session, model);
 
           }
           return "redirect:/";
@@ -82,7 +87,7 @@ public class StudentController {
                HttpSession session, Model model) {
           globalService.validatePages("student", response, session);
           try {
-               if (studService.findDocumentByTitle(document).isEmpty()) {
+               if (requestServiceImpl.findDocumentByTitle(document).isEmpty()) {
                     return "redirect:" + "/student/request/documents";
                }
                String description = docRepo.findByTitle(document).get().getDescription();
@@ -101,7 +106,7 @@ public class StudentController {
      @GetMapping("/student/documents/image")
      public void showImage(@Param("documentId") long id, HttpServletResponse response,
                Optional<Documents> dOptional) {
-          studService.student_showImageFiles(id, response, dOptional);
+          requestServiceImpl.student_showImageFiles(id, response, dOptional);
 
      }
 

@@ -15,8 +15,7 @@ import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 
-public interface StudentService {
-
+public interface Student_RequestService {
      String displayStudentRequests(Model model, HttpSession session);
 
      ResponseEntity<String> saveRequest(String id,
@@ -25,30 +24,14 @@ public interface StudentService {
 
      Optional<Documents> findDocumentByTitle(String title);
 
-     Optional<StudentRequest> findRequestById(Long requestId);
-
-
      List<StudentRequest> displayAllRequestByStudent(Users user);
 
      List<StudentRequest> displayAllRequestByStudentAndRequestId(Users user, long requestId);
 
      Optional<Users> displayAllRequestByStudent(String username);
 
-     ResponseEntity<Object> fetchRequestInformationToModals(String username,
-               Long requestId);
+     void student_showImageFiles(long id, HttpServletResponse response, Optional<Documents> dOptional);
 
-     // File Management
-
-     void student_showImageFiles(long id, HttpServletResponse response,
-               Optional<Documents> dOptional);
-
-     ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file,
-               Map<String, String> params);
-
-     ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params);
-
-     ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId);
-
-     String displayAllFilesByUserId(HttpSession session, Model model);
+     ResponseEntity<Object> fetchRequestInformationToModals(String username, Long requestId);
 
 }

@@ -25,33 +25,24 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
-import svfc_rdms.rdms.serviceImpl.File.FileUploadServiceImpl;
-import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 
 @RestController
 public class Admin_RestController {
 
      @Autowired
-     AdminServicesImpl mainService;
+     private AdminServicesImpl mainService;
 
      @Autowired
-     DocumentRepository docRepo;
+     private UsersRepository userRepo;
+
 
      @Autowired
-     UsersRepository userRepo;
+     private Student_RequestServiceImpl requestServiceImpl;
 
-     @Autowired
-     RegRepository regsRepository;
 
-     @Autowired
-     StudentServiceImpl studService;
-
-     @Autowired
-     FileUploadServiceImpl studFileService;
 
      @PostMapping(value = "/admin/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
@@ -100,7 +91,7 @@ public class Admin_RestController {
                          "Failed to get user informations, Please Try Again!. Please contact the administrator for further assistance.");
           }
           String username = user.get().getUsername();
-          return studService.fetchRequestInformationToModals(username, requestId);
+          return requestServiceImpl.fetchRequestInformationToModals(username, requestId);
      }
 
      @GetMapping("/admin/update-document-cards")

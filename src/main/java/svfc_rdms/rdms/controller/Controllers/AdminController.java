@@ -29,16 +29,12 @@ import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
-import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
 
 @Controller
 public class AdminController {
 
      @Autowired
      AdminServicesImpl mainService;
-
-     @Autowired
-     StudentServiceImpl studService;
 
      @Autowired
      DocumentRepository docRepo;

@@ -24,38 +24,45 @@ import org.springframework.web.multipart.MultipartFile;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.serviceImpl.Registrar.Reg_AccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
-import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 
 @RestController
 public class Regs_RestController {
 
      @Autowired
-     private StudentServiceImpl studentServiceImpl;
+     private Student_RequestServiceImpl requestServiceImpl;
 
      @Autowired
      private UsersRepository userRepository;
 
      @Autowired
      private Registrar_ServiceImpl regs_ServiceImpl;
+     @Autowired
+     private Reg_AccountServiceImpl regs_AccountService;
+
+     @Autowired
+     private Reg_RequestServiceImpl regs_RequestService;
 
      @PostMapping(value = "/registrar/save/user-account")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
 
-          return regs_ServiceImpl.saveUsersAccount(user, 0);
+          return regs_AccountService.saveUsersAccount(user, 0);
      }
 
      @PostMapping(value = "/registrar/save/update-account")
      public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
 
-          return regs_ServiceImpl.saveUsersAccount(user, 1);
+          return regs_AccountService.saveUsersAccount(user, 1);
      }
 
      @GetMapping("/registrar/user/update")
      @ResponseBody
      public List<Users> returnUserById(@RequestParam("userId") long id) {
 
-          Optional<Users> users = regs_ServiceImpl.findOneUserById(id);
+          Optional<Users> users = regs_AccountService.findOneUserById(id);
 
           List<Users> usersList = new ArrayList<>();
           if (users.isPresent()) {
@@ -77,15 +84,15 @@ public class Regs_RestController {
      public ResponseEntity<Object> changeStatus(@PathVariable("status") String status,
                @RequestParam("userId") long userId) {
           if (status.equals("permanently")) {
-               if (regs_ServiceImpl.deleteData(userId)) {
+               if (regs_AccountService.deleteData(userId)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("temporary")) {
-               if (regs_ServiceImpl.changeAccountStatus("Temporary", userId)) {
+               if (regs_AccountService.changeAccountStatus("Temporary", userId)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("active")) {
-               if (regs_ServiceImpl.changeAccountStatus("Active", userId)) {
+               if (regs_AccountService.changeAccountStatus("Active", userId)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           }
@@ -96,7 +103,7 @@ public class Regs_RestController {
 
      @GetMapping(value = "/registrar/getAllAccounts")
      public ResponseEntity<Object> getAllUser(@RequestParam("account-type") String accountType) {
-          return regs_ServiceImpl.displayAllUserAccountByType(accountType);
+          return regs_AccountService.displayAllUserAccountByType(accountType);
      }
 
      @GetMapping("/registrar/studentrequest/fetch")
@@ -112,7 +119,7 @@ public class Regs_RestController {
                          "Failed to get user informations, Please Try Again!. Please contact the administrator for further assistance.");
           }
           String username = user.get().getUsername();
-          return studentServiceImpl.fetchRequestInformationToModals(username, requestId);
+          return requestServiceImpl.fetchRequestInformationToModals(username, requestId);
      }
 
      @GetMapping(value = "/registrar/studentreq/change/{status}")
@@ -125,7 +132,7 @@ public class Regs_RestController {
                HttpServletResponse response,
                HttpSession session) {
 
-          if (!regs_ServiceImpl.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
+          if (!regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
                     session)) {
                throw new ApiRequestException(
                          "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
@@ -138,7 +145,7 @@ public class Regs_RestController {
                @RequestParam("rfile[]") Optional<MultipartFile[]> files,
                @RequestParam Map<String, String> params, HttpSession session) {
 
-          return regs_ServiceImpl.finalizedRequestsWithFiles(userId, requestId, files, params, session);
+          return regs_RequestService.finalizedRequestsWithFiles(userId, requestId, files, params, session);
 
      }
 
@@ -149,7 +156,7 @@ public class Regs_RestController {
 
      // Manage Requests for teachers.
      @PostMapping("/registrar/send/requests")
-     public ResponseEntity<String> sendRequestsToTeacher(@RequestParam long userId,HttpSession session,
+     public ResponseEntity<String> sendRequestsToTeacher(@RequestParam long userId, HttpSession session,
                @RequestParam Map<String, String> params) {
 
           return regs_ServiceImpl.sendRequestToTeacher(userId, session, params);

@@ -16,77 +16,75 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import svfc_rdms.rdms.repository.Document.DocumentRepository;
-import svfc_rdms.rdms.serviceImpl.File.FileUploadServiceImpl;
-import svfc_rdms.rdms.serviceImpl.Student.StudentServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Student.Student_RequirementServiceImpl;
 
 @RestController
 public class Student_RestController {
 
-     @Autowired
-     FileUploadServiceImpl studFileService;
 
      @Autowired
-     DocumentRepository docRepo;
+     private GlobalServiceControllerImpl globalService;
 
      @Autowired
-     StudentServiceImpl studService;
+     private Student_RequestServiceImpl requestServiceImpl;
+
+     @Autowired
+     private Student_RequirementServiceImpl requirementServiceImpl;
 
      @PostMapping("/student/request/{document}/sent")
      public ResponseEntity<String> studRequestSent(@RequestParam("studentId") String id,
                @RequestParam("file[]") Optional<MultipartFile[]> files, @PathVariable String document,
                @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
-          validatePages(response, session);
-          return studService.saveRequest(id, files, document, params);
+
+          if (globalService.validatePages("student", response, session)) {
+               return requestServiceImpl.saveRequest(id, files, document, params);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
      }
 
      @PostMapping("/student/request/file/update")
      public ResponseEntity<Object> updateFileRequirement(@RequestParam("file") Optional<MultipartFile> file,
-               @RequestParam Map<String, String> params) {
-
-          return studService.updateFileRequirement(file, params);
+               @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
+          if (globalService.validatePages("student", response, session)) {
+               return requirementServiceImpl.updateFileRequirement(file, params);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
      }
 
      @PostMapping("/student/request/info/update")
      public ResponseEntity<Object> updateInformationRequirement(
-               @RequestParam long requestId, @RequestParam Map<String, String> params) {
+               @RequestParam long requestId, @RequestParam Map<String, String> params, HttpServletResponse response,
+               HttpSession session) {
+          if (globalService.validatePages("student", response, session)) {
+               return requirementServiceImpl.updateInformationRequirement(requestId, params);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
 
-          return studService.updateInformationRequirement(requestId, params);
      }
 
      @GetMapping("/student/requests/resubmit")
      public ResponseEntity<Object> resubmitStudentRequests(
                @RequestParam("userId") long userId, @RequestParam("requestId") long requestId,
                HttpServletResponse response, HttpSession session) {
+          if (globalService.validatePages("student", response, session)) {
+               return requirementServiceImpl.resubmitRequests("Pending", userId, requestId);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
 
-          return studService.resubmitRequests("Pending", userId, requestId);
      }
 
      @GetMapping("/student/my-requests/fetch")
      public ResponseEntity<Object> getUserFilesByRequestId(@RequestParam("requestId") Long requestId,
                HttpServletResponse response, HttpSession session) {
-          validatePages(response, session);
-          String username = session.getAttribute("username").toString();
-          return studService.fetchRequestInformationToModals(username, requestId);
-     }
 
-
-     public ResponseEntity<String> validatePages(HttpServletResponse response, HttpSession session) {
-          try {
-               response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-               response.setHeader("Pragma", "no-cache");
-               response.setDateHeader("Expires", 0);
-               if (session.getAttribute("username") == null ||
-                         session.getAttribute("accountType") == null
-                         || session.getAttribute("name") == null) {
-                    // If the session is not valid, redirect to the login page
-                    response.sendRedirect("/");
-
-               }
-               return new ResponseEntity<>("Pass", HttpStatus.OK);
-          } catch (Exception e) {
-               e.printStackTrace();
+          if (globalService.validatePages("student", response, session)) {
+               String username = session.getAttribute("username").toString();
+               return requestServiceImpl.fetchRequestInformationToModals(username, requestId);
           }
-          return new ResponseEntity<>("Failed", HttpStatus.UNAUTHORIZED);
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
+
      }
+
 }

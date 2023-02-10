@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
 
 @Controller
@@ -22,9 +23,12 @@ public class RegistrarController {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
      @Autowired
      private AdminServicesImpl mainService;
 
+     @Autowired
+     private Reg_RequestServiceImpl regs_RequestService;
    
      @GetMapping(value = "/registrar/dashboard")
      public String registrarDashboard(HttpSession session, HttpServletResponse response) {
@@ -42,17 +46,15 @@ public class RegistrarController {
           if (globalService.validatePages("registrar", response, session)) {
                String accountType = accType.substring(0, 1).toUpperCase() + accType.substring(1, accType.length());
                String idFormat = "";
-               String status = "";
+
                try {
 
                     if (accountType.equals("Teacher")) {
                          accType = "Teacher";
                          idFormat = "T- / t-";
-                         status = "Active";
                     } else if (accountType.equals("Student")) {
                          accType = "Student";
                          idFormat = "C- / c-";
-                         status = "Active";
                     } else {
 
                          return "redirect:/";
@@ -75,7 +77,7 @@ public class RegistrarController {
      public String studentRequests(@PathVariable String userType, HttpSession session, HttpServletResponse response,
                Model model) {
           if (globalService.validatePages(userType, response, session)) {
-               return regs_ServiceImpl.displayAllStudentRequest(userType, model);
+               return regs_RequestService.displayAllStudentRequest(userType, model);
           }
           return "redirect:/";
 
@@ -85,7 +87,7 @@ public class RegistrarController {
      public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("registrar", response, session)) {
-               return regs_ServiceImpl.displayAllFilesByUserId(session, model);
+               return regs_RequestService.displayAllFilesByUserId(session, model);
           }
           return "redirect:/";
 
