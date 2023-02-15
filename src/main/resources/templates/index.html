@@ -40,10 +40,10 @@
                         <h5 class="scText">St. Vincent De Ferrer College of Camarin Inc.</h5>
                     </div>
                     <div class="h3 text-start" style="line-height: 1.4;
-    font-weight: 250;
-    font-size: 18px;
-    margin-bottom: 1.5rem !important;
-    margin-top: 29px !important;">Please enter your credentials.</div>
+                    font-weight: 250;
+                    font-size: 18px;
+                    margin-bottom: 1.5rem !important;
+                    margin-top: 29px !important;">Please enter your credentials.</div>
                     <div class="form-group">
                         <input
                             type="text"
@@ -80,6 +80,11 @@
                             <th:block th:if="${login_RememberMe != 'true'}">
                                 <option disabled selected>--Login As--</option>
                                 <option value="Student">Student</option>
+                                <option value="Registrar">Registrar</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="School_Admin">
+                                    School Admin
+                                </option>
                             </th:block>
                             <th:block th:if="${login_RememberMe == 'true'}">
                                 <th:block th:if="${login_MyAccountType == 'Student'}">

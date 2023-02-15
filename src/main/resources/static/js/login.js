@@ -109,19 +109,19 @@ $(document).ready(function () {
       if (accountType == "Student") {
         $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
-        errorMessage.innerText = accountType + " Account Type Invalid";
+        errorMessage.innerText = `Account Type Invalid (${accountType})`;
       } else if (accountType == "Registrar") {
         $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
-        errorMessage.innerText = accountType + " Account Type Invalid";
+        errorMessage.innerText = `Account Type Invalid (${accountType})`;
       } else if (accountType == "Teacher") {
         $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
-        errorMessage.innerText = accountType + " Account Type Invalid";
+        errorMessage.innerText = `Account Type Invalid (${accountType})`;
       } else if (accountType == "Administrator") {
         $(".userInput").addClass("is-invalid");
         alertMessage.style = "display:block";
-        errorMessage.innerText = accountType + " Account Type Invalid";
+        errorMessage.innerText = `Account Type Invalid (${accountType})`;
       }
     }
   }
