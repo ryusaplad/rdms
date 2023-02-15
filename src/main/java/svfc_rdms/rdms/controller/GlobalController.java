@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,7 @@ public class GlobalController {
      private GlobalServiceControllerImpl globalService;
 
      @GetMapping(value = "/")
-     public String loginPage(HttpSession session, HttpServletResponse response,
+     public String loginPage(HttpSession session, HttpServletResponse response, HttpServletRequest request,
                Model model) {
           // Set the Cache-Control, Pragma, and Expires headers to prevent caching of the
           // login page
@@ -48,6 +49,23 @@ public class GlobalController {
           response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
           response.setHeader("Pragma", "no-cache");
           response.setDateHeader("Expires", 0);
+
+          Cookie[] cookies = request.getCookies();
+          System.out.println("is Cookie Active: " + cookies == null);
+          if (cookies != null) {
+               for (Cookie cookie : cookies) {
+                    System.out.println(cookie);
+                    if (cookie.getName().equals("login_MyUsername")) {
+                         model.addAttribute("login_MyUsername", cookie.getValue());
+                    } else if (cookie.getName().equals("login_MyPassword")) {
+                         model.addAttribute("login_MyPassword", cookie.getValue());
+                    } else if (cookie.getName().equals("login_MyAccountType")) {
+                         model.addAttribute("login_MyAccountType", cookie.getValue());
+                    } else if (cookie.getName().equals("login_RememberMe")) {
+                         model.addAttribute("login_RememberMe", cookie.getValue());
+                    }
+               }
+          }
           return "/index";
      }
 
@@ -57,15 +75,7 @@ public class GlobalController {
           session.removeAttribute("accountType");
           session.removeAttribute("username");
           session.removeAttribute("name");
-
-          if (session.getAttribute("session_remember") != null) {
-               if (session.getAttribute("session_remember").equals("false")) {
-                    session.invalidate();
-
-               } else {
-                    System.out.println(session.getAttribute("session_remember").toString());
-               }
-          }
+          session.invalidate();
 
           return "redirect:/";
      }

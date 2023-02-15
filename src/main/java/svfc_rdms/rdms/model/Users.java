@@ -42,7 +42,7 @@ public class Users {
      private String status;
 
      @Column(name = "profile_image", columnDefinition = "LONGBLOB", nullable = true)
-     private byte profilePicture;
+     private byte[] profilePicture;
 
      @OneToMany(mappedBy = "requestBy")
      private List<RegistrarRequest> requests;

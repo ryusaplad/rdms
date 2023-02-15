@@ -2,6 +2,7 @@ package svfc_rdms.rdms.serviceImpl.Global;
 
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -37,22 +38,27 @@ public class LoginServiceImpl implements LoginService {
                Optional<Users> optional_User = loginRepo.findByUsernameAndPasswordAndType(user.getUsername(),
                          hashPassword,
                          user.getType());
+
                try {
                     Users foundUser = optional_User.get();
                     if (foundUser != null) {
 
                          if (foundUser.getStatus().equals("Active")) {
-                              System.out.println(rememberMe);
+
                               if (rememberMe.equals("true")) {
-                                   session.setAttribute("session_username", user.getUsername());
-                                   session.setAttribute("session_password", user.getPassword());
-                                   session.setAttribute("session_accType", user.getType());
-                                   session.setAttribute("session_remember", rememberMe);
+
+                                   System.out.println(manageCookie("login_MyUsername", user.getUsername(), 30, response,
+                                             "save"));
+                                   manageCookie("login_MyPassword", user.getPassword(), 30, response, "save");
+                                   manageCookie("login_MyAccountType", user.getType(), 30, response, "save");
+                                   manageCookie("login_RememberMe", rememberMe, 30, response, "save");
+
                               } else {
-                                   session.removeAttribute("session_username");
-                                   session.removeAttribute("session_password");
-                                   session.removeAttribute("session_accType");
-                                   session.removeAttribute("session_remember");
+
+                                   manageCookie("login_MyUsername", user.getUsername(), 0, response, "clear");
+                                   manageCookie("login_MyPassword", user.getPassword(), 0, response, "clear");
+                                   manageCookie("login_MyAccountType", user.getType(), 0, response, "clear");
+                                   manageCookie("login_RememberMe", rememberMe, 0, response, "clear");
                               }
                               session.setAttribute("name", foundUser.getName());
                               session.setAttribute("username", user.getUsername());
@@ -75,6 +81,24 @@ public class LoginServiceImpl implements LoginService {
           {
                return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
           }
+     }
+
+     private String manageCookie(String cookieName, String cookieValue, int maxAge, HttpServletResponse response,
+               String action) {
+          Cookie cookie = new Cookie(cookieName, cookieValue);
+
+          if (action.equals("save")) {
+               cookie.setMaxAge(maxAge * 24 * 60 * 60);
+               cookie.setSecure(true);
+               cookie.setHttpOnly(true);
+          } else if (action.equals("clear")) {
+
+               cookie.setMaxAge(0);
+               cookie.setSecure(true);
+               cookie.setHttpOnly(true);
+          }
+          response.addCookie(cookie);
+          return action;
      }
 
 }

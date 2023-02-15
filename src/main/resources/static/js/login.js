@@ -13,7 +13,7 @@ function usernameChangerBySelection() {
     document.getElementById("username").placeholder = "Registrar Id";
   } else if (getSelected == "Teacher") {
     document.getElementById("username").placeholder = "Teacher Id";
-  } else if (getSelected == "Administrator") {
+  } else if (getSelected == "School_Admin") {
     document.getElementById("username").placeholder = "Admin Id";
   }
 }
@@ -254,3 +254,4 @@ $(document).ready(function () {
     }
   });
 });
+

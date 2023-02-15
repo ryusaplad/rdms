@@ -1,0 +1,89 @@
+package svfc_rdms.rdms.serviceImpl.Global;
+
+import java.io.IOException;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import svfc_rdms.rdms.model.Users;
+import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.service.Global.AllAccountServices;
+
+@Service
+public class AllAccountServiceImpl implements AllAccountServices {
+
+     @Autowired
+     UsersRepository userRepository;
+
+     @Override
+     public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId) {
+          Optional<Users> optionalUser = userRepository.findById(userId);
+
+          PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+          if (newPassword.length() < 8) {
+               return new ResponseEntity<>("New password must be at least 8 characters long", HttpStatus.BAD_REQUEST);
+          }
+
+          if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$")) {
+               return new ResponseEntity<>(
+                         "New password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number",
+                         HttpStatus.BAD_REQUEST);
+          } else {
+               oldPassword = oldPassword.replaceAll("\\s", "");
+               newPassword = newPassword.replaceAll("\\s", "");
+          }
+
+          if (oldPassword.isBlank() || newPassword.isBlank()) {
+               return new ResponseEntity<>("Please fill in all the required inputs.", HttpStatus.BAD_REQUEST);
+          }
+
+          if (optionalUser.isPresent()) {
+               Users user = optionalUser.get();
+               boolean isOldPasswordValid = passwordEncoder.matches(oldPassword, user.getPassword());
+
+               if (isOldPasswordValid) {
+                    String hashedPassword = passwordEncoder.encode(newPassword);
+                    user.setPassword(hashedPassword);
+
+                    if (user.getProfilePicture()[0] == 48) {
+                         byte[] profilePicture = new byte[1];
+                         profilePicture[0] = 0;
+                         user.setProfilePicture(profilePicture);
+                    }
+                    userRepository.save(user);
+                    return new ResponseEntity<>("Password updated.", HttpStatus.OK);
+               } else {
+                    return new ResponseEntity<>("Old password is incorrect.", HttpStatus.BAD_REQUEST);
+               }
+          }
+
+          return new ResponseEntity<>("You are performing an invalid action, please try again.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
+     @Override
+     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId) {
+          try {
+               byte[] bytes = image.getBytes();
+               Optional<Users> optionalUser = userRepository.findById(userId);
+               if (optionalUser.isPresent()) {
+                    Users user = optionalUser.get();
+                    user.setProfilePicture(bytes);
+                    userRepository.save(user);
+                    return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
+               }
+          } catch (IOException e) {
+               return new ResponseEntity<>("Failed to change profile picture. Please try again.",
+                         HttpStatus.INTERNAL_SERVER_ERROR);
+          }
+          return new ResponseEntity<>("User not found. Please try again.", HttpStatus.BAD_REQUEST);
+     }
+
+}

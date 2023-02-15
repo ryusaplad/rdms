@@ -75,10 +75,36 @@ function validateAddingForm(
     alert2.innerText = "";
 
     alert3.style.display = "block";
-    alert3.innerText = "Password must 8 characters";
+    alert3.innerText = "Password must be at least 8 characters long";
 
     alert4.style.display = "block";
-    alert4.innerText = "Password must 8 characters";
+    alert4.innerText = "Password must be at least 8 characters long";
+    return false;
+  } else if (
+    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(
+      accountPassword
+    )
+  ) {
+    alert2.style.display = "none";
+    alert2.innerText = "";
+
+    alert3.style.display = "block";
+    alert3.innerText =
+      "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number";
+
+    return false;
+  } else if (
+    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(
+      confirmPassword
+    )
+  ) {
+    alert2.style.display = "none";
+    alert2.innerText = "";
+
+    alert4.style.display = "block";
+    alert4.innerText =
+      "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number";
+
     return false;
   } else {
     alert1.style.display = "none";

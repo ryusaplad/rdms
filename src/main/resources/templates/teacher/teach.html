@@ -44,7 +44,7 @@
 
 
                         <b class="logo-icon">
-                        
+
                             <img height="50px" th:src="@{/images/svdfc-logo.png}" alt="homepage" class="img-responsive light-logo" />
                         </b>
 
@@ -183,13 +183,13 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#"
                                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31">
+                                <img id="profilePicture" src="../../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                 aria-labelledby="navbarDropdown">
                                 <hr class="devider">
                                 <div th:if="${#session.getAttribute('username')!=null}">
-                                
+
                                     <label th:with="name=${#session.getAttribute('name')}"
                                         class="dropdown-item bg-success border border-1 b-2 text-white">Name
                                         :[[${name}]]</label>
@@ -201,14 +201,14 @@
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
+                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
                                     Change Password</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
+                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
                                     Change Profile Picture</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout"><i
-                                        class="fa fa-power-off me-1 ms-1"></i> Logout</a>
+                                <a class="dropdown-item" href="/logout"><i class="fa fa-power-off me-1 ms-1"></i>
+                                    Logout</a>
                                 <div class="dropdown-divider"></div>
 
                             </ul>
@@ -220,96 +220,96 @@
                 </div>
             </nav>
 
-        <rside class="sidebar-t">
-            <button class="rightSidebarToggle btn" onclick="toggleSidebarT(); "><i id="btnIcon"
-                    class="fas fa-angle-left text-white"></i></button>
-            <!-- ============================================================== -->
-            <!-- Right Side Bar -->
-            <!-- ============================================================== -->
-        
-            <div class="row">
-                <div class="col-7">
-                    <div class="card  dateTimeCard">
-                        <div class="card-body">
-                            <h4 class="card-title">Date / Time</h4>
-                            <hr class="hr" />
-                            <div class="todo-widget text-center" style="height:20px;">
-                                <h5>Today is Monday</h5>
+            <rside class="sidebar-t">
+                <button class="rightSidebarToggle btn" onclick="toggleSidebarT(); "><i id="btnIcon"
+                        class="fas fa-angle-left text-white"></i></button>
+                <!-- ============================================================== -->
+                <!-- Right Side Bar -->
+                <!-- ============================================================== -->
+            
+                <div class="row">
+                    <div class="col-7">
+                        <div class="card  dateTimeCard">
+                            <div class="card-body">
+                                <h4 class="card-title">Date Today</h4>
+                                <hr class="hr" />
+                                <div class="todo-widget text-center" style="height:20px;">
+                                    <h5 id="dayValueRightBar">Today is Monday</h5>
+                                    </div>
+                                    <div class="todo-widget text-black-50 text-center" style="height:20px;">
+                                        <h5 id="dateValueRightBar">00/00/2022</h5>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        <div class="col-7">
+                                        
+                                            <div class="card ">
+                                                <div class="card-body">
+                                                    <h4 class="card-title ">Notifications</h4>
+                                                    <hr class="hr" />
+                                                    <div class="notificationCard">
+                                                        <a href="javascript:void(0)" class="link border-top">
+                                                            <div class="d-flex no-block align-items-center p-10">
+                                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                                                <div class="ms-2">
+                                                                    <h5 class="mb-0">Event today</h5>
+                                                                    <span class="mail-desc">Just a reminder that event</span>
+                                                                </div>
+                                                            </div>
+                                        
+                                                        </a>
+                                                        <hr class="hr" />
+                                                        <a href="javascript:void(0)" class="link border-top">
+                                                            <div class="d-flex no-block align-items-center p-10">
+                                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                                                <div class="ms-2">
+                                                                    <h5 class="mb-0">Event today</h5>
+                                                                    <span class="mail-desc">Just a reminder that event</span>
+                                                                </div>
+                                                            </div>
+                                
+                                                </a>
+                                                <hr class="hr" />
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Event today</h5>
+                                                            <span class="mail-desc">Just a reminder that event</span>
+                                                        </div>
+                                                    </div>
+                                
+                                                </a>
+                                                <hr class="hr" />
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Event today</h5>
+                                                            <span class="mail-desc">Just a reminder that event</span>
+                                                        </div>
+                                                    </div>
+                                
+                                                </a>
+                                                <hr class="hr" />
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Event today</h5>
+                                                            <span class="mail-desc">Just a reminder that event</span>
+                                                        </div>
+                                                    </div>
+                                
+                                                </a>
+                                                <hr class="hr" />
+                                </div>
                             </div>
-                            <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                <h5>00/00/2022</h5>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-7">
-        
-                    <div class="card ">
-                        <div class="card-body">
-                            <h4 class="card-title ">Notifications</h4>
-                            <hr class="hr" />
-                            <div class="notificationCard">
-                                <a href="javascript:void(0)" class="link border-top">
-                                    <div class="d-flex no-block align-items-center p-10">
-                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                        <div class="ms-2">
-                                            <h5 class="mb-0">Event today</h5>
-                                            <span class="mail-desc">Just a reminder that event</span>
-                                        </div>
-                                    </div>
-        
-                                </a>
-                                <hr class="hr" />
-                                <a href="javascript:void(0)" class="link border-top">
-                                    <div class="d-flex no-block align-items-center p-10">
-                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                        <div class="ms-2">
-                                            <h5 class="mb-0">Event today</h5>
-                                            <span class="mail-desc">Just a reminder that event</span>
-                                        </div>
-                                    </div>
-                                
-                                </a>
-                                <hr class="hr" />
-                                <a href="javascript:void(0)" class="link border-top">
-                                    <div class="d-flex no-block align-items-center p-10">
-                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                        <div class="ms-2">
-                                            <h5 class="mb-0">Event today</h5>
-                                            <span class="mail-desc">Just a reminder that event</span>
-                                        </div>
-                                    </div>
-                                
-                                </a>
-                                <hr class="hr" />
-                                <a href="javascript:void(0)" class="link border-top">
-                                    <div class="d-flex no-block align-items-center p-10">
-                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                        <div class="ms-2">
-                                            <h5 class="mb-0">Event today</h5>
-                                            <span class="mail-desc">Just a reminder that event</span>
-                                        </div>
-                                    </div>
-                                
-                                </a>
-                                <hr class="hr" />
-                                <a href="javascript:void(0)" class="link border-top">
-                                    <div class="d-flex no-block align-items-center p-10">
-                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                        <div class="ms-2">
-                                            <h5 class="mb-0">Event today</h5>
-                                            <span class="mail-desc">Just a reminder that event</span>
-                                        </div>
-                                    </div>
-                                
-                                </a>
-                                <hr class="hr" />
-                                </div>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
-                                </rside>
+                            </div>
+                            </div>
+                            </rside>
         </header>
         <!-- ============================================================== -->
         <!-- End Topbar header -->
@@ -340,9 +340,6 @@
                                 </span></a></li>
                         <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-bell"></i><span
                                     class="hide-menu">Notifications
-                                </span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-list-alt"></i><span
-                                    class="hide-menu">Todo Lists
                                 </span></a></li>
                         <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-user"></i><span
                                     class="hide-menu">My Profile
@@ -392,123 +389,60 @@
                 <!-- Sales Cards  -->
                 <!-- ============================================================== -->
                 <div class="row">
+                    <div class="col-md-8">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="card card-hover">
+                                        <div class="box bg-primary text-center">
+                                            <h1 class="font-light text-white"><i class="fas fa-table"></i></h1>
+                                            <h6 class="text-white">Requests</h6>
+                                            <h6 class="text-white">0</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Column -->
+                                <div class="col-md-6">
+                                    <div class="card card-hover">
+                                        <div class="box bg-success text-center">
+                                            <h1 class="font-light text-white"><i class="far fa-check-square"></i></h1>
+                                            <h6 class="text-white">Sent Requests</h6>
+                                            <h6 class="text-white">0</h6>
 
-                    <div class="col-md-6 col-lg-3 col-xlg-3">
-                        <div class="card card-hover">
-                            <div class="box bg-primary text-center">
-                                <h1 class="font-light text-white"><i class="fas fa-table"></i></h1>
-                                <h6 class="text-white">Requests</h6>
-                                <h6 class="text-white">0</h6>
+                                        </div>
+                                        </div>
+                                        </div>
+
+                                <div class="col-md-6">
+                                    <div class="card card-hover">
+                                        <div class="box bg-cyan text-center">
+                                            <h1 class="font-light text-white"><i class="mdi mdi-folder"></i></h1>
+                                            <h6 class="text-white">Files Uploaded</h6>
+                                            <h6 class="text-white">0</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-3 col-xlg-3">
-                        <div class="card card-hover">
-                            <div class="box bg-success text-center">
-                                <h1 class="font-light text-white"><i class="far fa-check-square"></i></h1>
-                                <h6 class="text-white">Sent Requests</h6>
-                                <h6 class="text-white">0</h6>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-lg-3 col-xlg-3">
-                        <div class="card card-hover">
-                            <div class="box bg-cyan text-center">
-                                <h1 class="font-light text-white"><i class="mdi mdi-folder"></i></h1>
-                                <h6 class="text-white">Files Uploaded</h6>
-                                <h6 class="text-white">0</h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Column -->
-                </div>
-
-                <!-- ============================================================== -->
-                <!-- Recent comment and chats -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <!-- column -->
-                    <div class="col-lg-7">
-
-
-                        <div class="card">
+                    <div class="col-md-3 flex-fill dtcard ">
+                        <div class="card card-hover w-100 align-self-center">
                             <div class="card-body">
-                                <h4 class="card-title">To Do List</h4>
-                                <div class="todo-widget scrollable" style="height:450px;">
-                                    <ul class="list-task todo-list list-group mb-0" data-role="tasklist">
-                                        <li class="list-group-item todo-item" data-role="task">
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="customCheck">
-                                                <label class="form-check-label w-100 mb-0 todo-label" for="customCheck">
-                                                    <span class="todo-desc fw-normal">Lorem Ipsum is simply dummy text
-                                                        of the
-                                                        printing and typesetting industry.</span> <span
-                                                        class="badge rounded-pill bg-danger float-end">Today</span>
-                                                </label>
-                                            </div>
-
-                                        </li>
-                                        <li class="list-group-item todo-item" data-role="task">
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                <label class="form-check-label w-100 mb-0 todo-label"
-                                                    for="customCheck1">
-                                                    <span class="todo-desc fw-normal">Lorem Ipsum is simply dummy text
-                                                        of the
-                                                        printing</span><span
-                                                        class="badge rounded-pill bg-primary float-end">1 week
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div class="item-date"> 26 jun 2021</div>
-                                        </li>
-                                        <li class="list-group-item todo-item" data-role="task">
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                <label class="form-check-label w-100 mb-0 todo-label"
-                                                    for="customCheck2">
-                                                    <span class="todo-desc fw-normal">Give Purchase report to</span>
-                                                    <span class="badge rounded-pill bg-info float-end">Yesterday</span>
-                                                </label>
-                                            </div>
-                                            <ul class="list-style-none assignedto">
-                                                <li class="assignee"><img class="rounded-circle" width="40"
-                                                        src="../../assets/images/users/3.jpg" alt="user"
-                                                        data-toggle="tooltip" data-placement="top" title=""
-                                                        data-original-title="Priyanka"></li>
-                                                <li class="assignee"><img class="rounded-circle" width="40"
-                                                        src="../../assets/images/users/4.jpg" alt="user"
-                                                        data-toggle="tooltip" data-placement="top" title=""
-                                                        data-original-title="Selina"></li>
-                                            </ul>
-                                        </li>
-
-                                    </ul>
+                                <h4 class="card-title">Date Today</h4>
+                                <div class="todo-widget text-left" style="height:20px;">
+                                    <h5 id="dayValueMain">Today is Monday</h5>
                                 </div>
-                            </div>
-                        </div>
+                                <div class="todo-widget text-black-50 text-left" style="height:20px;">
+                                    <h5 id="dateValueMain">00/00/2022</h5>
+                                </div>
+                                </div>
 
-                    </div>
-                    <div class="col-lg-5 dtcard">
-                        <div class="card ">
+                        </div>
+                        <div class="card ntcard">
                             <div class="card-body">
-                                <h4 class="card-title">Date / Time</h4>
-                                <div class="todo-widget text-center" style="height:20px;">
-                                    <h5>Today is Monday</h5>
-                                </div>
-                                <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                    <h5>00/00/2022</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body ntcard">
-                                <h4 class="card-title">Notifications</h4>
-                                <div class="todo-widget" style="height:50px;">
+                                <h4 class="card-title ">Notifications</h4>
+                                <hr class="hr" />
+                                <div class="ntcardMain">
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
@@ -518,21 +452,42 @@
                                             </div>
                                         </div>
                                     </a>
+                                    <hr>
+                                    <a href="javascript:void(0)" class="link border-top mt-5">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
+                                            </div>
+                                        <hr class="hr" />
+                                        </a>
+                                        <a href="javascript:void(0)" class="link border-top mt-5">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
+                                            <div class="ms-2">
+                                                <h5 class="mb-0">Event today</h5>
+                                                <span class="mail-desc">Just a reminder that event</span>
+                                            </div>
+                                        </div>
+                                        <hr class="hr" />
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
 
+
+
             </div>
-        
+
         </div>
-    
+
     </div>
-    <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
+    <div class="modalView"></div>
+    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/sparkline.js}"></script>

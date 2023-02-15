@@ -219,11 +219,11 @@
                                                   class="ti-user me-1 ms-1"></i>
                                              My Profile</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i
+                                        <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i
                                                   class="ti-settings me-1 ms-1"></i>
                                              Change Password</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i
+                                        <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i
                                                   class="ti-settings me-1 ms-1"></i>
                                              Change Profile Picture</a>
                                         <div class="dropdown-divider"></div>
@@ -253,13 +253,13 @@
                          <div class="col-7">
                               <div class="card  dateTimeCard">
                                    <div class="card-body">
-                                        <h4 class="card-title">Date / Time</h4>
+                                        <h4 class="card-title">Date Today</h4>
                                         <hr class="hr" />
                                         <div class="todo-widget text-center" style="height:20px;">
                                              <h5>Today is Monday</h5>
                                         </div>
                                         <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                             <h5>00/00/2022</h5>
+                                             <h5 id="dateValue">00/00/2022</h5>
                                         </div>
                                    </div>
                               </div>
@@ -490,8 +490,10 @@
 
 
 
+<div class="modalView">
 
-     <script type="text/javascript" th:src="@{/js/userpageJS/jquery.min.js}"></script>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
      <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
      <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
      <script type="text/javascript" th:src="@{/js/userpageJS/sparkline.js}"></script>

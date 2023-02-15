@@ -149,10 +149,7 @@ public class Regs_RestController {
 
      }
 
-     @GetMapping("/session/{sessionKey}")
-     public ResponseEntity<String> getSessionValue(@PathVariable("sessionKey") String sessionKey, HttpSession session) {
-          return new ResponseEntity<>((String) session.getAttribute(sessionKey), HttpStatus.OK);
-     }
+
 
      // Manage Requests for teachers.
      @PostMapping("/registrar/send/requests")

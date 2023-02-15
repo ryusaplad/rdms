@@ -28,6 +28,7 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
 
           String error = "";
           try {
+
                user.setPassword(user.getPassword().replaceAll("\\s", ""));
                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
@@ -44,7 +45,16 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                } else if (user.getUsername().length() > 255 || user.getName().length() > 255
                          || user.getPassword().length() > 255) {
                     throw new ApiRequestException("Data/Information is too long, Please Try Again!");
+               } else if (user.getPassword().length() < 8) {
+                    return new ResponseEntity<>("Password must be at least 8 characters long",
+                              HttpStatus.BAD_REQUEST);
+               } else if (!user.getPassword()
+                         .matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$")) {
+                    return new ResponseEntity<>(
+                              "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number",
+                              HttpStatus.BAD_REQUEST);
                } else {
+
                     String userIdFormat = user.getUsername().toUpperCase();
                     user.setStatus("Active");
                     if (userIdFormat.contains("C")) {
