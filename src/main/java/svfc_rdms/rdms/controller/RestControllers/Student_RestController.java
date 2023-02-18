@@ -34,7 +34,7 @@ public class Student_RestController {
      private Student_RequirementServiceImpl requirementServiceImpl;
 
      @PostMapping("/student/request/{document}/sent")
-     public ResponseEntity<String> studRequestSent(@RequestParam("studentId") String id,
+     public ResponseEntity<Object> studRequestSent(@RequestParam("studentId") String id,
                @RequestParam("file[]") Optional<MultipartFile[]> files, @PathVariable String document,
                @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
 

@@ -295,6 +295,11 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
+     public List<Documents> getAllDocumentsByStatus(boolean status) {
+          return docRepo.findAllByStatus(status);
+     }
+
+     @Override
      public List<String> getAllDocumentTitles() {
           return docRepo.findAllTitle();
      }
@@ -366,6 +371,20 @@ public class AdminServicesImpl implements AdminService {
 
           } else {
                throw new ApiRequestException("No data found for the given requests ID");
+          }
+
+     }
+
+     @Override
+     public void createDefault_Admin_User_IfNotExisted() {
+
+          Users user = Users.builder().name("Administrator").username("admin")
+                    .password(new BCryptPasswordEncoder().encode("Akosiryu123@")).type("School_Admin").status("Active")
+                    .build();
+
+          Optional<Users> defaultAdminUser = userRepository.findByUsername(user.getUsername());
+          if (!defaultAdminUser.isPresent()) {
+               userRepository.save(user);
           }
 
      }

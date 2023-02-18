@@ -42,9 +42,9 @@ public class StudentRepositoryTest {
           for (String string : arrayWithoutDuplicates) {
                stringwithoutDuplicate += string + ",";
           }
-          System.out.println(stringwithoutDuplicate);
+
           int index = stringwithoutDuplicate.toString().lastIndexOf(",");
           String value = stringwithoutDuplicate.substring(0, index);
-          System.out.println(value);
+
      }
 }

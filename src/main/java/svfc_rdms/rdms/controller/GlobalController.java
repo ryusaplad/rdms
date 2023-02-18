@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.ValidAccounts;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
@@ -51,10 +52,10 @@ public class GlobalController {
           response.setDateHeader("Expires", 0);
 
           Cookie[] cookies = request.getCookies();
-          System.out.println("is Cookie Active: " + cookies == null);
+
           if (cookies != null) {
                for (Cookie cookie : cookies) {
-                    System.out.println(cookie);
+
                     if (cookie.getName().equals("login_MyUsername")) {
                          model.addAttribute("login_MyUsername", cookie.getValue());
                     } else if (cookie.getName().equals("login_MyPassword")) {
@@ -104,7 +105,11 @@ public class GlobalController {
                response.sendRedirect("/");
           } catch (Exception e) {
 
-               throw new ApiRequestException(e.getMessage());
+               try {
+                    response.sendRedirect("/");
+               } catch (IOException e1) {
+
+               }
 
           }
      }

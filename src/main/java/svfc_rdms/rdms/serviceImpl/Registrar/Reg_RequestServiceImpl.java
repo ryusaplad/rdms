@@ -184,7 +184,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                for (MultipartFile filex : files.get()) {
 
                     if (!excludedFiles.contains(filex.getOriginalFilename())) {
-                         System.out.println(filex.getOriginalFilename());
+
                          UserFiles userFiles = new UserFiles();
                          userFiles.setData(filex.getBytes());
                          userFiles.setName(filex.getOriginalFilename());

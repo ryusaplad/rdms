@@ -19,6 +19,7 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.ExceptionHandler.FileNotFoundException;
 import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
+import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
@@ -28,6 +29,7 @@ import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Student.Student_RequirementService;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
 public class Student_RequirementServiceImpl implements Student_RequirementService, FileService {
@@ -42,6 +44,9 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private NotificationServiceImpl notificationService;
 
      @Override
      public List<UserFiles> getAllFilesByUser(long userId) throws FileNotFoundException {
@@ -133,8 +138,29 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
                if (user != null && studentRequest != null) {
 
-                    studentRepository.studentRequestsResubmit(status, studentRequest.getRequestId());
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                    String title = "Requesting " + studentRequest.getRequestDocument().getTitle();
+                    String message = user.getName() + "(" + user.getUsername()
+                              + ") has resubmit the requested " + studentRequest.getRequestDocument().getTitle()
+                              + " document.";
+                    String messageType = "requesting_notification";
+                    String dateAndTime = globalService.formattedDate();
+
+                    Notifications notifSentRequest = new Notifications();
+                    notifSentRequest.setMessage(message);
+                    notifSentRequest.setTitle(title);
+                    notifSentRequest.setMessageType(messageType);
+                    notifSentRequest.setDateAndTime(dateAndTime);
+                    notifSentRequest.setStatus(false);
+                    notifSentRequest.setFrom(user);
+                    // Saving Notification
+                    if (notificationService.sendNotificationGlobally(notifSentRequest)) {
+                         studentRepository.studentRequestsResubmit(status, studentRequest.getRequestId());
+                         return new ResponseEntity<>("Success", HttpStatus.OK);
+                    } else {
+                         return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
+                                   HttpStatus.BAD_REQUEST);
+                    }
+
                }
                return new ResponseEntity<>("Invalid Information, Please Try Again!", HttpStatus.BAD_REQUEST);
           } catch (Exception e) {

@@ -15,7 +15,7 @@
      <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
      <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
      <style>
-          .loader {
+          .cardLoader {
                width: 60px;
 
           }
@@ -164,7 +164,7 @@
                                                                  <span class="btn btn-success btn-circle"><i
                                                                            class="ti-calendar"></i></span>
                                                                  <div class="ms-2">
-                                                                      <h5 class="mb-0">Event today</h5>
+                                                                      <h5 class="mb-0  notifTitle">Event today</h5>
                                                                       <span class="mail-desc">Just a reminder that
                                                                            event</span>
                                                                  </div>
@@ -306,67 +306,51 @@
                </nav>
 
                <rside class="sidebar">
-                    <button class="rightSidebarToggle btn" onclick="toggleSidebar(); "><i id="btnIcon"
-                              class="fas fa-angle-left text-white"></i></button>
+                    <button class="rightSidebarToggle btn" onclick="toggleSidebar(); ">
+                        <i id="btnIcon" class="fas fa-angle-left text-white"></i>
+                    </button>
                     <!-- ============================================================== -->
                     <!-- Right Side Bar -->
                     <!-- ============================================================== -->
-
-                    <div class="row">
-                         <div class="col-7">
-                              <div class="card  dateTimeCard">
-                                   <div class="card-body">
-                                        <h4 class="card-title">Date Today</h4>
-                                        <hr class="hr" />
-                                        <div class="todo-widget text-center" style="height:20px;">
-                                             <h5>Today is Monday</h5>
-                                        </div>
-                                        <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                             <h5 id="dateValue">00/00/2022</h5>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
-                         <div class="col-7">
-
-                              <div class="card ">
-                                   <div class="card-body">
-                                        <h4 class="card-title ">Notifications</h4>
-                                        <hr class="hr" />
-                                        <div class="notificationCard">
-                                             <a href="javascript:void(0)" class="link border-top">
-                                                  <div class="d-flex no-block align-items-center p-10">
-                                                       <span class="btn btn-success btn-circle"><i
-                                                                 class="ti-calendar"></i></span>
-                                                       <div class="ms-2">
-                                                            <h5 class="mb-0">Event today</h5>
-                                                            <span class="mail-desc">Just a reminder that event</span>
-                                                       </div>
-                                                  </div>
-
-                                             </a>
-                                             <hr class="hr" />
-                                             <a href="javascript:void(0)" class="link border-top">
-                                                  <div class="d-flex no-block align-items-center p-10">
-                                                       <span class="btn btn-success btn-circle"><i
-                                                                 class="ti-calendar"></i></span>
-                                                       <div class="ms-2">
-                                                            <h5 class="mb-0">Event today</h5>
-                                                            <span class="mail-desc">Just a reminder that event</span>
-                                                       </div>
-                                                  </div>
-
-                                             </a>
-                                             <hr class="hr" />
-
-
-
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
+                    <div class="row" id="r_row1" >
+                        <div class="col-7" style="width:50.333333% !important">
+                            <div class="card  dateTimeCard">
+                                <div class="card-body">
+                                    <h4 class="card-title">Date Today</h4>
+                                    <hr class="hr">
+                                    <div class="todo-widget text-center" style="height:20px;">
+                                        <h5 id="dayValueRightBar">Today is Monday</h5>
+                                    </div>
+                                    <div class="todo-widget text-black-50 text-center" style="height:20px;">
+                                        <h5 id="dateValueRightBar">00/00/2022</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-7" style="width:50.333333% !important">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <h4 class="card-title ">Notifications</h4>
+                                    <hr class="hr">
+                                    <div class="notificationCard">
+                                        <a href="javascript:void(0)" class="link border-top">
+                                            <div class="d-flex no-block align-items-center p-10">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-check-box"></i>
+                                                </span>
+                                                <div class="ms-2 mainNotificationInfo">
+                                                    <h5 class="mb-0 title">Requests Status</h5>
+                                                    <span class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, cum obcaecati, est ipsam vel tempora quasi delectus voluptatum perspiciatis quaerat officiis enim numquam possimus, illum facere fugit. Laboriosam, totam possimus?</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <hr class="hr">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-               </rside>
+                </rside>
           </header>
           <!-- ============================================================== -->
           <!-- End Topbar header -->
@@ -524,7 +508,7 @@
                               <div class="card-body">
                                    <div class="mainLoaderDiv">
                                         <div id="loaderDiv">
-                                             <div class="loader">
+                                             <div class="cardLoader">
                                                   <div class="loader-wheel"></div>
                                                   <div class="loader-text"></div>
                                              </div>

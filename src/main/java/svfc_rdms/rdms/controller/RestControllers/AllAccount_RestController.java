@@ -79,11 +79,11 @@ public class AllAccount_RestController {
                          String base64Encoded = new String(encodeBase64, "UTF-8");
                          return new ResponseEntity<>(base64Encoded, HttpStatus.OK);
                     }
-                    throw new ApiRequestException("Invalid Action");
+                    throw new ApiRequestException("User not found!, Please Try Again");
                }
-               throw new ApiRequestException("Invalid Action");
+               throw new ApiRequestException("Username not found!, Please Try Again");
           } catch (Exception e) {
-               throw new ApiRequestException("Invalid Action");
+               throw new ApiRequestException("Image not found!, Please Try Again");
           }
      }
 }

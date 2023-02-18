@@ -11657,47 +11657,7 @@ body .jqstooltip {
   border-color: transparent;
   border-radius: 60px;
 }
-.chartist-tooltip {
-  position: absolute;
-  display: inline-block;
-  opacity: 0;
-  border-radius: 2px;
-  padding: 10px 20px;
-  background: #2255a4;
-  color: #fff;
-  ext-align: center;
-  pointer-events: none;
-  z-index: 1;
-  transition: opacity 0.2s linear;
-}
-.chartist-tooltip:before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  margin-left: -5px;
-  border: 5px solid transparent;
-  border-top-color: #2255a4;
-}
-.chartist-tooltip.tooltip-show {
-  opacity: 1;
-}
-.ct-area,
-.ct-line {
-  pointer-events: none;
-}
-.c3-chart-arcs-title {
-  fill: #a1aab2;
-}
-.c3 line,
-.c3 path {
-  stroke: #e9ecef;
-}
-.c3-chart-arc path {
-  stroke: transparent;
-}
+
 .popover-item {
   margin-left: -15px;
 }
@@ -12296,7 +12256,7 @@ label {
   .sidebar {
             position: fixed;
             top: 65px;
-            right: -550px;
+            right: -600px;
             width: 100%px;
             height: auto;
             background-color: gray;
@@ -12314,6 +12274,9 @@ label {
             color: black;
             padding: 50px;
             
+        }
+        #r_row1{
+          width: 521px !important;
         }
 
 
@@ -12440,6 +12403,26 @@ label {
         }
 
         #message[title] {
+            text-decoration: none;
+        }
+
+        /* Notification Text */
+         .mainNotificationInfo{
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 100%;
+            
+
+        }
+        .rightNotificationInfo{
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 50%;
+        }
+       
+        .description[title],.rightDescription[title],.notifTitle {
             text-decoration: none;
         }
 

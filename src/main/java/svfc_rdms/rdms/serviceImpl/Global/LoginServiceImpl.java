@@ -47,8 +47,7 @@ public class LoginServiceImpl implements LoginService {
 
                               if (rememberMe.equals("true")) {
 
-                                   System.out.println(manageCookie("login_MyUsername", user.getUsername(), 30, response,
-                                             "save"));
+                                   manageCookie("login_MyUsername", user.getUsername(), 30, response, "save");
                                    manageCookie("login_MyPassword", user.getPassword(), 30, response, "save");
                                    manageCookie("login_MyAccountType", user.getType(), 30, response, "save");
                                    manageCookie("login_RememberMe", rememberMe, 30, response, "save");

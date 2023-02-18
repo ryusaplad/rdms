@@ -1,500 +1,505 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Teacher - Dashboard</title>
-
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/svdfc-logo.png}">
-
-    <!-- Custom CSS -->
-    <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
-</head>
-
-<body>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Teacher - Dashboard</title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            th:href="@{/images/svdfc-logo.png}"
+        >
+        <!-- Custom CSS -->
+        <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
+    </head>
+    <body>
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <div class="preloader">
+            <div class="lds-ripple">
+                <div class="lds-pos"></div>
+                <div class="lds-pos"></div>
+            </div>
         </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
-        data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full" class="">
         <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- Main wrapper - style you can find in pages.scss -->
         <!-- ============================================================== -->
-        <header class="topbar" data-navbarbg="skin5">
-            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-                <div class="navbar-header" data-logobg="skin5">
-
+        <div
+            id="main-wrapper"
+            data-layout="vertical"
+            data-navbarbg="skin5"
+            data-sidebartype="full"
+            data-sidebar-position="absolute"
+            data-header-position="absolute"
+            data-boxed-layout="full"
+            class=""
+        >
+            <!-- ============================================================== -->
+            <!-- Topbar header - style you can find in pages.scss -->
+            <!-- ============================================================== -->
+            <header class="topbar" data-navbarbg="skin5">
+                <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                    <div class="navbar-header" data-logobg="skin5">
+                        <!-- ============================================================== -->
+                        <!-- Logo -->
+                        <!-- ============================================================== -->
+                        <a class="navbar-brand" href="/teacher/dashboard">
+                            <b class="logo-icon">
+                                <img
+                                    height="50px"
+                                    th:src="@{/images/svdfc-logo.png}"
+                                    alt="homepage"
+                                    class="img-responsive light-logo"
+                                >
+                            </b>
+                            <span class="logo-text text-dark logoText">
+                                SVFC - RDMS
+                            </span>
+                        </a>
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Toggle which is visible on mobile only -->
+                        <!-- ============================================================== -->
+                        <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                            <i class="ti-menu ti-close"></i>
+                        </a>
+                    </div>
                     <!-- ============================================================== -->
-                    <!-- Logo -->
+                    <!-- End Logo -->
                     <!-- ============================================================== -->
-                    <a class="navbar-brand" href="/teacher/dashboard">
-
-
-                        <b class="logo-icon">
-
-                            <img height="50px" th:src="@{/images/svdfc-logo.png}" alt="homepage" class="img-responsive light-logo" />
-                        </b>
-
-                        <span class="logo-text text-dark logoText">
-                            SVFC - RDMS
-                        </span>
-
-
-                    </a>
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Toggle which is visible on mobile only -->
-                    <!-- ============================================================== -->
-                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
-                            class="ti-menu ti-close"></i></a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-start me-auto">
-                        <li class="nav-item d-none d-lg-block"><a
-                                class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
-                                data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a></li>
-
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- Right side toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-end">
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#" id="2" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="mdi mdi-bell font-24"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end mailbox" aria-labelledby="2">
-                                <ul class="list-style-none" style="height: 350px; overflow: auto">
-                                    <li>
-                                        <div class="">
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-success btn-circle"><i
-                                                            class="ti-calendar"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Event today</h5>
-                                                        <span class="mail-desc">Just a reminder that event</span>
+                    <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                        <!-- ============================================================== -->
+                        <!-- toggle and nav items -->
+                        <!-- ============================================================== -->
+                        <ul class="navbar-nav float-start me-auto">
+                            <li class="nav-item d-none d-lg-block">
+                                <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar">
+                                    <i class="mdi mdi-menu font-24"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- ============================================================== -->
+                        <!-- Right side toggle and nav items -->
+                        <!-- ============================================================== -->
+                        <ul class="navbar-nav float-end">
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle waves-effect waves-dark"
+                                    href="#"
+                                    id="2"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <i class="mdi mdi-bell font-24"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end mailbox" aria-labelledby="2">
+                                    <ul class="list-style-none" style="height: 350px; overflow: auto">
+                                        <li>
+                                            <div class="">
+                                                <!-- Message -->
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-success btn-circle">
+                                                            <i class="ti-calendar"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0  notifTitle">Event today</h5>
+                                                            <span class="mail-desc">Just a reminder that event</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-info btn-circle"><i
-                                                            class="ti-settings"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Settings</h5>
-                                                        <span class="mail-desc">You can customize this template</span>
+                                                </a>
+                                                <!-- Message -->
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-info btn-circle">
+                                                            <i class="ti-settings"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Settings</h5>
+                                                            <span class="mail-desc">You can customize this template</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-primary btn-circle"><i
-                                                            class="ti-user"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Pavan kumar</h5>
-                                                        <span class="mail-desc">Just see the my admin!</span>
+                                                </a>
+                                                <!-- Message -->
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-primary btn-circle">
+                                                            <i class="ti-user"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Pavan kumar</h5>
+                                                            <span class="mail-desc">Just see the my admin!</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-danger btn-circle"><i
-                                                            class="fa fa-link"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Luanch Admin</h5>
-                                                        <span class="mail-desc">Just see the my new admin!</span>
+                                                </a>
+                                                <!-- Message -->
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-danger btn-circle">
+                                                            <i class="fa fa-link"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Luanch Admin</h5>
+                                                            <span class="mail-desc">Just see the my new admin!</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-danger btn-circle"><i
-                                                            class="fa fa-link"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Luanch Admin</h5>
-                                                        <span class="mail-desc">Just see the my new admin!</span>
+                                                </a>
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-danger btn-circle">
+                                                            <i class="fa fa-link"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Luanch Admin</h5>
+                                                            <span class="mail-desc">Just see the my new admin!</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-danger btn-circle"><i
-                                                            class="fa fa-link"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Luanch Admin</h5>
-                                                        <span class="mail-desc">Just see the my new admin!</span>
+                                                </a>
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-danger btn-circle">
+                                                            <i class="fa fa-link"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Luanch Admin</h5>
+                                                            <span class="mail-desc">Just see the my new admin!</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-danger btn-circle"><i
-                                                            class="fa fa-link"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Luanch Admin</h5>
-                                                        <span class="mail-desc">Just see the my new admin!</span>
+                                                </a>
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-danger btn-circle">
+                                                            <i class="fa fa-link"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Luanch Admin</h5>
+                                                            <span class="mail-desc">Just see the my new admin!</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-danger btn-circle"><i
-                                                            class="fa fa-link"></i></span>
-                                                    <div class="ms-2">
-                                                        <h5 class="mb-0">Luanch Admin</h5>
-                                                        <span class="mail-desc">Just see the my new admin!</span>
+                                                </a>
+                                                <a href="javascript:void(0)" class="link border-top">
+                                                    <div class="d-flex no-block align-items-center p-10">
+                                                        <span class="btn btn-danger btn-circle">
+                                                            <i class="fa fa-link"></i>
+                                                        </span>
+                                                        <div class="ms-2">
+                                                            <h5 class="mb-0">Luanch Admin</h5>
+                                                            <span class="mail-desc">Just see the my new admin!</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </li>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </ul>
-                            </ul>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#"
-                                id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img id="profilePicture" src="../../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end user-dd animated"
-                                aria-labelledby="navbarDropdown">
-                                <hr class="devider">
-                                <div th:if="${#session.getAttribute('username')!=null}">
-
-                                    <label th:with="name=${#session.getAttribute('name')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">Name
-                                        :[[${name}]]</label>
-                                    <label th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
+                            </li>
+                            <!-- ============================================================== -->
+                            <!-- User profile and search -->
+                            <!-- ============================================================== -->
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <img
+                                        id="profilePicture"
+                                        src="../../assets/images/users/1.jpg"
+                                        alt="user"
+                                        class="rounded-circle"
+                                        width="31"
+                                    >
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                                    <hr class="devider">
+                                    <div th:if="${#session.getAttribute('username')!=null}">
+                                        <label th:with="name=${#session.getAttribute('name')}" class="dropdown-item bg-success border border-1 b-2 text-white">
+                                            Name
+                                        :[[${name}]]
+                                        </label>
+                                        <label th:with="type=${#session.getAttribute('accountType')}" class="dropdown-item bg-primary border  border-1 b-2 text-white">
+                                            Account
                                         Type
-                                        :[[${type}]]</label>
-                                </div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
-                                    My Profile</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
-                                    Change Password</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
-                                    Change Profile Picture</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout"><i class="fa fa-power-off me-1 ms-1"></i>
-                                    Logout</a>
-                                <div class="dropdown-divider"></div>
-
-                            </ul>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                    </ul>
-                </div>
-            </nav>
-
-            <rside class="sidebar-t">
-                <button class="rightSidebarToggle btn" onclick="toggleSidebarT(); "><i id="btnIcon"
-                        class="fas fa-angle-left text-white"></i></button>
-                <!-- ============================================================== -->
-                <!-- Right Side Bar -->
-                <!-- ============================================================== -->
-            
-                <div class="row">
-                    <div class="col-7">
-                        <div class="card  dateTimeCard">
-                            <div class="card-body">
-                                <h4 class="card-title">Date Today</h4>
-                                <hr class="hr" />
-                                <div class="todo-widget text-center" style="height:20px;">
-                                    <h5 id="dayValueRightBar">Today is Monday</h5>
+                                        :[[${type}]]
+                                        </label>
+                                    </div>
+                                    <a class="dropdown-item" href="javascript:void(0)">
+                                        <i class="ti-user me-1 ms-1"></i>
+                                        My Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Password
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Profile Picture
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/logout">
+                                        <i class="fa fa-power-off me-1 ms-1"></i>
+                                        Logout
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                </ul>
+                            </li>
+                            <!-- ============================================================== -->
+                            <!-- User profile and search -->
+                            <!-- ============================================================== -->
+                        </ul>
+                    </div>
+                </nav>
+                <rside class="sidebar-t">
+                    <button class="rightSidebarToggle btn" onclick="toggleSidebarT(); ">
+                        <i id="btnIcon" class="fas fa-angle-left text-white"></i>
+                    </button>
+                    <!-- ============================================================== -->
+                    <!-- Right Side Bar -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="card  dateTimeCard">
+                                <div class="card-body">
+                                    <h4 class="card-title">Date Today</h4>
+                                    <hr class="hr">
+                                    <div class="todo-widget text-center" style="height:20px;">
+                                        <h5 id="dayValueRightBar">Today is Monday</h5>
                                     </div>
                                     <div class="todo-widget text-black-50 text-center" style="height:20px;">
                                         <h5 id="dateValueRightBar">00/00/2022</h5>
-                                        </div>
-                                        </div>
-                                        </div>
-                                        </div>
-                                        <div class="col-7">
-                                        
-                                            <div class="card ">
-                                                <div class="card-body">
-                                                    <h4 class="card-title ">Notifications</h4>
-                                                    <hr class="hr" />
-                                                    <div class="notificationCard">
-                                                        <a href="javascript:void(0)" class="link border-top">
-                                                            <div class="d-flex no-block align-items-center p-10">
-                                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                                <div class="ms-2">
-                                                                    <h5 class="mb-0">Event today</h5>
-                                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                                </div>
-                                                            </div>
-                                        
-                                                        </a>
-                                                        <hr class="hr" />
-                                                        <a href="javascript:void(0)" class="link border-top">
-                                                            <div class="d-flex no-block align-items-center p-10">
-                                                                <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                                <div class="ms-2">
-                                                                    <h5 class="mb-0">Event today</h5>
-                                                                    <span class="mail-desc">Just a reminder that event</span>
-                                                                </div>
-                                                            </div>
-                                
-                                                </a>
-                                                <hr class="hr" />
-                                                <a href="javascript:void(0)" class="link border-top">
-                                                    <div class="d-flex no-block align-items-center p-10">
-                                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                        <div class="ms-2">
-                                                            <h5 class="mb-0">Event today</h5>
-                                                            <span class="mail-desc">Just a reminder that event</span>
-                                                        </div>
-                                                    </div>
-                                
-                                                </a>
-                                                <hr class="hr" />
-                                                <a href="javascript:void(0)" class="link border-top">
-                                                    <div class="d-flex no-block align-items-center p-10">
-                                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                        <div class="ms-2">
-                                                            <h5 class="mb-0">Event today</h5>
-                                                            <span class="mail-desc">Just a reminder that event</span>
-                                                        </div>
-                                                    </div>
-                                
-                                                </a>
-                                                <hr class="hr" />
-                                                <a href="javascript:void(0)" class="link border-top">
-                                                    <div class="d-flex no-block align-items-center p-10">
-                                                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                        <div class="ms-2">
-                                                            <h5 class="mb-0">Event today</h5>
-                                                            <span class="mail-desc">Just a reminder that event</span>
-                                                        </div>
-                                                    </div>
-                                
-                                                </a>
-                                                <hr class="hr" />
-                                </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </rside>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/teacher/dashboard" aria-expanded="false"><i class="fas fa-home"></i><span
-                                    class="hide-menu">Home</span></a></li>
-
-
-
-                        <li class="sidebar-item"><a href="/teacher/registrar-requests" class="sidebar-link"><i class="fas fa-table"></i><span
-                                    class="hide-menu"> View Requests
-                                </span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-history"></i><span
-                                    class="hide-menu"> My Activity Logs
-                                </span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-folder"></i><span
-                                    class="hide-menu"> My Documents
-                                </span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class=" fas fa-bell"></i><span
-                                    class="hide-menu">Notifications
-                                </span></a></li>
-                        <li class="sidebar-item "><a href="#" class="sidebar-link"><i class="fas fa-user"></i><span
-                                    class="hide-menu">My Profile
-                                </span></a></li>
-                        <li class="sidebar-item "><a href="/logout" class="sidebar-link"><i class="fas fa-power-off"></i><span
-                                    class="hide-menu">Logout
-                                </span></a></li>
-                    </ul>
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Dashboard</h4>
-                        <div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Sales Cards  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <div class="card card-hover">
-                                        <div class="box bg-primary text-center">
-                                            <h1 class="font-light text-white"><i class="fas fa-table"></i></h1>
-                                            <h6 class="text-white">Requests</h6>
-                                            <h6 class="text-white">0</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Column -->
-                                <div class="col-md-6">
-                                    <div class="card card-hover">
-                                        <div class="box bg-success text-center">
-                                            <h1 class="font-light text-white"><i class="far fa-check-square"></i></h1>
-                                            <h6 class="text-white">Sent Requests</h6>
-                                            <h6 class="text-white">0</h6>
-
-                                        </div>
-                                        </div>
-                                        </div>
-
-                                <div class="col-md-6">
-                                    <div class="card card-hover">
-                                        <div class="box bg-cyan text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-folder"></i></h1>
-                                            <h6 class="text-white">Files Uploaded</h6>
-                                            <h6 class="text-white">0</h6>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3 flex-fill dtcard ">
-                        <div class="card card-hover w-100 align-self-center">
-                            <div class="card-body">
-                                <h4 class="card-title">Date Today</h4>
-                                <div class="todo-widget text-left" style="height:20px;">
-                                    <h5 id="dayValueMain">Today is Monday</h5>
-                                </div>
-                                <div class="todo-widget text-black-50 text-left" style="height:20px;">
-                                    <h5 id="dateValueMain">00/00/2022</h5>
-                                </div>
-                                </div>
-
-                        </div>
-                        <div class="card ntcard">
-                            <div class="card-body">
-                                <h4 class="card-title ">Notifications</h4>
-                                <hr class="hr" />
-                                <div class="ntcardMain">
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
+                        <div class="col-7">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <h4 class="card-title ">Notifications</h4>
+                                    <hr class="hr">
+                                    <div class="notificationCard">
+                                        <a href="javascript:void(0)" class="link border-top">
+                                            <div class="d-flex no-block align-items-center p-10">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-check-box"></i>
+                                                </span>
+                                                <div class="ms-2 mainNotificationInfo">
+                                                    <h5 class="mb-0 title">Requests Status</h5>
+                                                    <span class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, cum obcaecati, est ipsam vel tempora quasi delectus voluptatum perspiciatis quaerat officiis enim numquam possimus, illum facere fugit. Laboriosam, totam possimus?</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <hr>
-                                    <a href="javascript:void(0)" class="link border-top mt-5">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
-                                            </div>
-                                            </div>
-                                        <hr class="hr" />
                                         </a>
-                                        <a href="javascript:void(0)" class="link border-top mt-5">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                            <div class="ms-2">
-                                                <h5 class="mb-0">Event today</h5>
-                                                <span class="mail-desc">Just a reminder that event</span>
+                                        <hr class="hr">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </rside>
+            </header>
+            <!-- ============================================================== -->
+            <!-- End Topbar header -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Left Sidebar - style you can find in sidebar.scss  -->
+            <!-- ============================================================== -->
+            <aside class="left-sidebar" data-sidebarbg="skin5">
+                <!-- Sidebar scroll-->
+                <div class="scroll-sidebar">
+                    <!-- Sidebar navigation-->
+                    <nav class="sidebar-nav">
+                        <ul id="sidebarnav" class="pt-4">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/teacher/dashboard" aria-expanded="false">
+                                    <i class="fas fa-home"></i>
+                                    <span class="hide-menu">Home</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/teacher/registrar-requests" class="sidebar-link">
+                                    <i class="fas fa-table"></i>
+                                    <span class="hide-menu">
+                                        View Requests
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">
+                                    <i class="fas fa-history"></i>
+                                    <span class="hide-menu">
+                                        My Activity Logs
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">
+                                    <i class="fas fa-folder"></i>
+                                    <span class="hide-menu">
+                                        My Documents
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">
+                                    <i class=" fas fa-bell"></i>
+                                    <span class="hide-menu">
+                                        Notifications
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="#" class="sidebar-link">
+                                    <i class="fas fa-user"></i>
+                                    <span class="hide-menu">
+                                        My Profile
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="/logout" class="sidebar-link">
+                                    <i class="fas fa-power-off"></i>
+                                    <span class="hide-menu">
+                                        Logout
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- End Sidebar navigation -->
+                </div>
+                <!-- End Sidebar scroll-->
+            </aside>
+            <!-- ============================================================== -->
+            <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Page wrapper  -->
+            <!-- ============================================================== -->
+            <div class="page-wrapper">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Dashboard</h4>
+                            <div class="ms-auto text-end">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">
+                                            <a href="#">Home</a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Container fluid  -->
+                <!-- ============================================================== -->
+                <div class="container-fluid">
+                    <!-- ============================================================== -->
+                    <!-- Rows -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <div class="card card-hover">
+                                            <div class="box bg-primary text-center">
+                                                <h1 class="font-light text-white">
+                                                    <i class="fas fa-table"></i>
+                                                </h1>
+                                                <h6 class="text-white">Requests</h6>
+                                                <h6 class="text-white">0</h6>
                                             </div>
                                         </div>
-                                        <hr class="hr" />
-                                    </a>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6">
+                                        <div class="card card-hover">
+                                            <div class="box bg-success text-center">
+                                                <h1 class="font-light text-white">
+                                                    <i class="far fa-check-square"></i>
+                                                </h1>
+                                                <h6 class="text-white">Sent Requests</h6>
+                                                <h6 class="text-white">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card card-hover">
+                                            <div class="box bg-cyan text-center">
+                                                <h1 class="font-light text-white">
+                                                    <i class="mdi mdi-folder"></i>
+                                                </h1>
+                                                <h6 class="text-white">Files Uploaded</h6>
+                                                <h6 class="text-white">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 flex-fill dtcard ">
+                            <div class="card card-hover w-100 align-self-center">
+                                <div class="card-body">
+                                    <h4 class="card-title">Date Today</h4>
+                                    <hr class="hr">
+                                    <div class="todo-widget text-center" style="height:20px;">
+                                        <h5 id="dayValueRightBar">Today is Monday</h5>
+                                    </div>
+                                    <div class="todo-widget text-black-50 text-center" style="height:20px;">
+                                        <h5 id="dateValueRightBar">00/00/2022</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card ntcard">
+                                <div class="card-body">
+                                    <h4 class="card-title ">Notifications</h4>
+                                    <hr class="hr">
+                                    <div class="ntcardMain">
+                                        <a href="javascript:void(0)" class="link border-top">
+                                            <div class="d-flex no-block align-items-center p-10">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-check-box"></i>
+                                                </span>
+                                                <div class="ms-2 mainNotificationInfo">
+                                                    <h5 class="mb-0 title">Requests Status</h5>
+                                                    <span class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, cum obcaecati, est ipsam vel tempora quasi delectus voluptatum perspiciatis quaerat officiis enim numquam possimus, illum facere fugit. Laboriosam, totam possimus?</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <hr class="hr">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
-
         </div>
-
-    </div>
-    <div class="modalView"></div>
-    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/sparkline.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
-
-</body>
-
+        <div class="modalView"></div>
+        <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+        <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
+        <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
+        <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
+    </body>
 </html>

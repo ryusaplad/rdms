@@ -96,8 +96,8 @@ a {
   padding-top: 10.36vh;
   padding-left: 4vw;
   padding-right: 4vw;
-  margin-top: 0px;
-  margin-bottom: 10px;
+  margin:auto;
+ 
 }
 
 form {
@@ -204,6 +204,7 @@ p {
     padding-top: 0;
     padding-left: 4vw;
     padding-right: 4vw;
+   
   }
 }
 @media (max-width: 1199px) {

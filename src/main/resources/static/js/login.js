@@ -52,7 +52,7 @@ $(document).ready(function () {
     } else {
       hideMessage(passMessage, passError);
     }
-    if (getSelected == "Account Type") {
+    if (getSelected == "login_as") {
       $(".passInput").removeClass("is-invalid");
       $(".typeInput").addClass("is-invalid");
       displayMessage(accTypeMessage, accTypeError, 1, "Account Type");

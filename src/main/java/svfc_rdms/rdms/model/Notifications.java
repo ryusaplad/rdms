@@ -26,10 +26,11 @@ public class Notifications {
      @SequenceGenerator(name = "notif_sequence", sequenceName = "notif_sequence", allocationSize = 1)
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notif_sequence")
      private long notifId;
+     private String title;
      private String message; // add messages
      private String messageType; // warning / information
      private String dateAndTime; // what date created
-     private boolean status; // viewed, deleted
+     private Boolean status; // viewed, deleted
 
      @ManyToOne
      @JoinColumn(name = "notification_from", referencedColumnName = "userId")

@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.serviceImpl.Student;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
@@ -33,6 +36,7 @@ import svfc_rdms.rdms.service.Document.DocumentService;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Student.Student_RequestService;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
 public class Student_RequestServiceImpl implements Student_RequestService, FileService, DocumentService {
@@ -51,6 +55,9 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private NotificationServiceImpl notificationService;
 
      @Override
      public Optional<Documents> getFileDocumentById(long id) {
@@ -119,7 +126,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      }
 
      @Override
-     public ResponseEntity<String> saveRequest(String requestId,
+     public ResponseEntity<Object> saveRequest(String requestId,
                Optional<MultipartFile[]> uploadedFiles, String document,
                Map<String, String> params) {
 
@@ -152,10 +159,6 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                          }
                     }
 
-                    excludedFiles.stream().forEach(e -> {
-
-                    });
-
                     req.setRequestDate(globalService.formattedDate());
                     req.setRequestStatus("Pending");
                     req.setReleaseDate("");
@@ -171,7 +174,16 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
 
                          if (!excludedFiles.contains(filex.getOriginalFilename())) {
                               UserFiles userFiles = new UserFiles();
-                              userFiles.setData(filex.getBytes());
+                              InputStream inputStream = filex.getInputStream();
+                              byte[] buffer = new byte[4096];
+                              int bytesRead = -1;
+                              ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                              while ((bytesRead = inputStream.read(buffer)) != -1) {
+                                   outputStream.write(buffer, 0, bytesRead);
+                              }
+
+                              userFiles.setData(outputStream.toByteArray());
                               userFiles.setName(filex.getOriginalFilename());
                               userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
                               userFiles.setDateUploaded(globalService.formattedDate());
@@ -182,11 +194,34 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                               userFiles.setRequestWith(req);
                               saveFiles(userFiles);
 
+                              inputStream.close();
                          }
 
                     }
-                    studentRepository.save(req);
-                    return new ResponseEntity<>("Request Submited.", HttpStatus.OK);
+                    String title = "Requesting " + document;
+                    String message = user.getName() + "(" + user.getUsername()
+                              + ") has requested an " + document + " document.";
+                    String messageType = "requesting_notification";
+                    String dateAndTime = globalService.formattedDate();
+                    boolean status = false;
+
+                    Notifications notifSentRequest = new Notifications();
+                    notifSentRequest.setMessage(message);
+                    notifSentRequest.setTitle(title);
+                    notifSentRequest.setMessageType(messageType);
+                    notifSentRequest.setDateAndTime(dateAndTime);
+                    notifSentRequest.setStatus(status);
+                    notifSentRequest.setFrom(user);
+
+                    if (notificationService.sendNotificationGlobally(notifSentRequest)) {
+
+                         studentRepository.save(req);
+                         return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
+                    } else {
+                         return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
+                                   HttpStatus.BAD_REQUEST);
+                    }
+
                } else {
                     return new ResponseEntity<>("Required Informations, cannot be empty!", HttpStatus.BAD_REQUEST);
                }

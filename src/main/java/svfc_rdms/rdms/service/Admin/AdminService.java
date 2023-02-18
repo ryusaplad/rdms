@@ -14,6 +14,8 @@ import svfc_rdms.rdms.model.Users;
 
 public interface AdminService {
 
+     // DefaultAdmin
+     void createDefault_Admin_User_IfNotExisted();
      List<Users> diplayAllAccounts(String status, String type);
 
      List<Users> diplayAllAccountsByType(String type);
@@ -37,6 +39,8 @@ public interface AdminService {
      ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile, Map<String, String> documentsInfo);
 
      List<Documents> getAllDocuments();
+
+     List<Documents> getAllDocumentsByStatus(boolean status);
 
      List<String> getAllDocumentTitles();
 

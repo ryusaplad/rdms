@@ -75,7 +75,7 @@ $(document).ready(function () {
                 </div>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary saveEditDocument clearModal"  data-bs-dismiss="modal">Save changes</button>
+                    <button type="submit" class="btn btn-primary saveEditDocument "  data-bs-dismiss="modal">Save changes</button>
                 </div>
                 </form>
             </div>
@@ -207,7 +207,7 @@ $(document).ready(function () {
         $("#resultDiv").fadeIn(100);
         $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
-
+        modalView.empty();
         $("#resultMessage").html("A Document has been successfully updated.");
         focusToElement();
       },
@@ -288,7 +288,7 @@ $(document).ready(function () {
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="reset" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary saveDocument clearModal"  data-bs-dismiss="modal" >Save</button>
+                                                        <button type="submit" class="btn btn-primary saveDocument"  data-bs-dismiss="modal" >Save</button>
                                                     </div>
                                                     </form>
                                                 </div>
@@ -331,7 +331,9 @@ $(document).ready(function () {
         $("#resultDiv").fadeIn(100);
         $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+        modalView.empty();
         $("#resultMessage").html("A Document has been successfully inserted.");
+        focusToElement();
       },
       error: function (err) {
         resetFields(
