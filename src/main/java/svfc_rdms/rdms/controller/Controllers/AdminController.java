@@ -58,7 +58,7 @@ public class AdminController {
                          mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
                model.addAttribute("totalDeletedTeach",
                          mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
-
+            
                return "/admin/admin_dashboard";
           }
           return "redirect:/";

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,11 @@ public class AdminServicesImpl implements AdminService {
                } else {
                     String userIdFormat = user.getUsername().toUpperCase();
                     user.setStatus("Active");
+                    // Setting Default Color Code in hex
+                    Random random = new Random();
+                    int color = random.nextInt(0x1000000); // 0x1000000 is equivalent to 16777216 in decimal
+                    String colorCode = String.format("#%06x", color);
+                    user.setColorCode(colorCode);
                     if (userIdFormat.contains("C")) {
 
                          user.setType("Student");
@@ -131,6 +137,8 @@ public class AdminServicesImpl implements AdminService {
                          } else {
                               String hashedPassword = passwordEncoder.encode(user.getPassword());
                               user.setPassword(hashedPassword);
+                              byte[] image = new byte[] { 0 };
+                              user.setProfilePicture(image);
                               userRepository.saveAndFlush(user);
                               ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
                               return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);

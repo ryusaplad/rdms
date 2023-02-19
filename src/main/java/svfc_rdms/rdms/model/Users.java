@@ -44,6 +44,8 @@ public class Users {
      @Column(name = "profile_image", columnDefinition = "LONGBLOB", nullable = true)
      private byte[] profilePicture;
 
+     private String colorCode;
+
      @OneToMany(mappedBy = "requestBy")
      private List<RegistrarRequest> requests;
 
@@ -59,6 +61,17 @@ public class Users {
      @OneToMany(mappedBy = "requestTo")
      private List<RegistrarRequest> requestTo;
 
+     public Users(long userId, String name, String username, String password, String type, String status,
+               String colorCode) {
+          this.userId = userId;
+          this.name = name;
+          this.username = username;
+          this.password = password;
+          this.type = type;
+          this.status = status;
+          this.colorCode = colorCode;
+     }
+
      public Users(long userId, String name, String username, String password, String type, String status) {
           this.userId = userId;
           this.name = name;
@@ -66,6 +79,7 @@ public class Users {
           this.password = password;
           this.type = type;
           this.status = status;
+
      }
 
 }

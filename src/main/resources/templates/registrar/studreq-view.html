@@ -12,7 +12,8 @@
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/svdfc-logo.png}">
 
     <!-- Custom CSS -->
-    <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
+    <link th:href="@{/css/croppie.css}" rel="stylesheet">
     <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
     <style>
         .file-upload {
@@ -285,7 +286,8 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#"
                                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img id="profilePicture" src="../../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31">
+                                <img id="profilePicture" src="../../assets/images/users/1.jpg" alt="user"
+                                    class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                 aria-labelledby="navbarDropdown">
@@ -293,8 +295,10 @@
                                 <div th:if="${#session.getAttribute('username')!=null}">
 
                                     <label th:with="name=${#session.getAttribute('name')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">Name
-                                        :[[${name}]]</label>
+                                        class="dropdown-item bg-success border border-1 b-2 text-white">
+                                        Name:
+                                        <strong id="nameVal">[[${name}]]</strong>
+                                    </label>
                                     <label th:with="type=${#session.getAttribute('accountType')}"
                                         class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
                                         Type
@@ -303,10 +307,12 @@
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
                                     My Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
+                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i
+                                        class="ti-settings me-1 ms-1"></i>
                                     Change Password</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i class="ti-settings me-1 ms-1"></i>
+                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i
+                                        class="ti-settings me-1 ms-1"></i>
                                     Change Profile Picture</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/logout"><i class="fa fa-power-off me-1 ms-1"></i>
@@ -329,19 +335,19 @@
                 <!-- Right Side Bar -->
                 <!-- ============================================================== -->
 
-                  <div class="row" id="r_row1" >
-                        <div class="col-7" style="width:50.333333% !important">
+                <div class="row" id="r_row1">
+                    <div class="col-7" style="width:50.333333% !important">
                         <div class="card  dateTimeCard">
-                           <div class="card-body">
-                                    <h4 class="card-title">Date Today</h4>
-                                    <hr class="hr">
-                                    <div class="todo-widget text-center" style="height:20px;">
-                                        <h5 id="dayValueRightBar">Today is Monday</h5>
-                                    </div>
-                                    <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                        <h5 id="dateValueRightBar">00/00/2022</h5>
-                                    </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Date Today</h4>
+                                <hr class="hr">
+                                <div class="todo-widget text-center" style="height:20px;">
+                                    <h5 id="dayValueRightBar">Today is Monday</h5>
                                 </div>
+                                <div class="todo-widget text-black-50 text-center" style="height:20px;">
+                                    <h5 id="dateValueRightBar">00/00/2022</h5>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-7" style="width:50.333333% !important">
@@ -351,18 +357,21 @@
                                 <h4 class="card-title ">Notifications</h4>
                                 <hr class="hr" />
                                 <div class="notificationCard">
-                                     <a href="javascript:void(0)" class="link border-top">
-                                            <div class="d-flex no-block align-items-center p-10">
-                                                <span class="btn btn-success btn-circle">
-                                                    <i class="ti-check-box" ></i>
-                                                </span>
-                                                <div class="ms-2 mainNotificationInfo">
-                                                    <h5 class="mb-0 title">Requests Status</h5>
-                                                    <span class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, cum obcaecati, est ipsam vel tempora quasi delectus voluptatum perspiciatis quaerat officiis enim numquam possimus, illum facere fugit. Laboriosam, totam possimus?</span>
-                                                </div>
+                                    <a href="javascript:void(0)" class="link border-top">
+                                        <div class="d-flex no-block align-items-center p-10">
+                                            <span class="btn btn-success btn-circle">
+                                                <i class="ti-check-box"></i>
+                                            </span>
+                                            <div class="ms-2 mainNotificationInfo">
+                                                <h5 class="mb-0 title">Requests Status</h5>
+                                                <span class="description">Lorem ipsum dolor sit amet, consectetur
+                                                    adipisicing elit. Vero, cum obcaecati, est ipsam vel tempora quasi
+                                                    delectus voluptatum perspiciatis quaerat officiis enim numquam
+                                                    possimus, illum facere fugit. Laboriosam, totam possimus?</span>
                                             </div>
-                                        </a>
-                                       <hr class="hr">
+                                        </div>
+                                    </a>
+                                    <hr class="hr">
                                 </div>
                             </div>
                         </div>
@@ -551,9 +560,10 @@
 
     </div>
     <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/croppie.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
-    
+
     <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>

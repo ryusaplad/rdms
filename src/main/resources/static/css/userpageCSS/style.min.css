@@ -12508,3 +12508,8 @@ span:nth-child(5){
   object-fit: contain;
   border-radius: 50%;
 }
+
+#profilePicture{
+  width:40px;
+  height: 40px;
+}

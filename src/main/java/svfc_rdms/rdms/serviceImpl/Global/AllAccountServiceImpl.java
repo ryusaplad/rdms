@@ -71,19 +71,31 @@ public class AllAccountServiceImpl implements AllAccountServices {
      @Override
      public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId) {
           try {
-               byte[] bytes = image.getBytes();
+
                Optional<Users> optionalUser = userRepository.findById(userId);
-               if (optionalUser.isPresent()) {
+               if (image == null || image.getSize() == 0) {
+                    byte[] byteImage = new byte[] { 0 };
                     Users user = optionalUser.get();
-                    user.setProfilePicture(bytes);
+                    user.setProfilePicture(byteImage);
                     userRepository.save(user);
-                    return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
+                    return new ResponseEntity<>("Profile picture successfully cleared", HttpStatus.OK);
+               } else {
+
+                    if (optionalUser.isPresent()) {
+                         byte[] bytes = image.getBytes();
+                         Users user = optionalUser.get();
+                         user.setProfilePicture(bytes);
+                         userRepository.save(user);
+                         return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
+                    }
                }
           } catch (IOException e) {
-               return new ResponseEntity<>("Failed to change profile picture. Please try again.",
+               return new ResponseEntity<>(
+                         "Failed to change profile picture. The selected file is not a valid image. Please choose a valid image file and try again.",
                          HttpStatus.INTERNAL_SERVER_ERROR);
           }
-          return new ResponseEntity<>("User not found. Please try again.", HttpStatus.BAD_REQUEST);
+          return new ResponseEntity<>("Profile picture not found for the specified user. No changes were made.",
+                    HttpStatus.BAD_REQUEST);
      }
 
 }

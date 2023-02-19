@@ -166,7 +166,7 @@ $(document).ready(function () {
               dlAnchor =
                 "<tr>" +
                 "<td>" +
-                "<a href = '/student/files/download?id=" +
+                "<a href = '/registrar/files/download?id=" +
                 result.data[x].fileId +
                 "'class='btn btn-danger text-white'>Download</a>" +
                 "</td>" +
@@ -182,7 +182,7 @@ $(document).ready(function () {
               dlAnchor =
                 "<tr>" +
                 "<td>" +
-                "<a href = '/student/files/download?id=" +
+                "<a href = '/registrar/files/download?id=" +
                 result.data[x].fileId +
                 "'class='btn btn-danger text-white'>Download</a>" +
                 "</td>" +

@@ -139,7 +139,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                     } else {
                          registrarRequest.setRequestStatus("norecord");
                     }
-
+                    
                     if (messageAvailability && filesAvailability) {
                          registrarRequest.setRequestStatus("completed");
                     } else if (messageAvailability) {
@@ -147,7 +147,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                     } else if (filesAvailability) {
                          registrarRequest.setRequestStatus("recordonly");
                     }
-
+                    
                     regsRepository.save(registrarRequest);
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                } catch (Exception e) {

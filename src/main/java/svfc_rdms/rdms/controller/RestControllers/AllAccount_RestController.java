@@ -75,6 +75,14 @@ public class AllAccount_RestController {
                     Optional<Users> optionalUser = usersRepository.findByUsername(username);
                     if (optionalUser.isPresent()) {
                          image = optionalUser.get().getProfilePicture();
+
+                         // if image is empty return the name and color code to use in the ajax call. to
+                         // produce avatar using name and color code.
+                         if (image[0] == 48 || image == null || image[0] == 0) {
+                              String[] nameData = { optionalUser.get().getName(), optionalUser.get().getColorCode() };
+                              return new ResponseEntity<>(nameData, HttpStatus.NOT_FOUND);
+                         }
+
                          byte[] encodeBase64 = Base64.getEncoder().encode(image);
                          String base64Encoded = new String(encodeBase64, "UTF-8");
                          return new ResponseEntity<>(base64Encoded, HttpStatus.OK);
@@ -84,6 +92,26 @@ public class AllAccount_RestController {
                throw new ApiRequestException("Username not found!, Please Try Again");
           } catch (Exception e) {
                throw new ApiRequestException("Image not found!, Please Try Again");
+          }
+     }
+
+     @GetMapping("/load/user-profile-info")
+     public ResponseEntity<Object> profileInfo(@RequestParam("username") String username, HttpSession session) {
+
+          try {
+
+               if (!username.isEmpty() || !username.isBlank()) {
+                    Optional<Users> optionalUser = usersRepository.findByUsername(username);
+                    if (optionalUser.isPresent()) {
+                         // return only name and color code.
+                         String[] nameData = { optionalUser.get().getName(), optionalUser.get().getColorCode() };
+                         return new ResponseEntity<>(nameData, HttpStatus.OK);
+                    }
+                    throw new ApiRequestException("User not found!, Please Try Again");
+               }
+               throw new ApiRequestException("Username not found!, Please Try Again");
+          } catch (Exception e) {
+               throw new ApiRequestException("Profile Picture Data not found!, Please Try Again");
           }
      }
 }

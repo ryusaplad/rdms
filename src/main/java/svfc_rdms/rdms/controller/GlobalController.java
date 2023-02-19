@@ -1,7 +1,5 @@
 package svfc_rdms.rdms.controller;
 
-import java.io.IOException;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,14 +98,15 @@ public class GlobalController {
                     if (globalService.validatePages(accType, response, session)) {
                          globalService.DownloadFile(id, model, response);
                     }
+               } else {
+                    response.sendRedirect("/");
                }
 
-               response.sendRedirect("/");
           } catch (Exception e) {
 
                try {
                     response.sendRedirect("/");
-               } catch (IOException e1) {
+               } catch (Exception exception) {
 
                }
 
