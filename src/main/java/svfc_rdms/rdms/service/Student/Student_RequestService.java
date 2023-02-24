@@ -18,7 +18,7 @@ import svfc_rdms.rdms.model.Users;
 public interface Student_RequestService {
      String displayStudentRequests(Model model, HttpSession session);
 
-     ResponseEntity<Object> saveRequest(String id,
+     ResponseEntity<Object> submitRequest(String id,
                Optional<MultipartFile[]> files, String document,
                Map<String, String> params);
 

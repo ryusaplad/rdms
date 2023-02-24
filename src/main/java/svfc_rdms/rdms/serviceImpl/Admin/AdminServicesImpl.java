@@ -1,13 +1,16 @@
 package svfc_rdms.rdms.serviceImpl.Admin;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +32,8 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Admin.AdminService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
 public class AdminServicesImpl implements AdminService {
@@ -47,6 +52,12 @@ public class AdminServicesImpl implements AdminService {
 
      @Autowired
      RegRepository regsRepository;
+
+     @Autowired
+     GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private NotificationServiceImpl notificationService;
 
      @Override
      public List<Users> diplayAllAccounts(String status, String type) {
@@ -111,10 +122,8 @@ public class AdminServicesImpl implements AdminService {
                     String userIdFormat = user.getUsername().toUpperCase();
                     user.setStatus("Active");
                     // Setting Default Color Code in hex
-                    Random random = new Random();
-                    int color = random.nextInt(0x1000000); // 0x1000000 is equivalent to 16777216 in decimal
-                    String colorCode = String.format("#%06x", color);
-                    user.setColorCode(colorCode);
+                    String randomColorCode = globalService.generateRandomHexColor();
+                    user.setColorCode(randomColorCode);
                     if (userIdFormat.contains("C")) {
 
                          user.setType("Student");
@@ -202,7 +211,7 @@ public class AdminServicesImpl implements AdminService {
                String title = "";
                String description = "";
                Boolean status = true;
-
+               int notificationCounter = 0;
                if (multipartFile.getSize() == 0) {
                     throw new ApiRequestException("Invalid Image, Documents Image Cannot be Empty");
                } else {
@@ -226,8 +235,31 @@ public class AdminServicesImpl implements AdminService {
 
                     Documents saveDocument = new Documents(0, title, description, image, status);
 
-                    docRepo.save(saveDocument);
-                    return new ResponseEntity<Object>("success", HttpStatus.OK);
+                    List<Users> users = userRepository.findAllByStatusAndType("Active", "Student");
+
+                    if (!users.isEmpty()) {
+                         for (Users user : users) {
+                              String notifTitle = "a document " + saveDocument.getTitle() + " has been added.";
+                              String message = "Hello " + user.getName() + ", a new document titled '" + title
+                                        + "' is waiting for you in the Request Document section. To access it, please go to the Request Document section and select '"
+                                        + title + "' from the list.";
+                              String messageType = "new_document";
+                              String dateAndTime = globalService.formattedDate();
+
+                              if (notificationService.sendNotificationGlobally(notifTitle, message, messageType,
+                                        dateAndTime,
+                                        false, user)) {
+                                   notificationCounter++;
+
+                              }
+                         }
+                    }
+                    if (notificationCounter >= 0) {
+                         docRepo.save(saveDocument);
+                         return new ResponseEntity<Object>("success", HttpStatus.OK);
+                    } else {
+                         return new ResponseEntity<Object>("failed", HttpStatus.BAD_REQUEST);
+                    }
                }
 
           } catch (Exception e) {
@@ -252,6 +284,7 @@ public class AdminServicesImpl implements AdminService {
                String title = "";
                String description = "";
                Boolean status = true;
+               int notificationCounter = 0;
 
                if (multipartFile.getSize() > 0) {
                     image = multipartFile.getBytes();
@@ -281,9 +314,32 @@ public class AdminServicesImpl implements AdminService {
                     }
 
                     Documents updateDocument = new Documents(id, title, description, image, status);
+                    List<Users> users = userRepository.findAllByStatusAndType("Active", "Student");
 
-                    docRepo.save(updateDocument);
-                    return new ResponseEntity<Object>("success", HttpStatus.OK);
+                    if (!users.isEmpty()) {
+                         for (Users user : users) {
+                              String notifTitle = "a document " + updateDocument.getTitle() + " has been updated.";
+                              String message = "Hello " + user.getName() + ", a document titled '" + title
+                                        + "' has been updated and is waiting for you in the Request Document section. To access it, please go to the Request Document section and select '"
+                                        + title + "' from the list.";
+                              String messageType = "new_document";
+                              String dateAndTime = globalService.formattedDate();
+
+                              if (notificationService.sendNotificationGlobally(notifTitle, message, messageType,
+                                        dateAndTime,
+                                        false, user)) {
+                                   notificationCounter++;
+
+                              }
+                         }
+                    }
+                    if (notificationCounter >= 0) {
+                         docRepo.save(updateDocument);
+                         return new ResponseEntity<Object>("success", HttpStatus.OK);
+                    } else {
+                         return new ResponseEntity<Object>("failed", HttpStatus.BAD_REQUEST);
+                    }
+
                }
 
           } catch (Exception e) {
@@ -384,15 +440,112 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public void createDefault_Admin_User_IfNotExisted() {
+     public void ensureDefaultAdminUserExists() {
 
           Users user = Users.builder().name("Administrator").username("admin")
                     .password(new BCryptPasswordEncoder().encode("Akosiryu123@")).type("School_Admin").status("Active")
-                    .build();
+                    .colorCode("#DC143C").build();
 
           Optional<Users> defaultAdminUser = userRepository.findByUsername(user.getUsername());
           if (!defaultAdminUser.isPresent()) {
                userRepository.save(user);
+          }
+
+     }
+
+     @Override
+     public void ensureDefaultAccountUsersExist() {
+
+          List<Users> users = new ArrayList<>();
+
+          Users account1 = Users.builder().name("Ryu Saplad").username("C-082095")
+                    .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Student").status("Active")
+                    .build();
+
+          users.add(account1);
+
+          users.stream().forEach(user -> {
+               Optional<Users> userData = userRepository.findByUsername(user.getUsername());
+               if (!userData.isPresent()) {
+                    String colorCode = globalService.generateRandomHexColor();
+                    user.setColorCode(colorCode);
+                    userRepository.save(user);
+               }
+          });
+
+     }
+
+     @Override
+     public void ensureDefaultDocumentsExist() {
+
+          ClassPathResource idFile = new ClassPathResource("static/images/ID.png");
+          ClassPathResource comImage = new ClassPathResource("static/images/COM.png");
+          ClassPathResource corImage = new ClassPathResource("static/images/COR.png");
+          ClassPathResource gradeImage = new ClassPathResource("static/images/GRADES.jpg");
+
+          // List all the files in the folder
+          List<ClassPathResource> images = new ArrayList<>();
+          images.add(idFile);
+          images.add(comImage);
+          images.add(corImage);
+          images.add(gradeImage);
+
+          String[] documentTitles = { "ID", "COM", "COR", "GRADES" };
+          String idDescription = "Student Information - Requirements\n" +
+                    "1. Year\n" +
+                    "2. Course\n" +
+                    "3. Semester\n\n" +
+                    "File Requirements\n" +
+                    "1. ID PICTURE\n- ID Picture must be white background." +
+                    "\n-Wear Uniform/Org Shirt." +
+                    "1. Signature Image\n- Signature Image must be in PNG format with a white background.";
+          String comDescription = "Student Information - Requirements\n" +
+                    "1. Year\n" +
+                    "2. Course\n" +
+                    "3. Semester\n\n" +
+                    "File Requirements\n" +
+                    "1. Signature Image\n- Signature Image must be in PNG format with a white background.";
+          String corDescription = "Student Information - Requirements\n" +
+                    "1. Year\n" +
+                    "2. Course\n" +
+                    "3. Semester\n\n" +
+                    "File Requirements\n" +
+                    "1. Signature Image\n- Signature Image must be in a PNG format and white background";
+
+          String gradeDescription = "Student Information - Requirements\n" +
+                    "1. Year\n" +
+                    "2. Course\n" +
+                    "3. Semester\n" +
+                    "4. List of Subjects & Professors (Upload in a pdf/doc/docx/jpeg/jpg/png format)";
+
+          String[] documentDescriptions = { idDescription, comDescription,
+                    corDescription, gradeDescription };
+
+          // Iterate through the files and upload them to the database
+          for (int index = 0; index < images.size(); index++) {
+               try {
+                    Optional<Documents> documents = docRepo.findByTitle(documentTitles[index]);
+                    if (!documents.isPresent()) {
+                         InputStream inputStream = images.get(index).getInputStream();
+                         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                         byte[] buffer = new byte[1024];
+                         int length;
+                         while ((length = inputStream.read(buffer)) != -1) {
+                              outputStream.write(buffer, 0, length);
+                         }
+                         byte[] data = outputStream.toByteArray();
+
+                         Documents document = new Documents();
+                         document.setTitle(documentTitles[index]);
+                         document.setDescription(documentDescriptions[index]);
+                         document.setImage(data);
+                         document.setStatus(true);
+                         docRepo.save(document);
+                    }
+
+               } catch (IOException e) {
+                    System.out.println(e.getMessage());
+               }
           }
 
      }

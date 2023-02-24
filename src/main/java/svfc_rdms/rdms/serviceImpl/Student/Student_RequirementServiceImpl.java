@@ -19,7 +19,6 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.ExceptionHandler.FileNotFoundException;
 import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
-import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
@@ -129,7 +128,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      }
 
      @Override
-     public ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId) {
+     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId) {
           try {
 
                Users user = usersRepository.findByuserId(userId).get();
@@ -138,28 +137,29 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
                if (user != null && studentRequest != null) {
 
-                    String title = "Requesting " + studentRequest.getRequestDocument().getTitle();
+                    String title = "Resubmit : Requesting " + studentRequest.getRequestDocument().getTitle();
                     String message = user.getName() + "(" + user.getUsername()
                               + ") has resubmit the requested " + studentRequest.getRequestDocument().getTitle()
                               + " document.";
                     String messageType = "requesting_notification";
                     String dateAndTime = globalService.formattedDate();
 
-                    Notifications notifSentRequest = new Notifications();
-                    notifSentRequest.setMessage(message);
-                    notifSentRequest.setTitle(title);
-                    notifSentRequest.setMessageType(messageType);
-                    notifSentRequest.setDateAndTime(dateAndTime);
-                    notifSentRequest.setStatus(false);
-                    notifSentRequest.setFrom(user);
-                    // Saving Notification
-                    if (notificationService.sendNotificationGlobally(notifSentRequest)) {
-                         studentRepository.studentRequestsResubmit(status, studentRequest.getRequestId());
-                         return new ResponseEntity<>("Success", HttpStatus.OK);
-                    } else {
-                         return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
-                                   HttpStatus.BAD_REQUEST);
+                    List<Users> registrars = usersRepository.findAllByStatusAndType("Active", "Registrar");
+                    if (!registrars.isEmpty()) {
+                         for (Users registrar : registrars) {
+                              if (notificationService.sendNotificationFromUserToUser(title, message, messageType,
+                                        dateAndTime,
+                                        false,
+                                        user, registrar)) {
+
+                              } else {
+                                   return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
+                                             HttpStatus.BAD_REQUEST);
+                              }
+                         }
                     }
+                    studentRepository.save(studentRequest);
+                    return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
 
                }
                return new ResponseEntity<>("Invalid Information, Please Try Again!", HttpStatus.BAD_REQUEST);

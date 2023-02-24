@@ -16,7 +16,7 @@ public interface Student_RequirementService {
 
      ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params);
 
-     ResponseEntity<Object> resubmitRequests(String status, long userId, long requestId);
+     ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId);
 
      String displayAllFilesByUserId(HttpSession session, Model model);
 

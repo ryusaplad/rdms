@@ -124,7 +124,7 @@ public class Regs_RestController {
 
      @GetMapping(value = "/registrar/studentreq/change/{status}")
      @ResponseBody
-     public ResponseEntity<Object> changeRequestInformations(
+     public ResponseEntity<String> changeRequestInformations(
                @PathVariable("status") String status,
                @RequestParam("userId") long userId,
                @RequestParam("requestId") long requestId,
@@ -132,12 +132,9 @@ public class Regs_RestController {
                HttpServletResponse response,
                HttpSession session) {
 
-          if (!regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
-                    session)) {
-               throw new ApiRequestException(
-                         "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
-          }
-          return new ResponseEntity<>("Success", HttpStatus.OK);
+          return regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
+                    session);
+
      }
 
      @PostMapping("/registrar/studentreq/finalized")
@@ -148,8 +145,6 @@ public class Regs_RestController {
           return regs_RequestService.finalizedRequestsWithFiles(userId, requestId, files, params, session);
 
      }
-
-
 
      // Manage Requests for teachers.
      @PostMapping("/registrar/send/requests")

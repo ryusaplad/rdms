@@ -296,15 +296,9 @@ $(document).ready(function () {
             if (user.status.toLowerCase() == "temporary") {
               htmlTable =
                 " <tr><td>" +
-                user.userId +
-                "</td><td>" +
                 user.name +
                 "</td><td>" +
                 user.username +
-                "</td><td>" +
-                "********" +
-                "</td><td>" +
-                user.type +
                 "</td><td>" +
                 user.status +
                 "</td><td>" +
@@ -329,10 +323,6 @@ $(document).ready(function () {
                   user.name +
                   "</td><td>" +
                   user.username +
-                  "</td><td>" +
-                  "********" +
-                  "</td><td>" +
-                  user.type +
                   "</td><td>" +
                   user.status +
                   "</td><td>" +
@@ -367,10 +357,6 @@ $(document).ready(function () {
                   "</td><td>" +
                   user.username +
                   "</td><td>" +
-                  "********" +
-                  "</td><td>" +
-                  user.type +
-                  "</td><td>" +
                   user.status +
                   "</td><td>" +
                   "<div class='row'>" +
@@ -403,11 +389,8 @@ $(document).ready(function () {
             $("#zero_config")
               .DataTable()
               .row.add([
-                user.userId,
                 user.name,
                 user.username,
-                "********",
-                user.type,
                 user.status,
                 actions,
               ])

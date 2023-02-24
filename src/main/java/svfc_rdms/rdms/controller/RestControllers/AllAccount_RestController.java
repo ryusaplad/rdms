@@ -68,18 +68,18 @@ public class AllAccount_RestController {
 
      @GetMapping("/load/image")
      public ResponseEntity<Object> loadImage(@RequestParam("username") String username, HttpSession session) {
-
+          Optional<Users> user = usersRepository.findByUsername(username);
           try {
                byte[] image = null;
                if (!username.isEmpty() || !username.isBlank()) {
-                    Optional<Users> optionalUser = usersRepository.findByUsername(username);
-                    if (optionalUser.isPresent()) {
-                         image = optionalUser.get().getProfilePicture();
+
+                    if (user.isPresent()) {
+                         image = user.get().getProfilePicture();
 
                          // if image is empty return the name and color code to use in the ajax call. to
                          // produce avatar using name and color code.
                          if (image[0] == 48 || image == null || image[0] == 0) {
-                              String[] nameData = { optionalUser.get().getName(), optionalUser.get().getColorCode() };
+                              String[] nameData = { user.get().getName(), user.get().getColorCode() };
                               return new ResponseEntity<>(nameData, HttpStatus.NOT_FOUND);
                          }
 
@@ -91,7 +91,8 @@ public class AllAccount_RestController {
                }
                throw new ApiRequestException("Username not found!, Please Try Again");
           } catch (Exception e) {
-               throw new ApiRequestException("Image not found!, Please Try Again");
+               String[] nameData = { user.get().getName(), user.get().getColorCode() };
+               return new ResponseEntity<>(nameData, HttpStatus.NOT_FOUND);
           }
      }
 

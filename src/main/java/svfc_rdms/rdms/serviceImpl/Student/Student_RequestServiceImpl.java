@@ -24,7 +24,6 @@ import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.Documents;
-import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
@@ -126,7 +125,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      }
 
      @Override
-     public ResponseEntity<Object> saveRequest(String requestId,
+     public ResponseEntity<Object> submitRequest(String requestId,
                Optional<MultipartFile[]> uploadedFiles, String document,
                Map<String, String> params) {
 
@@ -204,24 +203,21 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                     String messageType = "requesting_notification";
                     String dateAndTime = globalService.formattedDate();
                     boolean status = false;
-
-                    Notifications notifSentRequest = new Notifications();
-                    notifSentRequest.setMessage(message);
-                    notifSentRequest.setTitle(title);
-                    notifSentRequest.setMessageType(messageType);
-                    notifSentRequest.setDateAndTime(dateAndTime);
-                    notifSentRequest.setStatus(status);
-                    notifSentRequest.setFrom(user);
-
-                    if (notificationService.sendNotificationGlobally(notifSentRequest)) {
-
-                         studentRepository.save(req);
-                         return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
-                    } else {
-                         return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
-                                   HttpStatus.BAD_REQUEST);
+                    List<Users> registrars = usersRepository.findAllByStatusAndType("Active", "Registrar");
+                    if (!registrars.isEmpty()) {
+                         for (Users registrar : registrars) {
+                              if (notificationService.sendNotificationFromUserToUser(title, message, messageType,
+                                        dateAndTime,
+                                        status,
+                                        user, registrar)) {
+                              } else {
+                                   return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
+                                             HttpStatus.BAD_REQUEST);
+                              }
+                         }
                     }
-
+                    studentRepository.save(req);
+                    return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                } else {
                     return new ResponseEntity<>("Required Informations, cannot be empty!", HttpStatus.BAD_REQUEST);
                }

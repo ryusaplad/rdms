@@ -28,6 +28,7 @@ import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Registrar.Registrar_RequestService;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
 public class Reg_RequestServiceImpl implements Registrar_RequestService, FileService {
@@ -43,6 +44,9 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private NotificationServiceImpl notificationService;
 
      @Override
      public String displayAllStudentRequest(String userType, Model model) {
@@ -120,39 +124,69 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      }
 
      @Override
-     public boolean changeStatusAndManageByAndMessageOfRequests(String status, String message,
+     public ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String message,
                long userId, long requestId, HttpSession session) {
           Users user = usersRepository.findByuserId(userId).get();
-          StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
+          Optional<StudentRequest> studRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId);
 
-          if (message.equals("N/A")) {
-               message = studentRequest.getReply();
-          } else if (studentRequest.getReply() != null) {
-               if (studentRequest.getReply().length() > 0) {
-                    message = studentRequest.getReply() + "," + message;
+          if (studRequest.isPresent()) {
+               StudentRequest studentRequest = studRequest.get();
+               if (message.equals("N/A")) {
+                    message = studentRequest.getReply();
+               } else if (studentRequest.getReply() != null) {
+                    if (studentRequest.getReply().length() > 0) {
+                         message = studentRequest.getReply() + "," + message;
+                    }
+
+               } else if (message == null || message.isEmpty()) {
+                    message = "";
                }
+               if (!status.isEmpty() || !status.isBlank() || session.getAttribute("name") != null) {
+                    String manageBy = session.getAttribute("name").toString();
+                    String manageByFromDatabase = globalService.removeDuplicateInManageBy(studentRequest.getManageBy());
 
-          } else if (message == null || message.isEmpty()) {
-               message = "";
+                    if (!manageByFromDatabase.trim().isEmpty()) {
+                         manageBy = globalService
+                                   .removeDuplicateInManageBy(studentRequest.getManageBy() + "," + manageBy);
+                    }
+                    String title = "Request Status", notifMessage = "";
+                    String documentName = studentRequest.getRequestDocument().getTitle();
+                    if (status.equals("On-Going")) {
+
+                         notifMessage = "Hello " + user.getName() + ", the " + documentName
+                                   + " request is currently ongoing, please go to the 'My Request' to view the details.";
+
+                    } else if (status.equals("Rejected")) {
+
+                         notifMessage = "Hello " + user.getName() + ", unfortunately your request for " + documentName
+                                   + " has been rejected. Please review the request provided and resubmit the request if needed.";
+                    }
+
+                    String messageType = "requesting_notification";
+                    String dateAndTime = globalService.formattedDate();
+
+                    if (user != null && studentRequest != null) {
+
+                         if (notificationService.sendNotificationGlobally(title, notifMessage, messageType, dateAndTime,
+                                   false,
+                                   user)) {
+                              studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
+                                        manageBy,
+                                        message, studentRequest.getRequestId());
+                              return new ResponseEntity<>("Success", HttpStatus.OK);
+                         } else {
+                              throw new ApiRequestException(
+                                        "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
+
+                         }
+
+                    }
+
+               }
           }
-          if (!status.isEmpty() || !status.isBlank() || session.getAttribute("name") != null) {
-               String manageBy = session.getAttribute("name").toString();
-               String manageByFromDatabase = globalService.removeDuplicateInManageBy(studentRequest.getManageBy());
 
-               if (!manageByFromDatabase.trim().isEmpty()) {
-                    manageBy = globalService.removeDuplicateInManageBy(studentRequest.getManageBy() + "," + manageBy);
-               }
-
-               if (user != null && studentRequest != null) {
-
-                    studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
-                              manageBy,
-                              message, studentRequest.getRequestId());
-                    return true;
-               }
-
-          }
-          return false;
+          throw new ApiRequestException(
+                    "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
 
      }
 
@@ -160,51 +194,72 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      public ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
                Optional<MultipartFile[]> files, Map<String, String> params,
                HttpSession session) {
+
           try {
+
                if (files.isEmpty()) {
                     throw new ApiRequestException("Please upload file.");
                }
+               Optional<Users> user_op = usersRepository.findByuserId(userId);
 
-               Users user = usersRepository.findByuserId(userId).get();
-               StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
-               studentRequest.setReleaseDate(globalService.formattedDate());
-               studentRequest.setRequestStatus("Approved");
-               List<String> excludedFiles = new ArrayList<>();
-               studentRepository.save(studentRequest);
+               if (user_op.isPresent()) {
+                    Users user = usersRepository.findByuserId(userId).get();
+                    Optional<StudentRequest> studRequest = studentRepository.findOneByRequestByAndRequestId(user,
+                              requestId);
+                    StudentRequest studentRequest = studRequest.get();
 
-               for (Map.Entry<String, String> entry : params.entrySet()) {
-                    if (entry.getKey().contains("excluded")) {
-                         excludedFiles.add(entry.getValue());
-                    }
+                    studentRequest.setReleaseDate(globalService.formattedDate());
+                    studentRequest.setRequestStatus("Approved");
+                    List<String> excludedFiles = new ArrayList<>();
 
-               }
-
-               Users manageBy = usersRepository.findByUsername(session.getAttribute("username").toString()).get();
-
-               for (MultipartFile filex : files.get()) {
-
-                    if (!excludedFiles.contains(filex.getOriginalFilename())) {
-
-                         UserFiles userFiles = new UserFiles();
-                         userFiles.setData(filex.getBytes());
-                         userFiles.setName(filex.getOriginalFilename());
-                         userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
-                         userFiles.setDateUploaded(globalService.formattedDate());
-                         userFiles.setStatus("Approved");
-                         userFiles.setFilePurpose("dfs");
-                         userFiles.setUploadedBy(manageBy);
-                         userFiles.setRequestWith(studentRequest);
-                         fileRepository.save(userFiles);
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                         if (entry.getKey().contains("excluded")) {
+                              excludedFiles.add(entry.getValue());
+                         }
 
                     }
-               }
 
-               return new ResponseEntity<>("Success", HttpStatus.OK);
+                    String documentName = studentRequest.getRequestDocument().getTitle();
+                    String title = "Requested " + documentName + " has been completed.";
+                    String notifMessage = "Hello " + studentRequest.getRequestBy().getName() + " your requested "
+                              + documentName + " has been approved, please go to the 'My Request' to view the details.";
+                    String messageType = "requested_completed";
+                    String dateAndTime = globalService.formattedDate();
+                    if (notificationService.sendNotificationGlobally(title, notifMessage, messageType, dateAndTime,
+                              false,
+                              user)) {
+                         Users manageBy = usersRepository.findByUsername(session.getAttribute("username").toString())
+                                   .get();
+
+                         for (MultipartFile filex : files.get()) {
+
+                              if (!excludedFiles.contains(filex.getOriginalFilename())) {
+
+                                   UserFiles userFiles = new UserFiles();
+                                   userFiles.setData(filex.getBytes());
+                                   userFiles.setName(filex.getOriginalFilename());
+                                   userFiles.setSize(globalService.formatFileUploadSize(filex.getSize()));
+                                   userFiles.setDateUploaded(globalService.formattedDate());
+                                   userFiles.setStatus("Approved");
+                                   userFiles.setFilePurpose("dfs");
+                                   userFiles.setUploadedBy(manageBy);
+                                   userFiles.setRequestWith(studentRequest);
+                                   fileRepository.save(userFiles);
+
+                              }
+                         }
+                         studentRepository.save(studentRequest);
+                         return new ResponseEntity<>("Success", HttpStatus.OK);
+
+                    } else {
+                         return new ResponseEntity<>("Failed to save the notification.", HttpStatus.OK);
+                    }
+               }
 
           } catch (Exception ex) {
                throw new ApiRequestException(ex.getMessage());
           }
-
+          return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
      }
 
      @Override

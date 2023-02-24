@@ -202,10 +202,10 @@ $(document).ready(function () {
           $("#requestbynpar").text(result.data[0].name);
           $("#cysem").text(
             result.data[0].course +
-              "," +
-              result.data[0].year +
-              "," +
-              result.data[0].semester.substring(0, 3)
+            "," +
+            result.data[0].year +
+            "," +
+            result.data[0].semester.substring(0, 3)
           );
           var requestStatusValue = result.data[0].requestStatus.toLowerCase();
 
@@ -274,7 +274,7 @@ $(document).ready(function () {
         }
         $("#reqDetailModal").modal("toggle");
       },
-      error: function (error) {},
+      error: function (error) { },
     });
   });
   $(document).on("click", ".processBtn", function (e) {
@@ -424,8 +424,8 @@ $(document).ready(function () {
 
   $(document).on("click", ".confirmCompleteFinal", function (e) {
     e.preventDefault();
-
     $("#f-reqs-upload").submit();
+
   });
 
   // Finalized Requests with uploaded files
@@ -575,7 +575,7 @@ $(document).ready(function () {
     });
   });
 
-  $(".okCompleted").on("click", function (e) {
+  $(document).on("click", ".okCompleted", function (e) {
     window.location.reload();
   });
 

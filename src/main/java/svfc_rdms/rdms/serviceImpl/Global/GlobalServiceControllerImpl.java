@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
 
      @Autowired
      private FileRepository fileRepository;
+
      @Override
      public boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session) {
           try {
@@ -129,6 +131,12 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
           String formattedDate = myDateObj.format(myFormatObj);
           return formattedDate;
+     }
+
+     public String generateRandomHexColor() {
+          Random random = new Random();
+          int color = random.nextInt(0x1000000);
+          return String.format("#%06x", color);
      }
 
 }

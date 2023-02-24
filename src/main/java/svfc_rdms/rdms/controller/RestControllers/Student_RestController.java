@@ -23,7 +23,6 @@ import svfc_rdms.rdms.serviceImpl.Student.Student_RequirementServiceImpl;
 @RestController
 public class Student_RestController {
 
-
      @Autowired
      private GlobalServiceControllerImpl globalService;
 
@@ -39,7 +38,7 @@ public class Student_RestController {
                @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
 
           if (globalService.validatePages("student", response, session)) {
-               return requestServiceImpl.saveRequest(id, files, document, params);
+               return requestServiceImpl.submitRequest(id, files, document, params);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
      }
@@ -69,7 +68,7 @@ public class Student_RestController {
                @RequestParam("userId") long userId, @RequestParam("requestId") long requestId,
                HttpServletResponse response, HttpSession session) {
           if (globalService.validatePages("student", response, session)) {
-               return requirementServiceImpl.resubmitRequests("Pending", userId, requestId);
+               return requirementServiceImpl.resubmitRequest("Pending", userId, requestId);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
 

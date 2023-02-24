@@ -15,7 +15,14 @@ import svfc_rdms.rdms.model.Users;
 public interface AdminService {
 
      // DefaultAdmin
-     void createDefault_Admin_User_IfNotExisted();
+     void ensureDefaultAdminUserExists();
+
+     // DefaultAccounts
+     void ensureDefaultAccountUsersExist();
+
+     // DefaultDocuments
+     void ensureDefaultDocumentsExist();
+
      List<Users> diplayAllAccounts(String status, String type);
 
      List<Users> diplayAllAccountsByType(String type);

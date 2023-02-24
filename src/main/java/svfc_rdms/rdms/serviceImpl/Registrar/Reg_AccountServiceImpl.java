@@ -3,7 +3,6 @@ package svfc_rdms.rdms.serviceImpl.Registrar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +16,16 @@ import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.service.Registrar.Registrar_AccountService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Service
 public class Reg_AccountServiceImpl implements Registrar_AccountService {
 
      @Autowired
      private UsersRepository usersRepository;
+
+     @Autowired
+     GlobalServiceControllerImpl globalService;
 
      @Override
      public ResponseEntity<Object> saveUsersAccount(Users user, int actions) {
@@ -59,10 +62,8 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                     String userIdFormat = user.getUsername().toUpperCase();
                     user.setStatus("Active");
                     // Setting Default Color Code in hex
-                    Random random = new Random();
-                    int color = random.nextInt(0x1000000); // 0x1000000 is equivalent to 16777216 in decimal
-                    String colorCode = String.format("#%06x", color);
-                    user.setColorCode(colorCode);
+                    String randomColorCode = globalService.generateRandomHexColor();
+                    user.setColorCode(randomColorCode);
 
                     if (userIdFormat.contains("C")) {
 

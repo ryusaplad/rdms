@@ -17,5 +17,6 @@ public interface GlobalControllerService {
 
       String formattedDate();
 
+      String generateRandomHexColor();
 
 }

@@ -20,7 +20,9 @@ public class RdmsApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		adminServicesImpl.createDefault_Admin_User_IfNotExisted();
+		adminServicesImpl.ensureDefaultAdminUserExists();
+		adminServicesImpl.ensureDefaultAccountUsersExist();
+		adminServicesImpl.ensureDefaultDocumentsExist();
 	}
 
 }
