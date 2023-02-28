@@ -71,7 +71,7 @@ public class StudentController {
      }
 
      @GetMapping("/student/my-documents")
-     public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
+     public String myDocuments(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("student", response, session)) {
 
@@ -81,6 +81,8 @@ public class StudentController {
           return "redirect:/";
 
      }
+
+    
 
      @GetMapping(value = "/student/request/{document}")
      public String requestForm(@PathVariable String document, HttpServletRequest request, HttpServletResponse response,

@@ -246,7 +246,7 @@ public class AdminServicesImpl implements AdminService {
                               String messageType = "new_document";
                               String dateAndTime = globalService.formattedDate();
 
-                              if (notificationService.sendNotificationGlobally(notifTitle, message, messageType,
+                              if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
                                         false, user)) {
                                    notificationCounter++;
@@ -325,7 +325,7 @@ public class AdminServicesImpl implements AdminService {
                               String messageType = "new_document";
                               String dateAndTime = globalService.formattedDate();
 
-                              if (notificationService.sendNotificationGlobally(notifTitle, message, messageType,
+                              if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
                                         false, user)) {
                                    notificationCounter++;

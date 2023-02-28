@@ -1,20 +1,21 @@
 package svfc_rdms.rdms.service.Global;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
-import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.Users;
 
 public interface NotificationService {
-    List<Notifications> getAllNotificationByUser();
 
-    List<Notifications> getAllNotificationsByAdmin();
+        ResponseEntity<Object> getAllNotificationsByUser();
 
-    boolean sendNotificationGlobally(String title, String message, String messageType, String timeAndDate,
-            boolean status, Users user);
+        ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, int lowestPage, int totalPage);
 
-    boolean sendNotificationFromUserToUser(String title, String message, String messageType,
-            String timeAndDate,
-            boolean status,
-            Users from, Users to);
+        boolean sendStudentNotification(String title, String message, String messageType, String timeAndDate,
+                        boolean status,
+                        Users user);
+
+        boolean sendRegistrarNotification(String title, String message, String messageType, String timeAndDate,
+                        boolean status,
+                        Users from);
+
 }

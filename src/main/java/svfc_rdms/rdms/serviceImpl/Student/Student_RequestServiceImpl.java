@@ -203,21 +203,18 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                     String messageType = "requesting_notification";
                     String dateAndTime = globalService.formattedDate();
                     boolean status = false;
-                    List<Users> registrars = usersRepository.findAllByStatusAndType("Active", "Registrar");
-                    if (!registrars.isEmpty()) {
-                         for (Users registrar : registrars) {
-                              if (notificationService.sendNotificationFromUserToUser(title, message, messageType,
-                                        dateAndTime,
-                                        status,
-                                        user, registrar)) {
-                              } else {
-                                   return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
-                                             HttpStatus.BAD_REQUEST);
-                              }
-                         }
+
+                    if (notificationService.sendRegistrarNotification(title, message, messageType,
+                              dateAndTime,
+                              status,
+                              user)) {
+                         studentRepository.save(req);
+                         return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
+                    } else {
+                         return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
+                                   HttpStatus.BAD_REQUEST);
                     }
-                    studentRepository.save(req);
-                    return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
+
                } else {
                     return new ResponseEntity<>("Required Informations, cannot be empty!", HttpStatus.BAD_REQUEST);
                }

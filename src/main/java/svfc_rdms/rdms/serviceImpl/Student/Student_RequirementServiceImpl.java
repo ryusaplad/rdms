@@ -144,22 +144,16 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                     String messageType = "requesting_notification";
                     String dateAndTime = globalService.formattedDate();
 
-                    List<Users> registrars = usersRepository.findAllByStatusAndType("Active", "Registrar");
-                    if (!registrars.isEmpty()) {
-                         for (Users registrar : registrars) {
-                              if (notificationService.sendNotificationFromUserToUser(title, message, messageType,
-                                        dateAndTime,
-                                        false,
-                                        user, registrar)) {
-
-                              } else {
-                                   return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
-                                             HttpStatus.BAD_REQUEST);
-                              }
-                         }
+                    if (notificationService.sendRegistrarNotification(title, message, messageType,
+                              dateAndTime,
+                              false,
+                              user)) {
+                         studentRepository.save(studentRequest);
+                         return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
+                    } else {
+                         return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
+                                   HttpStatus.BAD_REQUEST);
                     }
-                    studentRepository.save(studentRequest);
-                    return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
 
                }
                return new ResponseEntity<>("Invalid Information, Please Try Again!", HttpStatus.BAD_REQUEST);

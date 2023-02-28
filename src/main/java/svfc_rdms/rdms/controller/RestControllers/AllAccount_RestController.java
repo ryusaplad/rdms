@@ -20,12 +20,16 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @RestController
 public class AllAccount_RestController {
 
      @Autowired
      AllAccountServiceImpl accountServiceImpl;
+
+     @Autowired
+     NotificationServiceImpl notificationServiceImpl;
 
      @Autowired
      UsersRepository usersRepository;
@@ -115,4 +119,26 @@ public class AllAccount_RestController {
                throw new ApiRequestException("Profile Picture Data not found!, Please Try Again");
           }
      }
+
+     @GetMapping("/user/notification/{lowest}/{current}")
+     public ResponseEntity<Object> loadNotification(@PathVariable("lowest") int lowestPage,
+               @PathVariable("current") int totalPage, HttpSession session) {
+
+          try {
+               String username = "";
+               if ((username = session.getAttribute("username").toString()) != null) {
+                    Optional<Users> user = usersRepository.findByUsername(username);
+                    return new ResponseEntity<>(
+                              notificationServiceImpl.fetchAllNotificationByLoggedinUser(user.get(), lowestPage,
+                                        totalPage),
+                              HttpStatus.OK);
+               } else {
+                    throw new ApiRequestException("You are performing invalid action.");
+               }
+
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
+     }
+
 }

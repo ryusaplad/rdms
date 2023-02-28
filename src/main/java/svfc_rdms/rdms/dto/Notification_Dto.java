@@ -10,9 +10,10 @@ public class Notification_Dto {
     private boolean status;
     private String from;
     private String to;
+    private long pageCount;
 
     public Notification_Dto(long notifId, String title, String message, String messageType, String dateAndTime,
-            boolean status, String from, String to) {
+            boolean status, String from, String to, long pageCount) {
         this.notifId = notifId;
         this.title = title;
         this.message = message;
@@ -21,8 +22,9 @@ public class Notification_Dto {
         this.status = status;
         this.from = from;
         this.to = to;
+        this.pageCount = pageCount;
     }
-
+    
     public long getNotifId() {
         return notifId;
     }
@@ -86,5 +88,11 @@ public class Notification_Dto {
     public void setTo(String to) {
         this.to = to;
     }
+
+    public long getPageCount() {
+        return pageCount;
+    }
+
+   
 
 }

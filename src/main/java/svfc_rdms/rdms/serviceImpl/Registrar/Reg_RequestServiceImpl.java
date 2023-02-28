@@ -167,7 +167,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                     if (user != null && studentRequest != null) {
 
-                         if (notificationService.sendNotificationGlobally(title, notifMessage, messageType, dateAndTime,
+                         if (notificationService.sendStudentNotification(title, notifMessage, messageType, dateAndTime,
                                    false,
                                    user)) {
                               studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
@@ -225,7 +225,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               + documentName + " has been approved, please go to the 'My Request' to view the details.";
                     String messageType = "requested_completed";
                     String dateAndTime = globalService.formattedDate();
-                    if (notificationService.sendNotificationGlobally(title, notifMessage, messageType, dateAndTime,
+                    if (notificationService.sendStudentNotification(title, notifMessage, messageType, dateAndTime,
                               false,
                               user)) {
                          Users manageBy = usersRepository.findByUsername(session.getAttribute("username").toString())
