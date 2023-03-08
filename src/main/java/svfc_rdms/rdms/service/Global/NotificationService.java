@@ -8,7 +8,8 @@ public interface NotificationService {
 
         ResponseEntity<Object> getAllNotificationsByUser();
 
-        ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, int lowestPage, int totalPage);
+        ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, String userType, int lowestPage,
+                        int totalPage);
 
         boolean sendStudentNotification(String title, String message, String messageType, String timeAndDate,
                         boolean status,
@@ -17,5 +18,9 @@ public interface NotificationService {
         boolean sendRegistrarNotification(String title, String message, String messageType, String timeAndDate,
                         boolean status,
                         Users from);
+
+        boolean sendNotification(String title, String message, String messageType, String timeAndDate,
+                        boolean status,
+                        Users from,Users to);
 
 }

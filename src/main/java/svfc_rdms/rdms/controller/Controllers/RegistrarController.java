@@ -29,7 +29,7 @@ public class RegistrarController {
 
      @Autowired
      private Reg_RequestServiceImpl regs_RequestService;
-   
+
      @GetMapping(value = "/registrar/dashboard")
      public String registrarDashboard(HttpSession session, HttpServletResponse response) {
           if (globalService.validatePages("registrar", response, session)) {
@@ -84,13 +84,22 @@ public class RegistrarController {
      }
 
      @GetMapping("/registrar/my-files")
-     public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
+     public String displayMyFiles(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("registrar", response, session)) {
                return regs_RequestService.displayAllFilesByUserId(session, model);
           }
           return "redirect:/";
 
+     }
+
+     @GetMapping("/registrar/documents-list")
+     public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
+          model.addAttribute("documentsList", mainService.getAllDocuments());
+          if (globalService.validatePages("registrar", response, session)) {
+               return "/registrar/documents-list";
+          }
+          return "redirect:/";
      }
 
      @GetMapping("/registrar/sent-requests")

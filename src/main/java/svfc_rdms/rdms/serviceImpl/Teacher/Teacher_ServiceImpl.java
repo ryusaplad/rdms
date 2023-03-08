@@ -26,6 +26,7 @@ import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Teacher.Teacher_Service;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
 public class Teacher_ServiceImpl implements Teacher_Service, FileService {
@@ -41,6 +42,9 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private NotificationServiceImpl notificationService;
 
      @Override
      public Optional<RegistrarRequest> getRegistrarRequest(long requestsId) {
@@ -96,6 +100,13 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
 
           String username = (String) session.getAttribute("username");
           String message = "";
+
+          String title = "";
+          String notifMessage = "";
+          String messageType = "";
+          String date = globalService.formattedDate();
+          boolean notifStatus = false;
+
           boolean messageAvailability = false;
           boolean filesAvailability = false;
           if (username == null || username.isEmpty()) {
@@ -137,19 +148,36 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                          }
                          filesAvailability = true;
                     } else {
+                         title = "Student has no record.";
+                         notifMessage = "This student has no record available, please go to the 'Registrar Request for more details.'";
+                         messageType = "Request_No_Record";
                          registrarRequest.setRequestStatus("norecord");
                     }
-                    
+
                     if (messageAvailability && filesAvailability) {
+                         title = "Request Completed";
+                         notifMessage = "This student record has been found and sent., please go to the 'Registrar Request for more details.'";
+                         messageType = "Request Completed";
                          registrarRequest.setRequestStatus("completed");
                     } else if (messageAvailability) {
+                         title = "Student has no record";
+                         notifMessage = "This student has no record available, please go to the 'Registrar Request for more details.'";
+                         messageType = "Request_No_Record";
                          registrarRequest.setRequestStatus("messageonly");
                     } else if (filesAvailability) {
+                         title = "Student has no record";
+                         notifMessage = "This student has no record available, please go to the 'Registrar Request for more details.'";
+                         messageType = "Request_No_Record";
                          registrarRequest.setRequestStatus("recordonly");
                     }
-                    
-                    regsRepository.save(registrarRequest);
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
+
+                    if (notificationService.sendNotification(title, notifMessage, messageType, date, notifStatus,
+                              uploadedBy,
+                              registrarRequest.getRequestBy())) {
+                         regsRepository.save(registrarRequest);
+                         return new ResponseEntity<>("Success", HttpStatus.OK);
+                    }
+
                } catch (Exception e) {
                     throw new ApiRequestException("Can't send requests. Please contact the administrator!");
                }

@@ -18,8 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Users;
+import svfc_rdms.rdms.model.ValidAccounts;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @RestController
@@ -30,6 +32,9 @@ public class AllAccount_RestController {
 
      @Autowired
      NotificationServiceImpl notificationServiceImpl;
+
+     @Autowired
+     GlobalServiceControllerImpl globalService;
 
      @Autowired
      UsersRepository usersRepository;
@@ -120,25 +125,70 @@ public class AllAccount_RestController {
           }
      }
 
-     @GetMapping("/user/notification/{lowest}/{current}")
-     public ResponseEntity<Object> loadNotification(@PathVariable("lowest") int lowestPage,
-               @PathVariable("current") int totalPage, HttpSession session) {
+     @GetMapping("/{userType}/notification/{lowest}/{current}")
+     public ResponseEntity<Object> loadNotification(@PathVariable("userType") String userType,
+               @PathVariable("lowest") int lowestPage,
+               @PathVariable("current") int totalPage, HttpSession session, HttpServletResponse response) {
 
           try {
                String username = "";
                if ((username = session.getAttribute("username").toString()) != null) {
-                    Optional<Users> user = usersRepository.findByUsername(username);
-                    return new ResponseEntity<>(
-                              notificationServiceImpl.fetchAllNotificationByLoggedinUser(user.get(), lowestPage,
-                                        totalPage),
-                              HttpStatus.OK);
+
+                    ValidAccounts[] validAccountType = ValidAccounts.values();
+
+                    for (ValidAccounts validAcc : validAccountType) {
+                         if (String.valueOf(validAcc).toLowerCase()
+                                   .contains(userType.toLowerCase())) {
+                              userType = validAcc.toString().toLowerCase();
+                              break;
+                         }
+                    }
+                    if (globalService.validatePages(userType, response, session)) {
+                         if (userType.equals("student")) {
+                              Optional<Users> user = usersRepository.findByUsername(username);
+                              return new ResponseEntity<>(
+                                        notificationServiceImpl.fetchAllNotificationByLoggedinUser(user.get(), userType,
+                                                  lowestPage,
+                                                  totalPage),
+                                        HttpStatus.OK);
+                         } else if (userType.equals("registrar")) {
+                             
+                              Optional<Users> user = usersRepository.findByUsername(username);
+                              return new ResponseEntity<>(
+                                        notificationServiceImpl.fetchAllNotificationByLoggedinUser(user.get(), userType,
+                                                  lowestPage,
+                                                  totalPage),
+                                        HttpStatus.OK);
+                         } else if (userType.equals("teacher")) {
+                              Optional<Users> user = usersRepository.findByUsername(username);
+                              return new ResponseEntity<>(
+                                        notificationServiceImpl.fetchAllNotificationByLoggedinUser(user.get(), userType,
+                                                  lowestPage,
+                                                  totalPage),
+                                        HttpStatus.OK);
+                         } else if (userType.equals("school_admin")) {
+                              Optional<Users> user = usersRepository.findByUsername(username);
+                              return new ResponseEntity<>(
+                                        notificationServiceImpl.fetchAllNotificationByLoggedinUser(user.get(), userType,
+                                                  lowestPage,
+                                                  totalPage),
+                                        HttpStatus.OK);
+                         } else {
+                              throw new ApiRequestException("You are performing invalid action, Please try again");
+                         }
+
+                    } else {
+                         throw new ApiRequestException("You are performing invalid action, Please try again");
+                    }
+
                } else {
-                    throw new ApiRequestException("You are performing invalid action.");
+                    throw new ApiRequestException("You are performing invalid action, Please try again");
                }
 
           } catch (Exception e) {
                throw new ApiRequestException(e.getMessage());
           }
+
      }
 
 }

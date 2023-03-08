@@ -239,7 +239,7 @@ public class AdminServicesImpl implements AdminService {
 
                     if (!users.isEmpty()) {
                          for (Users user : users) {
-                              String notifTitle = "a document " + saveDocument.getTitle() + " has been added.";
+                              String notifTitle = "A document " + saveDocument.getTitle() + " has been added.";
                               String message = "Hello " + user.getName() + ", a new document titled '" + title
                                         + "' is waiting for you in the Request Document section. To access it, please go to the Request Document section and select '"
                                         + title + "' from the list.";
@@ -318,7 +318,7 @@ public class AdminServicesImpl implements AdminService {
 
                     if (!users.isEmpty()) {
                          for (Users user : users) {
-                              String notifTitle = "a document " + updateDocument.getTitle() + " has been updated.";
+                              String notifTitle = "A document " + updateDocument.getTitle() + " has been updated.";
                               String message = "Hello " + user.getName() + ", a document titled '" + title
                                         + "' has been updated and is waiting for you in the Request Document section. To access it, please go to the Request Document section and select '"
                                         + title + "' from the list.";

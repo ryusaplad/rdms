@@ -15284,7 +15284,7 @@ label {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 50%;
+  max-width: 100%;
 }
 
 .description[title],
@@ -15402,3 +15402,70 @@ span:nth-child(5) {
   width: 40px;
   height: 40px;
 }
+
+
+
+          .cardLoader {
+               width: 60px;
+
+          }
+
+          .loader-wheel {
+               animation: spin 1s infinite linear;
+               border: 2px solid rgba(98, 97, 97, 0.5);
+               border-left: 4px solid #DC143C;
+               border-radius: 50%;
+               height: 50px;
+               margin-bottom: 10px;
+               width: 50px;
+          }
+
+          .loader-text {
+               color: #DC143C;
+               font-family: arial, sans-serif;
+          }
+
+          .loader-text:after {
+               content: 'Loading';
+               animation: load 2s linear infinite;
+          }
+
+          @keyframes spin {
+               0% {
+                    transform: rotate(0deg);
+               }
+
+               100% {
+                    transform: rotate(360deg);
+               }
+          }
+
+          @keyframes load {
+               0% {
+                    content: 'Loading';
+               }
+
+               33% {
+                    content: 'Loading.';
+               }
+
+               67% {
+                    content: 'Loading..';
+               }
+
+               100% {
+                    content: 'Loading...';
+               }
+          }
+
+          #loaderDiv {
+               align-items: center;
+               display: flex;
+               height: 100%;
+               justify-content: center;
+               margin: 0;
+          }
+
+          .mainLoaderDiv {
+               display: none;
+          }

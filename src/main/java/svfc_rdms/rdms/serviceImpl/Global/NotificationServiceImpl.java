@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
     private NotificationRepository notifRepository;
 
     @Autowired
-    private UsersRepository userRepository;
+    private UsersRepository usersRepository;
 
     @Override
     public ResponseEntity<Object> getAllNotificationsByUser() {
@@ -42,29 +42,50 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, int lowestPage, int totalPage) {
+    public ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, String userType, int lowestPage,
+            int totalPage) {
         Sort descendingSort = Sort.by("notifId").descending();
-        Page<Notifications> page = notifRepository.findAllByToAndStatus(user, false,
-                PageRequest.of(lowestPage, totalPage, descendingSort));
+        Page<Notifications> page = null;
+
+        if (userType.equals("student")) {
+            page = notifRepository.findAllByToAndStatus(user, false,
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
+
+        } else if (userType.equals("registrar")) {
+            page = notifRepository.findAllByToIsNullAndStatus(false,
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
+
+        } else if (userType.equals("teacher")) {
+            page = notifRepository.findAllByToAndStatus(user, false,
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
+        }
 
         List<Notifications> notifications = page.getContent();
+
         List<Notification_Dto> notifsDto = new ArrayList<>();
 
         for (Notifications notifData : notifications) {
-            if (notifData.getTo() != null) {
 
-                String reciever = "";
-                String sender = "";
+            String reciever = "";
+            String sender = "";
+            if (userType.equals("student")) {
+
                 if (user.getUserId() == notifData.getTo().getUserId()) {
 
                     reciever = notifData.getTo().getName() + "(" + notifData.getTo().getUsername() + ")";
                     if (notifData.getFrom() != null) {
 
                         sender = notifData.getFrom().getName() + "(" + notifData.getFrom().getUsername() + ")";
-                    } else if (notifData.getTo() == null) {
+                    }
+                    if (notifData.getTo() != null) {
+
+                        reciever = notifData.getTo().getName() + "(" + notifData.getTo().getUsername() + ")";
+                    }
+                    if (notifData.getTo() == null) {
 
                         reciever = "NONE";
-                    } else if (notifData.getFrom() == null) {
+                    }
+                    if (notifData.getFrom() == null) {
                         sender = "NONE";
                     }
                     notifsDto.add(
@@ -74,6 +95,51 @@ public class NotificationServiceImpl implements NotificationService {
                 } else {
 
                 }
+            } else if (userType.equals("registrar")) {
+
+                if (notifData.getFrom() != null) {
+
+                    sender = notifData.getFrom().getName() + "(" + notifData.getFrom().getUsername() + ")";
+                }
+                if (notifData.getTo() != null) {
+
+                    reciever = notifData.getTo().getName() + "(" + notifData.getTo().getUsername() + ")";
+                }
+                if (notifData.getTo() == null) {
+
+                    reciever = "Add Here";
+                }
+                if (notifData.getFrom() == null) {
+                    sender = "System";
+                }
+                notifsDto.add(
+                        new Notification_Dto(notifData.getNotifId(), notifData.getTitle(), notifData.getMessage(),
+                                notifData.getMessageType(), notifData.getDateAndTime(), notifData.getStatus(),
+                                sender, reciever, page.getTotalElements()));
+
+            } else if (userType.equals("teacher")) {
+                System.out.println(notifData.getFrom() != null);
+                System.out.println(notifData.getTo() != null);
+                if (notifData.getFrom() != null) {
+
+                    sender = notifData.getFrom().getName() + "(" + notifData.getFrom().getUsername() + ")";
+                }
+                if (notifData.getTo() != null) {
+
+                    reciever = notifData.getTo().getName() + "(" + notifData.getTo().getUsername() + ")";
+                }
+                if (notifData.getTo() == null) {
+
+                    reciever = "NONE";
+                }
+                if (notifData.getFrom() == null) {
+                    sender = "NONE";
+                }
+                notifsDto.add(
+                        new Notification_Dto(notifData.getNotifId(), notifData.getTitle(), notifData.getMessage(),
+                                notifData.getMessageType(), notifData.getDateAndTime(), notifData.getStatus(),
+                                sender, reciever, page.getTotalElements()));
+
             } else {
 
             }
@@ -115,6 +181,26 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setDateAndTime(timeAndDate);
             notification.setStatus(status);
             notification.setFrom(user);
+            notifRepository.save(notification);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean sendNotification(String title, String message, String messageType, String timeAndDate,
+            boolean status,
+            Users from, Users to) {
+
+        if (from != null && to != null) {
+            Notifications notification = new Notifications();
+            notification.setTitle(title);
+            notification.setMessage(message);
+            notification.setMessageType(messageType);
+            notification.setDateAndTime(timeAndDate);
+            notification.setStatus(status);
+            notification.setFrom(from);
+            notification.setTo(to);
             notifRepository.save(notification);
             return true;
         }

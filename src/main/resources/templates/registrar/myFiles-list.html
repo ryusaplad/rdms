@@ -4,13 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Request Documents</title>
+
+    <title>Registrar - My Files</title>
+
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/svdfc-logo.png}">
+
     <!-- Custom CSS -->
     <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
-
     <link th:href="@{/css/croppie.css}" rel="stylesheet">
+    <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet" />
 </head>
 
 <body>
@@ -34,22 +38,32 @@
         <header class="topbar" data-navbarbg="skin5">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header" data-logobg="skin5">
-                    <a class="navbar-brand" href="/student/dashboard">
+
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a class="navbar-brand" href="/registrar/dashboard">
+
+
                         <b class="logo-icon">
+
                             <img height="50px" th:src="@{/images/svdfc-logo.png}" alt="homepage"
-                                class="img-responsive light-logo">
+                                class="img-responsive light-logo" />
+
                         </b>
+
                         <span class="logo-text text-dark logoText">
                             SVFC - RDMS
                         </span>
+
+
                     </a>
                     <!-- ============================================================== -->
                     <!-- ============================================================== -->
                     <!-- Toggle which is visible on mobile only -->
                     <!-- ============================================================== -->
-                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
-                        <i class="ti-menu ti-close"></i>
-                    </a>
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                            class="ti-menu ti-close"></i></a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -59,17 +73,16 @@
                     <!-- toggle and nav items -->
                     <!-- ============================================================== -->
                     <ul class="navbar-nav float-start me-auto">
-                        <li class="nav-item d-none d-lg-block">
-                            <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
-                                data-sidebartype="mini-sidebar">
-                                <i class="mdi mdi-menu font-24"></i>
-                            </a>
-                        </li>
+                        <li class="nav-item d-none d-lg-block"><a
+                                class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
+                                data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a></li>
+
                     </ul>
                     <!-- ============================================================== -->
                     <!-- Right side toggle and nav items -->
                     <!-- ============================================================== -->
                     <ul class="navbar-nav float-end">
+
 
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
@@ -84,39 +97,32 @@
                                 aria-labelledby="navbarDropdown">
                                 <hr class="devider">
                                 <div th:if="${#session.getAttribute('username')!=null}">
+
                                     <label th:with="name=${#session.getAttribute('name')}"
                                         class="dropdown-item bg-success border border-1 b-2 text-white">
                                         Name:
                                         <strong id="nameVal">[[${name}]]</strong>
                                     </label>
                                     <label th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">
-                                        Account
+                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
                                         Type
-                                        :[[${type}]]
-                                    </label>
+                                        :[[${type}]]</label>
                                 </div>
-                                <hr class="devider">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    <i class="ti-user me-1 ms-1"></i>
-                                    My Profile
-                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user me-1 ms-1"></i>
+                                    My Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Password
-                                </a>
+                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i
+                                        class="ti-settings me-1 ms-1"></i>
+                                    Change Password</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Profile Picture
-                                </a>
+                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i
+                                        class="ti-settings me-1 ms-1"></i>
+                                    Change Profile Picture</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout">
-                                    <i class="fa fa-power-off me-1 ms-1"></i>
-                                    Logout
-                                </a>
+                                <a class="dropdown-item" href="/logout"><i class="fa fa-power-off me-1 ms-1"></i>
+                                    Logout</a>
                                 <div class="dropdown-divider"></div>
+
                             </ul>
                         </li>
                         <!-- ============================================================== -->
@@ -125,6 +131,7 @@
                     </ul>
                 </div>
             </nav>
+
             <rside class="sidebar">
                 <button class="rightSidebarToggle btn">
                     <i id="btnIcon" class="fas fa-angle-left text-white"></i>
@@ -148,15 +155,15 @@
                         </div>
                     </div>
                     <div class="col-7" style="width:50.333333% !important">
-                        <div class="card w-100">
-                            <div class="card-body ">
+                        <div class="card ">
+                            <div class="card-body">
                                 <h4 class="card-title ">Notifications</h4>
                                 <hr class="hr">
                                 <div class="notificationCard">
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle">
-                                                <i class="ti-calendar"></i>
+                                                <i class="ti-check-box"></i>
                                             </span>
                                             <div class="ms-2 rightNotificationInfo ">
                                                 <h5 class="mb-0 notifTitle ">Event today</h5>
@@ -184,71 +191,62 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/student/dashboard"
-                                aria-expanded="false">
-                                <i class="fas fa-home"></i>
-                                <span class="hide-menu">Home</span>
-                            </a>
+                        <li title="Home" class="sidebar-item"> <a
+                                class="sidebar-link waves-effect waves-dark sidebar-link" href="/registrar/dashboard"
+                                aria-expanded="false"><i class="fas fa-home"></i><span class="hide-menu">Home</span></a>
                         </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="/student/request/documents"
-                                aria-expanded="false">
-                                <i class="fas fa-list"></i>
-                                <span class="hide-menu">Requests</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level in">
-                                <li class="sidebar-item">
-                                    <a href="/student/my-requests" class="sidebar-link">
-                                        <i class="fas fa-table"></i>
-                                        <span class="hide-menu">
-                                            My Requests
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="/student/request/documents" class="sidebar-link">
-                                        <i class="fas fa-folder-open"></i>
-                                        <span class="hide-menu">
-                                            Request Documents
-                                        </span>
-                                    </a>
-                                </li>
+
+                        <li title="Manage Request" class="sidebar-item"> <a
+                                class="sidebar-link has-arrow waves-effect waves-dark " href="javascript:void(0)"
+                                aria-expanded="false"><i class="fas fa-list"></i><span class="hide-menu">Manage
+                                    Requests</span></a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li title="Student Requests" class="sidebar-item"><a href="/registrar/studrequest"
+                                        class="sidebar-link"><i class="fas fa-table"></i><span
+                                            class="hide-menu">Students Requests
+                                        </span></a></li>
+                                <li title="Sent Requests" class="sidebar-item"><a href="/registrar/sent-requests"
+                                        class="sidebar-link active"><i class=" far fa-paper-plane"></i><span
+                                            class="hide-menu">Sent Requests
+                                        </span></a></li>
+
                             </ul>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="/student/my-documents" class="sidebar-link">
-                                <i class="fas fa-folder"></i>
-                                <span class="hide-menu">
-                                    My Documents
-                                </span>
-                            </a>
+                        <li title="Manage Accounts" class="sidebar-item"> <a
+                                class="sidebar-link has-arrow waves-effect waves-dark " href="javascript:void(0)"
+                                aria-expanded="false"><i class=" fas fa-users"></i><span class="hide-menu ">Manage
+                                    Accounts</span></a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li title="Students" class="sidebar-item"><a href="/registrar/student/accounts"
+                                        class="sidebar-link"><i class=" fas fa-user-plus"></i><span
+                                            class="hide-menu">Students
+                                        </span></a></li>
+                                <li title="Teachers" class="sidebar-item"><a href="/registrar/teacher/accounts"
+                                        class="sidebar-link"><i class=" fas fa-user-plus"></i><span class="hide-menu">
+                                            Teachers
+                                        </span></a></li>
+
+                            </ul>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link notifLink">
-                                <i class=" fas fa-bell"></i>
-                                <span class="hide-menu">
-                                    Notifications
-                                </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="#" class="sidebar-link">
-                                <i class="fas fa-user"></i>
-                                <span class="hide-menu">
-                                    My Profile
-                                </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item ">
-                            <a href="/logout" class="sidebar-link">
-                                <i class="fas fa-power-off"></i>
-                                <span class="hide-menu">
-                                    Logout
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
+                        <li title="Activity Logs" class="sidebar-item"><a href="#" class="sidebar-link"><i
+                                    class="fas fa-history"></i><span class="hide-menu">Activity Logs
+                                </span></a></li>
+                        <li title="My Files" class="sidebar-item"><a href="/registrar/my-files" class="sidebar-link"><i
+                                    class="fas fa-file"></i><span class="hide-menu"> My Files
+                                </span></a></li>
+                        <li class="sidebar-item"><a href="/registrar/documents-list" class="sidebar-link"><i
+                                    class="fas fa-folder"></i><span class="hide-menu">Manage Documents
+                                </span></a></li>
+                        <li title="Notifications" class="sidebar-item"><a href="#" class="sidebar-link notifLink"><i
+                                    class=" fas fa-bell"></i><span class="hide-menu">Notifications
+                                </span></a></li>
+                        <li title="My Profile" class="sidebar-item "><a href="#" class="sidebar-link"><i
+                                    class="fas fa-user"></i><span class="hide-menu">My Profile
+                                </span></a></li>
+                        <li title="Logout" class="sidebar-item "><a href="/logout" class="sidebar-link"><i
+                                    class="fas fa-power-off"></i><span class="hide-menu">Logout
+                                </span></a></li>
+
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -267,14 +265,13 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Request Document</h4>
+                        <h4 class="page-title">Dashboard</h4>
                         <div class="ms-auto text-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a href="#">Request</a>
-                                    </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Documents List</li>
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+
+                                    <li class="breadcrumb-item active" aria-current="page">My Files</li>
                                 </ol>
                             </nav>
                         </div>
@@ -288,54 +285,58 @@
             <!-- Container fluid  -->
             <!-- ============================================================== -->
             <div class="container-fluid">
-                <div class="container">
-                    <div class="card mb-4 el-card">
-                        <div class="card-header"></div>
-                        <div class="card-body ">
-                            <div class="row">
-                                <div class="col-lg-4 mb-2" th:each="documents : ${documentsCards}">
-                                    <div class="card border border-dark shadow card-hover">
-                                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                            <a href="#!">
-                                                <div class="imageDiv mt-2 text-center"
-                                                    style="background-color: rgba(251, 251, 251, 0.15);">
-                                                    <img th:src="@{'/student/documents/image?id='+ ${documents.documentId}}"
-                                                        src="images/documentImage" class="img-fluid"
-                                                        style="height: 250px; width: 250px;">
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="card-body">
-                                            <h3 class="card-title text-center" th:text="${documents.title}"></h3>
-                                            <div class="row">
-                                                <div class="col-sm mt-2">
-                                                    <a th:href="@{'/student/request/'+ ${documents.title}}"
-                                                        class="w-100 btn btn-primary">
-                                                        Request
-                                                        This Document.
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">My Requests</h5>
+                        <div class="table-responsive">
+                            <table id="zero_config" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+
+                                        <th>Action</th>
+                                        <th>File</th>
+                                        <th>Upload By</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr th:each="file : ${files}">
+                                        <td><a th:href="@{'/registrar/files/download?id='} + ${file.fileId}"
+                                                type="button" class="btn btn-warning">
+                                                Download</a></td>
+                                        <td th:text="${file.name}"></td>
+                                        <td th:text="${file.uploadedBy}"></td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
                         </div>
+
                     </div>
                 </div>
+
             </div>
+
         </div>
-    </div>
-    </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
     </div>
     <div class="modalView"></div>
     <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/js/croppie.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
+
     <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
+    <script>
+
+        $('#zero_config').DataTable();
+    </script>
 </body>
 
 </html>

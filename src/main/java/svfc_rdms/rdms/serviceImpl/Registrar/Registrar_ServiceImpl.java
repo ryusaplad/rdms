@@ -23,6 +23,7 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
 import svfc_rdms.rdms.service.Registrar.Registrar_SelfRequest_Service;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
+import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
 public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
@@ -38,6 +39,9 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private NotificationServiceImpl notificationService;
 
      @Override
      public ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params) {
@@ -85,14 +89,24 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
                          }
                          if (!from.isBlank() && !to.isBlank() && !message.isBlank() && !title.isBlank()
                                    && textSizeChecker(message, 10000) && textSizeChecker(title, 50)) {
+
+                              String notifMessage = registrar.getName()
+                                        + " is requesting document for the specific student, please go to the 'Request View' for more details.";
+                              String messageType = "requesting_document";
+                              String date = globalService.formattedDate();
+                              boolean notifStatus = false;
                               registrarRequest.setRequestBy(registrar);
                               registrarRequest.setRequestTo(teacher);
                               registrarRequest.setRequestTitle(title);
                               registrarRequest.setRequestMessage(message);
                               registrarRequest.setRequestStatus("pending");
                               registrarRequest.setRequestDate(requestedDate);
-                              regsRepository.save(registrarRequest);
-                              return new ResponseEntity<>("Success", HttpStatus.OK);
+                              if (notificationService.sendNotification(title, notifMessage, messageType, date,
+                                        notifStatus, registrar, teacher)) {
+                                   regsRepository.save(registrarRequest);
+                                   return new ResponseEntity<>("Success", HttpStatus.OK);
+                              }
+
                          }
 
                     }

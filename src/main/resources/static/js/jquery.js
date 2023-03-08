@@ -6,7 +6,7 @@
         ? t(e, !0)
         : function (e) {
             if (!e.document)
-              throw new Error("jQuery requires a window with a document");
+              throwtoggleSidebarT();  Error("jQuery requires a window with a document");
             return t(e);
           })
     : t(e);
