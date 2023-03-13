@@ -6,10 +6,11 @@ import svfc_rdms.rdms.model.Users;
 
 public interface NotificationService {
 
-        ResponseEntity<Object> getAllNotificationsByUser();
+        ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
+        int totalPage);
 
-        ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, String userType, int lowestPage,
-                        int totalPage);
+        ResponseEntity<Object> fetchDasboardAndSidebarNotif(Users user, String userType, int lowestPage,
+                        int totalPage,boolean status);
 
         boolean sendStudentNotification(String title, String message, String messageType, String timeAndDate,
                         boolean status,

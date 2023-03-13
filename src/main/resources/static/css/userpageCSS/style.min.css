@@ -4920,6 +4920,7 @@ fieldset:disabled .btn {
 
 .accordion-button.collapsed {
   border-bottom-width: 0;
+
 }
 
 .accordion-button:not(.collapsed) {

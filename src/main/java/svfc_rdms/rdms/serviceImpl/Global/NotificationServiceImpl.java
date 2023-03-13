@@ -28,42 +28,28 @@ public class NotificationServiceImpl implements NotificationService {
     private UsersRepository usersRepository;
 
     @Override
-    public ResponseEntity<Object> getAllNotificationsByUser() {
-        List<Notifications> notifications = notifRepository.findAll();
-        List<Notification_Dto> notifsDto = new ArrayList<>();
-
-        for (Notifications notifData : notifications) {
-
-            notifsDto.add(new Notification_Dto(notifData.getNotifId(), notifData.getTitle(), notifData.getMessage(),
-                    notifData.getMessageType(), notifData.getDateAndTime(), notifData.getStatus(),
-                    notifData.getFrom().getName(), notifData.getTo().getName(), notifications.size()));
-        }
-        return new ResponseEntity<>(notifsDto, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<Object> fetchAllNotificationByLoggedinUser(Users user, String userType, int lowestPage,
+    public ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
             int totalPage) {
         Sort descendingSort = Sort.by("notifId").descending();
         Page<Notifications> page = null;
 
         if (userType.equals("student")) {
-            page = notifRepository.findAllByToAndStatus(user, false,
+            page = notifRepository.findAllByTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
 
         } else if (userType.equals("registrar")) {
-            page = notifRepository.findAllByToIsNullAndStatus(false,
+            page = notifRepository.findAllByToIsNull(
                     PageRequest.of(lowestPage, totalPage, descendingSort));
 
         } else if (userType.equals("teacher")) {
-            page = notifRepository.findAllByToAndStatus(user, false,
+            page = notifRepository.findAllByToIsNull(
                     PageRequest.of(lowestPage, totalPage, descendingSort));
+
         }
 
         List<Notifications> notifications = page.getContent();
 
         List<Notification_Dto> notifsDto = new ArrayList<>();
-
         for (Notifications notifData : notifications) {
 
             String reciever = "";
@@ -144,6 +130,38 @@ public class NotificationServiceImpl implements NotificationService {
 
             }
 
+        }
+
+        return new ResponseEntity<>(notifsDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> fetchDasboardAndSidebarNotif(Users user, String userType, int lowestPage,
+            int totalPage, boolean status) {
+        Sort descendingSort = Sort.by("notifId").descending();
+        Page<Notifications> page = null;
+
+        if (userType.equals("student")) {
+            page = notifRepository.findAllByToAndStatus(user, status,
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
+
+        } else if (userType.equals("registrar")) {
+            page = notifRepository.findAllByToIsNullAndStatus(status,
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
+
+        } else if (userType.equals("teacher")) {
+            page = notifRepository.findAllByToAndStatus(user, status,
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
+        }
+
+        List<Notifications> notifications = page.getContent();
+
+        List<Notification_Dto> notifsDto = new ArrayList<>();
+        for (Notifications notifData : notifications) {
+            notifsDto.add(
+                    new Notification_Dto(notifData.getNotifId(), notifData.getTitle(), notifData.getMessage(),
+                            notifData.getMessageType(), notifData.getDateAndTime(), notifData.getStatus(),
+                            "", "", page.getTotalElements()));
         }
 
         return new ResponseEntity<>(notifsDto, HttpStatus.OK);
