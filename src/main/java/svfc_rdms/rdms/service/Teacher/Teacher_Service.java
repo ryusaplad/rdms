@@ -22,5 +22,5 @@ public interface Teacher_Service {
                Map<String, String> params);
 
      String displayAllRequests(HttpSession session, Model model);
-
+     String displayAllFilesByUserId(HttpSession session, Model model);
 }

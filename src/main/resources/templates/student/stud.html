@@ -96,10 +96,7 @@
                                     :[[${type}]]
                                 </label>
                                 <hr class="devider">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    <i class="ti-user me-1 ms-1"></i>
-                                    My Profile
-                                </a>
+
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
                                     <i class="ti-settings me-1 ms-1"></i>
@@ -128,12 +125,51 @@
                 <button class="rightSidebarToggle btn">
                     <i id="btnIcon" class="fas fa-angle-left text-white"></i>
                 </button>
-                <!-- ============================================================== -->
-                <!-- Right Side Bar -->
-                <!-- ============================================================== -->
+
                 <div class="row" id="r_row1">
+                    <div class="col-7" style="width:50.333333% !important;margin-top: -10px ;
+                         margin-bottom: 50px;">
+                        <div class="card  ">
+                            <div class="card-body">
+
+                                <div class="dropdown">
+                                    <a class="nav-link  text-muted waves-effect waves-dark pro-pic" href="#"
+                                        id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img th:src="@{/images/userImage.png}" alt="user" class="rounded-circle"
+                                            width="31">
+                                    </a>
+                                    <span th:with="name=${#session.getAttribute('name')}"
+                                        class="dropdown-item bg-success border border-1 b-2 text-white">
+                                        Name:
+                                        <strong id="nameVal">[[${name}]]</strong>
+                                    </span>
+                                    <span th:with="type=${#session.getAttribute('accountType')}"
+                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
+                                        Type
+                                        :[[${type}]]</sp>
+
+                                        <div class="dropdown-menu">
+
+                                            <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i
+                                                    class="ti-settings me-1 ms-1"></i>
+                                                Change Password</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i
+                                                    class="ti-settings me-1 ms-1"></i>
+                                                Change Profile Picture</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout"><i
+                                                    class="fa fa-power-off me-1 ms-1"></i>
+                                                Logout</a>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <div class="col-7" style="width:50.333333% !important">
-                        <div class="card  w-100 dateTimeCard">
+                        <div class="card  dateTimeCard">
                             <div class="card-body">
 
                                 <div class="todo-widget text-center" style="height:20px;">
@@ -147,18 +183,18 @@
                         </div>
                     </div>
                     <div class="col-7" style="width:50.333333% !important">
-                        <div class="card w-100">
-                            <div class="card-body ">
+                        <div class="card ">
+                            <div class="card-body">
                                 <h4 class="card-title ">Notifications</h4>
                                 <hr class="hr">
                                 <div class="notificationCard">
                                     <a href="javascript:void(0)" class="link border-top">
                                         <div class="d-flex no-block align-items-center p-10">
                                             <span class="btn btn-success btn-circle">
-                                                <i class="ti-calendar"></i>
+                                                <i class="ti-check-box"></i>
                                             </span>
-                                            <div class="ms-2 rightNotificationInfo ">
-                                                <h5 class="mb-0 notifTitle ">Event today</h5>
+                                            <div class="ms-2 mainNotificationInfo">
+                                                <h5 class="mb-0 title">Requests Status</h5>
                                                 <span class="description"></span>
                                             </div>
                                         </div>
@@ -230,14 +266,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="sidebar-item ">
-                            <a href="#" class="sidebar-link">
-                                <i class="fas fa-user"></i>
-                                <span class="hide-menu">
-                                    My Profile
-                                </span>
-                            </a>
-                        </li>
+
                         <li class="sidebar-item ">
                             <a href="/logout" class="sidebar-link">
                                 <i class="fas fa-power-off"></i>

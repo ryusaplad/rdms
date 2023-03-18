@@ -39,4 +39,17 @@ public class TeacherController {
           }
           return "redirect:/";
      }
+
+     @GetMapping("/teacher/documents")
+     public String teacherUploadedFiles(HttpSession session, HttpServletResponse response, Model model) {
+
+          if (globalService.validatePages("teacher", response, session)) {
+               
+              return teacherService.displayAllFilesByUserId(session, model);
+
+          } 
+               return "redirect:/";
+          
+         
+     }
 }

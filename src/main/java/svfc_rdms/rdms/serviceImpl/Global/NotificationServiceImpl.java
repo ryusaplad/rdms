@@ -42,8 +42,8 @@ public class NotificationServiceImpl implements NotificationService {
                     PageRequest.of(lowestPage, totalPage, descendingSort));
 
         } else if (userType.equals("teacher")) {
-            page = notifRepository.findAllByToIsNull(
-                    PageRequest.of(lowestPage, totalPage, descendingSort));
+            page = notifRepository.findAllByTo(user,
+            PageRequest.of(lowestPage, totalPage, descendingSort));
 
         }
 
@@ -104,8 +104,7 @@ public class NotificationServiceImpl implements NotificationService {
                                 sender, reciever, page.getTotalElements()));
 
             } else if (userType.equals("teacher")) {
-                System.out.println(notifData.getFrom() != null);
-                System.out.println(notifData.getTo() != null);
+                
                 if (notifData.getFrom() != null) {
 
                     sender = notifData.getFrom().getName() + "(" + notifData.getFrom().getUsername() + ")";

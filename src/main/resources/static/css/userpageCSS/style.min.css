@@ -15099,15 +15099,29 @@ label {
 
 /* User Pages CSs */
 .sidebar {
-  position: fixed;
+  position: absolute;
   top: 65px;
-  right: -600px;
-  width: 100%px;
-  height: auto;
+  bottom: 0;
+  right: -300px;
+  width: 300px;
+  height: 40rem;
   background-color: gray;
   color: black;
   padding: 50px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  z-index: 1000;
+}
 
+.rightSidebarToggle {
+  height: 40px;
+  width: 50px;
+  background-color: gray;
+  color: white;
+  margin-top: 5px;
+  margin-left: -84px;
+  text-align: left;
+  position: fixed;
 }
 
 .sidebar-t {
@@ -15124,18 +15138,11 @@ label {
 
 #r_row1 {
   width: 521px !important;
+  margin-left: -25px;
 }
 
 
-.rightSidebarToggle {
-  height: 40px;
-  width: 50px;
-  background-color: gray;
-  color: white;
-  margin-top: 20px;
-  margin-left: -90px;
-  text-align: left;
-}
+
 
 .notificationCard {
 
@@ -15143,7 +15150,7 @@ label {
   padding: 0;
   margin-top: 10px;
   overflow-y: scroll;
-  height: 200px;
+  height: 150px;
 
 }
 
@@ -15406,67 +15413,83 @@ span:nth-child(5) {
 
 
 
-          .cardLoader {
-               width: 60px;
+.cardLoader {
+  width: 60px;
 
-          }
+}
 
-          .loader-wheel {
-               animation: spin 1s infinite linear;
-               border: 2px solid rgba(98, 97, 97, 0.5);
-               border-left: 4px solid #DC143C;
-               border-radius: 50%;
-               height: 50px;
-               margin-bottom: 10px;
-               width: 50px;
-          }
+.loader-wheel {
+  animation: spin 1s infinite linear;
+  border: 2px solid rgba(98, 97, 97, 0.5);
+  border-left: 4px solid #DC143C;
+  border-radius: 50%;
+  height: 50px;
+  margin-bottom: 10px;
+  width: 50px;
+}
 
-          .loader-text {
-               color: #DC143C;
-               font-family: arial, sans-serif;
-          }
+.loader-text {
+  color: #DC143C;
+  font-family: arial, sans-serif;
+}
 
-          .loader-text:after {
-               content: 'Loading';
-               animation: load 2s linear infinite;
-          }
+.loader-text:after {
+  content: 'Loading';
+  animation: load 2s linear infinite;
+}
 
-          @keyframes spin {
-               0% {
-                    transform: rotate(0deg);
-               }
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
 
-               100% {
-                    transform: rotate(360deg);
-               }
-          }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
-          @keyframes load {
-               0% {
-                    content: 'Loading';
-               }
+@keyframes load {
+  0% {
+    content: 'Loading';
+  }
 
-               33% {
-                    content: 'Loading.';
-               }
+  33% {
+    content: 'Loading.';
+  }
 
-               67% {
-                    content: 'Loading..';
-               }
+  67% {
+    content: 'Loading..';
+  }
 
-               100% {
-                    content: 'Loading...';
-               }
-          }
+  100% {
+    content: 'Loading...';
+  }
+}
 
-          #loaderDiv {
-               align-items: center;
-               display: flex;
-               height: 100%;
-               justify-content: center;
-               margin: 0;
-          }
+#loaderDiv {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  margin: 0;
+}
 
-          .mainLoaderDiv {
-               display: none;
-          }
+.mainLoaderDiv {
+  display: none;
+}
+
+.saveImageFooter {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.btn-group #changeImage,
+#resetImage,
+#clearImage {
+  margin-right: 5px;
+}
+
+.saveImageFooter .btn-group:last-child {
+  margin-right: 0;
+}

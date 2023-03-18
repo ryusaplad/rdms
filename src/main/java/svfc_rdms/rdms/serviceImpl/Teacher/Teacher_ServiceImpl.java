@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
+import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
@@ -250,7 +253,21 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      @Override
      public List<UserFiles> getAllFilesByUser(long userId) {
 
-          return null;
+          try {
+               if (userId != -1) {
+                    Users uploader = usersRepository.findByuserId(userId).get();
+                    List<UserFiles> teacherFiles = fileRepository.findAllByUploadedBy(uploader);
+                    if (!teacherFiles.isEmpty()) {
+                         return teacherFiles;
+                    }
+
+               }
+
+               return null;
+
+          } catch (IllegalArgumentException e) {
+               throw new UserNotFoundException("User with id " + userId + " not found", e);
+          }
      }
 
      @Override
@@ -258,6 +275,37 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
 
           return null;
 
+     }
+
+     @Override
+     public String displayAllFilesByUserId(HttpSession session, Model model) {
+          Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
+          if (user.getUserId() != -1) {
+
+               List<UserFiles> getAllFiles = getAllFilesByUser(user.getUserId());
+               List<UserFiles_Dto> userFiles = new ArrayList<>();
+
+               if (getAllFiles == null) {
+                    model.addAttribute("files", userFiles);
+                    System.out.println("Files got fire but no item");
+                    return "/teacher/myFiles-list";
+               }
+               getAllFiles.stream().forEach(file -> {
+                    String stringValue = file.getFileId().toString();
+                    UUID uuidValue = UUID.fromString(stringValue);
+                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
+                              + file.getUploadedBy().getName();
+                    userFiles.add(new UserFiles_Dto(
+                              uuidValue, file.getName(), file.getSize(),
+                              file.getStatus(),
+                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
+               });
+               model.addAttribute("files", userFiles);
+               return "/teacher/myFiles-list";
+
+          }
+
+          return null;
      }
 
 }
