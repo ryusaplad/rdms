@@ -16,18 +16,18 @@ $(document).ready(function () {
       var name = fileName + "." + extension;
       $("#fileInfoTable").append(
         "'<tr>'" +
-          "<td>" +
-          "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
-          x +
-          ">Delete</button>" +
-          "</td>" +
-          "<td>" +
-          name +
-          "</td >" +
-          "<td>" +
-          formatFileSize($("#files")[0].files[x].size) +
-          "</td >" +
-          "</tr >"
+        "<td>" +
+        "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
+        x +
+        ">Delete</button>" +
+        "</td>" +
+        "<td>" +
+        name +
+        "</td >" +
+        "<td>" +
+        formatFileSize($("#files")[0].files[x].size) +
+        "</td >" +
+        "</tr >"
       );
     }
 
@@ -89,6 +89,13 @@ $(document).ready(function () {
       var studCourse = $("#course").val();
       var studSemester = $("#semester").val();
       var userMessage = $("#message").val();
+      if (studCourse == undefined) {
+        studCourse = "N/A";
+      }
+      if (studSemester == undefined) {
+        studSemester = "N/A";
+      }
+
       formData.append("studentId", studId);
       formData.append("studName", studName);
       formData.append("year", studYear);
@@ -181,10 +188,12 @@ $(document).ready(function () {
 
     if (id === "") {
       message = "invalid request";
+      console.log(message);
       window.location = "/student/request/documents";
     } else if (studId === "" || studName === "") {
       message = "Invalid Student Informatation(id,name)";
       window.location = "/";
+      console.log(message);
     } else if (file === "") {
       message = "Please Select File";
       $(".message").text(message);

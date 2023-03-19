@@ -67,7 +67,7 @@ $(document).ready(function () {
       accTypeMessage.style = "display:none";
       accTypeError.innerText = " ";
       if (getSelected == "Student") {
-        if (!user.includes("c-")) {
+        if (!user.includes("c-") && !user.includes("b-")&&!user.includes("shs-")) {
           displayMessage(userMessage, userError, 2, getSelected);
           return false;
         }

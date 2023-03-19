@@ -363,32 +363,24 @@
                                                 <span class="badge badge-secondary text-danger ">*</span>
                                         </div>
                                         <div class=" mt-2 form-floating">
-                                            <select id="year" name="year" class="form-select" placeholder="Year Level">
-                                                <option value="1ST YEAR">1ST YEAR</option>
-                                                <option value="2ND YEAR">2ND YEAR</option>
-                                                <option value="3RD YEAR">3RD YEAR</option>
-                                                <option value="4TH YEAR">4TH YEAR</option>
-                                                <option value="5TH YEAR">5TH YEAR</option>
+                                            <select id="schoolLevel" name="schoolLevel" class="form-select"
+                                                placeholder="Select School Level">
+                                                <option value="n/a">--School Level--</option>
+                                                <option value="pre-school">Pre School</option>
+                                                <option value="elementary">Elementary</option>
+                                                <option value="junior-high">Junior High School</option>
+                                                <option value="senior-high">Senior High School</option>
+                                                <option value="college">College</option>
                                             </select>
-                                            <label for="year">Year
+                                            <label for="schoolLevel">School Level
                                                 <span class="badge badge-secondary text-danger ">*</span>
                                         </div>
-                                        <div class="mt-2  form-floating">
-                                            <select id="course" name="course" class="form-select">
-                                                <option value="BSIT">BSIT</option>
-                                                <option value="BPAD">BPAD</option>
-                                                <option value="BSHM">BSHM</option>
-                                            </select>
-                                            <label for="course">Course
-                                                <span class="badge badge-secondary text-danger ">*</span>
+                                        <div class="mt-2 form-floating yearSelect" style="display:none">
                                         </div>
-                                        <div class="mt-2  form-floating">
-                                            <select id="semester" name="semester" class="form-select">
-                                                <option value="1ST SEMESTER">1ST SEMESTER</option>
-                                                <option value="2ND SEMESTER">2ND SEMESTER</option>
-                                            </select>
-                                            <label for="semester">Semester
-                                                <span class="badge badge-secondary text-danger ">*</span>
+                                        <div class=" mt-2 form-floating courseSelect" style="display:none">
+
+                                        </div>
+                                        <div class=" mt-2  form-floating semGradeSelect" style="display:none">
                                         </div>
                                         <div class="mt-2 form-floating">
                                             <textarea id="message" name="message" class="form-control floatingInput"
@@ -503,6 +495,7 @@
     <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
     <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/course-year-level_Selection.js}"></script>
 </body>
 
 </html>
