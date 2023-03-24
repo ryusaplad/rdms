@@ -20,7 +20,7 @@ import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.service.Registrar.Registrar_SelfRequest_Service;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
@@ -35,7 +35,7 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
      private FileRepository fileRepository;
 
      @Autowired
-     private RegRepository regsRepository;
+     private RegsRequestRepository regsRepository;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;

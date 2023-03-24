@@ -25,7 +25,7 @@ import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Teacher.Teacher_Service;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
@@ -41,7 +41,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      private FileRepository fileRepository;
 
      @Autowired
-     private RegRepository regsRepository;
+     private RegsRequestRepository regsRepository;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;

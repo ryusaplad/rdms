@@ -26,7 +26,7 @@ import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
-import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
@@ -43,7 +43,7 @@ public class AdminController {
      GlobalServiceControllerImpl globalService;
 
      @Autowired
-     RegRepository registrarRepo;
+     RegsRequestRepository registrarRepo;
 
      // Get Mapping Method
      @GetMapping("/admin/dashboard")

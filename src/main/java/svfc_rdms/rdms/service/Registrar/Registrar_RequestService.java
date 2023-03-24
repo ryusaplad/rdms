@@ -3,6 +3,7 @@ package svfc_rdms.rdms.service.Registrar;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
@@ -23,4 +24,7 @@ public interface Registrar_RequestService {
 
      ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String message, long userId,
                long requestId, HttpSession session);
+
+     void exportStudentRequestToExcel(HttpServletResponse response);
+
 }

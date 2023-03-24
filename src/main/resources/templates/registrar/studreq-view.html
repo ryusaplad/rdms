@@ -96,6 +96,39 @@
             margin: auto;
             padding: 20px;
         }
+
+
+        #loading-modal {
+            display: none;
+            position: fixed;
+            top: 63px;
+            left: 62px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+
+
+        .spinner-export {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #DC143C;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            animation: spin 2s linear infinite;
+            margin: auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -422,6 +455,22 @@
             <!-- ============================================================== -->
             <div class="container-fluid">
                 <div class="card">
+                    <!-- Error Display by ajax -->
+
+                    <div class="card-header">
+
+                        <div class="d-flex flex-row-reverse">
+
+                            <div class="">
+
+                                <a href="javascript:void(0)" class="btn btn-primary export-link">Export All Student
+                                    Requests</a>
+
+
+
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">Student Requests</h5>
                         <div class="table-responsive">
@@ -494,6 +543,9 @@
     <div class="modalView">
 
     </div>
+
+
+    <!-- HTML for the export link -->
     <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
     <script type="text/javascript" th:src="@{/js/croppie.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
@@ -507,6 +559,40 @@
     <script>
 
         $('#zero_config').DataTable();
+
+
+        $(document).ready(function () {
+            var modalView = $(".modalView");
+
+            $(".export-link").click(function () {
+
+                var htmlModal = `<div class="modal fade" id="exportedModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exportedModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-body">
+            
+                <div class="spinner-export"></div>
+                <p style="margin: auto;">Please wait while your file is being generated...</p>
+           
+        </div>
+       
+      </div>
+    </div>
+  </div>`;
+                modalView.append(htmlModal);
+                // Show the loading modal
+                $("#exportedModal").modal("toggle");
+
+
+                setTimeout(function () {
+                    $("#exportedModal").modal("hide");
+                  
+                    window.location.href = "/registrar/student-request-export/all";
+                }, 1000);
+            });
+        });
+
 
 
     </script>

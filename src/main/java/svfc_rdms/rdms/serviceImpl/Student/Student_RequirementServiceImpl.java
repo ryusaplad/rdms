@@ -135,6 +135,8 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
                StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
 
+               System.out.println(studentRequest.getRequestId());
+
                if (user != null && studentRequest != null) {
 
                     String title = "Resubmit : Requesting " + studentRequest.getRequestDocument().getTitle();
@@ -148,6 +150,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                               dateAndTime,
                               false,
                               user)) {
+                         studentRequest.setRequestStatus("Pending");
                          studentRepository.save(studentRequest);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {

@@ -1,13 +1,28 @@
 package svfc_rdms.rdms.serviceImpl.Registrar;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -310,6 +325,101 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      public Boolean deleteFile(long id) {
           // TODO Auto-generated method stub
           return null;
+     }
+
+     @Override
+     public void exportStudentRequestToExcel(HttpServletResponse response) {
+          try {
+               // Create a new workbook
+               Workbook workbook = new XSSFWorkbook();
+
+               LocalDateTime now = LocalDateTime.now();
+
+               DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM - d - uuuu (h-mm-ss)");
+               String formattedDateTime = now.format(formatter);
+               System.out.println(formattedDateTime);
+               // Create the file name using the formatted date and time
+               String fileName = "StudentRequest -" + formattedDateTime + ".xlsx";
+
+               // Create a new sheet
+               Sheet sheet = workbook.createSheet("Student Requests");
+
+               // Create header row
+               Row headerRow = sheet.createRow(0);
+               headerRow.createCell(0).setCellValue("Request ID");
+               headerRow.createCell(1).setCellValue("Year");
+               headerRow.createCell(2).setCellValue("Course");
+               headerRow.createCell(3).setCellValue("Semester");
+               headerRow.createCell(4).setCellValue("Message");
+               headerRow.createCell(5).setCellValue("Name");
+               headerRow.createCell(6).setCellValue("Username");
+               headerRow.createCell(7).setCellValue("Reply");
+               headerRow.createCell(8).setCellValue("Manage By");
+               headerRow.createCell(9).setCellValue("Request Date");
+               headerRow.createCell(10).setCellValue("Release Date");
+               headerRow.createCell(11).setCellValue("Request Document");
+               headerRow.createCell(12).setCellValue("Request Status");
+
+               List<StudentRequest> studRequest = studentRepository.findAll();
+               int rowNum = 1; // Start from row 1 to skip the header row
+               for (StudentRequest request : studRequest) {
+                    Row dataRow = sheet.createRow(rowNum++);
+                    dataRow.createCell(0).setCellValue("Request - " + request.getRequestId());
+                    dataRow.createCell(1).setCellValue(request.getYear());
+                    dataRow.createCell(2).setCellValue(request.getCourse());
+                    dataRow.createCell(3).setCellValue(request.getSemester());
+                    dataRow.createCell(4).setCellValue(request.getMessage());
+                    dataRow.createCell(5).setCellValue(request.getRequestBy().getName());
+                    dataRow.createCell(6).setCellValue(request.getRequestBy().getUsername());
+                    dataRow.createCell(7).setCellValue(request.getReply());
+                    dataRow.createCell(8).setCellValue(request.getManageBy());
+                    dataRow.createCell(9).setCellValue(request.getRequestDate().toString());
+                    dataRow.createCell(10).setCellValue(request.getReleaseDate().toString());
+                    dataRow.createCell(11).setCellValue(request.getRequestDocument().getTitle());
+                    CellStyle style = workbook.createCellStyle();
+                    if (request.getRequestStatus().equalsIgnoreCase("on-going")) {
+
+                         style.setFillForegroundColor(
+                                   new XSSFColor(new byte[] { (byte) 0xE5, (byte) 0xF6, (byte) 0xDF, (byte) 0xCC },
+                                             new DefaultIndexedColorMap()));
+                         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                    } else if (request.getRequestStatus().equalsIgnoreCase("approved")) {
+                         style.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+                         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                    } else if (request.getRequestStatus().equalsIgnoreCase("rejected")) {
+                         style.setFillForegroundColor(IndexedColors.RED.getIndex());
+                         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                    } else if (request.getRequestStatus().equalsIgnoreCase("pending")) {
+                         style.setFillForegroundColor(new XSSFColor(new byte[]{(byte) 126, (byte) 200, (byte) 227}, new DefaultIndexedColorMap()));
+                         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                    }
+                    Cell statusCell = dataRow.createCell(12);
+                    statusCell.setCellStyle(style);
+                    statusCell.setCellValue(request.getRequestStatus());
+               }
+               // Add more data rows as needed
+
+               // Auto-size the columns for better visibility
+               for (int i = 0; i < headerRow.getLastCellNum(); i++) {
+                    sheet.autoSizeColumn(i);
+               }
+
+               // Set the response headers
+               response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+               response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+
+               // Write the workbook to the response output stream
+               try {
+                    OutputStream outputStream = response.getOutputStream();
+                    workbook.write(outputStream);
+                    workbook.close();
+                    outputStream.close();
+               } catch (IOException e) {
+                    throw new ApiRequestException(e.getMessage());
+               }
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
      }
 
 }

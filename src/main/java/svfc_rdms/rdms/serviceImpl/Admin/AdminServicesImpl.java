@@ -29,7 +29,7 @@ import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.repository.RegistrarRequests.RegRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Admin.AdminService;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
@@ -51,7 +51,7 @@ public class AdminServicesImpl implements AdminService {
      FileRepository userRepo;
 
      @Autowired
-     RegRepository regsRepository;
+     RegsRequestRepository regsRepository;
 
      @Autowired
      GlobalServiceControllerImpl globalService;

@@ -135,8 +135,20 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
 
      public String generateRandomHexColor() {
           Random random = new Random();
-          int color = random.nextInt(0x1000000);
-          return String.format("#%06x", color);
-     }
+
+          int maxBound = 256;
+          int maxTotalBound = 550;
+
+          int red = random.nextInt(maxBound);
+          int green = random.nextInt(maxBound);
+          int blue = random.nextInt(maxBound);
+          // Ensure that the color is not too light
+          while ((red + green + blue) > maxTotalBound) {
+          red = random.nextInt(maxBound);
+          green = random.nextInt(maxBound);
+          blue = random.nextInt(maxBound);
+          }
+          return String.format("#%02x%02x%02x", red, green, blue);
+          }
 
 }

@@ -160,4 +160,12 @@ public class Regs_RestController {
 
           return regs_ServiceImpl.viewRegistrarRequests(requestId);
      }
+
+     @GetMapping("/registrar/student-request-export/all")
+     public void exportStudentRequestToExcel(HttpSession session,
+               HttpServletResponse response) {
+
+          regs_RequestService.exportStudentRequestToExcel(response);
+     }
+
 }
