@@ -66,7 +66,7 @@ public class StudentController {
           if (globalService.validatePages("student", response, session)) {
                return requestServiceImpl.displayStudentRequests(model, session);
           }
-          return null;
+          return "redirect:/";
 
      }
 
@@ -101,7 +101,7 @@ public class StudentController {
                e.printStackTrace();
           }
 
-          return null;
+          return "redirect:/";
 
      }
 

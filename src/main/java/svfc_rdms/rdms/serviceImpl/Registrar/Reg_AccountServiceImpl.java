@@ -1,8 +1,11 @@
 package svfc_rdms.rdms.serviceImpl.Registrar;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.service.Registrar.Registrar_AccountService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Service
@@ -26,9 +30,11 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
 
      @Autowired
      GlobalServiceControllerImpl globalService;
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
-     public ResponseEntity<Object> saveUsersAccount(Users user, int actions) {
+     public ResponseEntity<Object> saveUsersAccount(Users user, int actions, HttpSession session) {
 
           String error = "";
           try {
@@ -88,6 +94,11 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                               user.setProfilePicture(image);
                               usersRepository.saveAndFlush(user);
                               ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
+                              String date = LocalDateTime.now().toString();
+                              String logMessage = "[" + date + "] Account added Successfully! User: "
+                                        + session.getAttribute("name").toString() + " added a user (" + user.getName()
+                                        + ")";
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                               return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                          }
                     } else if (actions == 1) {
@@ -96,6 +107,11 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                          user.setPassword(hashedPassword);
                          usersRepository.saveAndFlush(user);
                          ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
+                         String date = LocalDateTime.now().toString();
+                         String logMessage = "[" + date + "] Account Updated Successfully! User: "
+                                   + session.getAttribute("name").toString() + " updated a user (" + user.getName()
+                                   + ")";
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Mid_Log", date, "medium", session);
                          return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                     }
                }
@@ -132,11 +148,16 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
      }
 
      @Override
-     public boolean deleteData(long userId) {
+     public boolean deleteData(long userId, HttpSession session) {
 
           try {
                if (findOneUserById(userId).isPresent()) {
                     usersRepository.deleteById(userId);
+                    String date = LocalDateTime.now().toString();
+                    String logMessage = "[" + date + "] Account Deleted Successfully! User: "
+                              + session.getAttribute("name").toString() + " deleted a user ("
+                              + findOneUserById(userId).get().getName() + ")";
+                    globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session);
                     return true;
                }
                return false;
@@ -147,7 +168,7 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
      }
 
      @Override
-     public boolean changeAccountStatus(String status, long userId) {
+     public boolean changeAccountStatus(String status, long userId, HttpSession session) {
           try {
                if (findOneUserById(userId).isPresent()) {
                     usersRepository.changeStatusOfUser(status, userId);

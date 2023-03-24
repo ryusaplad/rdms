@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.serviceImpl.Student;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Student.Student_RequirementService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
@@ -46,6 +48,9 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
      @Autowired
      private NotificationServiceImpl notificationService;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
      public List<UserFiles> getAllFilesByUser(long userId) throws FileNotFoundException {
@@ -128,14 +133,12 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      }
 
      @Override
-     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId) {
+     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId, HttpSession session) {
           try {
 
                Users user = usersRepository.findByuserId(userId).get();
 
                StudentRequest studentRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId).get();
-
-               System.out.println(studentRequest.getRequestId());
 
                if (user != null && studentRequest != null) {
 
@@ -149,9 +152,15 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                     if (notificationService.sendRegistrarNotification(title, message, messageType,
                               dateAndTime,
                               false,
-                              user)) {
+                              user, session)) {
                          studentRequest.setRequestStatus("Pending");
                          studentRepository.save(studentRequest);
+                         String date = LocalDateTime.now().toString();
+                         String logMessage = "[" + date + "] User Resubmit a request "
+                                   + studentRequest.getRequestDocument().getTitle() + " User: " + user.getName()
+                                   + " resubmit the request of (" + studentRequest.getRequestDocument().getTitle()
+                                   + ")";
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",

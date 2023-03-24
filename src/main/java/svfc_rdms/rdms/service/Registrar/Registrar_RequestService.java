@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.service.Registrar;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+
+import svfc_rdms.rdms.model.StudentRequest;
 
 public interface Registrar_RequestService {
 
@@ -25,6 +28,9 @@ public interface Registrar_RequestService {
      ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String message, long userId,
                long requestId, HttpSession session);
 
-     void exportStudentRequestToExcel(HttpServletResponse response);
 
+
+    ResponseEntity<String> exportingStudentRequestToExcel(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq);
+
+    void exportConfirmation(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq);
 }

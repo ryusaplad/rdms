@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_AccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
@@ -39,6 +41,9 @@ public class Regs_RestController {
      private UsersRepository userRepository;
 
      @Autowired
+     private StudentRepository studentRepository;
+
+     @Autowired
      private Registrar_ServiceImpl regs_ServiceImpl;
      @Autowired
      private Reg_AccountServiceImpl regs_AccountService;
@@ -47,15 +52,15 @@ public class Regs_RestController {
      private Reg_RequestServiceImpl regs_RequestService;
 
      @PostMapping(value = "/registrar/save/user-account")
-     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
+     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session) {
 
-          return regs_AccountService.saveUsersAccount(user, 0);
+          return regs_AccountService.saveUsersAccount(user, 0, session);
      }
 
      @PostMapping(value = "/registrar/save/update-account")
-     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
+     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session) {
 
-          return regs_AccountService.saveUsersAccount(user, 1);
+          return regs_AccountService.saveUsersAccount(user, 1, session);
      }
 
      @GetMapping("/registrar/user/update")
@@ -82,17 +87,17 @@ public class Regs_RestController {
      @GetMapping(value = "/registrar/user/change/{status}")
 
      public ResponseEntity<Object> changeStatus(@PathVariable("status") String status,
-               @RequestParam("userId") long userId) {
+               @RequestParam("userId") long userId, HttpSession session) {
           if (status.equals("permanently")) {
-               if (regs_AccountService.deleteData(userId)) {
+               if (regs_AccountService.deleteData(userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("temporary")) {
-               if (regs_AccountService.changeAccountStatus("Temporary", userId)) {
+               if (regs_AccountService.changeAccountStatus("Temporary", userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("active")) {
-               if (regs_AccountService.changeAccountStatus("Active", userId)) {
+               if (regs_AccountService.changeAccountStatus("Active", userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           }
@@ -162,10 +167,17 @@ public class Regs_RestController {
      }
 
      @GetMapping("/registrar/student-request-export/all")
-     public void exportStudentRequestToExcel(HttpSession session,
+     public ResponseEntity<String> exportStudentRequestToExcelCheck(HttpSession session,
                HttpServletResponse response) {
+          List<StudentRequest> studRequest = studentRepository.findAll();
+          return regs_RequestService.exportingStudentRequestToExcel(response, session, studRequest);
+     }
 
-          regs_RequestService.exportStudentRequestToExcel(response);
+     @GetMapping("/registrar/student-request-export/confirm")
+     public void exportStudentRequestToExcelConfirm(HttpSession session,
+               HttpServletResponse response) {
+          List<StudentRequest> studRequest = studentRepository.findAll();
+          regs_RequestService.exportConfirmation(response, session, studRequest);
      }
 
 }

@@ -2,6 +2,7 @@ package svfc_rdms.rdms.serviceImpl.Student;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Document.DocumentService;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Student.Student_RequestService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
@@ -57,6 +59,9 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
 
      @Autowired
      private NotificationServiceImpl notificationService;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
      public Optional<Documents> getFileDocumentById(long id) {
@@ -127,7 +132,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      @Override
      public ResponseEntity<Object> submitRequest(String requestId,
                Optional<MultipartFile[]> uploadedFiles, String document,
-               Map<String, String> params) {
+               Map<String, String> params,HttpSession session) {
 
           try {
 
@@ -207,8 +212,11 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                     if (notificationService.sendRegistrarNotification(title, message, messageType,
                               dateAndTime,
                               status,
-                              user)) {
+                              user,session)) {
                          studentRepository.save(req);
+                         String date = LocalDateTime.now().toString();
+                    String logMessage = "[" + date + "] User Requested "+document+ " User: " + user.getName() + " is requesting ("+document+")";
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",

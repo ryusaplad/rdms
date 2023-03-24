@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -115,17 +116,17 @@ public class Admin_RestController {
 
      @PostMapping("/admin/save-document-info")
      public void saveDocument(@RequestParam("image") MultipartFile partFile,
-               @RequestParam Map<String, String> params) {
+               @RequestParam Map<String, String> params,HttpSession session) {
 
-          mainService.saveDocumentData(partFile, params);
+          mainService.saveDocumentData(partFile, params,session);
 
      }
 
      @DeleteMapping("/admin/delete-document-info")
-     public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId) {
+     public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId,HttpSession session) {
 
           try {
-               if (mainService.deleteDocumentFile(documentId)) {
+               if (mainService.deleteDocumentFile(documentId,session)) {
                     return new ResponseEntity<Object>("success", HttpStatus.OK);
                } else {
                     return new ResponseEntity<Object>("Invalid Document ID, Must be valid Document Id.",
@@ -144,9 +145,9 @@ public class Admin_RestController {
      @PostMapping("/admin/update-document-info")
      public void updateDocument(@RequestParam("docId") long id,
                @RequestParam("image") MultipartFile partFile,
-               @RequestParam Map<String, String> params) {
+               @RequestParam Map<String, String> params,HttpSession session) {
 
-          mainService.saveDocumentData(id, partFile, params);
+          mainService.saveDocumentData(id, partFile, params,session);
 
      }
 
@@ -173,9 +174,9 @@ public class Admin_RestController {
 
      @GetMapping(value = "/admin/user/delete")
 
-     public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request) {
+     public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request,HttpSession session) {
           try {
-               if (mainService.deleteData(userId)) {
+               if (mainService.deleteData(userId,session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } catch (Exception e) {

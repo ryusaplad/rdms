@@ -163,7 +163,7 @@ public class AdminController {
                if (!status.isEmpty() || !status.isBlank()) {
                     String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
                     // changing status based on the input
-                    if (mainService.changeAccountStatus(capitalizeS, userId)) {
+                    if (mainService.changeAccountStatus(capitalizeS, userId,session)) {
                          return "redirect:" + referer;
 
                     }
@@ -213,7 +213,7 @@ public class AdminController {
      public String deleteFile(@RequestParam("docid") long documentId, HttpServletResponse response, HttpSession session,
                Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-               String message = (mainService.deleteDocumentFile(documentId)) ? "Document Deleted" : "Not Deleted";
+               String message = (mainService.deleteDocumentFile(documentId,session)) ? "Document Deleted" : "Not Deleted";
                return "redirect:/documents-list?message=" + message;
           }
           return "redirect:/";

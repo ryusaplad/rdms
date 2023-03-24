@@ -42,6 +42,7 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Registrar.Registrar_RequestService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
@@ -59,6 +60,9 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Autowired
      private NotificationServiceImpl notificationService;
@@ -184,10 +188,17 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                          if (notificationService.sendStudentNotification(title, notifMessage, messageType, dateAndTime,
                                    false,
-                                   user)) {
+                                   user, session)) {
+
                               studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
                                         manageBy,
                                         message, studentRequest.getRequestId());
+
+                              String date = LocalDateTime.now().toString();
+                              String logMessage = "[" + LocalDateTime.now().toString() + "] Registrar Change the  "
+                                        + user.getName() + " Request to " + status + " User: " + manageBy
+                                        + "Change the status the request of " + user.getName();
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
                               return new ResponseEntity<>("Success", HttpStatus.OK);
                          } else {
                               throw new ApiRequestException(
@@ -242,7 +253,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                     String dateAndTime = globalService.formattedDate();
                     if (notificationService.sendStudentNotification(title, notifMessage, messageType, dateAndTime,
                               false,
-                              user)) {
+                              user, session)) {
                          Users manageBy = usersRepository.findByUsername(session.getAttribute("username").toString())
                                    .get();
 
@@ -264,6 +275,11 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               }
                          }
                          studentRepository.save(studentRequest);
+                         String date = LocalDateTime.now().toString();
+                         String logMessage = "[" + LocalDateTime.now().toString() + "] Registrar Finalized "
+                                   + user.getName() + " User: " + manageBy
+                                   + "Finalized/Completed the request of " + user.getName();
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
                          return new ResponseEntity<>("Success", HttpStatus.OK);
 
                     } else {
@@ -328,8 +344,23 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      }
 
      @Override
-     public void exportStudentRequestToExcel(HttpServletResponse response) {
+     public ResponseEntity<String> exportingStudentRequestToExcel(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq) {
+          if (session.getAttribute("name") == null) {
+               return new ResponseEntity<>("You are performing Invalid Action!", HttpStatus.BAD_REQUEST);
+          }
+          if (!studReq.isEmpty()) {
+            
+               return new ResponseEntity<>("success", HttpStatus.OK);
+          } else {
+               return new ResponseEntity<>("nodata", HttpStatus.OK);
+          }
+
+     }
+
+     @Override
+     public void exportConfirmation(HttpServletResponse response, HttpSession session, List<StudentRequest> studReq) {
           try {
+
                // Create a new workbook
                Workbook workbook = new XSSFWorkbook();
 
@@ -337,7 +368,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM - d - uuuu (h-mm-ss)");
                String formattedDateTime = now.format(formatter);
-               System.out.println(formattedDateTime);
+
                // Create the file name using the formatted date and time
                String fileName = "StudentRequest -" + formattedDateTime + ".xlsx";
 
@@ -360,9 +391,8 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                headerRow.createCell(11).setCellValue("Request Document");
                headerRow.createCell(12).setCellValue("Request Status");
 
-               List<StudentRequest> studRequest = studentRepository.findAll();
                int rowNum = 1; // Start from row 1 to skip the header row
-               for (StudentRequest request : studRequest) {
+               for (StudentRequest request : studReq) {
                     Row dataRow = sheet.createRow(rowNum++);
                     dataRow.createCell(0).setCellValue("Request - " + request.getRequestId());
                     dataRow.createCell(1).setCellValue(request.getYear());
@@ -390,7 +420,8 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                          style.setFillForegroundColor(IndexedColors.RED.getIndex());
                          style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                     } else if (request.getRequestStatus().equalsIgnoreCase("pending")) {
-                         style.setFillForegroundColor(new XSSFColor(new byte[]{(byte) 126, (byte) 200, (byte) 227}, new DefaultIndexedColorMap()));
+                         style.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 126, (byte) 200, (byte) 227 },
+                                   new DefaultIndexedColorMap()));
                          style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                     }
                     Cell statusCell = dataRow.createCell(12);
@@ -411,9 +442,17 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                // Write the workbook to the response output stream
                try {
                     OutputStream outputStream = response.getOutputStream();
+
                     workbook.write(outputStream);
                     workbook.close();
                     outputStream.close();
+
+                    String date = LocalDateTime.now().toString();
+                    String logMessage = "[" + LocalDateTime.now().toString() + "] Registrar Exporting data User: "
+                              + session.getAttribute("name")
+                              + " Exported the data to spreadsheet";
+                    globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session);
+
                } catch (IOException e) {
                     throw new ApiRequestException(e.getMessage());
                }

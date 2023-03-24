@@ -20,7 +20,7 @@ public interface Student_RequestService {
 
      ResponseEntity<Object> submitRequest(String id,
                Optional<MultipartFile[]> files, String document,
-               Map<String, String> params);
+               Map<String, String> params,HttpSession session);
 
      Optional<Documents> findDocumentByTitle(String title);
 

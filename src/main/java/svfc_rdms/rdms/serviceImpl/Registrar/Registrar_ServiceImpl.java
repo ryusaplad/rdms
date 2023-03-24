@@ -102,7 +102,7 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
                               registrarRequest.setRequestStatus("pending");
                               registrarRequest.setRequestDate(requestedDate);
                               if (notificationService.sendNotification(title, notifMessage, messageType, date,
-                                        notifStatus, registrar, teacher)) {
+                                        notifStatus, registrar, teacher,session)) {
                                    regsRepository.save(registrarRequest);
                                    return new ResponseEntity<>("Success", HttpStatus.OK);
                               }

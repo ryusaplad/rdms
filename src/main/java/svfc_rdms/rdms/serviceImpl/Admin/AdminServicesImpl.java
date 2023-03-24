@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -71,7 +73,7 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public boolean deleteData(long userId) {
+     public boolean deleteData(long userId,HttpSession session) {
 
           if (findOneUserById(userId).isPresent()) {
                userRepository.deleteById(userId);
@@ -81,7 +83,7 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public boolean changeAccountStatus(String status, long userId) {
+     public boolean changeAccountStatus(String status, long userId,HttpSession session) {
           if (findOneUserById(userId).isPresent()) {
                userRepository.changeStatusOfUser(status, userId);
                return true;
@@ -204,7 +206,7 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo) {
+     public ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,HttpSession session) {
 
           try {
 
@@ -248,7 +250,7 @@ public class AdminServicesImpl implements AdminService {
 
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
-                                        false, user)) {
+                                        false, user,session)) {
                                    notificationCounter++;
 
                               }
@@ -276,7 +278,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile,
-               Map<String, String> documentsInfo) {
+               Map<String, String> documentsInfo,HttpSession session) {
 
           try {
                byte[] image = docRepo.findById(id).get().getImage();
@@ -327,7 +329,7 @@ public class AdminServicesImpl implements AdminService {
 
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
-                                        false, user)) {
+                                        false, user,session)) {
                                    notificationCounter++;
 
                               }
@@ -389,7 +391,7 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public Boolean deleteDocumentFile(long id) {
+     public Boolean deleteDocumentFile(long id,HttpSession session) {
           if (id > -1) {
                docRepo.deleteById(id);
                return true;
@@ -462,7 +464,12 @@ public class AdminServicesImpl implements AdminService {
                     .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Student").status("Active")
                     .build();
 
+          Users account2 = Users.builder().name("Regs Ki").username("R-1")
+                    .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Registrar").status("Active")
+                    .build();
+
           users.add(account1);
+          users.add(account2);
 
           users.stream().forEach(user -> {
                Optional<Users> userData = userRepository.findByUsername(user.getUsername());

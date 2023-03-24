@@ -1,7 +1,10 @@
 package svfc_rdms.rdms.serviceImpl.Global;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private GlobalLogsServiceImpl globalLogsServiceImpl;
+
     @Override
     public ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
             int totalPage) {
@@ -43,7 +49,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         } else if (userType.equals("teacher")) {
             page = notifRepository.findAllByTo(user,
-            PageRequest.of(lowestPage, totalPage, descendingSort));
+                    PageRequest.of(lowestPage, totalPage, descendingSort));
 
         }
 
@@ -104,7 +110,7 @@ public class NotificationServiceImpl implements NotificationService {
                                 sender, reciever, page.getTotalElements()));
 
             } else if (userType.equals("teacher")) {
-                
+
                 if (notifData.getFrom() != null) {
 
                     sender = notifData.getFrom().getName() + "(" + notifData.getFrom().getUsername() + ")";
@@ -169,7 +175,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public boolean sendStudentNotification(String title, String message, String messageType, String timeAndDate,
             boolean status,
-            Users user) {
+            Users user, HttpSession session) {
 
         if (user != null) {
             Notifications notification = new Notifications();
@@ -180,6 +186,10 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setStatus(status);
             notification.setTo(user);
             notifRepository.save(notification);
+            String date = LocalDateTime.now().toString();
+            String logMessage = "[" + date + "]User: " + session.getAttribute("name").toString()
+                    + " has send notification.";
+            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
             return true;
         }
         return false;
@@ -188,7 +198,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public boolean sendRegistrarNotification(String title, String message, String messageType, String timeAndDate,
             boolean status,
-            Users user) {
+            Users user, HttpSession session) {
 
         if (user != null) {
             Notifications notification = new Notifications();
@@ -199,6 +209,9 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setStatus(status);
             notification.setFrom(user);
             notifRepository.save(notification);
+            String date = LocalDateTime.now().toString();
+            String logMessage = "[" + date + "]User: " + user.getName() + " has send notification.";
+            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
             return true;
         }
         return false;
@@ -207,7 +220,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public boolean sendNotification(String title, String message, String messageType, String timeAndDate,
             boolean status,
-            Users from, Users to) {
+            Users from, Users to, HttpSession session) {
 
         if (from != null && to != null) {
             Notifications notification = new Notifications();
@@ -219,6 +232,9 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setFrom(from);
             notification.setTo(to);
             notifRepository.save(notification);
+            String date = LocalDateTime.now().toString();
+            String logMessage = "[" + date + "]User: " + from + " has send notification to " + to + " .";
+            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
             return true;
         }
         return false;

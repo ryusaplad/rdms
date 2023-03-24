@@ -1,7 +1,10 @@
 package svfc_rdms.rdms.serviceImpl.Global;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +22,12 @@ import svfc_rdms.rdms.service.Global.AllAccountServices;
 public class AllAccountServiceImpl implements AllAccountServices {
 
      @Autowired
-     UsersRepository userRepository;
+     private UsersRepository userRepository;
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
-     public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId) {
+     public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId,HttpSession session) {
           Optional<Users> optionalUser = userRepository.findById(userId);
 
           PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -58,6 +63,9 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          user.setProfilePicture(profilePicture);
                     }
                     userRepository.save(user);
+                    String date = LocalDateTime.now().toString();
+                    String logMessage = "[" + date + "] Password Changed Successfully! User: " + user.getName() + " has changed their password.";
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                     return new ResponseEntity<>("Password updated.", HttpStatus.OK);
                } else {
                     return new ResponseEntity<>("Old password is incorrect.", HttpStatus.BAD_REQUEST);
@@ -69,7 +77,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
      }
 
      @Override
-     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId) {
+     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId,HttpSession session) {
           try {
 
                Optional<Users> optionalUser = userRepository.findById(userId);
@@ -78,7 +86,11 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     Users user = optionalUser.get();
                     user.setProfilePicture(byteImage);
                     userRepository.save(user);
+                    String date = LocalDateTime.now().toString();
+                    String logMessage = "[" + date + "] Profile Changed Successfully! User: " + user.getName() + " has changed their profile picture.";
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                     return new ResponseEntity<>("Profile picture successfully cleared", HttpStatus.OK);
+                    
                } else {
 
                     if (optionalUser.isPresent()) {
@@ -86,6 +98,9 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          Users user = optionalUser.get();
                          user.setProfilePicture(bytes);
                          userRepository.save(user);
+                         String date = LocalDateTime.now().toString();
+                         String logMessage = "[" + date + "] Profile Changed Successfully! User: " + user.getName() + " has changed their profile picture.";
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                          return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
                     }
                }

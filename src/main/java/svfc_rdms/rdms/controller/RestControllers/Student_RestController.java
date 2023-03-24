@@ -38,7 +38,7 @@ public class Student_RestController {
                @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
 
           if (globalService.validatePages("student", response, session)) {
-               return requestServiceImpl.submitRequest(id, files, document, params);
+               return requestServiceImpl.submitRequest(id, files, document, params,session);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
      }
@@ -68,7 +68,7 @@ public class Student_RestController {
                @RequestParam("userId") long userId, @RequestParam("requestId") long requestId,
                HttpServletResponse response, HttpSession session) {
           if (globalService.validatePages("student", response, session)) {
-               return requirementServiceImpl.resubmitRequest("Pending", userId, requestId);
+               return requirementServiceImpl.resubmitRequest("Pending", userId, requestId,session);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
 

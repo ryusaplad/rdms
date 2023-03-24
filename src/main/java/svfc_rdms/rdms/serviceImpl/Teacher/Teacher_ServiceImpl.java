@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.serviceImpl.Teacher;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.service.Teacher.Teacher_Service;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
@@ -47,7 +49,11 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      private GlobalServiceControllerImpl globalService;
 
      @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
+
+     @Autowired
      private NotificationServiceImpl notificationService;
+
 
      @Override
      public Optional<RegistrarRequest> getRegistrarRequest(long requestsId) {
@@ -176,8 +182,14 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
 
                     if (notificationService.sendNotification(title, notifMessage, messageType, date, notifStatus,
                               uploadedBy,
-                              registrarRequest.getRequestBy())) {
+                              registrarRequest.getRequestBy(), session)) {
                          regsRepository.save(registrarRequest);
+
+                      
+                         String logMessage = "[" + LocalDateTime.now().toString() + "] Teacher replied "+registrarRequest.getRequestBy().getName()+ " User: " + registrarRequest.getRequestTo().getName()
+                                   + " re-sent requested data";
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+
                          return new ResponseEntity<>("Success", HttpStatus.OK);
                     }
 

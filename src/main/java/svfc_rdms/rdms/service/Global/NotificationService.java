@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.service.Global;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.ResponseEntity;
 
 import svfc_rdms.rdms.model.Users;
@@ -14,14 +16,14 @@ public interface NotificationService {
 
         boolean sendStudentNotification(String title, String message, String messageType, String timeAndDate,
                         boolean status,
-                        Users user);
+                        Users user,HttpSession session);
 
         boolean sendRegistrarNotification(String title, String message, String messageType, String timeAndDate,
                         boolean status,
-                        Users from);
+                        Users from,HttpSession session);
 
         boolean sendNotification(String title, String message, String messageType, String timeAndDate,
                         boolean status,
-                        Users from,Users to);
+                        Users from,Users to,HttpSession session);
 
 }

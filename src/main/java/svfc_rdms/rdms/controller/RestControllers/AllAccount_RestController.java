@@ -55,7 +55,7 @@ public class AllAccount_RestController {
                if (optionalUser.isPresent()) {
                     userId = optionalUser.get().getUserId();
                }
-               return accountServiceImpl.changePassword(oldPassword, newPassword, userId);
+               return accountServiceImpl.changePassword(oldPassword, newPassword, userId,session);
           }
           throw new ApiRequestException("Invalid Action");
 
@@ -70,7 +70,7 @@ public class AllAccount_RestController {
                if (optionalUser.isPresent()) {
                     userId = optionalUser.get().getUserId();
                }
-               return accountServiceImpl.changeProfilePicture(image, userId);
+               return accountServiceImpl.changeProfilePicture(image, userId,session);
           }
           throw new ApiRequestException("Invalid Action");
      }
