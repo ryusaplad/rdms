@@ -1,5 +1,6 @@
 package svfc_rdms.rdms;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -20,16 +21,21 @@ public class DatabaseBackupScheduler {
     private static final String DB_NAME = "svfc_rdms_db";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "123456";
+    private static final String BACKUP_FOLDER = "C:\\rdms_db_backup_sql";
 
-    @Scheduled(cron = "0 * * * * *") // 0 0 0 * * ? = everynight backup
+    @Scheduled(cron = "0 * * * * *") // 0 0 0 * *= everynight backup 0 * * * * * = every minute
     public void backupDatabase() {
         try {
             LocalDateTime dateNow = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss_EEEE");
-            String BACKUP_PATH = "C:\\backup\\(" + dateNow.format(formatter)
-                    + ")backup_sql_rdms.sql";
-            adminDataBaseService.backup(HOST, PORT, DB_NAME, USERNAME, PASSWORD, BACKUP_PATH);
 
+            File folder = new File(BACKUP_FOLDER);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            String backUpPath = BACKUP_FOLDER + "\\(" + dateNow.format(formatter)
+                    + ")backup_sql_rdms.sql";
+            adminDataBaseService.backup(HOST, PORT, DB_NAME, USERNAME, PASSWORD, backUpPath);
         } catch (Exception e) {
             System.out.println("DB " + e.getMessage());
         }

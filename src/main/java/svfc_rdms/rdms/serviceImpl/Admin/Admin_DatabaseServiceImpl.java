@@ -1,11 +1,17 @@
 package svfc_rdms.rdms.serviceImpl.Admin;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.service.Admin.Admin_DatabaseService;
 
 @Service
@@ -16,7 +22,6 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
         List<String> command = Arrays.asList("mysqldump", "-u" + username, "-p" + password,
                 "--add-drop-database", "-B", dbName, "-r", backupPath);
         try {
-            System.out.println(command.get(0));
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
             int exitCode = process.waitFor();
@@ -36,7 +41,7 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
                 dbName, "-e",
                 "source " + backupPath);
         try {
-            System.out.println(command.get(0));
+
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
             int exitCode = process.waitFor();
@@ -48,6 +53,38 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
         } catch (IOException | InterruptedException e) {
             System.out.println("Error " + e.getMessage());
         }
+    }
+
+    @Override
+    public File backUpDatabase(String host, String port, String dbName, String username, String password) {
+        try {
+            LocalDateTime dateNow = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss_EEEE");
+            String backupFileName = "(" + dateNow.format(formatter) + ")backup_sql_rdms.sql";
+
+            String[] command = new String[] { "mysqldump", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
+                    dbName };
+
+            Process process = Runtime.getRuntime().exec(command);
+            InputStream inputStream = process.getInputStream();
+            File backupFile = new File(backupFileName);
+            FileOutputStream outputStream = new FileOutputStream(backupFile);
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            inputStream.close();
+            outputStream.close();
+            process.waitFor();
+
+            return backupFile;
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+        }
+
     }
 
 }

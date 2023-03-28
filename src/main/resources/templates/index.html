@@ -78,7 +78,7 @@
                             onchange="usernameChangerBySelection();"
                         >
                             <th:block th:if="${login_RememberMe != 'true'}">
-                                <option value="login_as"disabled selected>--Login As--</option>
+                                <option value="login_as" disabled selected>--Login As--</option>
                                 <option value="Student">Student</option>
                                 <option value="Registrar">Registrar</option>
                                 <option value="Teacher">Teacher</option>
@@ -132,6 +132,7 @@
                             name="rememberMe"
                             type="checkbox"
                             id="rememberMe"
+                            tabindex="-1"
                         >
                         <label class="form-check-label" for="rememberMe">
                             Remember Me
