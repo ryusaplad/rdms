@@ -187,8 +187,8 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setTo(user);
             notifRepository.save(notification);
             String date = LocalDateTime.now().toString();
-            String logMessage = "[" + date + "]User: " + session.getAttribute("name").toString()
-                    + " has send notification.";
+            String logMessage = "Notification sent by user " + session.getAttribute("name").toString()
+                    + " with the message: " + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
             return true;
         }
@@ -210,7 +210,8 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setFrom(user);
             notifRepository.save(notification);
             String date = LocalDateTime.now().toString();
-            String logMessage = "[" + date + "]User: " + user.getName() + " has send notification.";
+            String logMessage = "Notification sent by user " + user.getName()
+                    + " with the message: " + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
             return true;
         }
@@ -233,7 +234,8 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setTo(to);
             notifRepository.save(notification);
             String date = LocalDateTime.now().toString();
-            String logMessage = "[" + date + "]User: " + from + " has send notification to " + to + " .";
+            String logMessage = "Notification sent by user " + from + " to " + to + " with the message "
+                    + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
             return true;
         }

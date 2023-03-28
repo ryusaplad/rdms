@@ -1,5 +1,7 @@
 package svfc_rdms.rdms.controller;
 
+import java.time.LocalDateTime;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import svfc_rdms.rdms.model.ValidAccounts;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Controller
@@ -20,6 +23,8 @@ public class GlobalController {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @GetMapping(value = "/")
      public String loginPage(HttpSession session, HttpServletResponse response, HttpServletRequest request,
@@ -70,13 +75,22 @@ public class GlobalController {
 
      @GetMapping(value = "/logout")
      public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+          if (session.getAttribute("name") != null && session.getAttribute("username") != null && !session.isNew()) {
+               String date = LocalDateTime.now().toString();
+               String logMessage = "User Logged Out: " + session.getAttribute("name") + ":"
+                         + session.getAttribute("username") + " has logged out";
+               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "normal", session);
+               clearSessionAttributes(session);
+               session.invalidate();
+          }
+          return "redirect:/";
+     }
+
+     private void clearSessionAttributes(HttpSession session) {
           session.removeAttribute("studentName");
           session.removeAttribute("accountType");
           session.removeAttribute("username");
           session.removeAttribute("name");
-          session.invalidate();
-
-          return "redirect:/";
      }
 
      @GetMapping("/{acctType}/files/download")
@@ -113,5 +127,4 @@ public class GlobalController {
           }
      }
 
-    
 }

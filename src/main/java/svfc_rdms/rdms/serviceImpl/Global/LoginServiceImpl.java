@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.serviceImpl.Global;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
@@ -22,7 +23,10 @@ import svfc_rdms.rdms.service.Global.LoginService;
 public class LoginServiceImpl implements LoginService {
 
      @Autowired
-     LoginRepository loginRepo;
+     private LoginRepository loginRepo;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
      public ResponseEntity<String> login(Users user, String rememberMe, HttpSession session,
@@ -62,6 +66,11 @@ public class LoginServiceImpl implements LoginService {
                               session.setAttribute("name", foundUser.getName());
                               session.setAttribute("username", user.getUsername());
                               session.setAttribute("accountType", user.getType());
+
+                              String date = LocalDateTime.now().toString();
+                              String logMessage = "User Logged In: " + foundUser.getName() + ":" + user.getUsername()
+                                        + " has logged in";
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Login_Log", date, "normal", session);
 
                               return new ResponseEntity<>("success", HttpStatus.OK);
                          } else {

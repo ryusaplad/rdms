@@ -27,7 +27,8 @@ public class AllAccountServiceImpl implements AllAccountServices {
      private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
-     public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId,HttpSession session) {
+     public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId,
+               HttpSession session) {
           Optional<Users> optionalUser = userRepository.findById(userId);
 
           PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -64,7 +65,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     }
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
-                    String logMessage = "[" + date + "] Password Changed Successfully! User: " + user.getName() + " has changed their password.";
+                    String logMessage = "Password changed for user " + user.getName() + ".";
                     globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                     return new ResponseEntity<>("Password updated.", HttpStatus.OK);
                } else {
@@ -77,7 +78,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
      }
 
      @Override
-     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId,HttpSession session) {
+     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId, HttpSession session) {
           try {
 
                Optional<Users> optionalUser = userRepository.findById(userId);
@@ -87,10 +88,10 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     user.setProfilePicture(byteImage);
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
-                    String logMessage = "[" + date + "] Profile Changed Successfully! User: " + user.getName() + " has changed their profile picture.";
+                    String logMessage = "Profile picture changed for user " + user.getName() + ".";
                     globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                     return new ResponseEntity<>("Profile picture successfully cleared", HttpStatus.OK);
-                    
+
                } else {
 
                     if (optionalUser.isPresent()) {
@@ -99,7 +100,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          user.setProfilePicture(bytes);
                          userRepository.save(user);
                          String date = LocalDateTime.now().toString();
-                         String logMessage = "[" + date + "] Profile Changed Successfully! User: " + user.getName() + " has changed their profile picture.";
+                         String logMessage = "Profile picture changed for user " + user.getName() + ".";
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                          return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
                     }

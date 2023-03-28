@@ -95,9 +95,9 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                               usersRepository.saveAndFlush(user);
                               ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
                               String date = LocalDateTime.now().toString();
-                              String logMessage = "[" + date + "] Account added Successfully! User: "
-                                        + session.getAttribute("name").toString() + " added a user (" + user.getName()
-                                        + ")";
+                              String logMessage = "User " + session.getAttribute("name").toString()
+                                        + " added a user (" + user.getName() + ") with a user type of " + user.getType()
+                                        + ".";
                               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
                               return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                          }
@@ -108,9 +108,9 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                          usersRepository.saveAndFlush(user);
                          ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
                          String date = LocalDateTime.now().toString();
-                         String logMessage = "[" + date + "] Account Updated Successfully! User: "
-                                   + session.getAttribute("name").toString() + " updated a user (" + user.getName()
-                                   + ")";
+                         String logMessage = "User " + session.getAttribute("name").toString()
+                                   + " updated the user (" + user.getName() + ") with a user type of " + user.getType()
+                                   + ".";
                          globalLogsServiceImpl.saveLog(0, logMessage, "Mid_Log", date, "medium", session);
                          return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                     }
@@ -154,14 +154,20 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                if (findOneUserById(userId).isPresent()) {
                     usersRepository.deleteById(userId);
                     String date = LocalDateTime.now().toString();
-                    String logMessage = "[" + date + "] Account Deleted Successfully! User: "
-                              + session.getAttribute("name").toString() + " deleted a user ("
-                              + findOneUserById(userId).get().getName() + ")";
+                    String logMessage = "User " + session.getAttribute("name").toString()
+                              + " deleted the user (" + findOneUserById(userId).get().getName()
+                              + ")";
                     globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session);
                     return true;
                }
                return false;
           } catch (Exception e) {
+               String date = LocalDateTime.now().toString();
+               String logMessage = "User " + session.getAttribute("name").toString()
+                         + " trying to delete the user (" + findOneUserById(userId).get().getName()
+                         + ")::system message: " + e.getMessage();
+               globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session);
+
                throw new ApiRequestException(
                          "Users with requests cannot be permanently deleted. Please contact the administrator for further assistance.");
           }
@@ -176,6 +182,12 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
                }
                return false;
           } catch (Exception e) {
+               String date = LocalDateTime.now().toString();
+               String logMessage = "User " + session.getAttribute("name").toString()
+                         + " trying to change status of the user (" + findOneUserById(userId).get().getName()
+                         + ")::system message: " + e.getMessage();
+               globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session);
+
                throw new ApiRequestException(
                          "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
           }

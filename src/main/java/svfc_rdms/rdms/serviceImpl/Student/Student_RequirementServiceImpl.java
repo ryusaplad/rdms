@@ -156,7 +156,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                          studentRequest.setRequestStatus("Pending");
                          studentRepository.save(studentRequest);
                          String date = LocalDateTime.now().toString();
-                         String logMessage = "[" + date + "] User Resubmit a request "
+                         String logMessage = "User Resubmit a request "
                                    + studentRequest.getRequestDocument().getTitle() + " User: " + user.getName()
                                    + " resubmit the request of (" + studentRequest.getRequestDocument().getTitle()
                                    + ")";
