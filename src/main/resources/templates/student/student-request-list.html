@@ -1,423 +1,477 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Student - My Requests</title>
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/svdfc-logo.png}">
-    <!-- Custom CSS -->
-    <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
-    <link th:href="@{/css/croppie.css}" rel="stylesheet">
-
-    <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
-    <style></style>
-</head>
-
-<body>
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-        </symbol>
-        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-        </symbol>
-        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-        </symbol>
-        <symbol id="arrow-clockwise" fill="currentColor" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
-            <path
-                d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
-        </symbol>
-    </svg>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Student - My Requests</title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            th:href="@{/images/svdfc-logo.png}"
+        >
+        <!-- Custom CSS -->
+        <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
+        <link th:href="@{/css/croppie.css}" rel="stylesheet">
+        <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
+        <style></style>
+    </head>
+    <body>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </symbol>
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </symbol>
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </symbol>
+            <symbol id="arrow-clockwise" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </symbol>
+        </svg>
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <div class="preloader">
+            <div class="lds-ripple">
+                <div class="lds-pos"></div>
+                <div class="lds-pos"></div>
+            </div>
         </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
-        data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full" class="">
         <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- Main wrapper - style you can find in pages.scss -->
         <!-- ============================================================== -->
-        <header class="topbar" data-navbarbg="skin5">
-            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-                <div class="navbar-header" data-logobg="skin5">
-                    <a class="navbar-brand" href="/student/dashboard">
-                        <b class="logo-icon">
-                            <img height="50px" th:src="@{/images/svdfc-logo.png}" alt="homepage"
-                                class="img-responsive light-logo">
-                        </b>
-                        <span class="logo-text text-dark logoText">
-                            SVFC - RDMS
-                        </span>
-                    </a>
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Toggle which is visible on mobile only -->
-                    <!-- ============================================================== -->
-                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
-                        <i class="ti-menu ti-close"></i>
-                    </a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-start me-auto">
-                        <li class="nav-item d-none d-lg-block">
-                            <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
-                                data-sidebartype="mini-sidebar">
-                                <i class="mdi mdi-menu font-24"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- Right side toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-end">
-
+        <div
+            id="main-wrapper"
+            data-layout="vertical"
+            data-navbarbg="skin5"
+            data-sidebartype="full"
+            data-sidebar-position="absolute"
+            data-header-position="absolute"
+            data-boxed-layout="full"
+            class=""
+        >
+            <!-- ============================================================== -->
+            <!-- Topbar header - style you can find in pages.scss -->
+            <!-- ============================================================== -->
+            <header class="topbar" data-navbarbg="skin5">
+                <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                    <div class="navbar-header" data-logobg="skin5">
+                        <a class="navbar-brand" href="/student/dashboard">
+                            <b class="logo-icon">
+                                <img
+                                    height="50px"
+                                    th:src="@{/images/svdfc-logo.png}"
+                                    alt="homepage"
+                                    class="img-responsive light-logo"
+                                >
+                            </b>
+                            <span class="logo-text text-dark logoText">
+                                SVFC - RDMS
+                            </span>
+                        </a>
                         <!-- ============================================================== -->
-                        <!-- User profile and search -->
                         <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#"
-                                id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img id="profilePicture" src="../../assets/images/users/1.jpg" alt="user"
-                                    class="rounded-circle" width="31">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end user-dd animated"
-                                aria-labelledby="navbarDropdown">
-                                <hr class="devider">
-                                <div th:if="${#session.getAttribute('username')!=null}">
-                                    <label th:with="name=${#session.getAttribute('name')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">
-                                        Name:
-                                        <strong id="nameVal">[[${name}]]</strong>
-                                    </label>
-                                    <label th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">
-                                        Account
+                        <!-- Toggle which is visible on mobile only -->
+                        <!-- ============================================================== -->
+                        <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                            <i class="ti-menu ti-close"></i>
+                        </a>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                        <!-- ============================================================== -->
+                        <!-- toggle and nav items -->
+                        <!-- ============================================================== -->
+                        <ul class="navbar-nav float-start me-auto">
+                            <li class="nav-item d-none d-lg-block">
+                                <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar">
+                                    <i class="mdi mdi-menu font-24"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- ============================================================== -->
+                        <!-- Right side toggle and nav items -->
+                        <!-- ============================================================== -->
+                        <ul class="navbar-nav float-end">
+                            <!-- ============================================================== -->
+                            <!-- User profile and search -->
+                            <!-- ============================================================== -->
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <img
+                                        id="profilePicture"
+                                        src="../../assets/images/users/1.jpg"
+                                        alt="user"
+                                        class="rounded-circle"
+                                        width="31"
+                                    >
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                                    <hr class="devider">
+                                    <div th:if="${#session.getAttribute('username')!=null}">
+                                        <label th:with="name=${#session.getAttribute('name')}" class="dropdown-item bg-success border border-1 b-2 text-white">
+                                            Name:
+                                            <strong id="nameVal">[[${name}]]</strong>
+                                        </label>
+                                        <label th:with="type=${#session.getAttribute('accountType')}" class="dropdown-item bg-primary border  border-1 b-2 text-white">
+                                            Account
                                         Type
                                         :[[${type}]]
-                                    </label>
-                                </div>
-                                <hr class="devider">
-
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Password
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Profile Picture
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout">
-                                    <i class="fa fa-power-off me-1 ms-1"></i>
-                                    Logout
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            </ul>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                    </ul>
-                </div>
-            </nav>
-            <rside class="sidebar">
-                <button class="rightSidebarToggle btn">
-                    <i id="btnIcon" class="fas fa-angle-left text-white"></i>
-                </button>
-
-                <div class="row" id="r_row1">
-                    <div class="col-7" style="width:50.333333% !important;margin-top: -10px ;
-                         margin-bottom: 50px;">
-                        <div class="card  ">
-                            <div class="card-body">
-
-                                <div class="dropdown">
-                                    <a class="nav-link  text-muted waves-effect waves-dark pro-pic" href="#"
-                                        id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <img th:src="@{/images/userImage.png}" alt="user" class="rounded-circle"
-                                            width="31">
+                                        </label>
+                                    </div>
+                                    <hr class="devider">
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Password
                                     </a>
-                                    <span th:with="name=${#session.getAttribute('name')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">
-                                        Name:
-                                        <strong id="nameVal">[[${name}]]</strong>
-                                    </span>
-                                    <span th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
-                                        Type
-                                        :[[${type}]]</sp>
-
-                                        <div class="dropdown-menu">
-
-                                            <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i
-                                                    class="ti-settings me-1 ms-1"></i>
-                                                Change Password</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i
-                                                    class="ti-settings me-1 ms-1"></i>
-                                                Change Profile Picture</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="/logout"><i
-                                                    class="fa fa-power-off me-1 ms-1"></i>
-                                                Logout</a>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Profile Picture
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/logout">
+                                        <i class="fa fa-power-off me-1 ms-1"></i>
+                                        Logout
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                </ul>
+                            </li>
+                            <!-- ============================================================== -->
+                            <!-- User profile and search -->
+                            <!-- ============================================================== -->
+                        </ul>
                     </div>
-                    <div class="col-7" style="width:50.333333% !important">
-                        <div class="card  dateTimeCard">
-                            <div class="card-body">
-
-                                <div class="todo-widget text-center" style="height:20px;">
-                                    <h4 class="text-danger" id="dayValueRightBar">Today is Monday</h4>
-                                    <span class="text-danger" id="dateValueRightBar">00/00/2022</span>
-                                </div>
-                                <div class="todo-widget text-black-50 text-center" style="height:20px;">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-7" style="width:50.333333% !important">
-                        <div class="card ">
-                            <div class="card-body">
-                                <h4 class="card-title ">Notifications</h4>
-                                <hr class="hr">
-                                <div class="notificationCard">
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle">
-                                                <i class="ti-check-box"></i>
-                                            </span>
-                                            <div class="ms-2 mainNotificationInfo">
-                                                <h5 class="mb-0 title">Requests Status</h5>
-                                                <span class="description"></span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <hr class="hr">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </rside>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/student/dashboard"
-                                aria-expanded="false">
-                                <i class="fas fa-home"></i>
-                                <span class="hide-menu">Home</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark in"
-                                href="/student/request/documents" aria-expanded="false">
-                                <i class="fas fa-list"></i>
-                                <span class="hide-menu">Requests</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="/student/my-requests" class="sidebar-link">
-                                        <i class="fas fa-table"></i>
-                                        <span class="hide-menu">
-                                            My Requests
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="/student/request/documents" class="sidebar-link">
-                                        <i class="fas fa-folder-open"></i>
-                                        <span class="hide-menu">
-                                            Request Documents
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="/student/my-documents" class="sidebar-link">
-                                <i class="fas fa-folder"></i>
-                                <span class="hide-menu">
-                                    My Documents
-                                </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link notifLink">
-                                <i class=" fas fa-bell"></i>
-                                <span class="hide-menu">
-                                    Notifications
-                                </span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item ">
-                            <a href="/logout" class="sidebar-link">
-                                <i class="fas fa-power-off"></i>
-                                <span class="hide-menu">
-                                    Logout
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
                 </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
+                <rside class="sidebar">
+                    <button class="rightSidebarToggle btn">
+                        <i id="btnIcon" class="fas fa-angle-left text-white"></i>
+                    </button>
+                    <div class="row" id="r_row1">
+                        <div class="col-7" style="width:50.333333% !important;margin-top: -10px ;
+                         margin-bottom: 50px;">
+                            <div class="card  ">
+                                <div class="card-body">
+                                    <div class="dropdown">
+                                        <a
+                                            class="nav-link  text-muted waves-effect waves-dark pro-pic"
+                                            href="#"
+                                            id="navbarDropdown"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            <img
+                                                th:src="@{/images/userImage.png}"
+                                                alt="user"
+                                                class="rounded-circle"
+                                                width="31"
+                                            >
+                                        </a>
+                                        <span th:with="name=${#session.getAttribute('name')}" class="dropdown-item bg-success border border-1 b-2 text-white">
+                                            Name:
+                                            <strong id="nameVal">[[${name}]]</strong>
+                                        </span>
+                                        <span th:with="type=${#session.getAttribute('accountType')}" class="dropdown-item bg-primary border  border-1 b-2 text-white">
+                                            Account
+                                        Type
+                                        :[[${type}]]
+                                        </sp>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
+                                                <i class="ti-settings me-1 ms-1"></i>
+                                                Change Password
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
+                                                <i class="ti-settings me-1 ms-1"></i>
+                                                Change Profile Picture
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">
+                                                <i class="fa fa-power-off me-1 ms-1"></i>
+                                                Logout
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7" style="width:50.333333% !important">
+                            <div class="card  dateTimeCard">
+                                <div class="card-body">
+                                    <div class="todo-widget text-center" style="height:20px;">
+                                        <h4 class="text-danger" id="dayValueRightBar">Today is Monday</h4>
+                                        <span class="text-danger" id="dateValueRightBar">00/00/2022</span>
+                                    </div>
+                                    <div class="todo-widget text-black-50 text-center" style="height:20px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7" style="width:50.333333% !important">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <h4 class="card-title ">Notifications</h4>
+                                    <hr class="hr">
+                                    <div class="notificationCard">
+                                        <a href="javascript:void(0)" class="link border-top">
+                                            <div class="d-flex no-block align-items-center p-10">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-check-box"></i>
+                                                </span>
+                                                <div class="ms-2 mainNotificationInfo">
+                                                    <h5 class="mb-0 title">Requests Status</h5>
+                                                    <span class="description"></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <hr class="hr">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </rside>
+            </header>
             <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
+            <!-- End Topbar header -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Request Document</h4>
-                        <div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a href="#">Request</a>
+            <!-- ============================================================== -->
+            <!-- Left Sidebar - style you can find in sidebar.scss  -->
+            <!-- ============================================================== -->
+            <aside class="left-sidebar" data-sidebarbg="skin5">
+                <!-- Sidebar scroll-->
+                <div class="scroll-sidebar">
+                    <!-- Sidebar navigation-->
+                    <nav class="sidebar-nav">
+                        <ul id="sidebarnav" class="pt-4">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/student/dashboard" aria-expanded="false">
+                                    <i class="fas fa-home"></i>
+                                    <span class="hide-menu">Home</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow waves-effect waves-dark in" href="/student/request/documents" aria-expanded="false">
+                                    <i class="fas fa-list"></i>
+                                    <span class="hide-menu">Requests</span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse  first-level">
+                                    <li class="sidebar-item">
+                                        <a href="/student/my-requests" class="sidebar-link">
+                                            <i class="fas fa-table"></i>
+                                            <span class="hide-menu">
+                                                My Requests
+                                            </span>
+                                        </a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Documents List</li>
-                                </ol>
-                            </nav>
+                                    <li class="sidebar-item">
+                                        <a href="/student/request/documents" class="sidebar-link">
+                                            <i class="fas fa-folder-open"></i>
+                                            <span class="hide-menu">
+                                                Request Documents
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/student/my-documents" class="sidebar-link">
+                                    <i class="fas fa-folder"></i>
+                                    <span class="hide-menu">
+                                        My Documents
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link notifLink">
+                                    <i class=" fas fa-bell"></i>
+                                    <span class="hide-menu">
+                                        Notifications
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="/logout" class="sidebar-link">
+                                    <i class="fas fa-power-off"></i>
+                                    <span class="hide-menu">
+                                        Logout
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- End Sidebar navigation -->
+                </div>
+                <!-- End Sidebar scroll-->
+            </aside>
+            <!-- ============================================================== -->
+            <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Page wrapper  -->
+            <!-- ============================================================== -->
+            <div class="page-wrapper">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Request Document</h4>
+                            <div class="ms-auto text-end">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">
+                                            <a href="#">Request</a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">Documents List</li>
+                                    </ol>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">My Requests</h5>
-                        <table id="zero_config" class="table table-striped text-center table-bordered ">
-                            <thead>
-                                <tr>
-                                    <th>Request Document</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="studRequestBody">
-                                <tr th:each="studRequest : ${myrequest}">
-                                    <td th:text="${studRequest.requestDocument}"></td>
-                                    <td th:text="${studRequest.requestStatus}"></td>
-                                    <td style="width:2%;">
-                                        <div class="btn-group dropstart">
-                                            <button id="btnDropDown" type="button" class="btn btn-danger text-white"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                Action
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a data-toggle="tooltip" data-placement="top"
-                                                        title="View Full Details" th:href="${studRequest.requestId}"
-                                                        type="button" class=" dropdown-item link toggleDetailsModal">
-                                                        Details
-                                                    </a>
-                                                </li>
-                                                <li th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a data-toggle="tooltip" data-placement="top" title="Edit Files"
-                                                        th:href="${studRequest.requestId}" type="button"
-                                                        class="dropdown-item link text-primary toggleEditReqModal">
-                                                        Edit Files
-                                                    </a>
-                                                </li>
-                                                <li th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a data-toggle="tooltip" data-placement="top"
-                                                        title="Edit Informations" th:href="${studRequest.requestId}"
-                                                        type="button"
-                                                        class="dropdown-item link text-primary toggleEditInfosModal">
-                                                        Edit Informations
-                                                    </a>
-                                                </li>
-                                                <li th:if="${studRequest.requestStatus =='Rejected'}">
-                                                    <a data-toggle="tooltip" data-placement="top" title="Re Submit"
-                                                        th:href="${studRequest.studentId}"
-                                                        th:data-value="${studRequest.requestId}" type="button"
-                                                        class="dropdown-item link text-success resubmitRequests">
-                                                        Submit
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Container fluid  -->
+                <!-- ============================================================== -->
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body table-responsive">
+                            <h5 class="card-title">My Requests</h5>
+                            <table id="zero_config" class="table table-striped text-center table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th>Request Document</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studRequestBody">
+                                    <tr th:each="studRequest : ${myrequest}">
+                                        <td th:text="${studRequest.requestDocument}"></td>
+                                        <td th:text="${studRequest.requestStatus}"></td>
+                                        <td style="width:2%;">
+                                            <div class="btn-group dropstart">
+                                                <button
+                                                    id="btnDropDown"
+                                                    type="button"
+                                                    class="btn btn-danger text-white"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                >
+                                                    Action
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a
+                                                            data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="View Full Details"
+                                                            th:href="${studRequest.requestId}"
+                                                            type="button"
+                                                            class=" dropdown-item link toggleDetailsModal"
+                                                        >
+                                                            Details
+                                                        </a>
+                                                    </li>
+                                                    <li th:if="${studRequest.requestStatus =='Rejected'}">
+                                                        <a
+                                                            data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="Edit Files"
+                                                            th:href="${studRequest.requestId}"
+                                                            type="button"
+                                                            class="dropdown-item link text-primary toggleEditReqModal"
+                                                        >
+                                                            Edit Files
+                                                        </a>
+                                                    </li>
+                                                    <li th:if="${studRequest.requestStatus =='Rejected'}">
+                                                        <a
+                                                            data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="Edit Informations"
+                                                            th:href="${studRequest.requestId}"
+                                                            type="button"
+                                                            class="dropdown-item link text-primary toggleEditInfosModal"
+                                                        >
+                                                            Edit Informations
+                                                        </a>
+                                                    </li>
+                                                    <li th:if="${studRequest.requestStatus =='Rejected'}">
+                                                        <a
+                                                            data-toggle="tooltip"
+                                                            data-placement="top"
+                                                            title="Re Submit"
+                                                            th:href="${studRequest.studentId}"
+                                                            th:data-value="${studRequest.requestId}"
+                                                            type="button"
+                                                            class="dropdown-item link text-success resubmitRequests"
+                                                        >
+                                                            Submit
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-    </div>
-    <!-- Modals -->
-    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="detailModal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailModal">
-                        <span id="titleVal">More Details</span>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="card-title">Requests Informations</h4>
-                    <div class="container-sm"></div>
-                    <table class="table table-primary table-responsive">
+</div>
+<!-- Modals -->
+<div
+    class="modal fade"
+    id="detailModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="detailModal"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModal">
+                    <span id="titleVal">More Details</span>
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="card-title">Requests Informations</h4>
+                <div class="container-sm"></div>
+                <div class="table-responsive">
+                    <table class="table table-primary">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -435,29 +489,31 @@
                             </tr>
                         </tbody>
                     </table>
-                    <hr>
-                    <div style="display:none" class="detail-alert"></div>
-                    <h4 class="card-title ">Message</h4>
-                    <div class="messHeader" style="display:none;overflow-y: scroll;"></div>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>MANAGE BY</th>
-                                <th>REQUESTED</th>
-                                <th>RELEASED</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-weight-bold" id="managebynpar"></td>
-                                <td class="font-weight-bold" id="datereqpar"></td>
-                                <td class="font-weight-bold" id="daterelpar"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title">Sent Requirements</h4>
-                    <table class="table table-white table-responsive">
+                </div>
+                <hr>
+                <div style="display:none" class="detail-alert"></div>
+                <h4 class="card-title ">Message</h4>
+                <div class="messHeader" style="display:none;overflow-y: scroll;"></div>
+                <table class="table table-primary table-responsive">
+                    <thead>
+                        <tr>
+                            <th>MANAGE BY</th>
+                            <th>REQUESTED</th>
+                            <th>RELEASED</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-weight-bold" id="managebynpar"></td>
+                            <td class="font-weight-bold" id="datereqpar"></td>
+                            <td class="font-weight-bold" id="daterelpar"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <h4 class="card-title">Sent Requirements</h4>
+                <div class="table-responsive">
+                    <table class="table table-white">
                         <thead>
                             <tr>
                                 <th>Action</th>
@@ -470,11 +526,19 @@
                                 <td></td>
                             </tr>
                         </tbody>
-                        <input style="display:none" class="form-control" name="file[]" type="file" id="files" multiple>
+                        <input
+                            style="display:none"
+                            class="form-control"
+                            name="file[]"
+                            type="file"
+                            id="files"
+                            multiple
+                        >
                     </table>
-                    <h4 class="card-title">Recieved Documents</h4>
-                    <table class="table table-white table-responsive receievedDocumentTable"
-                        style="overflow-y: scroll; height: 100px; display:none">
+                </div>
+                <h4 class="card-title">Recieved Documents</h4>
+                <div class="table-responsive">
+                    <table class="table table-white receievedDocumentTable" style="overflow-y: scroll; height: 100px; display:none">
                         <thead>
                             <tr>
                                 <th>Download</th>
@@ -489,54 +553,87 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="editRequirements" tabindex="-1" aria-labelledby="editingModalLabel" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    File Editing
-                </div>
-                <div class="modal-body">
-                    <div id="editingAlert" style="display:none" class="alert alert-danger" role="alert"></div>
-                    <form id="reqUpForm">
-                        <div class="mt-2  form-floating" style="display:none">
-                            <input name="fileId" type="text" class="form-control floatingInput" id="fileId" readonly>
-                            <label for="fileId">File Id
-                                <span class="badge badge-secondary text-danger ">*</span>
-                            </label>
-                        </div>
-                        <div class="mt-2  form-floating" style="display:none">
-                            <input name="file" type="text" class="form-control floatingInput" id="fileName" readonly>
-                            <label for="fileName">Selected File
-                                <span class="badge badge-secondary text-danger ">*</span>
-                            </label>
-                        </div>
-                        <div id="inputFile" style="display:none">
-                            <input style="display:block" class="mt-2 form-control" name="file" type="file" id="fileData"
-                                accept=".jpg,.jpeg,.png">
-                            <div class="row mt-3">
-                                <div class="col-sm">
-                                    <button type="button"
-                                        class="btn btn-danger text-white w-100 saveChanges">Save</button>
-                                </div>
-                                <div class="col-sm">
-                                    <button type="reset"
-                                        class="btn btn-secondary text-white  w-100 clearRequest">Clear</button>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <label for="files">Select File to update
+</div>
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="editRequirements"
+    tabindex="-1"
+    aria-labelledby="editingModalLabel"
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+>
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                File Editing
+            </div>
+            <div class="modal-body">
+                <div
+                    id="editingAlert"
+                    style="display:none"
+                    class="alert alert-danger"
+                    role="alert"
+                ></div>
+                <form id="reqUpForm">
+                    <div class="mt-2  form-floating" style="display:none">
+                        <input
+                            name="fileId"
+                            type="text"
+                            class="form-control floatingInput"
+                            id="fileId"
+                            readonly
+                        >
+                        <label for="fileId">
+                            File Id
                             <span class="badge badge-secondary text-danger ">*</span>
                         </label>
-                        <table class="table table-white w-100">
+                    </div>
+                    <div class="mt-2  form-floating" style="display:none">
+                        <input
+                            name="file"
+                            type="text"
+                            class="form-control floatingInput"
+                            id="fileName"
+                            readonly
+                        >
+                        <label for="fileName">
+                            Selected File
+                            <span class="badge badge-secondary text-danger ">*</span>
+                        </label>
+                    </div>
+                    <div id="inputFile" style="display:none">
+                        <input
+                            style="display:block"
+                            class="mt-2 form-control"
+                            name="file"
+                            type="file"
+                            id="fileData"
+                            accept=".jpg,.jpeg,.png"
+                        >
+                        <div class="row mt-3">
+                            <div class="col-sm">
+                                <button type="button" class="btn btn-danger text-white w-100 saveChanges">Save</button>
+                            </div>
+                            <div class="col-sm">
+                                <button type="reset" class="btn btn-secondary text-white  w-100 clearRequest">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <label for="files">
+                        Select File to update
+                        <span class="badge badge-secondary text-danger ">*</span>
+                    </label>
+                    <div class="table-responsive">
+                        <table class="table table-white w-100 ">
                             <thead>
                                 <tr>
                                     <th>Action</th>
@@ -549,127 +646,162 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelUpdateBtn"
-                        data-bs-dismiss="modal">Cancel</button>
-                </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancelUpdateBtn" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="resubmitReqModal" tabindex="-1" aria-labelledby="resubmitReqModalLabel"
-        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    Are you sure to re-submit the request?
-                </div>
-                <div class="modal-body">
-                    <b class="text-danger">Note</b>
-                    <ul>
-                        <li>
-                            <p>Make sure that all of the requirements is correct.</p>
-                        </li>
-                        <li>
-                            <p>
-                                Please keep in mind that if you do not meet all of the
+</div>
+<div
+    class="modal fade"
+    id="resubmitReqModal"
+    tabindex="-1"
+    aria-labelledby="resubmitReqModalLabel"
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+>
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure to re-submit the request?
+            </div>
+            <div class="modal-body">
+                <b class="text-danger">Note</b>
+                <ul>
+                    <li>
+                        <p>Make sure that all of the requirements is correct.</p>
+                    </li>
+                    <li>
+                        <p>
+                            Please keep in mind that if you do not meet all of the
                                 requirements, your request will be rejected.
-                            </p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelResubmit"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary confirmResubmit">Confirm</button>
-                </div>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancelResubmit" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary confirmResubmit">Confirm</button>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editReqInfos" tabindex="-1" aria-labelledby="editingModalLabel" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    Informations Editing
-                </div>
-                <div class="modal-body">
-                    <div id="editingInfoAlert" style="display:none" class="alert alert-danger" role="alert"></div>
-                    <form id="reqInfoUpForm">
-                        <div class="col-sm ">
-                            <div class="mt-2  form-floating" th:if="${#session.getAttribute('username')!=null}"
-                                style="display:none">
-                                <input name="studentId" type="text" class="form-control floatingInput" id="studentId"
-                                    th:value="${#session.getAttribute('username')}" placeholder="Student Id" readonly>
-                                <label for="userId">Student Id
+</div>
+<div
+    class="modal fade"
+    id="editReqInfos"
+    tabindex="-1"
+    aria-labelledby="editingModalLabel"
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+>
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                Informations Editing
+            </div>
+            <div class="modal-body">
+                <div
+                    id="editingInfoAlert"
+                    style="display:none"
+                    class="alert alert-danger"
+                    role="alert"
+                ></div>
+                <form id="reqInfoUpForm">
+                    <div class="col-sm ">
+                        <div class="mt-2  form-floating" th:if="${#session.getAttribute('username')!=null}" style="display:none">
+                            <input
+                                name="studentId"
+                                type="text"
+                                class="form-control floatingInput"
+                                id="studentId"
+                                th:value="${#session.getAttribute('username')}"
+                                placeholder="Student Id"
+                                readonly
+                            >
+                            <label for="userId">
+                                Student Id
+                                <span class="badge badge-secondary text-danger ">*</span>
+                            </div>
+                            <div class="mt-2 form-floating" th:if="${#session.getAttribute('name')!=null}" style="display:none">
+                                <input
+                                    id="studName"
+                                    name="name"
+                                    type="text"
+                                    class="form-control floatingInput"
+                                    th:value="${#session.getAttribute('name')}"
+                                    placeholder=" Student Name"
+                                    readonly
+                                >
+                                <label for="studName">
+                                    Student Name
                                     <span class="badge badge-secondary text-danger ">*</span>
-                            </div>
-                            <div class="mt-2 form-floating" th:if="${#session.getAttribute('name')!=null}"
-                                style="display:none">
-                                <input id="studName" name="name" type="text" class="form-control floatingInput"
-                                    th:value="${#session.getAttribute('name')}" placeholder=" Student Name" readonly>
-                                <label for="studName">Student Name
-                                    <span class="badge badge-secondary text-danger ">*</span>
-                            </div>
-                            <div class=" mt-2 form-floating">
-                                <select id="schoolLevel" name="schoolLevel" class="form-select"
-                                    placeholder="Select School Level">
-                                    <option value="n/a">--School Level--</option>
-                                    <option value="pre-school">Pre School</option>
-                                    <option value="elementary">Elementary</option>
-                                    <option value="junior-high">Junior High School</option>
-                                    <option value="senior-high">Senior High School</option>
-                                    <option value="college">College</option>
-                                </select>
-                                <label for="schoolLevel">School Level
-                                    <span class="badge badge-secondary text-danger ">*</span>
-                            </div>
-                            <div class="mt-2 form-floating yearSelect" style="display:none">
-                            </div>
-                            <div class=" mt-2 form-floating courseSelect" style="display:none">
-
-                            </div>
-                            <div class=" mt-2  form-floating semGradeSelect" style="display:none">
-                            </div>
-                            <div class="mt-2 form-floating">
-                                <textarea id="message" name="message" class="form-control floatingInput"
-                                    maxlength="1000" style="height:150px"></textarea>
-                                <label id="messageLengthLabel" for="message">
-                                    You can add message here with
+                                </div>
+                                <div class=" mt-2 form-floating">
+                                    <select
+                                        id="schoolLevel"
+                                        name="schoolLevel"
+                                        class="form-select"
+                                        placeholder="Select School Level"
+                                    >
+                                        <option value="n/a">--School Level--</option>
+                                        <option value="pre-school">Pre School</option>
+                                        <option value="elementary">Elementary</option>
+                                        <option value="junior-high">Junior High School</option>
+                                        <option value="senior-high">Senior High School</option>
+                                        <option value="college">College</option>
+                                    </select>
+                                    <label for="schoolLevel">
+                                        School Level
+                                        <span class="badge badge-secondary text-danger ">*</span>
+                                    </div>
+                                    <div class="mt-2 form-floating yearSelect" style="display:none"></div>
+                                    <div class=" mt-2 form-floating courseSelect" style="display:none"></div>
+                                    <div class=" mt-2  form-floating semGradeSelect" style="display:none"></div>
+                                    <div class="mt-2 form-floating">
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            class="form-control floatingInput"
+                                            maxlength="1000"
+                                            style="height:150px"
+                                        ></textarea>
+                                        <label id="messageLengthLabel" for="message">
+                                            You can add message here with
                                     maximum of (1000
                                     letters)
-                                </label>
-                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary cancelInfoUpdate"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary saveInfoUpdate">
-                        Save
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary cancelInfoUpdate" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary saveInfoUpdate">
+                                Save
                         Changes
-                    </button>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="modalView"></div>
-    <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{/js/croppie.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_list.js}"></script>
-    <script type="text/javascript" th:src="@{/js/userpageJS/course-year-level_Selection.js}"></script>
-
-    <script>
+            <div class="modalView"></div>
+            <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+            <script type="text/javascript" th:src="@{/js/croppie.js}"></script>
+            <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
+            <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_list.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/course-year-level_Selection.js}"></script>
+            <script>
         $('#zero_config').DataTable();
-    </script>
-</body>
-
-</html>
+            </script>
+        </body>
+    </html>

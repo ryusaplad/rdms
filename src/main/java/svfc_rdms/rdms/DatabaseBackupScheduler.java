@@ -23,7 +23,7 @@ public class DatabaseBackupScheduler {
     private static final String PASSWORD = "123456";
     private static final String BACKUP_FOLDER = "C:\\rdms_db_backup_sql";
 
-    @Scheduled(cron = "0 * * * * *") // 0 0 0 * *= everynight backup 0 * * * * * = every minute
+    @Scheduled(cron = "0 0 0 * * ?") // 0 0 0 * *= everynight backup 0 * * * * * = every minute
     public void backupDatabase() {
         try {
             LocalDateTime dateNow = LocalDateTime.now();

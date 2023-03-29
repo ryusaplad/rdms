@@ -26,6 +26,7 @@ import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_AccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
@@ -51,32 +52,36 @@ public class Regs_RestController {
      @Autowired
      private Reg_RequestServiceImpl regs_RequestService;
 
+     @Autowired
+     private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
+
      @PostMapping(value = "/registrar/save/user-account")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session) {
 
-          return regs_AccountService.saveUsersAccount(user, 0, session);
+          return adminAccountService.saveUsersAccount(user, 0, session);
      }
 
      @PostMapping(value = "/registrar/save/update-account")
      public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session) {
 
-          return regs_AccountService.saveUsersAccount(user, 1, session);
+          return adminAccountService.saveUsersAccount(user, 1, session);
      }
 
      @GetMapping("/registrar/user/update")
      @ResponseBody
      public List<Users> returnUserById(@RequestParam("userId") long id) {
 
-          Optional<Users> users = regs_AccountService.findOneUserById(id);
+          Optional<Users> users = adminAccountService.findOneUserById(id);
 
           List<Users> usersList = new ArrayList<>();
           if (users.isPresent()) {
                users.stream().forEach(e -> {
 
-                    usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
+                    usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getEmail(),
+                              users.get().getUsername(),
                               users.get().getPassword().replace(users.get()
                                         .getPassword(), ""),
-                              users.get().getType(), users.get().getStatus()));
+                              users.get().getType(), users.get().getStatus(), "update"));
                });
                return usersList;
           }
@@ -89,15 +94,15 @@ public class Regs_RestController {
      public ResponseEntity<Object> changeStatus(@PathVariable("status") String status,
                @RequestParam("userId") long userId, HttpSession session) {
           if (status.equals("permanently")) {
-               if (regs_AccountService.deleteData(userId, session)) {
+               if (adminAccountService.deleteData(userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("temporary")) {
-               if (regs_AccountService.changeAccountStatus("Temporary", userId, session)) {
+               if (adminAccountService.changeAccountStatus("Temporary", userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("active")) {
-               if (regs_AccountService.changeAccountStatus("Active", userId, session)) {
+               if (adminAccountService.changeAccountStatus("Active", userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           }

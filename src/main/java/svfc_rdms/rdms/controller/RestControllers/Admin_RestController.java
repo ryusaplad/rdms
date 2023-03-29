@@ -8,7 +8,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +27,7 @@ import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 
 @RestController
@@ -39,22 +39,22 @@ public class Admin_RestController {
      @Autowired
      private UsersRepository userRepo;
 
-
      @Autowired
      private Student_RequestServiceImpl requestServiceImpl;
 
-
+     @Autowired
+     private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
 
      @PostMapping(value = "/admin/saveUserAcc")
-     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model) {
+     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session) {
 
-          return mainService.saveUsersAccount(user, 0);
+          return adminAccountService.saveUsersAccount(user, 0, session);
      }
 
      @PostMapping(value = "/admin/updateUserAcc")
-     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model) {
+     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session) {
 
-          return mainService.saveUsersAccount(user, 1);
+          return adminAccountService.saveUsersAccount(user, 1, session);
      }
 
      @GetMapping(value = "/admin/getAllUser")
@@ -67,9 +67,9 @@ public class Admin_RestController {
 
           for (Users user : users) {
                storedAccountsWithoutImage
-                         .add(new Users(user.getUserId(), user.getName(), user.getUsername(),
+                         .add(new Users(user.getUserId(), user.getName(), user.getEmail(), user.getUsername(),
                                    user.getPassword(),
-                                   user.getType(), user.getStatus()));
+                                   user.getType(), user.getStatus(), "display"));
 
           }
           users = storedAccountsWithoutImage;
@@ -116,17 +116,17 @@ public class Admin_RestController {
 
      @PostMapping("/admin/save-document-info")
      public void saveDocument(@RequestParam("image") MultipartFile partFile,
-               @RequestParam Map<String, String> params,HttpSession session) {
+               @RequestParam Map<String, String> params, HttpSession session) {
 
-          mainService.saveDocumentData(partFile, params,session);
+          mainService.saveDocumentData(partFile, params, session);
 
      }
 
      @DeleteMapping("/admin/delete-document-info")
-     public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId,HttpSession session) {
+     public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId, HttpSession session) {
 
           try {
-               if (mainService.deleteDocumentFile(documentId,session)) {
+               if (mainService.deleteDocumentFile(documentId, session)) {
                     return new ResponseEntity<Object>("success", HttpStatus.OK);
                } else {
                     return new ResponseEntity<Object>("Invalid Document ID, Must be valid Document Id.",
@@ -145,9 +145,9 @@ public class Admin_RestController {
      @PostMapping("/admin/update-document-info")
      public void updateDocument(@RequestParam("docId") long id,
                @RequestParam("image") MultipartFile partFile,
-               @RequestParam Map<String, String> params,HttpSession session) {
+               @RequestParam Map<String, String> params, HttpSession session) {
 
-          mainService.saveDocumentData(id, partFile, params,session);
+          mainService.saveDocumentData(id, partFile, params, session);
 
      }
 
@@ -174,9 +174,10 @@ public class Admin_RestController {
 
      @GetMapping(value = "/admin/user/delete")
 
-     public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request,HttpSession session) {
+     public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request,
+               HttpSession session) {
           try {
-               if (mainService.deleteData(userId,session)) {
+               if (adminAccountService.deleteData(userId, session)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } catch (Exception e) {

@@ -1,126 +1,116 @@
 function validateAddingForm(
   title,
-  alert1,
-  alert2,
-  alert3,
-  alert4,
+  nameAlert,
+  usernameAlert,
+  emailAlert,
+  passwordAlert,
+  confirmPasswordAlert,
   accountName,
+  accountEmail,
   accountUserName,
   accountPassword,
   confirmPassword
 ) {
-  if (accountName == "" || accountName.length < 1) {
-    alert1.style.display = "block";
-    alert1.innerText = "Name cannot be empty!";
-    return false;
-  } else if (accountUserName == "" || accountName.length < 1) {
-    alert1.style.display = "none";
-    alert1.innerText = "";
 
-    alert2.style.display = "block";
-    alert2.innerText = "Username cannot be empty!";
-    return false;
-  } else if (title.includes("Student")) {
-    if (!accountUserName.includes("c-")) {
-      alert2.style.display = "block";
-      alert2.innerText = "Student Username Invalid!";
-      return false;
-    }
-  } else if (title.includes("Registrar")) {
-    if (!accountUserName.includes("r-")) {
-      alert2.style.display = "block";
-      alert2.innerText = "Registrar Username Invalid!";
-      return false;
-    }
-  } else if (title.includes("Teacher")) {
-    if (!accountUserName.includes("t-")) {
-      alert2.style.display = "block";
-      alert2.innerText = "Teacher Username Invalid!";
-      return false;
-    }
-  }
-  if (accountPassword == "" || accountPassword.length < 1) {
-    alert2.style.display = "none";
-    alert2.innerText = "";
 
-    alert3.style.display = "block";
-    alert3.innerText = "Password cannot be empty!";
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(accountEmail.value.trim());
 
-    return false;
-  }
-  if (confirmPassword == "" || confirmPassword.length < 1) {
-    alert2.style.display = "none";
-    alert2.innerText = "";
-
-    alert3.style.display = "none";
-    alert3.innerText = "";
-
-    alert4.style.display = "block";
-    alert4.innerText = "Password cannot be empty!";
-    return false;
-  }
-  if (accountPassword != confirmPassword) {
-    alert2.style.display = "none";
-    alert2.innerText = "";
-
-    alert3.style.display = "block";
-    alert3.innerText = "Password must be match";
-
-    alert4.style.display = "block";
-    alert4.innerText = "Password must be match!";
-    return false;
-  }
-  if (accountPassword.length < 8 || confirmPassword.length < 8) {
-    alert2.style.display = "none";
-    alert2.innerText = "";
-
-    alert3.style.display = "block";
-    alert3.innerText = "Password must be at least 8 characters long";
-
-    alert4.style.display = "block";
-    alert4.innerText = "Password must be at least 8 characters long";
-    return false;
-  } else if (
-    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(
-      accountPassword
-    )
-  ) {
-    alert2.style.display = "none";
-    alert2.innerText = "";
-
-    alert3.style.display = "block";
-    alert3.innerText =
-      "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number";
-
-    return false;
-  } else if (
-    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(
-      confirmPassword
-    )
-  ) {
-    alert2.style.display = "none";
-    alert2.innerText = "";
-
-    alert4.style.display = "block";
-    alert4.innerText =
-      "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number";
-
+  if (accountName.value.trim() === "") {
+    accountName.classList.add("is-invalid");
+    nameAlert.style.display = "block";
+    nameAlert.innerText = "Name cannot be empty!";
     return false;
   } else {
-    alert1.style.display = "none";
-    alert1.innerText = "";
-
-    alert2.style.display = "none";
-    alert2.innerText = "";
-
-    alert3.style.display = "none";
-    alert3.innerText = "";
-
-    alert4.style.display = "none";
-    alert4.innerText = "";
-    return true;
+    accountName.classList.remove("is-invalid");
+    nameAlert.style.display = "none";
+    nameAlert.innerText = "";
   }
+
+  if (!isValidEmail) {
+    accountEmail.classList.add("is-invalid");
+    emailAlert.style.display = "block";
+    emailAlert.innerText = "Invalid email address!";
+    return false;
+  } else {
+    accountEmail.classList.remove("is-invalid");
+    emailAlert.style.display = "none";
+    emailAlert.innerText = "";
+  }
+
+  if (accountUserName.value.trim() === "") {
+    accountUserName.classList.add("is-invalid");
+    usernameAlert.style.display = "block";
+    usernameAlert.innerText = "Username cannot be empty!";
+    return false;
+  } else if (title.includes("Student") && !accountUserName.value.trim().toLowerCase().includes("c-")) {
+    accountUserName.classList.add("is-invalid");
+    usernameAlert.style.display = "block";
+    usernameAlert.innerText = "Student Username Invalid!, must be start with (C-/c-)";
+    return false;
+  } else if (title.includes("Registrar") && !accountUserName.value.trim().toLowerCase().includes("r-")) {
+    accountUserName.classList.add("is-invalid");
+    usernameAlert.style.display = "block";
+    usernameAlert.innerText = "Registrar Username Invalid!, must be start with (R-/r-)";
+    return false;
+  } else if (title.includes("Teacher") && !accountUserName.value.trim().toLowerCase().includes("t-")) {
+    accountUserName.classList.add("is-invalid");
+    usernameAlert.style.display = "block";
+    usernameAlert.innerText = "Teacher Username Invalid!, must be start with (T-/t-)";
+    return false;
+  } else {
+    accountUserName.classList.remove("is-invalid");
+    usernameAlert.style.display = "none";
+    usernameAlert.innerText = "";
+  }
+
+
+
+  if (accountPassword.value.trim() === "") {
+    accountPassword.classList.add("is-invalid");
+    passwordAlert.style.display = "block";
+    passwordAlert.innerText = "Password cannot be empty!";
+    return false;
+  } else if (accountPassword.value.trim().length < 8) {
+    accountPassword.classList.add("is-invalid");
+    passwordAlert.style.display = "block";
+    passwordAlert.innerText = "Password must be at least 8 characters long";
+    return false;
+  } else if (
+
+    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/.test(
+      accountPassword.value
+    )
+  ) {
+    accountPassword.classList.add("is-invalid");
+    passwordAlert.style.display = "block";
+    passwordAlert.innerText =
+      "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number";
+    return false;
+  } else {
+    accountPassword.classList.remove("is-invalid");
+    passwordAlert.style.display = "none";
+    passwordAlert.innerText = "";
+  }
+
+  if (confirmPassword.value.trim() === "") {
+    confirmPassword.classList.add("is-invalid");
+    confirmPasswordAlert.style.display = "block";
+    confirmPasswordAlert.innerText = "Password cannot be empty!";
+    return false;
+  } else if (accountPassword.value.trim() !== confirmPassword.value.trim()) {
+    confirmPassword.classList.add("is-invalid");
+    confirmPasswordAlert.style.display = "block";
+    confirmPasswordAlert.innerText = "Passwords must match!";
+    return false;
+  } else {
+    confirmPassword.classList.remove("is-invalid");
+    confirmPasswordAlert.style.display = "none";
+    confirmPasswordAlert.innerText = "";
+  }
+
+  return true;
 }
+
 
 $(document).ready(function () {
   var title = $("#main-title").text();
@@ -151,23 +141,28 @@ $(document).ready(function () {
 
     let alert1 = document.getElementById("alertMessage1");
     let alert2 = document.getElementById("alertMessage2");
+    let alertEmail = document.getElementById("alertMessageEmail");
     let alert3 = document.getElementById("alertMessage3");
     let alert4 = document.getElementById("alertMessage4");
-    let accountName = document.getElementById("name").value;
+    let accountName = document.getElementById("name");
+    let email = document.getElementById("email");
     let accountUserName = document
-      .getElementById("username")
-      .value.toLowerCase();
-    let accountPassword = document.getElementById("password").value;
-    let confirmPassword = document.getElementById("confirmPass").value;
+      .getElementById("username");
+    let accountPassword = document.getElementById("password");
+    let confirmPassword = document.getElementById("confirmPass");
+
+
 
     if (
       validateAddingForm(
         title,
         alert1,
         alert2,
+        alertEmail,
         alert3,
         alert4,
         accountName,
+        email,
         accountUserName,
         accountPassword,
         confirmPassword
@@ -183,22 +178,25 @@ $(document).ready(function () {
     event.preventDefault();
     let alert1 = document.getElementById("alertMessage5");
     let alert2 = document.getElementById("alertMessage6");
+    let alertEmail = document.getElementById("alertMessageEmailEdit");
     let alert3 = document.getElementById("alertMessage7");
     let alert4 = document.getElementById("alertMessage8");
-    let accountName = document.getElementById("nameEdit").value;
+    let accountName = document.getElementById("nameEdit");
+    let email = document.getElementById("emailEdit");
     let accountUserName = document
-      .getElementById("usernameEdit")
-      .value.toLowerCase();
-    let accountPassword = document.getElementById("passwordEdit").value;
-    let confirmPassword = document.getElementById("confirmPassEdit").value;
+      .getElementById("usernameEdit");
+    let accountPassword = document.getElementById("passwordEdit");
+    let confirmPassword = document.getElementById("confirmPassEdit");
     if (
       validateAddingForm(
         title,
         alert1,
         alert2,
+        alertEmail,
         alert3,
         alert4,
         accountName,
+        email,
         accountUserName,
         accountPassword,
         confirmPassword
@@ -215,6 +213,7 @@ $(document).ready(function () {
     if (url.includes("saveUserAcc")) {
       formData = {
         name: $("#name").val(),
+        email: $("#email").val(),
         username: $("#username").val(),
         password: $("#password").val(),
       };
@@ -222,6 +221,7 @@ $(document).ready(function () {
       formData = {
         userId: $("#userIdEdit").val(),
         name: $("#nameEdit").val(),
+        email: $("#emailEdit").val(),
         username: $("#usernameEdit").val(),
         password: $("#passwordEdit").val(),
       };
@@ -298,6 +298,8 @@ $(document).ready(function () {
                 " <tr><td>" +
                 user.name +
                 "</td><td>" +
+                user.email +
+                "</td><td>" +
                 user.username +
                 "</td><td>" +
                 user.status +
@@ -321,6 +323,8 @@ $(document).ready(function () {
                 htmlTable =
                   " <tr><td>" +
                   user.name +
+                  "</td><td>" +
+                  user.email +
                   "</td><td>" +
                   user.username +
                   "</td><td>" +
@@ -354,6 +358,8 @@ $(document).ready(function () {
                 htmlTable =
                   " <tr><td>" +
                   user.name +
+                  "</td><td>" +
+                  user.email +
                   "</td><td>" +
                   user.username +
                   "</td><td>" +
@@ -390,6 +396,7 @@ $(document).ready(function () {
               .DataTable()
               .row.add([
                 user.name,
+                user.email,
                 user.username,
                 user.status,
                 actions,
@@ -464,6 +471,7 @@ $(document).ready(function () {
     $.get(href, function (user) {
       $("#userIdEdit").val(user[0].userId);
       $("#nameEdit").val(user[0].name);
+      $("#emailEdit").val(user[0].email);
       $("#usernameEdit").val(user[0].username);
       $("#passwordEdit").val(user[0].password);
       $("#confirmPassEdit").val(user[0].password);

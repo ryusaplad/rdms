@@ -16,13 +16,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
-import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
@@ -73,129 +71,6 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public boolean deleteData(long userId,HttpSession session) {
-
-          if (findOneUserById(userId).isPresent()) {
-               userRepository.deleteById(userId);
-               return true;
-          }
-          return false;
-     }
-
-     @Override
-     public boolean changeAccountStatus(String status, long userId,HttpSession session) {
-          if (findOneUserById(userId).isPresent()) {
-               userRepository.changeStatusOfUser(status, userId);
-               return true;
-          }
-          return false;
-     }
-
-     @Override
-     public ResponseEntity<Object> saveUsersAccount(Users user, int actions) {
-
-          String error = "";
-          try {
-
-               PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-               if (user.getName() == null || user.getName().length() < 1 || user.getName().isEmpty()) {
-                    error = "Name cannot be empty! " + user.getName();
-                    throw new ApiRequestException(error);
-               } else if (user.getUsername() == null || user.getUsername().length() < 1
-                         || user.getUsername().isEmpty()) {
-                    error = "Username cannot be empty " + user.getUsername();
-                    throw new ApiRequestException(error);
-               } else if (user.getPassword() == null || user.getPassword().length() < 1
-                         || user.getPassword().isEmpty()) {
-                    error = "Password cannot be empty" + user.getPassword();
-                    throw new ApiRequestException(error);
-               } else if (user.getUsername().length() > 255 || user.getName().length() > 255
-                         || user.getPassword().length() > 255) {
-                    throw new ApiRequestException("Data/Information is too long, Please Try Again!");
-               } else if (user.getPassword().length() < 8) {
-                    return new ResponseEntity<>("Password must be at least 8 characters long",
-                              HttpStatus.BAD_REQUEST);
-               } else if (!user.getPassword()
-                         .matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$")) {
-                    return new ResponseEntity<>(
-                              "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number",
-                              HttpStatus.BAD_REQUEST);
-               } else {
-                    String userIdFormat = user.getUsername().toUpperCase();
-                    user.setStatus("Active");
-                    // Setting Default Color Code in hex
-                    String randomColorCode = globalService.generateRandomHexColor();
-                    user.setColorCode(randomColorCode);
-                    if (userIdFormat.contains("C")) {
-
-                         user.setType("Student");
-                    } else if (userIdFormat.contains("R-")) {
-
-                         user.setType("Registrar");
-                    } else if (userIdFormat.contains("T-")) {
-
-                         user.setType("Teacher");
-                    } else {
-                         error = "Account Type Invalid, Please try again!";
-
-                         throw new ApiRequestException(error);
-                    }
-                    if (actions == 0) {
-                         if (findUserName(userIdFormat.toLowerCase())) {
-                              error = "Username is already taken, Please try again!";
-
-                              throw new ApiRequestException(error);
-                         } else {
-                              String hashedPassword = passwordEncoder.encode(user.getPassword());
-                              user.setPassword(hashedPassword);
-                              byte[] image = new byte[] { 0 };
-                              user.setProfilePicture(image);
-                              userRepository.saveAndFlush(user);
-                              ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
-                              return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
-                         }
-                    } else if (actions == 1) {
-
-                         String hashedPassword = passwordEncoder.encode(user.getPassword());
-                         user.setPassword(hashedPassword);
-                         userRepository.saveAndFlush(user);
-                         ServiceResponse<Users> serviceResponseDTO = new ServiceResponse<>("success", user);
-                         return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
-                    }
-               }
-          } catch (Exception e) {
-               error = e.getMessage();
-               if (error.contains("ConstraintViolationException")) {
-
-                    error = "Username is already taken, Please try again!";
-                    throw new ApiRequestException(error);
-               }
-          }
-          throw new ApiRequestException(error);
-     }
-
-     @Override
-     public boolean findUserName(String username) {
-          if (userRepository.findByUsername(username).isPresent()) {
-               Optional<Users> users = userRepository.findByUsername(username);
-               if (users.isPresent()) {
-                    return true;
-               }
-          }
-          return false;
-
-     }
-
-     @Override
-     public Optional<Users> findOneUserById(long userId) {
-          Optional<Users> users = userRepository.findByuserId(userId);
-          if (users.isPresent()) {
-               return users;
-          }
-          return null;
-     }
-
-     @Override
      public int displayCountsByStatusAndType(String status, String type) {
           return userRepository.totalUsers(status, type);
      }
@@ -206,7 +81,8 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,HttpSession session) {
+     public ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,
+               HttpSession session) {
 
           try {
 
@@ -250,7 +126,7 @@ public class AdminServicesImpl implements AdminService {
 
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
-                                        false, user,session)) {
+                                        false, user, session)) {
                                    notificationCounter++;
 
                               }
@@ -278,7 +154,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile,
-               Map<String, String> documentsInfo,HttpSession session) {
+               Map<String, String> documentsInfo, HttpSession session) {
 
           try {
                byte[] image = docRepo.findById(id).get().getImage();
@@ -329,7 +205,7 @@ public class AdminServicesImpl implements AdminService {
 
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
-                                        false, user,session)) {
+                                        false, user, session)) {
                                    notificationCounter++;
 
                               }
@@ -391,7 +267,7 @@ public class AdminServicesImpl implements AdminService {
      }
 
      @Override
-     public Boolean deleteDocumentFile(long id,HttpSession session) {
+     public Boolean deleteDocumentFile(long id, HttpSession session) {
           if (id > -1) {
                docRepo.deleteById(id);
                return true;

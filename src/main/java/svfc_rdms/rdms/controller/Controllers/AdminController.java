@@ -28,22 +28,26 @@ import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Controller
 public class AdminController {
 
      @Autowired
-     AdminServicesImpl mainService;
+     private AdminServicesImpl mainService;
 
      @Autowired
-     DocumentRepository docRepo;
+     private DocumentRepository docRepo;
 
      @Autowired
-     GlobalServiceControllerImpl globalService;
+     private GlobalServiceControllerImpl globalService;
 
      @Autowired
-     RegsRequestRepository registrarRepo;
+     private RegsRequestRepository registrarRepo;
+
+     @Autowired
+     private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
 
      // Get Mapping Method
      @GetMapping("/admin/dashboard")
@@ -163,7 +167,7 @@ public class AdminController {
                if (!status.isEmpty() || !status.isBlank()) {
                     String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
                     // changing status based on the input
-                    if (mainService.changeAccountStatus(capitalizeS, userId,session)) {
+                    if (adminAccountService.changeAccountStatus(capitalizeS, userId, session)) {
                          return "redirect:" + referer;
 
                     }
@@ -180,16 +184,17 @@ public class AdminController {
                HttpSession session, Model model) {
           List<Users> usersList = new ArrayList<>();
           if (globalService.validatePages("school_admin", response, session)) {
-               Optional<Users> users = mainService.findOneUserById(id);
+               Optional<Users> users = adminAccountService.findOneUserById(id);
 
                if (users.isPresent()) {
                     users.stream().forEach(e -> {
 
                          usersList.add(
-                                   new Users(users.get().getUserId(), users.get().getName(), users.get().getUsername(),
+                                   new Users(users.get().getUserId(), users.get().getName(), users.get().getEmail(),
+                                             users.get().getUsername(),
                                              users.get().getPassword().replace(users.get()
                                                        .getPassword(), ""),
-                                             users.get().getType(), users.get().getStatus()));
+                                             users.get().getType(), users.get().getStatus(), "update"));
                     });
                     return usersList;
                }
@@ -213,7 +218,8 @@ public class AdminController {
      public String deleteFile(@RequestParam("docid") long documentId, HttpServletResponse response, HttpSession session,
                Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-               String message = (mainService.deleteDocumentFile(documentId,session)) ? "Document Deleted" : "Not Deleted";
+               String message = (mainService.deleteDocumentFile(documentId, session)) ? "Document Deleted"
+                         : "Not Deleted";
                return "redirect:/documents-list?message=" + message;
           }
           return "redirect:/";

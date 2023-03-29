@@ -35,6 +35,9 @@ public class Users {
      @Column(unique = true)
      private String username;
 
+     @Column(unique = true)
+     private String email;
+
      private String password;
 
      private String type;
@@ -72,8 +75,10 @@ public class Users {
           this.colorCode = colorCode;
      }
 
-     public Users(long userId, String name, String username, String password, String type, String status) {
+     public Users(long userId, String name, String email, String username, String password, String type, String status,
+               String action) {
           this.userId = userId;
+          this.email = email;
           this.name = name;
           this.username = username;
           this.password = password;

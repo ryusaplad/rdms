@@ -29,23 +29,15 @@ public interface AdminService {
 
      List<Users> diplayAllAccountsByType(String type);
 
-     ResponseEntity<Object> saveUsersAccount(Users user, int actions);
-
-     boolean findUserName(String username);
-
-     Optional<Users> findOneUserById(long userId);
-
-     boolean deleteData(long userId,HttpSession session);
-
-     boolean changeAccountStatus(String status, long userId,HttpSession session);
-
      int displayCountsByStatusAndType(String status, String type);
 
      List<StudentRequest> displayRequestByStatus(String status);
 
-     ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,HttpSession session);
+     ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,
+               HttpSession session);
 
-     ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile, Map<String, String> documentsInfo,HttpSession session);
+     ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile, Map<String, String> documentsInfo,
+               HttpSession session);
 
      List<Documents> getAllDocuments();
 
@@ -55,7 +47,7 @@ public interface AdminService {
 
      Optional<Documents> getFileDocumentById(long id);
 
-     Boolean deleteDocumentFile(long id,HttpSession session);
+     Boolean deleteDocumentFile(long id, HttpSession session);
 
      // Get All Request of Students
      List<StudentRequest> displayAllRequest();

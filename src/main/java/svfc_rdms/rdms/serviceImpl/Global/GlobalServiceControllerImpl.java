@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -144,11 +145,17 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           int blue = random.nextInt(maxBound);
           // Ensure that the color is not too light
           while ((red + green + blue) > maxTotalBound) {
-          red = random.nextInt(maxBound);
-          green = random.nextInt(maxBound);
-          blue = random.nextInt(maxBound);
+               red = random.nextInt(maxBound);
+               green = random.nextInt(maxBound);
+               blue = random.nextInt(maxBound);
           }
           return String.format("#%02x%02x%02x", red, green, blue);
-          }
+     }
 
+     public boolean isValidEmail(String email) {
+          String emailRegex = "^[a-zA-Z0-9_+&-]+(?:\\." + "[a-zA-Z0-9_+&-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
+                    + "A-Z]{2,7}$";
+          Pattern pattern = Pattern.compile(emailRegex);
+          return pattern.matcher(email).matches();
+     }
 }
