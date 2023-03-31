@@ -53,17 +53,19 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
 
     @Override
     public List<GlobalLogs> getAllLogs() {
-        return globalLogsReposistory.findAll();
+        List<GlobalLogs> logs = globalLogsReposistory.findAllByOrderByLogsIdDesc();
+        return logs;
     }
 
     @Override
-    public ResponseEntity<Object> loadSpecificLogs(long logId) {
-        Optional<GlobalLogs> globalLogs = globalLogsReposistory.findById(logId);
-
-        if (globalLogs.isPresent()) {
-            return new ResponseEntity<>(globalLogs, HttpStatus.OK);
+    public ResponseEntity<GlobalLogs> loadSpecificLogs(long logId) {
+        Optional<GlobalLogs> logOptional = globalLogsReposistory.findById(logId);
+        GlobalLogs globalLog = new GlobalLogs();
+        if (logOptional.isPresent()) {
+            globalLog = logOptional.get();
+            return new ResponseEntity<>(globalLog, HttpStatus.OK);
         }
-        return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(globalLog, HttpStatus.BAD_REQUEST);
     }
 
     @Override

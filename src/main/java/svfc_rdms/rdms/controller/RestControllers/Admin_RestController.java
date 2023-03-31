@@ -24,10 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.GlobalLogs;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 
 @RestController
@@ -44,6 +46,9 @@ public class Admin_RestController {
 
      @Autowired
      private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsService;
 
      @PostMapping(value = "/admin/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session) {
@@ -196,4 +201,10 @@ public class Admin_RestController {
 
           return mainService.viewAllRegistrarRequests(requestId);
      }
+
+     @GetMapping("/admin/globallogs/fetch")
+     public ResponseEntity<GlobalLogs> fetchGlobalLogs(@RequestParam("logId") long logId) {
+          return globalLogsService.loadSpecificLogs(logId);
+     }
+
 }

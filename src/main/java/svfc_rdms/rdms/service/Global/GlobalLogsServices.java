@@ -12,16 +12,16 @@ public interface GlobalLogsServices {
 
     public void saveLog(
 
-             long logsId,
-             String message,
-             String messageType,
-             String dateAndTime,
-             String threatLevel,
-             HttpSession session);
+            long logsId,
+            String message,
+            String messageType,
+            String dateAndTime,
+            String threatLevel,
+            HttpSession session);
 
     public List<GlobalLogs> getAllLogs();
 
-    public ResponseEntity<Object> loadSpecificLogs(long logId);
+    public ResponseEntity<GlobalLogs> loadSpecificLogs(long logId);
 
     public Boolean deleteLog(long logId);
 }

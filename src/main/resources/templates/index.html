@@ -147,11 +147,10 @@
         <script type="text/javascript" th:src="@{js/popper.js}"></script>
         <script type="text/javascript" th:src="@{js/login.js}"></script>
         <script id="scriptX">
-    $(document).ready(function () {
-
-      $(".preloader").fadeOut();
+             $(window).on("load",function(){
+                $(".preloader").fadeOut();
       $("#scriptX").empty();
-    });
+  });
         </script>
     </body>
 </html>

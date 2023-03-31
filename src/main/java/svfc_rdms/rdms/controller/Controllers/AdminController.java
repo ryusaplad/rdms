@@ -29,6 +29,7 @@ import svfc_rdms.rdms.repository.Document.DocumentRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Controller
@@ -48,6 +49,9 @@ public class AdminController {
 
      @Autowired
      private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsService;
 
      // Get Mapping Method
      @GetMapping("/admin/dashboard")
@@ -152,7 +156,8 @@ public class AdminController {
      }
 
      @GetMapping("/admin/logs")
-     public String viewAdminLogs() {
+     public String viewAdminLogs(Model model) {
+          model.addAttribute("globalLogs",globalLogsService.getAllLogs());
           return "/admin/admin_global_logs";
      }
 

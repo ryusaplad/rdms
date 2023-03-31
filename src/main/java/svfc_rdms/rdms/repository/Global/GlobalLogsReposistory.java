@@ -9,4 +9,6 @@ import svfc_rdms.rdms.model.GlobalLogs;
 public interface GlobalLogsReposistory extends JpaRepository<GlobalLogs, Long> {
 
     public List<GlobalLogs> findAllByperformedBy(String user);
+
+    public List<GlobalLogs> findAllByOrderByLogsIdDesc();
 }

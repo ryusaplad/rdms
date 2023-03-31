@@ -460,29 +460,19 @@
                             <table id="zero_config" class="text-center table">
                                 <thead>
                                     <tr>
+                                        <th>Date&Time</th>
                                         <th>Activity</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td
-                                            class="border link"
-                                            id="tdMessage"
-                                            style="cursor:pointer"
-                                            data-value=""
-                                        >
-                                            <strong>Log1
-                                                <sup>
-                                                    <b class="text-success">Threat:Normal</b>
-                                                </sup>
-                                            </strong>
-                                            <strong id="message" style="opacity:.50;">
-                                                Lorem ipsum dolor sit amet
-                                                       consectetur adipisicing elit. Eaque voluptatibus tempore quae
-                                                       quia. Repellendus veniam velit, officia quaerat laboriosam
-                                                       tempore facere. Impedit corporis vitae ab eum maxime fuga harum
-                                                       nesciunt.
-                                            </strong>
+                                    <tr th:each="log : ${globalLogs}">
+                                        <td th:text="${log.dateAndTime}"></td>
+                                        <td th:text="${log.message}"></td>
+                                        <td>
+                                            <a type="button" class="btn btn-outline-success text-black toggleLogDetail" th:data-value="${log.logsId}">
+                                                Details
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -501,9 +491,28 @@
         <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
         <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/userpageJS/global_logs.js}"></script>
         <script>
 
-          $('#zero_config').DataTable();
+         // Get a reference to the DataTable
+            var table = $('#zero_config').DataTable({
+                ordering: false
+            });
+
+            // Get a reference to the first cell of the first row
+            var cell = table.cell(':eq(0)', 2);
+
+            // Get the existing text in the cell
+            var existingText = cell.data();
+
+            // Replace the first occurrence of "Details" with "Latest"
+            var newText = existingText.replace("Details", "Details - <span class='text-danger'>Latest</span>");
+
+            // Set the updated text back to the cell
+            cell.data(newText);
+
+            // Redraw the table to update the content
+            table.draw();
         </script>
     </body>
 </html>
