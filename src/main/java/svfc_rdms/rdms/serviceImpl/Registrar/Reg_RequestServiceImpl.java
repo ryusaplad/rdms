@@ -284,13 +284,18 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                               }
                          }
-                         studentRepository.save(studentRequest);
-                         String date = LocalDateTime.now().toString();
-                         String logMessage = "[" + LocalDateTime.now().toString() + "] Registrar Finalized "
-                                   + user.getName() + " User: " + manageBy
-                                   + "Finalized/Completed the request of " + user.getName();
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
-                         return new ResponseEntity<>("Success", HttpStatus.OK);
+                         if(!studentRequest.getRequestStatus().toLowerCase().contains("approved")){
+                              studentRepository.save(studentRequest);
+                              String date = LocalDateTime.now().toString();
+                              String logMessage = "[" + LocalDateTime.now().toString() + "] Registrar Finalized "
+                                        + user.getName() + " User: " + manageBy.getName()+":"+manageBy.getUsername()
+                                        + "Finalized/Completed the request of " + user.getName();
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                              return new ResponseEntity<>("Success", HttpStatus.OK);
+                         }else{
+                              return new ResponseEntity<>("Request is already completed.", HttpStatus.OK);
+                         }
+                      
 
                     } else {
                          return new ResponseEntity<>("Failed to save the notification.", HttpStatus.OK);
