@@ -7,6 +7,7 @@ The primary goal of this project is to design and develop a Request and Document
 
 # Progress Checklist - Tentative Checklist.
 
+<<<<<<< HEAD
 # Login and Validation
 > :white_check_mark: **Pre-school to high school start with (B-)**
 > :white_check_mark: **SHS - start with (SHS-)**
@@ -67,6 +68,26 @@ The primary goal of this project is to design and develop a Request and Document
 # System
 - :white_check_mark: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
 - :white_check_mark: **Automatically Send Notification to the student  if the request has change status(On-Going, Rejected, Approved)**
+=======
+- :white_check_mark: **Pre-school to high school start with B-**
+- :white_check_mark: **SHS - start with SHS-**
+- :white_check_mark: **College start the username with C-**
+- :white_check_mark: **Login Remember Me using Cookies**
+- :white_check_mark: **Session Management**
+- :white_check_mark: **Logout**
+- :white_check_mark: **Clear Session and invalidate**
+# Users Dashboard for different user account types
+- :white_check_mark: **Notification** 
+- :white_check_mark: **Date and Time** 
+# Users Profile Edit
+- :white_check_mark: **Change Password** 
+- :white_check_mark: **Change Profile Picture** 
+# Admin Control
+- :x: **Disabled Connection for maintenance (On-going)
+- :white_check_mark: **Restore and Backup Database Files.** 
+# System Control
+- :white_check_mark: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
+>>>>>>> f3056a79e77a369e5afe8fc62b938dbbfcaf5e9f
 - :x: **Automatically send notification by email every student request approval completed (On-going)** 
 - :white_check_mark: **Automatically Backup database every 12 Midnight** 
 
