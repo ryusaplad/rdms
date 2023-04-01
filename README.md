@@ -7,9 +7,10 @@ The primary goal of this project is to design and develop a Request and Document
 
 # Progress Checklist - Tentative Checklist.
 
-<<<<<<< HEAD
+
 # Login and Validation
 > :white_check_mark: **Pre-school to high school start with (B-)**
+
 > :white_check_mark: **SHS - start with (SHS-)**
 
 > :white_check_mark: **College start the username with (C-)**
