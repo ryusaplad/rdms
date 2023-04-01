@@ -7,24 +7,24 @@ The primary goal of this project is to design and develop a Request and Document
 
 # Progress Checklist - Tentative Checklist.
 
-Login / Logout and Validations
-- [x] Pre-school to high school start with B-
-- [x] SHS - start with SHS-
-- [x] College start the username with C-
-- [x] Login Remember Me using Cookies
-- [x] Session Management
-- [x] Logout
-- [x] Clear Session and invalidate
+- [x] <span style="color:green">Pre-school to high school start with B-</span>
+- [x] <span style="color:green">SHS - start with SHS-</span>
+- [x] <span style="color:green">College start the username with C-</span>
+- [x] <span style="color:green">Login Remember Me using Cookies</span>
+- [x] <span style="color:green">Session Management</span>
+- [x] <span style="color:green">Logout</span>
+- [x] <span style="color:green">Clear Session and invalidate</span>
 # Users Dashboard for different user account types
-- [x] Notification
-- [x] Date and Time
+- [x] <span style="color:green">Notification</span>
+- [x] <span style="color:green">Date and Time</span>
 # Users Profile Edit
-- [x] Change Password
-- [x] Change Profile Picture
+- [x] <span style="color:green">Change Password</span>
+- [x] <span style="color:green">Change Profile Picture</span>
 # Admin Control
-- [x] Disabled Connection for maintenance (On-going)
-- [x] Restore and Backup Database Files.
+- [x] <span style="color:green">Disabled Connection for maintenance (On-going)</span>
+- [x] <span style="color:green">Restore and Backup Database Files.</span>
 # System Control
-- [x] Automatically Send Notification to all registrars if the student request has already been sent to the registrar.
-- [ ] Automatically send notification by email every student request approval completed (On-going)
-- [x] Automatically Backup database every 12 Midnight
+- [x] <span style="color:green">Automatically Send Notification to all registrars if the student request has already been sent to the registrar.</span>
+- [ ] <span style="color:red">Automatically send notification by email every student request approval completed (On-going)</span>
+- [x] <span style="color:green">Automatically Backup database every 12 Midnight</span>
+
