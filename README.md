@@ -88,7 +88,6 @@ The primary goal of this project is to design and develop a Request and Document
 - :white_check_mark: **Restore and Backup Database Files.** 
 # System Control
 - :white_check_mark: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
->>>>>>> f3056a79e77a369e5afe8fc62b938dbbfcaf5e9f
 - :x: **Automatically send notification by email every student request approval completed (On-going)** 
 - :white_check_mark: **Automatically Backup database every 12 Midnight** 
 
