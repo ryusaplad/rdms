@@ -12,10 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.model.ValidAccounts;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.service.Registrar.Admin_RegistrarAccountService;
 
@@ -125,7 +125,7 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
                         String logMessage = "User " + session.getAttribute("name").toString()
                                 + " added a user (" + user.getName() + ") with a user type of " + user.getType()
                                 + ".";
-                        globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+                        globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                         return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                     }
                 } else if (actions == 1) {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import svfc_rdms.rdms.model.StudentRequest;
@@ -26,4 +27,8 @@ public interface StudentRepository extends JpaRepository<StudentRequest, Long> {
      @Transactional
      @Query("UPDATE StudentRequest req SET req.requestStatus =:status WHERE req.requestId =:requestId")
      void studentRequestsResubmit(String status, long requestId);
+
+     @Query("SELECT sr.year, sr.course,sr.requestStatus,COUNT(sr) FROM StudentRequest sr WHERE sr.requestStatus = :status GROUP BY sr.year, sr.course")
+     List<Object[]> findCountAndRequestStatusAndYearAndCourseWhereStatusIs(@Param("status") String requestStatus);
+ 
 }

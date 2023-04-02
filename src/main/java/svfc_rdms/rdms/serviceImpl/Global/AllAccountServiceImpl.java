@@ -66,7 +66,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Password changed for user " + user.getName() + ".";
-                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                     return new ResponseEntity<>("Password updated.", HttpStatus.OK);
                } else {
                     return new ResponseEntity<>("Old password is incorrect.", HttpStatus.BAD_REQUEST);
@@ -89,7 +89,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Profile picture changed for user " + user.getName() + ".";
-                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                     return new ResponseEntity<>("Profile picture successfully cleared", HttpStatus.OK);
 
                } else {
@@ -101,7 +101,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          userRepository.save(user);
                          String date = LocalDateTime.now().toString();
                          String logMessage = "Profile picture changed for user " + user.getName() + ".";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                          return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
                     }
                }

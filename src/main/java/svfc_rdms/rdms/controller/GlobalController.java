@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import svfc_rdms.rdms.model.ValidAccounts;
+import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
@@ -79,7 +79,7 @@ public class GlobalController {
                String date = LocalDateTime.now().toString();
                String logMessage = "User Logged Out: " + session.getAttribute("name") + ":"
                          + session.getAttribute("username") + " has logged out";
-               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "normal", session);
+               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "low", session);
                clearSessionAttributes(session);
                session.invalidate();
           }

@@ -198,13 +198,13 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               String logMessage = "[" + LocalDateTime.now().toString()
                                         + "] Registrar changed the request status of " + user.getName() + " to "
                                         + status + ". User: " + manageBy + ".";
-                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                               return new ResponseEntity<>("Success", HttpStatus.OK);
                          } else {
                               String date = LocalDateTime.now().toString();
                               String logMessage = "[" + LocalDateTime.now().toString()
                                         + "] Failed to change the student request status. System Message: Notification failed to send along with the status change of the message request.";
-                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
 
                               throw new ApiRequestException(
                                         "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
@@ -219,7 +219,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
           String logMessage = "[" + LocalDateTime.now().toString()
                     + "] Registrar (" + session.getAttribute("name") + ":" + session.getAttribute("username")
                     + ")failed to change the student request status \nSystem Message: Student not exist";
-          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
 
           throw new ApiRequestException(
                     "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
@@ -290,7 +290,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               String logMessage = "[" + LocalDateTime.now().toString() + "] Registrar Finalized "
                                         + user.getName() + " User: " + manageBy.getName()+":"+manageBy.getUsername()
                                         + "Finalized/Completed the request of " + user.getName();
-                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                               return new ResponseEntity<>("Success", HttpStatus.OK);
                          }else{
                               return new ResponseEntity<>("Request is already completed.", HttpStatus.OK);
@@ -308,7 +308,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                String logMessage = "[" + LocalDateTime.now().toString()
                          + "] Registrar (" + session.getAttribute("name") + ":" + session.getAttribute("username")
                          + ")failed to finalized request\nSystem Message: " + ex.getMessage();
-               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                throw new ApiRequestException(ex.getMessage());
           }
           return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
@@ -480,7 +480,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                     String logMessage = "[" + LocalDateTime.now().toString()
                               + "] Registrar (" + session.getAttribute("name") + ":" + session.getAttribute("username")
                               + ")failed to export student requests \nSystem Message: " + e.getMessage();
-                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
 
                     throw new ApiRequestException(e.getMessage());
                }
@@ -489,7 +489,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                String logMessage = "[" + LocalDateTime.now().toString()
                          + "] Registrar (" + session.getAttribute("name") + ":" + session.getAttribute("username")
                          + ")failed to export student requests \nSystem Message: " + e.getMessage();
-               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
 
                throw new ApiRequestException(e.getMessage());
           }

@@ -217,7 +217,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                          String date = LocalDateTime.now().toString();
                          String logMessage = "User Requested " + document + " User: " + user.getName()
                                    + " is requesting (" + document + ")";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",

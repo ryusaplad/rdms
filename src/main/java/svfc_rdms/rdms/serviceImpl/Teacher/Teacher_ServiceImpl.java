@@ -188,7 +188,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                       
                          String logMessage = "[" + LocalDateTime.now().toString() + "] Teacher replied "+registrarRequest.getRequestBy().getName()+ " User: " + registrarRequest.getRequestTo().getName()
                                    + " re-sent requested data";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "normal", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
 
                          return new ResponseEntity<>("Success", HttpStatus.OK);
                     }

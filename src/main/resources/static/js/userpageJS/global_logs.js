@@ -2,7 +2,7 @@ $(document).ready(function () {
   var modalView = $(".modalView");
   var htmlModal = "";
 
-  $(".toggleLogDetail").on("click", function (e) {
+  $(document).on("click", ".toggleLogDetail", function (e) {
     e.preventDefault();
     var logId = $(this).data("value");
 
@@ -49,7 +49,40 @@ $(document).ready(function () {
         logMessage.html("<strong>Message:</strong> " + data.message);
         logMessageType.html("<strong>Type:</strong> " + data.messageType);
         logDateAndTime.html("<strong>Date &amp; Time:</strong> " + data.dateAndTime);
-        logThreatLevel.html("<strong>Threat Level:</strong> " + data.threatLevel);
+
+
+        
+        var threatLevel = data.threatLevel;
+        var iconClass, badgeClass;
+        switch (threatLevel) {
+          case "low":
+            iconClass = "fas fa-shield-alt text-success";
+            badgeClass = "badge bg-success";
+            break;
+          case "medium":
+            iconClass = "fas fa-shield-alt text-warning";
+            badgeClass = "badge bg-warning";
+            break;
+          case "high":
+            iconClass = "fas fa-shield-alt text-danger";
+            badgeClass = "badge bg-danger";
+            break;
+          case "critical":
+            iconClass = "fas fa-shield-alt text-danger";
+            badgeClass = "badge bg-danger";
+            break;
+          default:
+            iconClass = "fas fa-shield-alt text-muted";
+            badgeClass = "badge bg-secondary";
+            threatLevel = "Unknown";
+            break;
+        }
+        
+        var html = '<strong>Threat Level:</strong> ' +
+          '<i class="' + iconClass + '"></i>' +
+          '<span class="' + badgeClass + '">' + threatLevel + '</span>';
+        logThreatLevel.html(html);
+        
         logPerformedBy.html("<strong>Performed By:</strong> " + data.performedBy);
         // Show the modal
         logDetailModal.modal("show");

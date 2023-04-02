@@ -30,6 +30,7 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.StudentRequest_ChartsLogicServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 
 @RestController
@@ -49,6 +50,9 @@ public class Admin_RestController {
 
      @Autowired
      private GlobalLogsServiceImpl globalLogsService;
+     
+     @Autowired
+     private StudentRequest_ChartsLogicServiceImpl student_RequestChartServiceImpl;
 
      @PostMapping(value = "/admin/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session) {
@@ -205,6 +209,11 @@ public class Admin_RestController {
      @GetMapping("/admin/globallogs/fetch")
      public ResponseEntity<GlobalLogs> fetchGlobalLogs(@RequestParam("logId") long logId) {
           return globalLogsService.loadSpecificLogs(logId);
+     }
+
+     @GetMapping("/admin/chart/data-filter")
+     public ResponseEntity<?> fetchFilterChartData(@RequestParam("s") String status) {
+          return student_RequestChartServiceImpl.getCountAndStatusAndYearAndCourseWhereStatusIs(status);
      }
 
 }

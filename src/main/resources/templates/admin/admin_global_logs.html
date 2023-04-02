@@ -462,6 +462,7 @@
                                     <tr>
                                         <th>Date&Time</th>
                                         <th>Activity</th>
+                                        <th>Threat</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -469,6 +470,30 @@
                                     <tr th:each="log : ${globalLogs}">
                                         <td th:text="${log.dateAndTime}"></td>
                                         <td th:text="${log.message}"></td>
+                                        <td>
+                                            <span th:switch="${log.threatLevel}">
+                                              <span th:case="'low'">
+                                                <i class="fas fa-shield-alt text-success"></i>
+                                                <span class="badge bg-success">Low</span>
+                                              </span>
+                                              <span th:case="'medium'">
+                                                <i class="fas fa-shield-alt text-warning"></i>
+                                                <span class="badge bg-warning">Medium</span>
+                                              </span>
+                                              <span th:case="'high'">
+                                                <i class="fas fa-shield-alt text-danger"></i>
+                                                <span class="badge bg-danger">High</span>
+                                              </span>
+                                              <span th:case="'critical'">
+                                                <i class="fas fa-shield-alt text-danger"></i>
+                                                <span class="badge bg-danger">Critical</span>
+                                              </span>
+                                              <span th:case="*">
+                                                <i class="fas fa-shield-alt text-muted"></i>
+                                                <span class="badge bg-secondary">Unknown</span>
+                                              </span>
+                                            </span>
+                                          </td>
                                         <td>
                                             <a type="button" class="btn btn-outline-success text-black toggleLogDetail" th:data-value="${log.logsId}">
                                                 Details
@@ -500,7 +525,7 @@
             });
 
             // Get a reference to the first cell of the first row
-            var cell = table.cell(':eq(0)', 2);
+            var cell = table.cell(':eq(0)', 3);
 
             // Get the existing text in the cell
             var existingText = cell.data();

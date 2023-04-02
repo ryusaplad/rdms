@@ -1,4 +1,4 @@
-package svfc_rdms.rdms.model;
+package svfc_rdms.rdms.Enums;
 
 public enum ValidAccounts {
      STUDENT,

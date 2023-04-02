@@ -70,7 +70,7 @@ public class LoginServiceImpl implements LoginService {
                               String date = LocalDateTime.now().toString();
                               String logMessage = "User Logged In: " + foundUser.getName() + ":" + user.getUsername()
                                         + " has logged in";
-                              globalLogsServiceImpl.saveLog(0, logMessage, "Login_Log", date, "normal", session);
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Login_Log", date, "low", session);
 
                               return new ResponseEntity<>("success", HttpStatus.OK);
                          } else {

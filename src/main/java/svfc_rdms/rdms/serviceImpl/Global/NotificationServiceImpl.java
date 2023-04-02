@@ -189,7 +189,7 @@ public class NotificationServiceImpl implements NotificationService {
             String date = LocalDateTime.now().toString();
             String logMessage = "Notification sent by user " + session.getAttribute("name").toString()
                     + " with the message: " + message + ".";
-            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
             return true;
         }
         return false;
@@ -212,7 +212,7 @@ public class NotificationServiceImpl implements NotificationService {
             String date = LocalDateTime.now().toString();
             String logMessage = "Notification sent by user " + user.getName()
                     + " with the message: " + message + ".";
-            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
             return true;
         }
         return false;
@@ -236,7 +236,7 @@ public class NotificationServiceImpl implements NotificationService {
             String date = LocalDateTime.now().toString();
             String logMessage = "Notification sent by user " + from + " to " + to + " with the message "
                     + message + ".";
-            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "Normal", session);
+            globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
             return true;
         }
         return false;
