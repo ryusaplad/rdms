@@ -23,6 +23,21 @@
   padding: 0;
 }
 
+ .tab-filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+ .mainDivChart{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+ }
+}
+
+
         </style>
     </head>
     <body>
@@ -575,152 +590,57 @@
                                 </div>
                             </div>
                         </div>
-                        <ul
-                            class="nav nav-tabs"
-                            id="myTab"
-                            role="tablist"
-                            style="display: flex;
-                            padding-left: 0;
-                            margin-bottom: 0;
-                            list-style: none;
-                            justify-content: space-between;"
-                        >
-                            <li class="nav-item">
-                                <span class="nav-link">
-                                    <h5>Top Year/Level/Courses Requesting</h5>
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link border border-dark"
-                                    id="ps-tab"
-                                    data-bs-toggle="tab"
-                                    href="#ps"
-                                    role="tab"
-                                    aria-controls="ps"
-                                    aria-selected="false"
-                                    onclick="isSelected();"
-                                >Preschool</a>
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link border border-dark"
-                                    id="hs-tab"
-                                    data-bs-toggle="tab"
-                                    href="#hs"
-                                    role="tab"
-                                    aria-controls="hs"
-                                    aria-selected="false"
-                                    onclick="isSelected();"
-                                >High School</a>
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link border border-dark"
-                                    id="shs-tab"
-                                    data-bs-toggle="tab"
-                                    href="#shs"
-                                    role="tab"
-                                    aria-controls="shs"
-                                    aria-selected="false"
-                                    onclick="isSelected();"
-                                >Senior High School</a>
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link border border-dark"
-                                    id="college-tab"
-                                    data-bs-toggle="tab"
-                                    href="#college"
-                                    role="tab"
-                                    aria-controls="college"
-                                    aria-selected="false"
-                                    onclick="isSelected();"
-                                >College</a>
-                            </li>
-                            <li>
-                                <div class="dropdown">
-                                    <button
-                                        class="btn btn-secondary dropdown-toggle"
-                                        type="button"
-                                        id="dropdownMenuButton"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                    >
-                                        Status
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            <a class="dropdown-item filter-p" onclick="filterChart('filter-p');"  href="javascript:void(0);">Pending</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item filter-o" onclick="filterChart('filter-o');" href="javascript:void(0);">Ongoing</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item filter-r" onclick="filterChart('filter-r');" href="javascript:void(0);">Rejected</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item filter-a" onclick="filterChart('filter-a');" href="javascript:void(0);">Approved</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div
-                                class="tab-pane fade"
-                                id="ps"
-                                role="tabpanel"
-                                aria-labelledby="ps-tab"
-                            >
-                                <div id="psChart"></div>
-                            </div>
-                            <div
-                                class="tab-pane fade"
-                                id="hs"
-                                role="tabpanel"
-                                aria-labelledby="hs-tab"
-                            >
-                                <div id="hsChart"></div>
-                            </div>
-                            <div
-                                class="tab-pane fade  "
-                                id="shs"
-                                role="tabpanel"
-                                aria-labelledby="shs-tab"
-                            >
-                                <div id="shsChart"></div>
-                            </div>
-                            <div
-                                class="tab-pane fade"
-                                id="college"
-                                role="tabpanel"
-                                aria-labelledby="college-tab"
-                            >
-                                <div id="collegeChart"></div>
-                            </div>
-                            <div
-                                class="tab-pane fade show active"
-                                id="select"
-                                role="tabpanel"
-                                aria-labelledby="select-tab"
-                            >
-                                <div class="prompt-message" style=" background-color: #f8f8f8;
-                        border: 1px solid #ccc;
-                        border-radius: 5px;
-                        padding: 10px;
-                        margin-bottom: 20px;">
-                                    <p style="
-                                margin: 0;
-                                font-size: 16px;
-                                font-weight: bold;
-                                text-align: center;
-                              ">
-                                        Please select a year level to view the corresponding chart:
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       <h4 class="page-title">Requesting Reports</h4>
+                       
+                       
+<div style="display:flex; justify-content:space-between;" class="mainDivChart">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="ps-tab" data-bs-toggle="tab" href="#ps" role="tab" aria-controls="ps" aria-selected="true">Preschool</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="hs-tab" data-bs-toggle="tab" href="#hs" role="tab" aria-controls="hs" aria-selected="false">High School</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="shs-tab" data-bs-toggle="tab" href="#shs" role="tab" aria-controls="shs" aria-selected="false">Senior High School</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="college-tab" data-bs-toggle="tab" href="#college" role="tab" aria-controls="college" aria-selected="false">College</a>
+    </li>
+  </ul>
+
+  <div class="nav-item" style="display: flex; align-items: center;">
+      <span class="filter-label">Filter:</span>
+      <select class="form-select btn filterChart" aria-label="Filter Chart">
+          <option selected>Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Approved">Approved</option>
+      </select>
+      <input type="date" class="form-control filterDate">
+      <button class="btn btn-primary filterButton" style="width: 90px; border: 1px solid #ced4da; margin-left: 5px;margin-right: 5px; height: calc(1.5em + 0.75rem + 2px); white-space: nowrap;">
+        <i class="fas fa-filter" style="font-size: 1rem; margin-right: 0.5rem;"></i> Filter
+      </button>
+  </div>
+</div>
+
+ <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="ps" role="tabpanel" aria-labelledby="ps-tab">
+      <div id="psChart"></div>
+    </div>
+    <div class="tab-pane fade" id="hs" role="tabpanel" aria-labelledby="hs-tab">
+      <div id="hsChart"></div>
+    </div>
+    <div class="tab-pane fade" id="shs" role="tabpanel" aria-labelledby="shs-tab">
+      <div id="shsChart"></div>
+    </div>
+    <div class="tab-pane fade" id="college" role="tabpanel" aria-labelledby="college-tab">
+      <div id="collegeChart"></div>
+    </div>
+  </div>
+
+
                     </div>
                 </div>
             </div>
