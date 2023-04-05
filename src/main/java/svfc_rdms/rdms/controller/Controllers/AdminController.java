@@ -53,7 +53,7 @@ public class AdminController {
      @Autowired
      private GlobalLogsServiceImpl globalLogsService;
 
-     // Get Mapping Method
+   
      @GetMapping("/admin/dashboard")
      public String dashboard_View(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
@@ -157,7 +157,7 @@ public class AdminController {
 
      @GetMapping("/admin/logs")
      public String viewAdminLogs(Model model) {
-          model.addAttribute("globalLogs",globalLogsService.getAllLogs());
+          model.addAttribute("globalLogs", globalLogsService.getAllLogs());
           return "/admin/admin_global_logs";
      }
 
@@ -172,7 +172,7 @@ public class AdminController {
                if (!status.isEmpty() || !status.isBlank()) {
                     String capitalizeS = status.substring(0, 1).toUpperCase() + status.substring(1);
                     // changing status based on the input
-                    if (adminAccountService.changeAccountStatus(capitalizeS, userId, session)) {
+                    if (adminAccountService.changeAccountStatus(capitalizeS, userId, session, request)) {
                          return "redirect:" + referer;
 
                     }
@@ -217,6 +217,18 @@ public class AdminController {
                return "/admin/admin_requests_cards";
           }
           return "redirect:/";
+     }
+
+     @GetMapping("/admin/global_files")
+     public String allUserFiles(HttpServletResponse response, HttpSession session, Model model) {
+
+          if (globalService.validatePages("school_admin", response, session)) {
+
+               return mainService.displayAllUserFiles(session, model);
+
+          }
+          return "redirect:/";
+
      }
 
      @RequestMapping(value = "/admin/delete-document-card", method = RequestMethod.GET)

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -20,7 +21,7 @@ public interface Student_RequestService {
 
      ResponseEntity<Object> submitRequest(String id,
                Optional<MultipartFile[]> files, String document,
-               Map<String, String> params,HttpSession session);
+               Map<String, String> params,HttpSession session,HttpServletRequest request);
 
      Optional<Documents> findDocumentByTitle(String title);
 

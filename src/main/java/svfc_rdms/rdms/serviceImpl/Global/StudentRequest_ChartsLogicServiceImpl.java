@@ -23,8 +23,8 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
     private StudentRepository studentReqRepository;
 
     @Override
-    public ResponseEntity<?> getCountAndStatusAndYearAndCourseWhereStatusIs(String status) {
-        List<Object[]> data = studentReqRepository.findCountAndRequestStatusAndYearAndCourseWhereStatusIs(status);
+    public ResponseEntity<?> getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(String status,String date) {
+        List<Object[]> data = studentReqRepository.findCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(status,date);
         List<Object[]> modifiedData = new ArrayList<>();
     
         for (Object[] obj : data) {

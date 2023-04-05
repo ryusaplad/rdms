@@ -4,18 +4,17 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Admin - Logs</title>
+        <title>Admin - User Files</title>
         <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            th:href="@{images/svdfc-logo.png}"
+            th:href="@{/images/svdfc-logo.png}"
         >
         <!-- Custom CSS -->
         <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
         <link th:href="@{/css/croppie.css}" rel="stylesheet">
         <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
-        <style></style>
     </head>
     <body>
         <!-- ============================================================== -->
@@ -437,15 +436,14 @@
                 <div class="page-breadcrumb">
                     <div class="row">
                         <div class="col-12 d-flex no-block align-items-center">
-                            <h4 id="main-title" class="page-title mt-4">Global Activity Logs</h4>
+                            <h4 class="page-title">Global Files</h4>
                             <div class="ms-auto text-end">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item">
                                             <a href="/admin/dashboard">Dashboard</a>
                                         </li>
-                                        <li class="breadcrumb-item active">Global Activity</li>
-                                        <li class="breadcrumb-item active">Logs</li>
+                                        <li class="breadcrumb-item active" aria-current="page">User Files List</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -458,94 +456,53 @@
                 <!-- ============================================================== -->
                 <!-- Container fluid  -->
                 <!-- ============================================================== -->
-                <div class="container-fluid px-4">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Activitys
-                        </div>
+                <div class="container-fluid">
+                    <div class="card">
                         <div class="card-body table-responsive">
-                            <table id="zero_config" class="text-center table">
-                                <thead>
-                                    <tr>
-                                        <th>Date&Time</th>
-                                        <th>Activity</th>
-                                        <th>Threat</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="log : ${globalLogs}">
-                                        <td th:text="${log.dateAndTime}"></td>
-                                        <td th:text="${log.message}"></td>
-                                        <td>
-                                            <span th:switch="${log.threatLevel}">
-                                                <span th:case="'low'">
-                                                    <i class="fas fa-shield-alt text-success"></i>
-                                                    <span class="badge bg-success">Low</span>
-                                                </span>
-                                                <span th:case="'medium'">
-                                                    <i class="fas fa-shield-alt text-warning"></i>
-                                                    <span class="badge bg-warning">Medium</span>
-                                                </span>
-                                                <span th:case="'high'">
-                                                    <i class="fas fa-shield-alt text-danger"></i>
-                                                    <span class="badge bg-danger">High</span>
-                                                </span>
-                                                <span th:case="'critical'">
-                                                    <i class="fas fa-shield-alt text-danger"></i>
-                                                    <span class="badge bg-danger">Critical</span>
-                                                </span>
-                                                <span th:case="*">
-                                                    <i class="fas fa-shield-alt text-muted"></i>
-                                                    <span class="badge bg-secondary">Unknown</span>
-                                                </span>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a type="button" class="btn btn-outline-success text-black toggleLogDetail" th:data-value="${log.logsId}">
-                                                Details
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <h5 class="
+                            card-title
+                            ">All Files</h5>
+                            <div>
+                                <table id="zero_config" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>File</th>
+                                            <th>Upload By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="file : ${files}">
+                                            <td>
+                                                <a th:href="@{'/school_admin/files/download?id='} + ${file.fileId}" type="button" class="btn btn-warning">
+                                                    Download
+                                                </a>
+                                            </td>
+                                            <td th:text="${file.name}"></td>
+                                            <td th:text="${file.uploadedBy}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modalView"></div>
-        <script type="text/javascript" th:src="@{/js/jquery.js}"></script>
-        <script type="text/javascript" th:src="@{/js/croppie.js}"></script>
-        <script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
-        <script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
-        <script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
-        <script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
-        <script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
-        <script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
-        <script type="text/javascript" th:src="@{/js/userpageJS/global_logs.js}"></script>
-        <script>
+    </div>
+</div>
+<div class="modalView"></div>
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/croppie.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/perfect-scrollbar.jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/waves.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/sidebarmenu.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/userpageJS/datatables.min.js}"></script>
+<script>
 
-         // Get a reference to the DataTable
-            var table = $('#zero_config').DataTable({
-                ordering: false
-            });
-
-            // Get a reference to the first cell of the first row
-            var cell = table.cell(':eq(0)', 3);
-
-            // Get the existing text in the cell
-            var existingText = cell.data();
-
-            // Replace the first occurrence of "Details" with "Latest"
-            var newText = existingText.replace("Details", "Details - <span class='text-danger'>Latest</span>");
-
-            // Set the updated text back to the cell
-            cell.data(newText);
-
-            // Redraw the table to update the content
-            table.draw();
-        </script>
-    </body>
+        $('#zero_config').DataTable();
+</script>
+</body>
 </html>

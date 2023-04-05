@@ -26,6 +26,7 @@ $(document).ready(function () {
         <p id="logDateAndTime"></p>
         <p id="logThreatLevel"></p>
         <p id="logPerformedBy"></p>
+        <p id="logClientIp"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
@@ -44,6 +45,7 @@ $(document).ready(function () {
         var logDateAndTime = $("#logDateAndTime");
         var logThreatLevel = $("#logThreatLevel");
         var logPerformedBy = $("#logPerformedBy");
+        var logClientIp = $("#logClientIp");
         // Loop through data and add to modalView
         $("#logDetailModalLabel").text($("#logDetailModalLabel").text() + " - " + logId);
         logMessage.html("<strong>Message:</strong> " + data.message);
@@ -84,6 +86,7 @@ $(document).ready(function () {
         logThreatLevel.html(html);
         
         logPerformedBy.html("<strong>Performed By:</strong> " + data.performedBy);
+        logClientIp.html("<strong>Client Ip:</strong> " + data.clientIpAddress);
         // Show the modal
         logDetailModal.modal("show");
       },

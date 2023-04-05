@@ -1,8 +1,10 @@
 package svfc_rdms.rdms.controller.RestControllers;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -19,9 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Notifications;
+import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.NotificationRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.repository.Student.StudentRepository;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
@@ -30,24 +35,30 @@ import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 public class AllAccount_RestController {
 
      @Autowired
-     AllAccountServiceImpl accountServiceImpl;
+     private AllAccountServiceImpl accountServiceImpl;
 
      @Autowired
-     NotificationServiceImpl notificationServiceImpl;
+     private Admin_Registrar_ManageAccountServiceImpl admin_RegistrarAccountServiceImpl;
 
      @Autowired
-     NotificationRepository notificationRepository;
+     private NotificationServiceImpl notificationServiceImpl;
 
      @Autowired
-     GlobalServiceControllerImpl globalService;
+     private NotificationRepository notificationRepository;
 
      @Autowired
-     UsersRepository usersRepository;
+     private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private UsersRepository usersRepository;
+
+     @Autowired
+     private StudentRepository studentRepository;
 
      @PostMapping("/change/account/password")
      public ResponseEntity<String> changePassword(@RequestParam("oldPass") String oldPassword,
                @RequestParam("newPass") String newPassword, @RequestParam("confirmPass") String confirmPassword,
-               HttpSession session, HttpServletResponse response) {
+               HttpSession session, HttpServletResponse response,HttpServletRequest request) {
           long userId = 0;
           String username = "";
           if ((username = session.getAttribute("username").toString()) != null) {
@@ -55,14 +66,14 @@ public class AllAccount_RestController {
                if (optionalUser.isPresent()) {
                     userId = optionalUser.get().getUserId();
                }
-               return accountServiceImpl.changePassword(oldPassword, newPassword, userId,session);
+               return accountServiceImpl.changePassword(oldPassword, newPassword, userId,session,request);
           }
           throw new ApiRequestException("Invalid Action");
 
      }
 
      @PostMapping("/change/account/profile-picture")
-     public ResponseEntity<String> changeProfilePicture(@RequestParam MultipartFile image, HttpSession session) {
+     public ResponseEntity<String> changeProfilePicture(@RequestParam MultipartFile image, HttpSession session,HttpServletRequest request) {
           long userId = 0;
           String username = "";
           if ((username = session.getAttribute("username").toString()) != null) {
@@ -70,7 +81,7 @@ public class AllAccount_RestController {
                if (optionalUser.isPresent()) {
                     userId = optionalUser.get().getUserId();
                }
-               return accountServiceImpl.changeProfilePicture(image, userId,session);
+               return accountServiceImpl.changeProfilePicture(image, userId,session,request);
           }
           throw new ApiRequestException("Invalid Action");
      }
@@ -297,6 +308,20 @@ public class AllAccount_RestController {
 
           }
           throw new ApiRequestException("You are performing invalid action, Please try again");
+     }
+
+     @GetMapping("/{userType}/student-request-export/all")
+     public ResponseEntity<String> exportStudentRequestToExcelCheck(@PathVariable("userType")String userType,HttpSession session,
+               HttpServletResponse response,HttpServletRequest request) {          
+          List<StudentRequest> studRequest = studentRepository.findAll();
+          return admin_RegistrarAccountServiceImpl.exportingStudentRequestToExcel(response, session, studRequest,request);
+     }
+
+     @GetMapping("/{userType}/student-request-export/confirm")
+     public void exportStudentRequestToExcelConfirm(@PathVariable("userType")String userType,HttpSession session,
+               HttpServletResponse response,HttpServletRequest request) {
+          List<StudentRequest> studRequest = studentRepository.findAll();
+          admin_RegistrarAccountServiceImpl.exportConfirmation(response, session, studRequest,request);
      }
 
 }

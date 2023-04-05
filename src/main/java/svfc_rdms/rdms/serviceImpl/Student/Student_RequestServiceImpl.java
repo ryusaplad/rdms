@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -132,7 +133,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      @Override
      public ResponseEntity<Object> submitRequest(String requestId,
                Optional<MultipartFile[]> uploadedFiles, String document,
-               Map<String, String> params, HttpSession session) {
+               Map<String, String> params, HttpSession session,HttpServletRequest request) {
 
           try {
 
@@ -212,12 +213,12 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                     if (notificationService.sendRegistrarNotification(title, message, messageType,
                               dateAndTime,
                               status,
-                              user, session)) {
+                              user, session,request)) {
                          studentRepository.save(req);
                          String date = LocalDateTime.now().toString();
                          String logMessage = "User Requested " + document + " User: " + user.getName()
                                    + " is requesting (" + document + ")";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
@@ -301,7 +302,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      }
 
      @Override
-     public Boolean deleteFile(long id) {
+     public Boolean deleteFile(UUID id) {
 
           return null;
      }

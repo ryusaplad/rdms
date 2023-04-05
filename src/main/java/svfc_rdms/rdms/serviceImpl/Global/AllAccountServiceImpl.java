@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
 
      @Override
      public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId,
-               HttpSession session) {
+               HttpSession session,HttpServletRequest request) {
           Optional<Users> optionalUser = userRepository.findById(userId);
 
           PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -66,7 +67,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Password changed for user " + user.getName() + ".";
-                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
                     return new ResponseEntity<>("Password updated.", HttpStatus.OK);
                } else {
                     return new ResponseEntity<>("Old password is incorrect.", HttpStatus.BAD_REQUEST);
@@ -78,7 +79,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
      }
 
      @Override
-     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId, HttpSession session) {
+     public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId, HttpSession session,HttpServletRequest request) {
           try {
 
                Optional<Users> optionalUser = userRepository.findById(userId);
@@ -89,7 +90,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Profile picture changed for user " + user.getName() + ".";
-                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
+                    globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
                     return new ResponseEntity<>("Profile picture successfully cleared", HttpStatus.OK);
 
                } else {
@@ -101,7 +102,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          userRepository.save(user);
                          String date = LocalDateTime.now().toString();
                          String logMessage = "Profile picture changed for user " + user.getName() + ".";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
                          return new ResponseEntity<>("Profile picture successfully changed!", HttpStatus.OK);
                     }
                }
@@ -114,4 +115,5 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     HttpStatus.BAD_REQUEST);
      }
 
+    
 }

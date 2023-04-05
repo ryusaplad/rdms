@@ -3,6 +3,7 @@ package svfc_rdms.rdms.controller.RestControllers;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -35,10 +36,10 @@ public class Student_RestController {
      @PostMapping("/student/request/{document}/sent")
      public ResponseEntity<Object> studRequestSent(@RequestParam("studentId") String id,
                @RequestParam("file[]") Optional<MultipartFile[]> files, @PathVariable String document,
-               @RequestParam Map<String, String> params, HttpServletResponse response, HttpSession session) {
+               @RequestParam Map<String, String> params, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
 
           if (globalService.validatePages("student", response, session)) {
-               return requestServiceImpl.submitRequest(id, files, document, params,session);
+               return requestServiceImpl.submitRequest(id, files, document, params,session,request);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
      }
@@ -66,9 +67,9 @@ public class Student_RestController {
      @GetMapping("/student/requests/resubmit")
      public ResponseEntity<Object> resubmitStudentRequests(
                @RequestParam("userId") long userId, @RequestParam("requestId") long requestId,
-               HttpServletResponse response, HttpSession session) {
+               HttpServletResponse response, HttpSession session,HttpServletRequest request) {
           if (globalService.validatePages("student", response, session)) {
-               return requirementServiceImpl.resubmitRequest("Pending", userId, requestId,session);
+               return requirementServiceImpl.resubmitRequest("Pending", userId, requestId,session,request);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
 

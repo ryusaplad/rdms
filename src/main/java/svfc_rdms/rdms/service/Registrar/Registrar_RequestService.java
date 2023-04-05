@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -21,16 +22,10 @@ public interface Registrar_RequestService {
 
      ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
                Optional<MultipartFile[]> files, Map<String, String> params,
-               HttpSession session);
+               HttpSession session,HttpServletRequest request);
 
      String displayAllFilesByUserId(HttpSession session, Model model);
 
      ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String message, long userId,
-               long requestId, HttpSession session);
-
-
-
-    ResponseEntity<String> exportingStudentRequestToExcel(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq);
-
-    void exportConfirmation(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq);
+               long requestId, HttpSession session,HttpServletRequest request);
 }

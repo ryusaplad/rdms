@@ -82,7 +82,7 @@ public class GlobalController {
                String date = LocalDateTime.now().toString();
                String logMessage = "User Logged Out: " + session.getAttribute("name") + ":"
                          + session.getAttribute("username") + " has logged out";
-               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "low", session);
+               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "low", session,request);
                clearSessionAttributes(session);
                session.invalidate();
           }

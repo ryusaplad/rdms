@@ -2,6 +2,7 @@ package svfc_rdms.rdms.service.Global;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public interface GlobalLogsServices {
             String messageType,
             String dateAndTime,
             String threatLevel,
-            HttpSession session);
+            HttpSession session,HttpServletRequest request);
 
     public List<GlobalLogs> getAllLogs();
 

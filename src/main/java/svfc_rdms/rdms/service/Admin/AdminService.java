@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.model.Documents;
@@ -34,12 +36,14 @@ public interface AdminService {
      List<StudentRequest> displayRequestByStatus(String status);
 
      ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,
-               HttpSession session);
+               HttpSession session,HttpServletRequest request);
 
      ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile, Map<String, String> documentsInfo,
-               HttpSession session);
+               HttpSession session,HttpServletRequest request);
 
      List<Documents> getAllDocuments();
+
+     String displayAllUserFiles(HttpSession session, Model model);
 
      List<Documents> getAllDocumentsByStatus(boolean status);
 

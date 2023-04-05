@@ -14,8 +14,9 @@ import svfc_rdms.rdms.model.Users;
 
 public interface StudentRepository extends JpaRepository<StudentRequest, Long> {
      List<StudentRequest> findAllByRequestBy(Users user);
-     
+
      Optional<StudentRequest> findOneByRequestByAndRequestId(Users user, long requestId);
+
      List<StudentRequest> findAllByRequestByAndRequestId(Users user, long requestId);
 
      @Modifying
@@ -28,7 +29,12 @@ public interface StudentRepository extends JpaRepository<StudentRequest, Long> {
      @Query("UPDATE StudentRequest req SET req.requestStatus =:status WHERE req.requestId =:requestId")
      void studentRequestsResubmit(String status, long requestId);
 
-     @Query("SELECT sr.year, sr.course,sr.requestStatus,COUNT(sr) FROM StudentRequest sr WHERE sr.requestStatus = :status GROUP BY sr.year, sr.course")
-     List<Object[]> findCountAndRequestStatusAndYearAndCourseWhereStatusIs(@Param("status") String requestStatus);
- 
+     @Query("SELECT sr.year, sr.course, sr.requestStatus, COUNT(sr) " +
+               "FROM StudentRequest sr " +
+               "WHERE sr.requestStatus = :status AND SUBSTRING(sr.requestDate, 1, 16) = :date " +
+               "GROUP BY sr.year, sr.course")
+     List<Object[]> findCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(
+               @Param("status") String requestStatus,
+               @Param("date") String requestDate);
+
 }

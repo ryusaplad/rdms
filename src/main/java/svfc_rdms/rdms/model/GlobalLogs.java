@@ -26,6 +26,7 @@ public class GlobalLogs {
     private String messageType; // logging
     private String dateAndTime; // what date created
     private String threatLevel; // low,medium,high,critical
+    private String clientIpAddress;
     private String performedBy;
 
 }

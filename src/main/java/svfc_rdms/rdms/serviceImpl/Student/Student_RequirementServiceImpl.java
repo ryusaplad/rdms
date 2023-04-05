@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
-     public List<UserFiles> getAllFilesByUser(long userId) throws FileNotFoundException {
+     public List<UserFiles> getAllFilesByUser(long userId){
 
           try {
                if (userId != -1) {
@@ -133,7 +134,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      }
 
      @Override
-     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId, HttpSession session) {
+     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId, HttpSession session,HttpServletRequest request) {
           try {
 
                Users user = usersRepository.findByuserId(userId).get();
@@ -152,7 +153,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                     if (notificationService.sendRegistrarNotification(title, message, messageType,
                               dateAndTime,
                               false,
-                              user, session)) {
+                              user, session,request)) {
                          studentRequest.setRequestStatus("Pending");
                          studentRepository.save(studentRequest);
                          String date = LocalDateTime.now().toString();
@@ -160,7 +161,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                                    + studentRequest.getRequestDocument().getTitle() + " User: " + user.getName()
                                    + " resubmit the request of (" + studentRequest.getRequestDocument().getTitle()
                                    + ")";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",
@@ -232,7 +233,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      }
 
      @Override
-     public Boolean deleteFile(long id) {
+     public Boolean deleteFile(UUID id) {
           // TODO Auto-generated method stub
           return null;
      }

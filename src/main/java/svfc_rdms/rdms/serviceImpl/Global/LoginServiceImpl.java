@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -30,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
 
      @Override
      public ResponseEntity<String> login(Users user, String rememberMe, HttpSession session,
-               HttpServletResponse response) {
+               HttpServletResponse response,HttpServletRequest request) {
 
           String hashPassword = loginRepo.findPasswordByUsername(user.getUsername())
                     .map(Users::getPassword)
@@ -70,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
                               String date = LocalDateTime.now().toString();
                               String logMessage = "User Logged In: " + foundUser.getName() + ":" + user.getUsername()
                                         + " has logged in";
-                              globalLogsServiceImpl.saveLog(0, logMessage, "Login_Log", date, "low", session);
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Login_Log", date, "low", session,request);
 
                               return new ResponseEntity<>("success", HttpStatus.OK);
                          } else {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
      private NotificationServiceImpl notificationService;
 
      @Override
-     public ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params) {
+     public ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params,HttpServletRequest request) {
           try {
 
                String requestedDate = globalService.formattedDate();
@@ -102,7 +103,7 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
                               registrarRequest.setRequestStatus("pending");
                               registrarRequest.setRequestDate(requestedDate);
                               if (notificationService.sendNotification(title, notifMessage, messageType, date,
-                                        notifStatus, registrar, teacher,session)) {
+                                        notifStatus, registrar, teacher,session,request)) {
                                    regsRepository.save(registrarRequest);
                                    return new ResponseEntity<>("Success", HttpStatus.OK);
                               }

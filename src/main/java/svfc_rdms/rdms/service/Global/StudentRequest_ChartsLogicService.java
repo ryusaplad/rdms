@@ -4,5 +4,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface StudentRequest_ChartsLogicService {
 
-    ResponseEntity<?> getCountAndStatusAndYearAndCourseWhereStatusIs(String status);
+    ResponseEntity<?> getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(String status,String date);
 }

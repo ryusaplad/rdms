@@ -3,6 +3,7 @@ package svfc_rdms.rdms.service.Registrar;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public interface Registrar_SelfRequest_Service {
       // Requests for Teachers
       Optional<RegistrarRequest> getRegistrarRequest(long requestsId);
 
-      ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params);
+      ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params,HttpServletRequest request);
 
       String displayAllRequests(HttpSession session, Model model);
 

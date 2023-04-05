@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.service.Global;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -18,5 +19,9 @@ public interface GlobalControllerService {
       String formattedDate();
 
       String generateRandomHexColor();
+
+      boolean isValidEmail(String email);
+
+      String getClientIP(HttpServletRequest request);
 
 }

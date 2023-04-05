@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
+import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
@@ -32,11 +36,12 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Admin.AdminService;
+import svfc_rdms.rdms.service.File.FileService;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
 @Service
-public class AdminServicesImpl implements AdminService {
+public class AdminServicesImpl implements AdminService, FileService {
 
      @Autowired
      UsersRepository userRepository;
@@ -48,7 +53,7 @@ public class AdminServicesImpl implements AdminService {
      DocumentRepository docRepo;
 
      @Autowired
-     FileRepository userRepo;
+     FileRepository fileRepository;
 
      @Autowired
      RegsRequestRepository regsRepository;
@@ -82,7 +87,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,
-               HttpSession session) {
+               HttpSession session, HttpServletRequest request) {
 
           try {
 
@@ -126,7 +131,7 @@ public class AdminServicesImpl implements AdminService {
 
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
-                                        false, user, session)) {
+                                        false, user, session, request)) {
                                    notificationCounter++;
 
                               }
@@ -154,7 +159,7 @@ public class AdminServicesImpl implements AdminService {
 
      @Override
      public ResponseEntity<Object> saveDocumentData(long id, MultipartFile multipartFile,
-               Map<String, String> documentsInfo, HttpSession session) {
+               Map<String, String> documentsInfo, HttpSession session, HttpServletRequest request) {
 
           try {
                byte[] image = docRepo.findById(id).get().getImage();
@@ -205,7 +210,7 @@ public class AdminServicesImpl implements AdminService {
 
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
-                                        false, user, session)) {
+                                        false, user, session, request)) {
                                    notificationCounter++;
 
                               }
@@ -259,7 +264,7 @@ public class AdminServicesImpl implements AdminService {
      public Optional<UserFiles> getFileById(String id) {
           String stringValue = id.toString();
           UUID uuidValue = UUID.fromString(stringValue);
-          Optional<UserFiles> fileOptional = userRepo.findById(uuidValue);
+          Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
           if (fileOptional.isPresent()) {
                return fileOptional;
           }
@@ -286,7 +291,7 @@ public class AdminServicesImpl implements AdminService {
           List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
           if (req != null) {
                req.forEach(regRequests -> {
-                    List<UserFiles> regRequestFiles = userRepo.findAllByRegRequestsWith(regRequests);
+                    List<UserFiles> regRequestFiles = fileRepository.findAllByRegRequestsWith(regRequests);
 
                     RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
                               regRequests.getRequestId(),
@@ -431,6 +436,82 @@ public class AdminServicesImpl implements AdminService {
                }
           }
 
+     }
+
+     @Override
+     public boolean saveFiles(UserFiles files) {
+          if (files != null) {
+               fileRepository.save(files);
+               return true;
+          } else {
+               return false;
+          }
+     }
+
+     @Override
+     public List<UserFiles> getAllFiles() {
+          return fileRepository.findAll();
+     }
+
+     @Override
+     public List<UserFiles> getFilesByRequestWith(StudentRequest sr) {
+          // TODO Auto-generated method stub
+          throw new UnsupportedOperationException("Unimplemented method 'getFilesByRequestWith'");
+     }
+
+     @Override
+     public List<UserFiles> getAllFilesByUser(long userId) {
+
+          try {
+               if (userId != -1) {
+                    Users uploader = userRepository.findByuserId(userId).get();
+                    List<UserFiles> studentFiles = fileRepository.findAllByUploadedBy(uploader);
+                    if (!studentFiles.isEmpty()) {
+                         return studentFiles;
+                    }
+
+               }
+
+               return null;
+
+          } catch (IllegalArgumentException e) {
+               throw new UserNotFoundException("Can't display files because, Reason: User " + userId + " not found.",
+                         e);
+          }
+     }
+
+     @Override
+     public Boolean deleteFile(UUID id) {
+          Optional<UserFiles> userFile = fileRepository.findById(id);
+          if (userFile.isPresent()) {
+               fileRepository.delete(userFile.get());
+               return true;
+          }
+          return false;
+     }
+
+     @Override
+     public String displayAllUserFiles(HttpSession session, Model model) {
+          List<UserFiles> getAllFiles = getAllFiles();
+          List<UserFiles_Dto> userFiles = new ArrayList<>();
+
+          if (getAllFiles == null) {
+               model.addAttribute("files", userFiles);
+               return "/admin/admin_all_user_files";
+          }
+          getAllFiles.stream().forEach(file -> {
+               String stringValue = file.getFileId().toString();
+               UUID uuidValue = UUID.fromString(stringValue);
+               String uploadedBy = file.getUploadedBy().getUsername() + ":"
+                         + file.getUploadedBy().getName();
+               userFiles.add(new UserFiles_Dto(
+                         uuidValue, file.getName(), file.getSize(),
+                         file.getStatus(),
+                         file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
+          });
+          
+          model.addAttribute("files", userFiles);
+          return "/admin/admin_all_user_files";
      }
 
 }

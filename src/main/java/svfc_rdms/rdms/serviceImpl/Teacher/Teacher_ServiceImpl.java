@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      @Override
      public ResponseEntity<String> sendRequestToRegistrar(long requestsId, HttpSession session,
                Optional<MultipartFile[]> files,
-               Map<String, String> params) {
+               Map<String, String> params,HttpServletRequest request) {
           List<String> excludedFiles = new ArrayList<>();
           Optional<RegistrarRequest> optionalRegRequest = getRegistrarRequest(requestsId);
 
@@ -182,13 +183,13 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
 
                     if (notificationService.sendNotification(title, notifMessage, messageType, date, notifStatus,
                               uploadedBy,
-                              registrarRequest.getRequestBy(), session)) {
+                              registrarRequest.getRequestBy(), session,request)) {
                          regsRepository.save(registrarRequest);
 
                       
-                         String logMessage = "[" + LocalDateTime.now().toString() + "] Teacher replied "+registrarRequest.getRequestBy().getName()+ " User: " + registrarRequest.getRequestTo().getName()
+                         String logMessage = "Teacher replied "+registrarRequest.getRequestBy().getName()+ " User: " + registrarRequest.getRequestTo().getName()
                                    + " re-sent requested data";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
 
                          return new ResponseEntity<>("Success", HttpStatus.OK);
                     }
@@ -283,7 +284,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      }
 
      @Override
-     public Boolean deleteFile(long id) {
+     public Boolean deleteFile(UUID id) {
 
           return null;
 

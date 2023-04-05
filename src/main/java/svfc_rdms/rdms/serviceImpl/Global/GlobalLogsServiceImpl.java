@@ -3,6 +3,7 @@ package svfc_rdms.rdms.serviceImpl.Global;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
     private GlobalLogsReposistory globalLogsReposistory;
 
     @Autowired
+    private GlobalServiceControllerImpl globalServiceController;
+
+    @Autowired
     private UsersRepository usersRepository;
 
     @Override
@@ -32,7 +36,7 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
             String messageType,
             String dateAndTime,
             String threatLevel,
-            HttpSession session) {
+            HttpSession session,HttpServletRequest request) {
 
         String usernameAndName = "";
         if (!(usernameAndName = session.getAttribute("username").toString()).isEmpty()) {
@@ -41,6 +45,7 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
             logs.setMessageType(messageType);
             logs.setDateAndTime(dateAndTime);
             logs.setThreatLevel(threatLevel);
+            logs.setClientIpAddress(globalServiceController.getClientIP(request));
             Optional<Users> user = usersRepository.findByUsername(usernameAndName);
             if (user.isPresent()) {
                 usernameAndName = user.get().getUsername() + "-" + user.get().getName();

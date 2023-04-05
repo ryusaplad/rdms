@@ -55,15 +55,15 @@ public class Admin_RestController {
      private StudentRequest_ChartsLogicServiceImpl student_RequestChartServiceImpl;
 
      @PostMapping(value = "/admin/saveUserAcc")
-     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session) {
+     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
 
-          return adminAccountService.saveUsersAccount(user, 0, session);
+          return adminAccountService.saveUsersAccount(user, 0, session,request);
      }
 
      @PostMapping(value = "/admin/updateUserAcc")
-     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session) {
+     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
 
-          return adminAccountService.saveUsersAccount(user, 1, session);
+          return adminAccountService.saveUsersAccount(user, 1, session,request);
      }
 
      @GetMapping(value = "/admin/getAllUser")
@@ -125,9 +125,9 @@ public class Admin_RestController {
 
      @PostMapping("/admin/save-document-info")
      public void saveDocument(@RequestParam("image") MultipartFile partFile,
-               @RequestParam Map<String, String> params, HttpSession session) {
+               @RequestParam Map<String, String> params, HttpSession session,HttpServletRequest request) {
 
-          mainService.saveDocumentData(partFile, params, session);
+          mainService.saveDocumentData(partFile, params, session,request);
 
      }
 
@@ -154,9 +154,9 @@ public class Admin_RestController {
      @PostMapping("/admin/update-document-info")
      public void updateDocument(@RequestParam("docId") long id,
                @RequestParam("image") MultipartFile partFile,
-               @RequestParam Map<String, String> params, HttpSession session) {
+               @RequestParam Map<String, String> params, HttpSession session,HttpServletRequest request) {
 
-          mainService.saveDocumentData(id, partFile, params, session);
+          mainService.saveDocumentData(id, partFile, params, session,request);
 
      }
 
@@ -186,7 +186,7 @@ public class Admin_RestController {
      public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request,
                HttpSession session) {
           try {
-               if (adminAccountService.deleteData(userId, session)) {
+               if (adminAccountService.deleteData(userId, session,request)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } catch (Exception e) {
@@ -212,8 +212,8 @@ public class Admin_RestController {
      }
 
      @GetMapping("/admin/chart/data-filter")
-     public ResponseEntity<?> fetchFilterChartData(@RequestParam("s") String status) {
-          return student_RequestChartServiceImpl.getCountAndStatusAndYearAndCourseWhereStatusIs(status);
+     public ResponseEntity<?> fetchFilterChartData(@RequestParam("s") String status,@RequestParam("d") String date) {
+          return student_RequestChartServiceImpl.getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(status,date);
      }
 
 }

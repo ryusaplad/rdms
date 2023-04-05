@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -133,7 +134,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           String formattedDate = myDateObj.format(myFormatObj);
           return formattedDate;
      }
-
+     @Override
      public String generateRandomHexColor() {
           Random random = new Random();
 
@@ -151,11 +152,20 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           }
           return String.format("#%02x%02x%02x", red, green, blue);
      }
-
+     @Override
      public boolean isValidEmail(String email) {
           String emailRegex = "^[a-zA-Z0-9_+&-]+(?:\\." + "[a-zA-Z0-9_+&-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
                     + "A-Z]{2,7}$";
           Pattern pattern = Pattern.compile(emailRegex);
           return pattern.matcher(email).matches();
      }
+     @Override
+     public String getClientIP(HttpServletRequest request) {
+          String xForwardedForHeader = request.getHeader("X-Forwarded-For");
+          if (xForwardedForHeader == null) {
+              return request.getRemoteAddr();
+          } else {
+              return xForwardedForHeader.split(",")[0].trim();
+          }
+      }
 }

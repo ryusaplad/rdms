@@ -26,7 +26,7 @@ public class LoginRestController {
                HttpSession session,
                HttpServletResponse response, HttpServletRequest request) {
 
-          return loginService.login(user, rememberMe, session, response);
+          return loginService.login(user, rememberMe, session, response,request);
      }
 
 }

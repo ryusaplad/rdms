@@ -2,6 +2,7 @@ package svfc_rdms.rdms.service.File;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
@@ -17,7 +18,7 @@ public interface FileService {
 
      List<UserFiles> getAllFilesByUser(long userId);
 
-     Boolean deleteFile(long id);
+     Boolean deleteFile(UUID id);
 
 
 }
