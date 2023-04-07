@@ -1,0 +1,8 @@
+{
+    "java.compile.nullAnalysis.mode": "disabled",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "java.configuration.updateBuildConfiguration": "automatic",
+    
+}
