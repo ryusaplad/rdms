@@ -9,12 +9,12 @@ public enum College_Courses {
     BSA("Bachelor of Science in Accountancy"),
     BSHM("Bachelor of Science in Hospitality Management"),
     BSIT("Bachelor of Science in Information Technology"),
-    BSEd_Eng("Bachelor of Secondary Education (English)"),
-    BSEd_Fil("Bachelor of Secondary Education (Filipino)"),
-    BSEd_Math("Bachelor of Secondary Education (Math)"),
-    BSEd_Sci("Bachelor of Secondary Education (Science)"),
-    BSEd_SocSci("Bachelor of Secondary Education (Social Studies)"),
-    BSEd_Val("Bachelor of Secondary Education (Values)"),
+    BSEdEng("Bachelor of Secondary Education (English)"),
+    BSEdFil("Bachelor of Secondary Education (Filipino)"),
+    BSEdMath("Bachelor of Secondary Education (Math)"),
+    BSEdSci("Bachelor of Secondary Education (Science)"),
+    BSEdSocSci("Bachelor of Secondary Education (Social Studies)"),
+    BSEdVal("Bachelor of Secondary Education (Values)"),
     BTVTEd("Bachelor of Technical-Vocational Teacher Education");
 
     private final String degree;

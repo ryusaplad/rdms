@@ -31,8 +31,10 @@ public class RegistrarController {
      private Reg_RequestServiceImpl regs_RequestService;
 
      @GetMapping(value = "/registrar/dashboard")
-     public String registrarDashboard(HttpSession session, HttpServletResponse response) {
+     public String registrarDashboard(HttpSession session, HttpServletResponse response,Model model) {
           if (globalService.validatePages("registrar", response, session)) {
+               model.addAttribute("page", "dashboard");
+               model.addAttribute("pageTitle", "Dashboard");
                return "/registrar/reg";
           }
           return "redirect:/";
@@ -87,6 +89,7 @@ public class RegistrarController {
      public String displayMyFiles(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("registrar", response, session)) {
+               
                return regs_RequestService.displayAllFilesByUserId(session, model);
           }
           return "redirect:/";
@@ -95,9 +98,12 @@ public class RegistrarController {
 
      @GetMapping("/registrar/documents-list")
      public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
-          model.addAttribute("documentsList", mainService.getAllDocuments());
+          
           if (globalService.validatePages("registrar", response, session)) {
-               return "/registrar/documents-list";
+               model.addAttribute("documentsList", mainService.getAllDocuments());
+               model.addAttribute("pageTitle", "Documents");
+               model.addAttribute("page", "documents");
+               return "/registrar/reg";
           }
           return "redirect:/";
      }

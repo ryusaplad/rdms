@@ -15331,6 +15331,8 @@ label {
   width: 100%;
 }
 
+
+
 /* loading */
 .loader {
   display: inline-block;
@@ -15494,7 +15496,6 @@ span:nth-child(5) {
 #clearImage {
   margin-right: 5px;
 }
-
 .saveImageFooter .btn-group:last-child {
   margin-right: 0;
 }

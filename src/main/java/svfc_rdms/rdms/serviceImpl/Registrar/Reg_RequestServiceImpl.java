@@ -99,7 +99,8 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
      @Override
      public String displayAllFilesByUserId(HttpSession session, Model model) {
-
+            model.addAttribute("page", "myfiles");
+          model.addAttribute("pageTitle", "My Files");
           Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
           if (user.getUserId() != -1) {
 
@@ -108,7 +109,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                if (getAllFiles == null) {
                     model.addAttribute("files", userFiles);
-                    return "/registrar/myFiles-list";
+                    return "/registrar/reg";
                }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
@@ -121,7 +122,8 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
                });
                model.addAttribute("files", userFiles);
-               return "/registrar/myFiles-list";
+               
+               return "/registrar/reg";
 
           }
 

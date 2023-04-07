@@ -40,10 +40,11 @@ public class StudentController {
      private DocumentRepository docRepo;
 
      @GetMapping(value = "/student/dashboard")
-     public String studentDashboard(HttpSession session, HttpServletResponse response) {
+     public String studentDashboard(HttpSession session, HttpServletResponse response,Model model) {
 
           if (globalService.validatePages("student", response, session)) {
-
+               model.addAttribute("page", "dashboard");
+               model.addAttribute("pageTitle", "Dashboard");
                return "/student/stud";
           }
           return "redirect:/";
@@ -56,7 +57,9 @@ public class StudentController {
 
                List<Documents> documentList = mainService.getAllDocumentsByStatus(true);
                model.addAttribute("documentsCards", documentList);
-               return "/student/student-request-cards";
+               model.addAttribute("page", "doc_cards");
+               model.addAttribute("pageTitle", "Documents");
+               return "/student/stud";
           }
           return "redirect:/";
      }
@@ -74,7 +77,7 @@ public class StudentController {
      public String myDocuments(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("student", response, session)) {
-
+              
                return requirementServiceImpl.displayAllFilesByUserId(session, model);
 
           }

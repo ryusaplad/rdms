@@ -53,7 +53,6 @@ public class AdminController {
      @Autowired
      private GlobalLogsServiceImpl globalLogsService;
 
-   
      @GetMapping("/admin/dashboard")
      public String dashboard_View(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
@@ -67,7 +66,10 @@ public class AdminController {
                model.addAttribute("totalDeletedTeach",
                          mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
 
-               return "/admin/admin_dashboard";
+               model.addAttribute("page", "dashboard");
+               model.addAttribute("pageTitle", "Dashboard");
+
+               return "/admin/admin";
           }
           return "redirect:/";
      }
@@ -103,6 +105,8 @@ public class AdminController {
                          showType = true;
 
                     }
+                    model.addAttribute("page", "account_adding");
+                    model.addAttribute("pageTitle", "Accounts");
                     model.addAttribute("title", accType + " Accounts");
                     model.addAttribute("userIdFormat", idFormat);
                     model.addAttribute("users", new Users());
@@ -113,7 +117,7 @@ public class AdminController {
                     return "redirect:/";
                }
 
-               return "/admin/admin_view_accounts";
+               return "/admin/admin";
           }
           return "redirect:/";
      }
@@ -123,6 +127,8 @@ public class AdminController {
      public String deletedAccounts_View(@PathVariable String userType, HttpServletResponse response,
                HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
+               model.addAttribute("page", "account_adding");
+               model.addAttribute("pageTitle", "Accounts");
                String title = "";
                boolean hideToggle = false;
                String dataStatus = "Temporary";
@@ -147,10 +153,11 @@ public class AdminController {
                     model.addAttribute("hide", hideToggle);
                     model.addAttribute("users", null);
                     model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
+                    
                } else {
-                    return "redirect:" + "/admin/" + userType + "/deleted-accounts?error=Invalid User Type";
+                    return "redirect:" + "/admin/" + userType + "/admin?error=Invalid User Type";
                }
-               return "/admin/admin_view_accounts";
+               return "/admin/admin";
           }
           return "redirect:/";
      }
@@ -158,7 +165,9 @@ public class AdminController {
      @GetMapping("/admin/logs")
      public String viewAdminLogs(Model model) {
           model.addAttribute("globalLogs", globalLogsService.getAllLogs());
-          return "/admin/admin_global_logs";
+               model.addAttribute("page", "globallogs");
+               model.addAttribute("pageTitle", "Global Logs");
+          return "/admin/admin";
      }
 
      @GetMapping(value = "/admin/user/{status}")
@@ -212,9 +221,12 @@ public class AdminController {
 
      @GetMapping("/admin/documents-list")
      public String requestForAdmin(HttpServletResponse response, HttpSession session, Model model) {
-          model.addAttribute("documentsList", mainService.getAllDocuments());
+       
           if (globalService.validatePages("school_admin", response, session)) {
-               return "/admin/admin_requests_cards";
+               model.addAttribute("documentsList", mainService.getAllDocuments());
+               model.addAttribute("page", "documents");
+               model.addAttribute("pageTitle", "Documents");
+               return "/admin/admin";
           }
           return "redirect:/";
      }
@@ -276,10 +288,12 @@ public class AdminController {
                                         studReq.getRequestStatus(), studReq.getReleaseDate(), studReq.getManageBy()));
 
                }
-
+               model.addAttribute("pageTitle", "Student Requests");
+               model.addAttribute("page", "student_request");
                model.addAttribute("studentRequests", storeStudentRequest);
+               
 
-               return "/admin/admin_student_all_requests";
+               return "/admin/admin";
           }
           return "redirect:/";
 
@@ -305,7 +319,9 @@ public class AdminController {
                     });
 
                     model.addAttribute("registrar_requests", filteredRequests);
-                    return "/admin/admin_registrar_all_requests";
+                    model.addAttribute("pageTitle", "Registrar Requests");
+                    model.addAttribute("page", "registrar_request");
+                    return "/admin/admin";
                }
           }
           return "redirect:/";
@@ -315,7 +331,9 @@ public class AdminController {
      @GetMapping("/admin/settings")
      public String settingViews(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-               return "/admin/admin_settings";
+               model.addAttribute("page", "settings");
+               model.addAttribute("pageTitle", "Settings");
+               return "/admin/admin";
           }
           return "redirect:/";
 

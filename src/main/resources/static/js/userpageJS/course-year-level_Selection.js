@@ -75,31 +75,31 @@ $(document).ready(function () {
 
             courseSelectHtml.append(`<div class="mt-2 form-floating">
             <select id="course" name="course" class="form-select">
-            <option value="1">Accountancy and Business Management (ABM)</option>
+            <option value="ABM">Accountancy and Business Management (ABM)</option>
 <option value="HUMSS">Humanities and Social Sciences (HUMSS)</option>
 <option value="STEM">Science, Technology, Engineering &amp; Mathematics (STEM)
 </option>
-<option value="gas-ncii">General Academic Strand</option>
+<option value="gasncii">General Academic Strand</option>
 <option value="sports">Sports</option>
-<option value="bhc-ncii">Beauty/Hair Care (NCII)</option>
-<option value="bpp-ncii">Bread Pastry Production (NCII)</option>
-<option value="cookery-ncii">Cookery (NCII)</option>
-<option value="dressmaking-ncii">Dressmaking (NCII)</option>
-<option value="fbs-ncii">Food and Beverage Services (NCII)</option>
-<option value="fos-ncii">Front Office Services (NCII)</option>
-<option value="hair-ncii">Hairdressing (NCII)</option>
-<option value="house-ncii">Housekeeping (NCII)</option>
-<option value="lgs-ncii">Local Guiding Services (NCII)</option>
-<option value="tailoring-ncii">Tailoring (NCII)</option>
-<option value="tourism-ncii">Tourism Promotion Services (NCII)</option>
-<option value="wellness-ncii">Wellness Massage (NCII)</option>
-<option value="animation-ncii">Animation (NCII)</option>
-<option value="computer-hardware-ncii">Computer Hardware Servicing (NCII)</option>
-<option value="comprog-ncii">Computer Programming (NCII)</option>
-<option value="auto-ncii">Automotive Servicing (NCII)</option>
-<option value="ces-ncii">Consumer Electronics Servicing (NCII)</option>
-<option value="ei-ncii">Electrical Installation Maintenance (NCII)</option>
-<option value="is-ncii">International Subject (IS)</option>
+<option value="bhcncii">Beauty/Hair Care (NCII)</option>
+<option value="bppncii">Bread Pastry Production (NCII)</option>
+<option value="cookeryncii">Cookery (NCII)</option>
+<option value="dressmakingncii">Dressmaking (NCII)</option>
+<option value="fbsncii">Food and Beverage Services (NCII)</option>
+<option value="fosncii">Front Office Services (NCII)</option>
+<option value="hairncii">Hairdressing (NCII)</option>
+<option value="housencii">Housekeeping (NCII)</option>
+<option value="lgsncii">Local Guiding Services (NCII)</option>
+<option value="tailoringncii">Tailoring (NCII)</option>
+<option value="tourismncii">Tourism Promotion Services (NCII)</option>
+<option value="wellnessncii">Wellness Massage (NCII)</option>
+<option value="animationncii">Animation (NCII)</option>
+<option value="computerhardwarencii">Computer Hardware Servicing (NCII)</option>
+<option value="comprogncii">Computer Programming (NCII)</option>
+<option value="autoncii">Automotive Servicing (NCII)</option>
+<option value="cesncii">Consumer Electronics Servicing (NCII)</option>
+<option value="eincii">Electrical Installation Maintenance (NCII)</option>
+<option value="isncii">International Subject (IS)</option>
             </select>
             <label for="course">Courses
                 <span class="badge badge-secondary text-danger">*</span>
@@ -140,13 +140,13 @@ $(document).ready(function () {
             <option value="BSA">Bachelor of Science in Accountancy</option>
             <option value="BSHM">Bachelor of Science in Hospitality Management</option>
             <option value="BSIT">Bachelor of Science in Information Technology</option>
-            <option value="BSEd-Eng">Bachelor of Secondary Education (English)</option>
-            <option value="BSEd-Fil">Bachelor of Secondary Education (Filipino)</option>
-            <option value="BSEd-Math">Bachelor of Secondary Education (Math)</option>
-            <option value="BSEd-Sci">Bachelor of Secondary Education (Science)</option>
-            <option value="BSEd-SocSci">Bachelor of Secondary Education (Social Studies)</option>
-            <option value="BSEd-Val">Bachelor of Secondary Education (Values)</option>
-            <option value="BTVTEd">Bachelor of Technical-Vocational Teacher Education</option>
+            <option value="BSEdEng">Bachelor of Secondary Education (English)</option>
+            <option value="BSEdFil">Bachelor of Secondary Education (Filipino)</option>
+            <option value="BSEdMath">Bachelor of Secondary Education (Math)</option>
+            <option value="BSEdSci">Bachelor of Secondary Education (Science)</option>
+            <option value="BSEdSocSci">Bachelor of Secondary Education (Social Studies)</option>
+            <option value="BSEdVal">Bachelor of Secondary Education (Values)</option>
+            <option value="BTVTEd">Bachelor of Technical Vocational Teacher Education</option>
             </select>
             <label for="course">Courses
                 <span class="badge badge-secondary text-danger">*</span>

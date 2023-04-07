@@ -1,7 +1,5 @@
 package svfc_rdms.rdms.service.Admin;
 
-import java.io.File;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,7 +15,5 @@ public interface Admin_DatabaseService {
                         String username, String password,
                         String backupPath);
 
-        File backUpDatabase(String host,
-                        String port, String dbName,
-                        String username, String password);
+         byte[] backUpDatabase(String host, String port, String dbName, String username, String password);
 }

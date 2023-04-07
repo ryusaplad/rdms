@@ -1,11 +1,8 @@
 package svfc_rdms.rdms.serviceImpl.Admin;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,35 +53,28 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
     }
 
     @Override
-    public File backUpDatabase(String host, String port, String dbName, String username, String password) {
-        try {
-            LocalDateTime dateNow = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss_EEEE");
-            String backupFileName = "(" + dateNow.format(formatter) + ")backup_sql_rdms.sql";
+public byte[] backUpDatabase(String host, String port, String dbName, String username, String password) {
+    try {
+        String[] command = new String[] { "mysqldump", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
+                dbName };
 
-            String[] command = new String[] { "mysqldump", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
-                    dbName };
+        Process process = Runtime.getRuntime().exec(command);
+        InputStream inputStream = process.getInputStream();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-            Process process = Runtime.getRuntime().exec(command);
-            InputStream inputStream = process.getInputStream();
-            File backupFile = new File(backupFileName);
-            FileOutputStream outputStream = new FileOutputStream(backupFile);
-
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            inputStream.close();
-            outputStream.close();
-            process.waitFor();
-
-            return backupFile;
-        } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage());
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
         }
 
-    }
+        inputStream.close();
+        outputStream.close();
+        process.waitFor();
 
+        return outputStream.toByteArray();
+    } catch (Exception e) {
+        throw new ApiRequestException(e.getMessage());
+    }
+}
 }

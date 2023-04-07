@@ -23,16 +23,22 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
     private StudentRepository studentReqRepository;
 
     @Override
-    public ResponseEntity<?> getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(String status,String date) {
-        List<Object[]> data = studentReqRepository.findCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(status,date);
+    public ResponseEntity<?> getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(String status,
+            String date) {
+        List<Object[]> data = studentReqRepository
+                .findCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(status, date);
         List<Object[]> modifiedData = new ArrayList<>();
-    
+
         for (Object[] obj : data) {
-            Object[] newObj = new Object[obj.length+2]; // Create new array with increased size
+            Object[] newObj = new Object[obj.length + 2]; // Create new array with increased size
             System.arraycopy(obj, 0, newObj, 0, obj.length); // Copy existing elements to new array
-            
+
             // Check if obj[1] is equal to any of the enum values
-            String course = obj[1].toString();
+            String course = obj[1].toString().replaceAll("\\s", "");
+            String grade = obj[0].toString().replaceAll("\\s", "");
+
+         
+
             boolean found = false;
             for (College_Courses cc : College_Courses.values()) {
                 if (course.equalsIgnoreCase(cc.name())) {
@@ -54,7 +60,8 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
             }
             if (!found) {
                 for (PreSchool p : PreSchool.values()) {
-                    if (course.equalsIgnoreCase(p.name())) {
+                    if (grade.equalsIgnoreCase(p.name())) {
+                        newObj[1]=grade;
                         newObj[4] = "Preschool";
                         newObj[5] = p.getGrade();
                         found = true;
@@ -64,7 +71,8 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
             }
             if (!found) {
                 for (HighSchool h : HighSchool.values()) {
-                    if (course.equalsIgnoreCase(h.name())) {
+                    if (grade.equalsIgnoreCase(h.name())) {
+                        newObj[1]=grade;
                         newObj[4] = "Highschool";
                         newObj[5] = h.getGrade();
                         found = true;
@@ -75,7 +83,7 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
             if (!found) {
                 newObj[4] = "N/A";
             }
-           
+
             modifiedData.add(newObj);
         }
         if (modifiedData.isEmpty()) {
@@ -83,7 +91,5 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
         }
         return new ResponseEntity<>(modifiedData, HttpStatus.OK);
     }
-    
-    
 
 }

@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
-import svfc_rdms.rdms.ExceptionHandler.FileNotFoundException;
 import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.StudentRequest;
@@ -178,7 +177,8 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
      @Override
      public String displayAllFilesByUserId(HttpSession session, Model model) {
-
+          model.addAttribute("page", "documents");
+          model.addAttribute("pageTitle", "My Documents");
           Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
           if (user.getUserId() != -1) {
 
@@ -187,7 +187,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
                if (getAllFiles == null) {
                     model.addAttribute("files", userFiles);
-                    return "/student/documents-list";
+                    return "/student/stud";
                }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
@@ -200,7 +200,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                               file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
                });
                model.addAttribute("files", userFiles);
-               return "/student/documents-list";
+               return "/student/stud";
 
           }
 

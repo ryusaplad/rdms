@@ -1,7 +1,9 @@
 package svfc_rdms.rdms.controller.RestControllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,14 +62,17 @@ public class Admin_DatabaseBackupAndRestoreController {
 
     @GetMapping("/download")
     public ResponseEntity<?> backUpDatabase() {
-
+    
         try {
-            File backupFile = adminDataBaseService.backUpDatabase(HOST, PORT, DB_NAME, USERNAME, PASSWORD);
+            byte[] backupBytes = adminDataBaseService.backUpDatabase(HOST, PORT, DB_NAME, USERNAME, PASSWORD);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", backupFile.getName());
-            headers.setContentLength(backupFile.length());
-            InputStreamResource isr = new InputStreamResource(new FileInputStream(backupFile));
+            LocalDateTime dateNow = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss_EEEE");
+            String backupFileName = "(" + dateNow.format(formatter) + ")backup_database_rdms.sql";
+            headers.setContentDispositionFormData("attachment", backupFileName);
+            headers.setContentLength(backupBytes.length);
+            InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(backupBytes));
             return new ResponseEntity<>(isr, headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to backup database, Please try again!", HttpStatus.BAD_REQUEST);
