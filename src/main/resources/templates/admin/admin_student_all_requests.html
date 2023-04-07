@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Admin - Student Requests</title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            th:href="@{images/svdfc-logo.png}"
+        >
+        <!-- Custom CSS -->
+        <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
+        <link th:href="@{/css/croppie.css}" rel="stylesheet">
+        <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
+        <style></style>
+    </head>
+    <body>
+        <preloader th:replace="studennt/templates :: preloader"></preloader>
+        <!-- ============================================================== -->
+        <!-- Main wrapper-->
+        <!-- ============================================================== -->
+        <div
+            id="main-wrapper"
+            data-layout="vertical"
+            data-navbarbg="skin5"
+            data-sidebartype="full"
+            data-sidebar-position="absolute"
+            data-header-position="absolute"
+            data-boxed-layout="full"
+            class=""
+        >
+            <header th:replace="student/templates :: header"></header>
+            <aside th:replace="student/templates :: aside"></aside>
+            <!-- Page wrapper  -->
+            <!-- ============================================================== -->
+           
+        </div>
+        <div class="modalView"></div>
+        <script type="text/javascript" th:src="@{/js/a_libraries/jquery.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/croppie.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/bootstrap.bundle.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/perfect-scrollbar.jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/waves.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/sidebarmenu.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/custom.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
+        
+        <script>
+          $('#zero_config').DataTable();
+        </script>
+    </body>
+</html>
