@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,8 +53,9 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      @Autowired
      private GlobalLogsServiceImpl globalLogsServiceImpl;
 
+
      @Override
-     public List<UserFiles> getAllFilesByUser(long userId){
+     public List<UserFiles> getAllFilesByUser(long userId) {
 
           try {
                if (userId != -1) {
@@ -133,7 +135,8 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      }
 
      @Override
-     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId, HttpSession session,HttpServletRequest request) {
+     public ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId, HttpSession session,
+               HttpServletRequest request) {
           try {
 
                Users user = usersRepository.findByuserId(userId).get();
@@ -152,15 +155,17 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                     if (notificationService.sendRegistrarNotification(title, message, messageType,
                               dateAndTime,
                               false,
-                              user, session,request)) {
+                              user, session, request)) {
                          studentRequest.setRequestStatus("Pending");
                          studentRepository.save(studentRequest);
+
                          String date = LocalDateTime.now().toString();
                          String logMessage = "User Resubmit a request "
                                    + studentRequest.getRequestDocument().getTitle() + " User: " + user.getName()
                                    + " resubmit the request of (" + studentRequest.getRequestDocument().getTitle()
                                    + ")";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
+                                   globalService.sendTopic("/topic/student/requests", "OK");
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",

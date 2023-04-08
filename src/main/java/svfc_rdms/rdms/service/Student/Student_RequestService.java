@@ -17,13 +17,14 @@ import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 
 public interface Student_RequestService {
-     String displayStudentRequests(Model model, HttpSession session);
 
      ResponseEntity<Object> submitRequest(String id,
                Optional<MultipartFile[]> files, String document,
-               Map<String, String> params,HttpSession session,HttpServletRequest request);
+               Map<String, String> params, HttpSession session, HttpServletRequest request);
 
      Optional<Documents> findDocumentByTitle(String title);
+
+     ResponseEntity<Object> loadAllStudentRequest(HttpSession session);
 
      List<StudentRequest> displayAllRequestByStudent(Users user);
 

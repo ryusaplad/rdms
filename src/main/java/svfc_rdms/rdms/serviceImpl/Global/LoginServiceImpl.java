@@ -72,7 +72,7 @@ public class LoginServiceImpl implements LoginService {
                               String logMessage = "User Logged In: " + foundUser.getName() + ":" + user.getUsername()
                                         + " has logged in";
                               globalLogsServiceImpl.saveLog(0, logMessage, "Login_Log", date, "low", session,request);
-
+                              
                               return new ResponseEntity<>("success", HttpStatus.OK);
                          } else {
                               return new ResponseEntity<>("Sorry, This is account is not currently Active.",

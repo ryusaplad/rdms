@@ -1,381 +1,401 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Teacher - Dashboard</title>
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/svdfc-logo.png}">
-    <!-- Custom CSS -->
-    <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
-    <link th:href="@{/css/croppie.css}" rel="stylesheet">
-</head>
-
-<body>
-    <!-- ============================================================== -->
-    <!-- Preloader-->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Teacher - Dashboard</title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            th:href="@{/images/svdfc-logo.png}"
+        >
+        <!-- Custom CSS -->
+        <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
+        <link th:href="@{/css/croppie.css}" rel="stylesheet">
+    </head>
+    <body>
+        <!-- ============================================================== -->
+        <!-- Preloader-->
+        <!-- ============================================================== -->
+        <div class="preloader">
+            <div class="lds-ripple">
+                <div class="lds-pos"></div>
+                <div class="lds-pos"></div>
+            </div>
         </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper-->
-    <!-- ============================================================== -->
-    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
-        data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full" class="">
         <!-- ============================================================== -->
-        <!-- Topbar header-->
+        <!-- Main wrapper-->
         <!-- ============================================================== -->
-        <header class="topbar" data-navbarbg="skin5">
-            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-                <div class="navbar-header" data-logobg="skin5">
-                    <!-- ============================================================== -->
-                    <!-- Logo -->
-                    <!-- ============================================================== -->
-                    <a class="navbar-brand" href="/teacher/dashboard">
-                        <b class="logo-icon">
-                            <img height="50px" th:src="@{/images/svdfc-logo.png}" alt="homepage"
-                                class="img-responsive light-logo">
-                        </b>
-                        <span class="logo-text text-dark logoText">
-                            SVFC - RDMS
-                        </span>
-                    </a>
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Toggle which is visible on mobile only -->
-                    <!-- ============================================================== -->
-                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
-                        <i class="ti-menu ti-close"></i>
-                    </a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-start me-auto">
-                        <li class="nav-item d-none d-lg-block">
-                            <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
-                                data-sidebartype="mini-sidebar">
-                                <i class="mdi mdi-menu font-24"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- Right side toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-end">
-
+        <div
+            id="main-wrapper"
+            data-layout="vertical"
+            data-navbarbg="skin5"
+            data-sidebartype="full"
+            data-sidebar-position="absolute"
+            data-header-position="absolute"
+            data-boxed-layout="full"
+            class=""
+        >
+            <!-- ============================================================== -->
+            <!-- Topbar header-->
+            <!-- ============================================================== -->
+            <header class="topbar" data-navbarbg="skin5">
+                <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                    <div class="navbar-header" data-logobg="skin5">
                         <!-- ============================================================== -->
-                        <!-- User profile and search -->
+                        <!-- Logo -->
                         <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#"
-                                id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img id="profilePicture" src="../../assets/images/users/1.jpg" alt="user"
-                                    class="rounded-circle" width="31">
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end user-dd animated"
-                                aria-labelledby="navbarDropdown">
-                                <hr class="devider">
-                                <div th:if="${#session.getAttribute('username')!=null}">
-                                    <label th:with="name=${#session.getAttribute('name')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">
-                                        Name:
-                                        <strong id="nameVal">[[${name}]]</strong>
-                                    </label>
-                                    <label th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">
-                                        Account
+                        <a class="navbar-brand" href="/teacher/dashboard">
+                            <b class="logo-icon">
+                                <img
+                                    height="50px"
+                                    th:src="@{/images/svdfc-logo.png}"
+                                    alt="homepage"
+                                    class="img-responsive light-logo"
+                                >
+                            </b>
+                            <span class="logo-text text-dark logoText">
+                                SVFC - RDMS
+                            </span>
+                        </a>
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Toggle which is visible on mobile only -->
+                        <!-- ============================================================== -->
+                        <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                            <i class="ti-menu ti-close"></i>
+                        </a>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                        <!-- ============================================================== -->
+                        <!-- toggle and nav items -->
+                        <!-- ============================================================== -->
+                        <ul class="navbar-nav float-start me-auto">
+                            <li class="nav-item d-none d-lg-block">
+                                <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar">
+                                    <i class="mdi mdi-menu font-24"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- ============================================================== -->
+                        <!-- Right side toggle and nav items -->
+                        <!-- ============================================================== -->
+                        <ul class="navbar-nav float-end">
+                            <!-- ============================================================== -->
+                            <!-- User profile and search -->
+                            <!-- ============================================================== -->
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <img
+                                        id="profilePicture"
+                                        src="../../assets/images/users/1.jpg"
+                                        alt="user"
+                                        class="rounded-circle"
+                                        width="31"
+                                    >
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                                    <hr class="devider">
+                                    <div th:if="${#session.getAttribute('username')!=null}">
+                                        <label th:with="name=${#session.getAttribute('name')}" class="dropdown-item bg-success border border-1 b-2 text-white">
+                                            Name:
+                                            <strong id="nameVal">[[${name}]]</strong>
+                                        </label>
+                                        <label th:with="type=${#session.getAttribute('accountType')}" class="dropdown-item bg-primary border  border-1 b-2 text-white">
+                                            Account
                                         Type
                                         :[[${type}]]
-                                    </label>
-                                </div>
-
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Password
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Profile Picture
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout">
-                                    <i class="fa fa-power-off me-1 ms-1"></i>
-                                    Logout
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            </ul>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                    </ul>
-                </div>
-            </nav>
-
-            <rside class="sidebar">
-                <button class="rightSidebarToggle btn">
-                    <i id="btnIcon" class="fas fa-angle-left text-white"></i>
-                </button>
-
-                <div class="row" id="r_row1">
-                    <div class="col-7" style="width:50.333333% !important;margin-top: -10px ;
-                         margin-bottom: 50px;">
-                        <div class="card  ">
-                            <div class="card-body">
-
-                                <div class="dropdown">
-                                    <a class="nav-link  text-muted waves-effect waves-dark pro-pic" href="#"
-                                        id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <img th:src="@{/images/userImage.png}" alt="user" class="rounded-circle"
-                                            width="31">
+                                        </label>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Password
                                     </a>
-                                    <span th:with="name=${#session.getAttribute('name')}"
-                                        class="dropdown-item bg-success border border-1 b-2 text-white">
-                                        Name:
-                                        <strong id="nameVal">[[${name}]]</strong>
-                                    </span>
-                                    <span th:with="type=${#session.getAttribute('accountType')}"
-                                        class="dropdown-item bg-primary border  border-1 b-2 text-white">Account
-                                        Type
-                                        :[[${type}]]</sp>
-
-                                        <div class="dropdown-menu">
-
-                                            <a class="dropdown-item changeAccountPassword" href="javascript:void(0)"><i
-                                                    class="ti-settings me-1 ms-1"></i>
-                                                Change Password</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item changeAccountProfile" href="javascript:void(0)"><i
-                                                    class="ti-settings me-1 ms-1"></i>
-                                                Change Profile Picture</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="/logout"><i
-                                                    class="fa fa-power-off me-1 ms-1"></i>
-                                                Logout</a>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-7" style="width:50.333333% !important">
-                        <div class="card  dateTimeCard">
-                            <div class="card-body">
-
-                                <div class="todo-widget text-center" style="height:20px;">
-                                    <h4 class="text-danger" id="dayValueRightBar">Today is Monday</h4>
-                                    <span class="text-danger" id="dateValueRightBar">00/00/2022</span>
-                                </div>
-                                <div class="todo-widget text-black-50 text-center" style="height:20px;">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-7" style="width:50.333333% !important">
-                        <div class="card ">
-                            <div class="card-body">
-                                <h4 class="card-title ">Notifications</h4>
-                                <hr class="hr">
-                                <div class="notificationCard">
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle">
-                                                <i class="ti-check-box"></i>
-                                            </span>
-                                            <div class="ms-2 mainNotificationInfo">
-                                                <h5 class="mb-0 title">Requests Status</h5>
-                                                <span class="description"></span>
-                                            </div>
-                                        </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Profile Picture
                                     </a>
-                                    <hr class="hr">
-                                </div>
-                            </div>
-                        </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/logout">
+                                        <i class="fa fa-power-off me-1 ms-1"></i>
+                                        Logout
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                </ul>
+                            </li>
+                            <!-- ============================================================== -->
+                            <!-- User profile and search -->
+                            <!-- ============================================================== -->
+                        </ul>
                     </div>
-                </div>
-            </rside>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar-->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/teacher/dashboard"
-                                aria-expanded="false">
-                                <i class="fas fa-home"></i>
-                                <span class="hide-menu">Home</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="/teacher/registrar-requests" class="sidebar-link">
-                                <i class="fas fa-table"></i>
-                                <span class="hide-menu">
-                                    View Requests
-                                </span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a href="/teacher/documents" class="sidebar-link">
-                                <i class="fas fa-folder"></i>
-                                <span class="hide-menu">
-                                    My Documents
-                                </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link notifLink">
-                                <i class=" fas fa-bell"></i>
-                                <span class="hide-menu">
-                                    Notifications
-                                </span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item ">
-                            <a href="/logout" class="sidebar-link">
-                                <i class="fas fa-power-off"></i>
-                                <span class="hide-menu">
-                                    Logout
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
                 </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar-->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
+                <rside class="sidebar">
+                    <button class="rightSidebarToggle btn">
+                        <i id="btnIcon" class="fas fa-angle-left text-white"></i>
+                    </button>
+                    <div class="row" id="r_row1">
+                        <div class="col-7" style="width:50.333333% !important;margin-top: -10px ;
+                         margin-bottom: 50px;">
+                            <div class="card  ">
+                                <div class="card-body">
+                                    <div class="dropdown">
+                                        <a
+                                            class="nav-link  text-muted waves-effect waves-dark pro-pic"
+                                            href="#"
+                                            id="navbarDropdown"
+                                            role="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            <img
+                                                th:src="@{/images/userImage.png}"
+                                                alt="user"
+                                                class="rounded-circle"
+                                                width="31"
+                                            >
+                                        </a>
+                                        <span th:with="name=${#session.getAttribute('name')}" class="dropdown-item bg-success border border-1 b-2 text-white">
+                                            Name:
+                                            <strong id="nameVal">[[${name}]]</strong>
+                                        </span>
+                                        <span th:with="type=${#session.getAttribute('accountType')}" class="dropdown-item bg-primary border  border-1 b-2 text-white">
+                                            Account
+                                        Type
+                                        :[[${type}]]
+                                        </sp>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
+                                                <i class="ti-settings me-1 ms-1"></i>
+                                                Change Password
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
+                                                <i class="ti-settings me-1 ms-1"></i>
+                                                Change Profile Picture
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">
+                                                <i class="fa fa-power-off me-1 ms-1"></i>
+                                                Logout
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7" style="width:50.333333% !important">
+                            <div class="card  dateTimeCard">
+                                <div class="card-body">
+                                    <div class="todo-widget text-center" style="height:20px;">
+                                        <h4 class="text-danger" id="dayValueRightBar">Today is Monday</h4>
+                                        <span class="text-danger" id="dateValueRightBar">00/00/2022</span>
+                                    </div>
+                                    <div class="todo-widget text-black-50 text-center" style="height:20px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7" style="width:50.333333% !important">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <h4 class="card-title ">Notifications</h4>
+                                    <hr class="hr">
+                                    <div class="notificationCard">
+                                        <a href="javascript:void(0)" class="link border-top">
+                                            <div class="d-flex no-block align-items-center p-10">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-check-box"></i>
+                                                </span>
+                                                <div class="ms-2 mainNotificationInfo">
+                                                    <h5 class="mb-0 title">Requests Status</h5>
+                                                    <span class="description"></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <hr class="hr">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </rside>
+            </header>
             <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
+            <!-- End Topbar header -->
             <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Dashboard</h4>
-                        <div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a href="#">Home</a>
-                                    </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                                </ol>
-                            </nav>
+            <!-- ============================================================== -->
+            <!-- Left Sidebar-->
+            <!-- ============================================================== -->
+            <aside class="left-sidebar" data-sidebarbg="skin5">
+                <!-- Sidebar scroll-->
+                <div class="scroll-sidebar">
+                    <!-- Sidebar navigation-->
+                    <nav class="sidebar-nav">
+                        <ul id="sidebarnav" class="pt-4">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/teacher/dashboard" aria-expanded="false">
+                                    <i class="fas fa-home"></i>
+                                    <span class="hide-menu">Home</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/teacher/registrar-requests" class="sidebar-link">
+                                    <i class="fas fa-table"></i>
+                                    <span class="hide-menu">
+                                        View Requests
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/teacher/documents" class="sidebar-link">
+                                    <i class="fas fa-folder"></i>
+                                    <span class="hide-menu">
+                                        My Documents
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link notifLink">
+                                    <i class=" fas fa-bell"></i>
+                                    <span class="hide-menu">
+                                        Notifications
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a href="/logout" class="sidebar-link">
+                                    <i class="fas fa-power-off"></i>
+                                    <span class="hide-menu">
+                                        Logout
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- End Sidebar navigation -->
+                </div>
+                <!-- End Sidebar scroll-->
+            </aside>
+            <!-- ============================================================== -->
+            <!-- End Left Sidebar-->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Page wrapper  -->
+            <!-- ============================================================== -->
+            <div class="page-wrapper">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Dashboard</h4>
+                            <div class="ms-auto text-end">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">
+                                            <a href="#">Home</a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    </ol>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
                 <!-- ============================================================== -->
-                <!-- Rows -->
+                <!-- End Bread crumb and right sidebar toggle -->
                 <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <div class="card card-hover">
-                                        <div class="box bg-primary text-center">
-                                            <h1 class="font-light text-white">
-                                                <i class="fas fa-table"></i>
-                                            </h1>
-                                            <h6 class="text-white">Requests</h6>
-                                            <h6 class="text-white">0</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Column -->
-                                <div class="col-md-6">
-                                    <div class="card card-hover">
-                                        <div class="box bg-success text-center">
-                                            <h1 class="font-light text-white">
-                                                <i class="far fa-check-square"></i>
-                                            </h1>
-                                            <h6 class="text-white">Sent Requests</h6>
-                                            <h6 class="text-white">0</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card card-hover">
-                                        <div class="box bg-cyan text-center">
-                                            <h1 class="font-light text-white">
-                                                <i class="mdi mdi-folder"></i>
-                                            </h1>
-                                            <h6 class="text-white">Files Uploaded</h6>
-                                            <h6 class="text-white">0</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 flex-fill dtcard ">
-                        <div class="card card-hover w-100 align-self-center">
-                            <div class="card-body">
-                                <div class="todo-widget text-center" style="height:20px;">
-                                    <h4 class="text-danger" id="dayValueMain">Today is Monday</h4>
-                                    <span class="text-danger" id="dateValueMain">00/00/2022</span>
-                                </div>
-                                <div class="todo-widget text-black-50 text-center" style="height:20px;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card ntcard">
-                            <div class="card-body">
-                                <h4 class="card-title ">Notifications</h4>
-                                <hr class="hr">
-                                <div class="ntcardMain">
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle">
-                                                <i class="ti-check-box"></i>
-                                            </span>
-                                            <div class="ms-2 mainNotificationInfo">
-                                                <h5 class="mb-0 title">Requests Status</h5>
-                                                <span class="description"></span>
+                <!-- ============================================================== -->
+                <!-- Container fluid  -->
+                <!-- ============================================================== -->
+                <div class="container-fluid">
+                    <!-- ============================================================== -->
+                    <!-- Rows -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <div class="card card-hover">
+                                            <div class="box bg-primary text-center">
+                                                <h1 class="font-light text-white">
+                                                    <i class="fas fa-table"></i>
+                                                </h1>
+                                                <h6 class="text-white">Requests</h6>
+                                                <h6 class="text-white">0</h6>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
+                                    <!-- Column -->
+                                    <div class="col-md-6">
+                                        <div class="card card-hover">
+                                            <div class="box bg-success text-center">
+                                                <h1 class="font-light text-white">
+                                                    <i class="far fa-check-square"></i>
+                                                </h1>
+                                                <h6 class="text-white">Sent Requests</h6>
+                                                <h6 class="text-white">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card card-hover">
+                                            <div class="box bg-cyan text-center">
+                                                <h1 class="font-light text-white">
+                                                    <i class="mdi mdi-folder"></i>
+                                                </h1>
+                                                <h6 class="text-white">Files Uploaded</h6>
+                                                <h6 class="text-white">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 flex-fill dtcard ">
+                            <div class="card card-hover w-100 align-self-center">
+                                <div class="card-body">
+                                    <div class="todo-widget text-center" style="height:20px;">
+                                        <h4 class="text-danger" id="dayValueMain">Today is Monday</h4>
+                                        <span class="text-danger" id="dateValueMain">00/00/2022</span>
+                                    </div>
+                                    <div class="todo-widget text-black-50 text-center" style="height:20px;"></div>
+                                </div>
+                            </div>
+                            <div class="card ntcard">
+                                <div class="card-body">
+                                    <h4 class="card-title ">Notifications</h4>
                                     <hr class="hr">
+                                    <div class="ntcardMain">
+                                        <a href="javascript:void(0)" class="link border-top">
+                                            <div class="d-flex no-block align-items-center p-10">
+                                                <span class="btn btn-success btn-circle">
+                                                    <i class="ti-check-box"></i>
+                                                </span>
+                                                <div class="ms-2 mainNotificationInfo">
+                                                    <h5 class="mb-0 title">Requests Status</h5>
+                                                    <span class="description"></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <hr class="hr">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -383,15 +403,17 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modalView"></div>
-    <script type="text/javascript" th:src="@{/js/a_libraries/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{/js/a_libraries/croppie.js}"></script>
-    <script type="text/javascript" th:src="@{/js/a_libraries/bootstrap.bundle.js}"></script>
-    <script type="text/javascript" th:src="@{/js/a_libraries/perfect-scrollbar.jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/a_libraries/waves.js}"></script>
-    <script type="text/javascript" th:src="@{/js/a_libraries/sidebarmenu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/a_libraries/custom.min.js}"></script>
-</body>
-
+        <div class="modalView"></div>
+        <script type="text/javascript" th:src="@{/js/a_libraries/jquery.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/croppie.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/bootstrap.bundle.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/perfect-scrollbar.jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/waves.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/sidebarmenu.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/custom.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/sockjs.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/a_libraries/stomp.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/websocket-config.js}"></script>
+        <script type="text/javascript" th:src="@{/js/userpageJS/realtime_notification.js}"></script>
+    </body>
 </html>

@@ -54,21 +54,14 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      @Autowired
      private NotificationServiceImpl notificationService;
 
+     
+
      @Override
-     public String displayAllStudentRequest(String userType, Model model) {
-          String link = "";
+     public ResponseEntity<Object> fetchAllStudentRequest() {
           try {
 
                List<StudentRequest> fetchStudentRequest = studentRepository.findAll();
 
-               if (userType.isEmpty() || userType.isBlank()) {
-                    return "redirect:/";
-
-               } else if (userType.equals("registrar")) {
-                    link = "/registrar/studreq-view";
-               } else {
-                    throw new ApiRequestException("Not Found");
-               }
                if (fetchStudentRequest.size() > -1) {
                     List<StudentRequest_Dto> studentRequests = new ArrayList<>();
 
@@ -86,10 +79,9 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                                              req.getManageBy()));
 
                     });
-                    model.addAttribute("studentreq", studentRequests);
-                    return link;
+                    return new ResponseEntity<>(studentRequests, HttpStatus.OK);
                }
-               return "redirect:/";
+               return new ResponseEntity<>("Invalid Action", HttpStatus.BAD_REQUEST);
 
           } catch (Exception e) {
                throw new ApiRequestException(e.getMessage());
@@ -97,9 +89,12 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
      }
 
+   
+         
+
      @Override
      public String displayAllFilesByUserId(HttpSession session, Model model) {
-            model.addAttribute("page", "myfiles");
+          model.addAttribute("page", "myfiles");
           model.addAttribute("pageTitle", "My Files");
           Users user = usersRepository.findUserIdByUsername(session.getAttribute("username").toString()).get();
           if (user.getUserId() != -1) {
@@ -122,7 +117,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
                });
                model.addAttribute("files", userFiles);
-               
+
                return "/registrar/reg";
 
           }
@@ -187,7 +182,9 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               String logMessage = "Registrar changed the request status of " + user.getName() + " to "
                                         + status + ". User: " + manageBy + ".";
                               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+                              globalService.sendTopic("/topic/student_request/recieved", "OK");
                               return new ResponseEntity<>("Success", HttpStatus.OK);
+
                          } else {
                               String date = LocalDateTime.now().toString();
                               String logMessage = "Failed to change the student request status. System Message: Notification failed to send along with the status change of the message request.";
@@ -270,17 +267,21 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                               }
                          }
-                         if (!studentRequest.getRequestStatus().toLowerCase().contains("approved")) {
+                         String reqStatus = studentRequest.getRequestStatus().toLowerCase();
+                         if (!reqStatus.contains("approved") || !reqStatus.contains("pending") || !reqStatus.contains("on-going")) {
                               studentRepository.save(studentRequest);
                               String date = LocalDateTime.now().toString();
                               String logMessage = "Registrar Finalized "
                                         + user.getName() + " User: " + manageBy.getName() + ":" + manageBy.getUsername()
                                         + "Finalized/Completed the request of " + user.getName();
+                                        
                               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+                              globalService.sendTopic("/topic/student_request/recieved", "OK");
+                              
                               return new ResponseEntity<>("Success", HttpStatus.OK);
-                         } else {
+                          } else {
                               return new ResponseEntity<>("Request is already completed.", HttpStatus.OK);
-                         }
+                          }
 
                     } else {
                          return new ResponseEntity<>("Failed to save the notification.", HttpStatus.OK);
@@ -348,5 +349,4 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
           return null;
      }
 
-     
 }

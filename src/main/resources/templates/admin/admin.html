@@ -502,7 +502,7 @@
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="logsTableBody">
                                                 <tr th:each="log : ${globalLogs}">
                                                     <td th:text="${log.dateAndTime}"></td>
                                                     <td th:text="${log.message}"></td>
@@ -836,7 +836,7 @@
                                 </div>
                             </div>
                         </th:block>
-                          <!-- ============================================================== -->
+                        <!-- ============================================================== -->
                         <!-- Account Adding -->
                         <!-- ============================================================== -->
                         <!-- ============================================================== -->
@@ -1305,6 +1305,10 @@
                 <script type="text/javascript" th:src="@{/js/a_libraries/waves.js}"></script>
                 <script type="text/javascript" th:src="@{/js/a_libraries/sidebarmenu.js}"></script>
                 <script type="text/javascript" th:src="@{/js/a_libraries/custom.min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/a_libraries/sockjs.min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/a_libraries/stomp.min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/websocket-config.js}"></script>
+                <script type="text/javascript" th:src="@{/js/userpageJS/realtime_notification.js}"></script>
                 <th:block th:switch="${page}">
                     <th:block th:case="'dashboard'">
                         <script type="text/javascript" th:src="@{/js/a_libraries/AnyChart.js}"></script>
@@ -1318,29 +1322,7 @@
                     </th:block>
                     <th:block th:case="'globallogs'">
                         <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
-                        <script type="text/javascript" th:src="@{/js/userpageJS/global_logs.js}"></script>
-                        <script>
-                
-                         // Get a reference to the DataTable
-                            var table = $('#zero_config').DataTable({
-                                ordering: false
-                            });
-                
-                            // Get a reference to the first cell of the first row
-                            var cell = table.cell(':eq(0)', 3);
-                
-                            // Get the existing text in the cell
-                            var existingText = cell.data();
-                
-                            // Replace the first occurrence of "Details" with "Latest"
-                            var newText = existingText.replace("Details", "Details - <span class='text-danger'>Latest</span>");
-                
-                            // Set the updated text back to the cell
-                            cell.data(newText);
-                
-                            // Redraw the table to update the content
-                            table.draw();
-                        </script>
+                        <script type="text/javascript" th:src="@{/js/adminjs/global_logs.js}"></script>
                     </th:block>
                     <th:block th:case="'documents'">
                         <script type="text/javascript" th:src="@{/js/manage_document_adding/manageAddingDocument.js}"></script>

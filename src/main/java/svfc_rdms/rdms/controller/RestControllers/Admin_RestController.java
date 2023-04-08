@@ -206,7 +206,12 @@ public class Admin_RestController {
           return mainService.viewAllRegistrarRequests(requestId);
      }
 
-     @GetMapping("/admin/globallogs/fetch")
+     @GetMapping("/fetch/admin/global_logs")
+     public ResponseEntity<Object> viewAdminLogs(Model model) {
+       return new ResponseEntity<>(globalLogsService.getAllLogs(),HttpStatus.OK);
+     }
+
+     @GetMapping("/admin/globallog/fetch")
      public ResponseEntity<GlobalLogs> fetchGlobalLogs(@RequestParam("logId") long logId) {
           return globalLogsService.loadSpecificLogs(logId);
      }

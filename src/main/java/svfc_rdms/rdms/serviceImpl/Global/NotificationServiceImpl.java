@@ -33,6 +33,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private GlobalLogsServiceImpl globalLogsServiceImpl;
+    
+    @Autowired
+    private GlobalServiceControllerImpl globalService;
 
     @Override
     public ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
@@ -220,6 +223,7 @@ public class NotificationServiceImpl implements NotificationService {
             String logMessage = "Notification sent by user " + session.getAttribute("name").toString()
                     + " with the message: " + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
+            globalService.sendTopic("/topic/notifications/","OK");
             return true;
         }
         return false;
@@ -243,6 +247,7 @@ public class NotificationServiceImpl implements NotificationService {
             String logMessage = "Notification sent by user " + user.getName()
                     + " with the message: " + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
+            globalService.sendTopic("/topic/notifications/","OK");
             return true;
         }
         return false;
@@ -267,6 +272,7 @@ public class NotificationServiceImpl implements NotificationService {
             String logMessage = "Notification sent by user " + from + " to " + to + " with the message "
                     + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
+            globalService.sendTopic("/topic/notifications/","OK");
             return true;
         }
         return false;

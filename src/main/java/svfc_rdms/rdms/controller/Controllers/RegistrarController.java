@@ -79,7 +79,7 @@ public class RegistrarController {
      public String studentRequests(@PathVariable String userType, HttpSession session, HttpServletResponse response,
                Model model) {
           if (globalService.validatePages(userType, response, session)) {
-               return regs_RequestService.displayAllStudentRequest(userType, model);
+               return "/registrar/studreq-view";
           }
           return "redirect:/";
 

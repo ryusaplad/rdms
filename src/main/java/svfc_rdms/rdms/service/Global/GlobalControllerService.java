@@ -24,4 +24,6 @@ public interface GlobalControllerService {
 
       String getClientIP(HttpServletRequest request);
 
+      void sendTopic(String topic,String payload);
+
 }

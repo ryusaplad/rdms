@@ -398,11 +398,11 @@ function loadChart(filterValue, currentDate, action) {
         all_shsChart.draw();
         all_collegeChart.draw();
         $("#all-tab").removeClass("disabled");
-        $("#all-tab").text($("#all-tab").text().replace(" (Empty)", ""));
+        $("#all-tab").text($("#all-tab").text().replace(" (Not Available)", ""));
       } else {
         $("#all-tab").addClass("disabled");
         if ($("#all-tab").text().indexOf("(Empty)") == -1) {
-          $("#all-tab").text($("#all-tab").text() + " (Empty)");
+          $("#all-tab").text($("#all-tab").text() + " (Not Available)");
         }
       }
 
@@ -485,39 +485,39 @@ $(document).on("click", ".exportingOption", function () {
   $(".modalView").empty();
   $(".modalView").html(htmlModal);
   if (preschoolChartData.length == 0 || shsChartData.length == 0 || highschoolChartData.length == 0 || collegeChartData.length == 0) {
-    $(".as").text($(".as").text() + " (Empty)");
+    $(".as").text($(".as").text() + " (Not Available)");
     $("#allChartCheckbox").attr("disabled",true);
   }else{
-    $(".as").text($(".as").text().replace(" (Empty)", ""));
+    $(".as").text($(".as").text().replace(" (Not Available)", ""));
     $("#allChartCheckbox").attr("disabled",false);
   }
   if (preschoolChartData.length == 0) {
-    $(".ps").text($(".ps").text() + " (Empty)");
+    $(".ps").text($(".ps").text() + " (Not Available)");
     $("#psChartCheckbox").attr("disabled",true);
   } else {
-    $(".ps").text($(".ps").text().replace(" (Empty)", ""));
+    $(".ps").text($(".ps").text().replace(" (Not Available)", ""));
     $("#psChartCheckbox").attr("disabled",false);
   }
   if (highschoolChartData.length == 0) {
-    $(".hs").text($(".hs").text() + " (Empty)");
+    $(".hs").text($(".hs").text() + " (Not Available)");
     $("#hsChartCheckbox").attr("disabled",true);
   } else {
-    $(".hs").text($(".hs").text().replace(" (Empty)", ""));
+    $(".hs").text($(".hs").text().replace(" (Not Available)", ""));
     $("#hsChartCheckbox").attr("disabled",false);
   }
   if (shsChartData.length == 0) {
-    $(".shs").text($(".shs").text() + " (Empty)");
+    $(".shs").text($(".shs").text() + " (Not Available)");
     $("#shsChartCheckbox").attr("disabled",true);
   } else {
-    $(".shs").text($(".shs").text().replace(" (Empty)", ""));
+    $(".shs").text($(".shs").text().replace(" (Not Available)", ""));
     $("#shsChartCheckbox").attr("disabled",false);
   }
 
   if (collegeChartData.length == 0) {
-    $(".cs").text($(".cs").text() + " (Empty)");
+    $(".cs").text($(".cs").text() + " (Not Available)");
     $("#collegeChartCheckbox").attr("disabled",true);
   } else {
-    $(".cs").text($(".cs").text().replace(" (Empty)", ""));
+    $(".cs").text($(".cs").text().replace(" (Not Available)", ""));
     $("#collegeChartCheckbox").attr("disabled",false);
   }
   $("#exportModal").modal("show");
@@ -692,8 +692,6 @@ $(document).on("click", ".exportBtn", function () {
         );
 
       }
-
-
       Promise.all(singlePromises).then(() => {
         doc.save(txt + "_chart.pdf");
       });
@@ -710,34 +708,34 @@ function changeTabText() {
   if (preschoolChart.data().getRowsCount() == 0) {
 
     if ($("#ps-tab").text().indexOf("(Empty)") == -1) {
-      $("#ps-tab").text($("#ps-tab").text() + " (Empty)");
+      $("#ps-tab").text($("#ps-tab").text() + " (Not Available)");
     }
   } else {
-    $("#ps-tab").text($("#ps-tab").text().replace(" (Empty)", ""));
+    $("#ps-tab").text($("#ps-tab").text().replace(" (Not Available)", ""));
   }
 
   if (highschoolChart.data().getRowsCount() == 0) {
     if ($("#hs-tab").text().indexOf("(Empty)") == -1) {
-      $("#hs-tab").text($("#hs-tab").text() + " (Empty)");
+      $("#hs-tab").text($("#hs-tab").text() + " (Not Available)");
     }
   } else {
-    $("#hs-tab").text($("#hs-tab").text().replace(" (Empty)", ""));
+    $("#hs-tab").text($("#hs-tab").text().replace(" (Not Available)", ""));
   }
 
   if (shsChart.data().getRowsCount() == 0) {
     if ($("#shs-tab").text().indexOf("(Empty)") == -1) {
-      $("#shs-tab").text($("#shs-tab").text() + " (Empty)");
+      $("#shs-tab").text($("#shs-tab").text() + " (Not Available)");
     }
   } else {
-    $("#shs-tab").text($("#shs-tab").text().replace(" (Empty)", ""));
+    $("#shs-tab").text($("#shs-tab").text().replace(" (Not Available)", ""));
   }
 
 
   if (collegeChart.data().getRowsCount() == 0) {
     if ($("#college-tab").text().indexOf("(Empty)") == -1) {
-      $("#college-tab").text($("#college-tab").text() + " (Empty)");
+      $("#college-tab").text($("#college-tab").text() + " (Not Available)");
     }
   } else {
-    $("#college-tab").text($("#college-tab").text().replace(" (Empty)", ""));
+    $("#college-tab").text($("#college-tab").text().replace(" (Not Available)", ""));
   }
 }

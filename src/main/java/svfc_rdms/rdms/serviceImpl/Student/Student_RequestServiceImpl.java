@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,7 +98,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      }
 
      @Override
-     public String displayStudentRequests(Model model, HttpSession session) {
+     public ResponseEntity<Object> loadAllStudentRequest(HttpSession session) {
           try {
                String username = "";
                if (session.getAttribute("username") != null) {
@@ -118,22 +119,24 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                                                   req.getRequestDate(),
                                                   req.getRequestStatus(), req.getReleaseDate(), req.getManageBy()));
                          });
-                         model.addAttribute("myrequest", studentRequests);
-                         return "/student/student-request-list";
+                        
+                         return new ResponseEntity<>(studentRequests,HttpStatus.OK);
                     }
-                    return "redirect:/";
+                    throw new ApiRequestException("No Data Available");
                }
 
-               return "redirect:/student/dashboard";
+               throw new ApiRequestException("Invalid Action");
           } catch (Exception e) {
                throw new ApiRequestException(e.getMessage());
           }
      }
 
+
+    
      @Override
      public ResponseEntity<Object> submitRequest(String requestId,
                Optional<MultipartFile[]> uploadedFiles, String document,
-               Map<String, String> params, HttpSession session,HttpServletRequest request) {
+               Map<String, String> params, HttpSession session, HttpServletRequest request) {
 
           try {
 
@@ -210,15 +213,18 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                     String dateAndTime = globalService.formattedDate();
                     boolean status = false;
 
-                    if (notificationService.sendRegistrarNotification(title, message, messageType,
+                    if (notificationService.sendRegistrarNotification(title, message,
+                              messageType,
                               dateAndTime,
                               status,
-                              user, session,request)) {
+                              user, session, request)) {
                          studentRepository.save(req);
                          String date = LocalDateTime.now().toString();
                          String logMessage = "User Requested " + document + " User: " + user.getName()
                                    + " is requesting (" + document + ")";
-                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
+                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+                         // Send a message over WebSocket
+                         globalService.sendTopic("/topic/student/requests", "OK");
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<>("Failed to send the request, Please Try Again Later!",

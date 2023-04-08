@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import svfc_rdms.rdms.model.GlobalLogs;
@@ -24,10 +25,11 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
     private GlobalLogsReposistory globalLogsReposistory;
 
     @Autowired
-    private GlobalServiceControllerImpl globalServiceController;
+    private GlobalServiceControllerImpl globalService;
 
     @Autowired
     private UsersRepository usersRepository;
+   
 
     @Override
     public void saveLog(
@@ -36,7 +38,7 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
             String messageType,
             String dateAndTime,
             String threatLevel,
-            HttpSession session,HttpServletRequest request) {
+            HttpSession session, HttpServletRequest request) {
 
         String usernameAndName = "";
         if (!(usernameAndName = session.getAttribute("username").toString()).isEmpty()) {
@@ -45,12 +47,16 @@ public class GlobalLogsServiceImpl implements GlobalLogsServices {
             logs.setMessageType(messageType);
             logs.setDateAndTime(dateAndTime);
             logs.setThreatLevel(threatLevel);
-            logs.setClientIpAddress(globalServiceController.getClientIP(request));
+            logs.setClientIpAddress(globalService.getClientIP(request));
             Optional<Users> user = usersRepository.findByUsername(usernameAndName);
             if (user.isPresent()) {
                 usernameAndName = user.get().getUsername() + "-" + user.get().getName();
             }
             logs.setPerformedBy(usernameAndName);
+            
+            // Send a message over WebSocket
+            globalService.sendTopic("/topic/logs", "OK");
+            
             globalLogsReposistory.save(logs);
         }
 

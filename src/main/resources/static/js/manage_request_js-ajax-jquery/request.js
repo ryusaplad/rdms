@@ -76,62 +76,7 @@ $(document).ready(function () {
       $(this).val($(this).val().substring(0, 1000));
     }
   });
-  $("#reqForm").submit(function (event) {
-    event.preventDefault();
 
-    if ($("#files").val() === "") {
-      alert("please select file");
-    } else {
-      var id = $("#documentTypeTitle").text();
-      var studId = $("#studentId").val();
-      var studName = $("#studName").val();
-      var studYear = $("#year").val();
-      var studCourse = $("#course").val();
-      var studSemester = $("#semester").val();
-      var userMessage = $("#message").val();
-      if (studCourse == undefined) {
-        studCourse = "N/A";
-      }
-      if (studSemester == undefined) {
-        studSemester = "N/A";
-      }
-
-      formData.append("studentId", studId);
-      formData.append("studName", studName);
-      formData.append("year", studYear);
-      formData.append("course", studCourse);
-      formData.append("semester", studSemester);
-      formData.append("message", userMessage);
-      $.ajax({
-        url: "/student/request/" + id + "/sent",
-        type: "POST",
-        data: formData,
-        enctype: "multipart/form-data",
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function () {
-          $(".confirmRequestModal").attr("disabled", true);
-          console.log("Please Wait");
-        },
-        success: function (res) {
-          $("#confirmModal").modal("hide");
-          $(".clearRequest").click();
-          window.location = "/student/my-requests";
-        },
-        error: function (err) {
-          $("#confirmModal").modal("hide");
-          $(".servererrorMessageAlert").text(err.responseText);
-          $(".servererrorMessageAlert").show();
-          $(".confirmRequestModal").attr("disabled", false);
-          setTimeout(function () {
-            $(".servererrorMessageAlert").hide();
-            $(".servererrorMessageAlert").empty();
-          }, 6000);
-        },
-      });
-    }
-  });
   $(".finalizedBtn").on("click", function (event) {
     event.preventDefault();
     var file = $("#files").val();
@@ -177,6 +122,19 @@ $(document).ready(function () {
       }
     }
   });
+  $(".clearRequest").on("click", function () {
+    $("#fileInfoTable").empty();
+
+    formData = new FormData();
+    $(".message").text("");
+    $(".errorMessageAlert").hide();
+
+    $("#year").attr("disabled", false);
+    $("#course").attr("disabled", false);
+    $("#semester").attr("disabled", false);
+  });
+
+
   $(document).on("click", ".saveRequest", function (event) {
     event.preventDefault();
     var message = "";
@@ -205,19 +163,74 @@ $(document).ready(function () {
       });
     }
   });
-  $(".clearRequest").on("click", function () {
-    $("#fileInfoTable").empty();
-
-    formData = new FormData();
-    $(".message").text("");
-    $(".errorMessageAlert").hide();
-
-    $("#year").attr("disabled", false);
-    $("#course").attr("disabled", false);
-    $("#semester").attr("disabled", false);
-  });
 
   $(".confirmRequestModal").on("click", function () {
+    // Serialize the form data as a JSON object
+
+
     $("#reqForm").submit();
   });
+
+  $("#reqForm").submit(function (event) {
+    event.preventDefault();
+
+    if ($("#files").val() === "") {
+      alert("please select file");
+    } else {
+      var id = $("#documentTypeTitle").text();
+      var studId = $("#studentId").val();
+      var studName = $("#studName").val();
+      var studYear = $("#year").val();
+      var studCourse = $("#course").val();
+      var studSemester = $("#semester").val();
+      var userMessage = $("#message").val();
+      if (studCourse == undefined) {
+        studCourse = "N/A";
+      }
+      if (studSemester == undefined) {
+        studSemester = "N/A";
+      }
+
+      formData.append("studentId", studId);
+      formData.append("studName", studName);
+      formData.append("year", studYear);
+      formData.append("course", studCourse);
+      formData.append("semester", studSemester);
+      formData.append("message", userMessage);
+
+      var data = {
+        studId: $("#studentId").val(),
+        message: "Data Sent",
+      };
+      $.ajax({
+        url: "/student/request/" + id + "/sent",
+        type: "POST",
+        data: formData,
+        enctype: "multipart/form-data",
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function () {
+          $(".confirmRequestModal").attr("disabled", true);
+          console.log("Please Wait");
+        },
+        success: function (res) {
+          // Send the data via WebSocket after
+          console.log("Request successfully submitted");
+          $("#confirmModal").modal("hide");
+          $("#successModal").modal("toggle");
+          window.location = "/student/my-requests";
+        },
+        error: function (err) {
+          console.log(err);
+        },
+        complete: function () {
+          $(".confirmRequestModal").attr("disabled", false);
+          console.log("Request complete");
+        },
+      });
+    }
+  });
+
+
 });

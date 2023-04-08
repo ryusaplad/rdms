@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -29,6 +30,9 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
 
      @Autowired
      private FileRepository fileRepository;
+     // WebSocket
+     @Autowired
+     private SimpMessagingTemplate messagingTemplate;
 
      @Override
      public boolean validatePages(String validAccount, HttpServletResponse response, HttpSession session) {
@@ -134,6 +138,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           String formattedDate = myDateObj.format(myFormatObj);
           return formattedDate;
      }
+
      @Override
      public String generateRandomHexColor() {
           Random random = new Random();
@@ -152,6 +157,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           }
           return String.format("#%02x%02x%02x", red, green, blue);
      }
+
      @Override
      public boolean isValidEmail(String email) {
           String emailRegex = "^[a-zA-Z0-9_+&-]+(?:\\." + "[a-zA-Z0-9_+&-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
@@ -159,13 +165,20 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           Pattern pattern = Pattern.compile(emailRegex);
           return pattern.matcher(email).matches();
      }
+
      @Override
      public String getClientIP(HttpServletRequest request) {
           String xForwardedForHeader = request.getHeader("X-Forwarded-For");
           if (xForwardedForHeader == null) {
-              return request.getRemoteAddr();
+               return request.getRemoteAddr();
           } else {
-              return xForwardedForHeader.split(",")[0].trim();
+               return xForwardedForHeader.split(",")[0].trim();
           }
-      }
+     }
+
+     // Send Data to Web Socket
+     @Override
+     public void sendTopic(String topic, String payload) {
+          messagingTemplate.convertAndSend(topic, payload);
+     }
 }

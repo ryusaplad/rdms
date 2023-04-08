@@ -1,11 +1,95 @@
 $(document).ready(function () {
+  //Web Socket Connect;
+  connect();
   var htmlTable = "";
   var htmlModal = "";
   var formData = new FormData();
-  var fileListArr;
+  var totalFiles = 0;
+  var fileListArr = [];
   var finalValue = "";
   var usId = "";
   var rId = "";
+  refreshTable();
+
+  function refreshTable() {
+    var tableBody = $(".requestTableBody");
+
+    // Make AJAX request to fetch latest data
+    $.ajax({
+      url: "/fetch/student-requests",
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        // Empty table body
+        var table = $("#zero_config").DataTable();
+        table.clear();
+       
+        var tableBodyItems = ``;
+        var actions = "";
+        for (var i = 0; i < data.length; i++) {
+
+
+          var studRequest = data[i];
+          tableBodyItems = `
+            <tr>
+                <td>${studRequest.requestBy}</td>
+                <td>${studRequest.requestDate}</td>
+                <td>${studRequest.requestStatus}</td>
+                <td>
+                <div class="row">
+                <div class="col-sm">
+                    <a href="?s=${studRequest.studentId}&req=${studRequest.requestId}" type="button" class="btn btn-primary w-100 toggleRequestDetail">Details</a>
+                </div>
+                <div class="col-sm" ${studRequest.requestStatus == 'Pending' ? '' : 'style="display:none;"'}>
+                    <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white processBtn">Approved</a>
+                </div>
+                <div class="col-sm" ${studRequest.requestStatus == 'On-Going' ? '' : 'style="display:none;"'}>
+                    <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white completeBtn">Complete</a>
+                </div>
+                <div class="col-sm" ${studRequest.requestStatus != 'On-Going' && studRequest.requestStatus != 'Approved' && studRequest.requestStatus != 'Rejected' ? '' : 'style="display:none;"'}>
+                    <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-danger w-100 text-white rejectBtn">Reject</a>
+                </div>
+            </div>
+                </td>
+            </tr>
+          `;
+          actions = `<div class="row">
+          <div class="col-sm">
+              <a href="?s=${studRequest.studentId}&req=${studRequest.requestId}" type="button" class="btn btn-primary w-100 toggleRequestDetail">Details</a>
+          </div>
+          <div class="col-sm" ${studRequest.requestStatus == 'Pending' ? '' : 'style="display:none;"'}>
+              <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white processBtn">Approved</a>
+          </div>
+          <div class="col-sm" ${studRequest.requestStatus == 'On-Going' ? '' : 'style="display:none;"'}>
+              <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white completeBtn">Complete</a>
+          </div>
+          <div class="col-sm" ${studRequest.requestStatus != 'On-Going' && studRequest.requestStatus != 'Approved' && studRequest.requestStatus != 'Rejected' ? '' : 'style="display:none;"'}>
+              <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-danger w-100 text-white rejectBtn">Reject</a>
+          </div>
+      </div>`;
+          // Append new data to table body
+         
+          $("#zero_config")
+            .DataTable()
+            .row.add([
+              studRequest.requestBy,
+              studRequest.requestDate,
+              studRequest.requestStatus,
+              actions,
+            ])
+            .draw();
+        }
+
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error("Error refreshing table: ", errorThrown);
+      }
+    });
+
+  }
+
+
+
   $(document).on("click", ".toggleRequestDetail", function (e) {
     e.preventDefault();
     $(".modalView").empty();
@@ -280,8 +364,8 @@ $(document).ready(function () {
   $(document).on("click", ".processBtn", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
+    rId = $(this).data("value");
     usId = userId;
-
     htmlModal =
       `
       <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -301,7 +385,7 @@ $(document).ready(function () {
                     <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>
                     <a id="processHref" href=` +
       usId +
-      ` type="button" class="btn btn-danger confirmProcess clearModal">Confirm</a>
+      ` type="button" class="btn btn-danger confirmProcess clearModal" data-bs-dismiss="modal">Confirm</a>
                 </div>
             </div>
         </div>
@@ -314,7 +398,7 @@ $(document).ready(function () {
     e.preventDefault();
     var userId = $(this).attr("href");
 
-    rId = $(".completeBtn").data("value");
+    rId = $(this).data("value");
     usId = userId;
     htmlModal =
       `
@@ -425,7 +509,7 @@ $(document).ready(function () {
   $(document).on("click", ".confirmCompleteFinal", function (e) {
     e.preventDefault();
     $("#f-reqs-upload").submit();
-
+   
   });
 
   // Finalized Requests with uploaded files
@@ -434,7 +518,12 @@ $(document).ready(function () {
     formData = new FormData();
     $(".r-file-table").empty();
 
-    var totalFiles = $("#rfile")[0].files.length;
+
+    if ($("#rfile")[0] && $("#rfile")[0].files) {
+      totalFiles = $("#rfile")[0].files.length;
+      fileListArr = Array.from($("#rfile")[0].files);
+    }
+
     for (var x = 0; x < totalFiles; x++) {
       var fileName = $("#rfile")[0].files[x].name;
       var split = fileName.split(".");
@@ -460,7 +549,7 @@ $(document).ready(function () {
         "</tr>";
       $(".r-file-table").append(htmlTable);
     }
-    fileListArr = Array.from($("#rfile")[0].files);
+
     for (var i = 0; i < fileListArr.length; i++) {
       formData.append("rfile[]", fileListArr[i]);
     }
@@ -508,9 +597,6 @@ $(document).ready(function () {
   $(document).on("submit", "#f-reqs-upload", function (e) {
     e.preventDefault();
 
-    for (let [key, val] of formData.entries()) {
-      console.log(key, val);
-    }
     usId = $(".confirmCompleteFinal").data("value");
     $.ajax({
       url:
@@ -545,7 +631,6 @@ $(document).ready(function () {
 							<div class="h3">
 							<p>Request has been finalized.</p>
 							</div>
-						  <button type="button" class="btn btn-success okCompleted clearModal text-white" data-bs-dismiss="modal">Ok</button>
 						</div>
                 </div>
               
@@ -558,9 +643,10 @@ $(document).ready(function () {
         setTimeout(function () {
           $("#finalizedCompletedModal").modal("hide");
           $(".okCompleted").trigger("click");
-        }, 5000);
+        }, 2000);
         $(".f-alert").hide();
         $("#f-alertM").text("");
+        refreshTable();
       },
       error: function (err) {
         $(".f-alert").show();
@@ -575,14 +661,10 @@ $(document).ready(function () {
     });
   });
 
-  $(document).on("click", ".okCompleted", function (e) {
-    window.location.reload();
-  });
-
   $(document).on("click", ".rejectBtn", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    rId = $(".rejectBtn").data("value");
+    rId = $(this).data("value");
     htmlModal =
       `
      <div class="modal fade" id="rejectModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -623,12 +705,13 @@ $(document).ready(function () {
   $(document).on("click", ".confirmProcess", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    rId = $(".processBtn").data("value");
+    console.log(userId +"And" +rId);
     updateStudentRequests(userId, "N/A", "On-Going");
   });
   $(document).on("click", ".confirmReject", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
+    console.log(userId +"And" +rId);
     var message = $("#reason").val();
     if (message.length < -1) {
       updateStudentRequests(userId, "N/A", "Rejected");
@@ -648,7 +731,7 @@ $(document).ready(function () {
     $.get(status, function (status) {
       if (status == "Success") {
         $("#rejectModal").modal("hide");
-        window.location.reload();
+        refreshTable();
       }
     });
   }
@@ -663,4 +746,22 @@ $(document).ready(function () {
       $(this).val($(this).val().substring(0, 1000));
     }
   });
+
+  function connect() {
+    var socket = new SockJS('/websocket-server');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+      setConnected(true);
+      stompClient.subscribe('/topic/student/requests', function (data) {
+
+        if (data.toString().toLowerCase().includes("ok")) {
+          refreshTable();
+        }
+        //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
+      });
+
+
+
+    });
+  }
 });

@@ -1,14 +1,148 @@
 $(document).ready(function () {
+  //Web Socket Connect;
+  connect();
   var id = "";
   var rid = "";
   var link = "";
   var finalValue = "";
+
+  refreshTable();
+
+  function refreshTable() {
+  
+
+    // Make AJAX request to fetch latest data
+    $.ajax({
+      url: "/student/my-requests/load_all",
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        // Empty table body
+        var table = $("#zero_config").DataTable();
+        table.clear();
+        var tableBodyItems = ``;
+        var buttons = ``;
+
+        for (let i = 0; i < data.length; i++) {
+          var myrequest = data[i];
+
+          if (myrequest.requestStatus == "Pending") {
+            buttons = ` <a
+           
+            title="View Full Details"
+            href="${myrequest.requestId}"
+            type="button"
+            class="btn btn-success text-white toggleDetailsModal"
+        >
+            View Details
+        </a>`;
+          } else {
+            buttons = `
+<button
+id="btnDropDown"
+type="button"
+class="btn btn-danger text-white"
+data-bs-toggle="dropdown"
+
+aria-expanded="false"
+>
+Action
+</button> 
+<ul class="dropdown-menu">
+<li>
+   <a
+       data-toggle="tooltip"
+       data-placement="top"
+       title="View Full Details"
+       href="${myrequest.requestId}"
+       type="button"
+       class=" dropdown-item link toggleDetailsModal"
+   >
+       Details
+   </a>
+</li>
+`;
+
+            if (myrequest.requestStatus == "Rejected") {
+              buttons += `  <li>
+                                               <a
+                                                   data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Edit Files"
+                                                  href="${myrequest.requestId}"
+                                                   type="button"
+                                                   class="dropdown-item link text-primary toggleEditReqModal"
+                                               >
+                                                   Edit Files
+                                               </a>
+                                           </li>`;
+            }
+            if (myrequest.requestStatus == "Rejected") {
+              buttons += `   <li>
+                                               <a
+                                                   data-toggle="tooltip"
+                                                   data-placement="top"
+                                                   title="Edit Informations"
+                                                  href="${myrequest.requestId}"
+                                                   type="button"
+                                                   class="dropdown-item link text-primary toggleEditInfosModal"
+                                               >
+                                                   Edit Informations
+                                               </a>
+                                           </li>`;
+            }
+            if (myrequest.requestStatus == "Rejected") {
+              buttons += `<li>
+       <a
+       data-toggle="tooltip"
+       data-placement="top"
+       title="Re Submit"
+      href="${myrequest.studentId}"
+       data-value="${myrequest.requestId}"
+       type="button"
+       class="dropdown-item link text-success resubmitRequests">Submit</a></li>`;
+            }
+          }
+
+
+
+
+          tableBodyItems = `
+            <tr>
+              <td>${myrequest.requestDocument}</td>
+              <td>${myrequest.requestStatus}</td>
+              <td>
+              <div class="btn-group dropstart">
+              ${buttons}
+              </ul>
+              </div>
+          </td>
+          </tr> `;
+
+         
+          $("#zero_config")
+            .DataTable()
+            .row.add([
+              myrequest.requestDocument,
+              myrequest.requestStatus,
+              buttons,
+            ])
+            .draw();
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error("Error refreshing table: ", errorThrown);
+      },
+    });
+  }
+
   $(document).on("click", ".toggleDetailsModal", function (e) {
     e.preventDefault();
     id = $(this).attr("href");
     rid = $(this).attr("href");
     link = "/student/my-requests/fetch?requestId=" + id;
-
+  
+  
     $.get(link, function (request) {
       $(".tablebody").empty();
       $(".receievedDoc").empty();
@@ -67,10 +201,10 @@ $(document).ready(function () {
         $("#requestbynpar").text(request.data[0].name);
         $("#cysem").text(
           request.data[0].course +
-            "," +
-            request.data[0].year +
-            "," +
-            request.data[0].semester.substring(0, 3)
+          "," +
+          request.data[0].year +
+          "," +
+          request.data[0].semester.substring(0, 3)
         );
 
         $("#docreqpar").text(request.data[0].requestDocument);
@@ -129,7 +263,8 @@ $(document).ready(function () {
     link = "/student/my-requests/fetch?requestId=" + id;
     finalValue = "";
     fetchReqFiles(id, link, finalValue);
-
+    rid = $(this).data("value");
+  
     $("#editRequirements").modal("toggle");
     // $.get(link, function (request) {});
   });
@@ -170,6 +305,9 @@ $(document).ready(function () {
   $(document).on("click", ".toggleEditInfosModal", function (e) {
     e.preventDefault();
     id = $(this).attr("href");
+   
+    rid = $(this).data("value");
+  
     $("#editReqInfos").modal("toggle");
   });
   $(".saveInfoUpdate").on("click", function (e) {
@@ -205,7 +343,8 @@ $(document).ready(function () {
         setTimeout(function () {
           $("#editingInfoAlert").empty();
           $("#editingInfoAlert").hide();
-        }, 10000);
+          refreshTable();
+        }, 2000);
       },
       error: function (err) {
         $("#editingInfoAlert").empty();
@@ -236,7 +375,6 @@ $(document).ready(function () {
   $(document).on("click", ".saveChanges", function (e) {
     e.preventDefault();
     var fileData = $("#fileData")[0].files;
-    console.log(fileData.length);
     if (fileData.length == 0) {
       $("#editingAlert").empty();
 
@@ -284,9 +422,6 @@ $(document).ready(function () {
         $(".saveChanges").attr("disabled", false);
         $("#editingAlert").empty();
         $("#editingAlert").hide();
-        console.log(id);
-        console.log(link);
-        console.log(finalValue);
         fetchReqFiles(id, link, finalValue);
       },
       error: function (err) {
@@ -299,22 +434,23 @@ $(document).ready(function () {
       },
     });
   });
-  $(".resubmitRequests").on("click", function (e) {
+  $(document).on("click", ".resubmitRequests", function (e) {
     e.preventDefault();
 
     $("#resubmitReqModal").modal("toggle");
     id = $(this).attr("href");
-    rId = $(".resubmitRequests").data("value");
+    rid = $(this).data("value");
+  
   });
   $(".confirmResubmit").on("click", function (e) {
     e.preventDefault();
 
-    link = "/student/requests/resubmit?userId=" + id + "&requestId=" + rId;
+    link = "/student/requests/resubmit?userId=" + id + "&requestId=" + rid;
 
     $.get(link, function (request) {
       if ((request = "Success")) {
         $("#resubmitReqModal").modal("hide");
-        window.location.reload();
+        refreshTable();
       }
     });
   });
@@ -329,4 +465,17 @@ $(document).ready(function () {
       $(this).val($(this).val().substring(0, 1000));
     }
   });
+  function connect() {
+    var socket = new SockJS("/websocket-server");
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+      setConnected(true);
+    stompClient.subscribe("/topic/student_request/recieved", function (data) {
+        if (data.toString().toLowerCase().includes("ok")) {
+          refreshTable();
+        }
+        //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
+      });
+    });
+  }
 });

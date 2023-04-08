@@ -56,16 +56,37 @@ public class Regs_RestController {
      @Autowired
      private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
 
-     @PostMapping(value = "/registrar/save/user-account")
-     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
+     @GetMapping(value = "/fetch/test/notif")
+     public ResponseEntity<Object> notifTest(HttpSession session,
+               HttpServletResponse response,
+               Model model) {
 
-          return adminAccountService.saveUsersAccount(user, 0, session,request);
+          return regs_RequestService.fetchAllStudentRequest();
+
+     }
+
+
+     @GetMapping(value = "/fetch/student-requests")
+     public ResponseEntity<Object> studentRequests(HttpSession session,
+               HttpServletResponse response,
+               Model model) {
+
+          return regs_RequestService.fetchAllStudentRequest();
+
+     }
+
+     @PostMapping(value = "/registrar/save/user-account")
+     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session,
+               HttpServletRequest request) {
+
+          return adminAccountService.saveUsersAccount(user, 0, session, request);
      }
 
      @PostMapping(value = "/registrar/save/update-account")
-     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
+     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session,
+               HttpServletRequest request) {
 
-          return adminAccountService.saveUsersAccount(user, 1, session,request);
+          return adminAccountService.saveUsersAccount(user, 1, session, request);
      }
 
      @GetMapping("/registrar/user/update")
@@ -93,17 +114,17 @@ public class Regs_RestController {
      @GetMapping(value = "/registrar/user/change/{status}")
 
      public ResponseEntity<Object> changeStatus(@PathVariable("status") String status,
-               @RequestParam("userId") long userId, HttpSession session,HttpServletRequest request) {
+               @RequestParam("userId") long userId, HttpSession session, HttpServletRequest request) {
           if (status.equals("permanently")) {
-               if (adminAccountService.deleteData(userId, session,request)) {
+               if (adminAccountService.deleteData(userId, session, request)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("temporary")) {
-               if (adminAccountService.changeAccountStatus("Temporary", userId, session,request)) {
+               if (adminAccountService.changeAccountStatus("Temporary", userId, session, request)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           } else if (status.equals("active")) {
-               if (adminAccountService.changeAccountStatus("Active", userId, session,request)) {
+               if (adminAccountService.changeAccountStatus("Active", userId, session, request)) {
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
           }
@@ -141,28 +162,31 @@ public class Regs_RestController {
                @RequestParam("requestId") long requestId,
                @RequestParam("reason") String message,
                HttpServletResponse response,
-               HttpSession session,HttpServletRequest request) {
+               HttpSession session, HttpServletRequest request) {
+
+          System.out.println("Datas" + "\nStatus: " + status + "\nUserId: " + userId + "\nRequest Id:" + requestId
+                    + "\nreason:" + message);
 
           return regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
-                    session,request);
+                    session, request);
 
      }
 
      @PostMapping("/registrar/studentreq/finalized")
      public ResponseEntity<Object> finalizedRequest(@RequestParam long userId, @RequestParam long requestId,
                @RequestParam("rfile[]") Optional<MultipartFile[]> files,
-               @RequestParam Map<String, String> params, HttpSession session,HttpServletRequest request) {
+               @RequestParam Map<String, String> params, HttpSession session, HttpServletRequest request) {
 
-          return regs_RequestService.finalizedRequestsWithFiles(userId, requestId, files, params, session,request);
+          return regs_RequestService.finalizedRequestsWithFiles(userId, requestId, files, params, session, request);
 
      }
 
      // Manage Requests for teachers.
      @PostMapping("/registrar/send/requests")
      public ResponseEntity<String> sendRequestsToTeacher(@RequestParam long userId, HttpSession session,
-               @RequestParam Map<String, String> params,HttpServletRequest request) {
+               @RequestParam Map<String, String> params, HttpServletRequest request) {
 
-          return regs_ServiceImpl.sendRequestToTeacher(userId, session, params,request);
+          return regs_ServiceImpl.sendRequestToTeacher(userId, session, params, request);
      }
 
      @GetMapping("/registrar/sent-requests-view")
@@ -171,7 +195,5 @@ public class Regs_RestController {
 
           return regs_ServiceImpl.viewRegistrarRequests(requestId);
      }
-
-    
 
 }

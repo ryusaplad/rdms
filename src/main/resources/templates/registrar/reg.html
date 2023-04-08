@@ -254,15 +254,20 @@
                                 <div id="resultDiv" style="display:none">
                                     <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
                                         <strong id="resultMessage"></strong>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                        ></button>
                                     </div>
                                 </div>
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <div class="d-flex flex-row-reverse">
-                                            <div class=""><a href="" class="btn btn-primary addDocument">Add Documents</a>
+                                            <div class="">
+                                                <a href="" class="btn btn-primary addDocument">Add Documents</a>
                                             </div>
-            
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -274,19 +279,18 @@
                                                 </div>
                                             </div>
                                         </div>
-            
                                         <div class="row card-secbody">
-            
                                             <div class="col-lg-4 mb-2" th:each="documentList : ${documentsList}">
                                                 <div class="card pagesCards ">
                                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-            
                                                         <a href="#!">
-                                                            <div class="imageDiv"
-                                                                style="background-color: rgba(251, 251, 251, 0.15);">
-                                                                <img th:src="@{'/admin/image?id='+ ${documentList.documentId}}"
-                                                                    src="images/documentImage" class="img-fluid"
-                                                                    style="height: 270px;" />
+                                                            <div class="imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
+                                                                <img
+                                                                    th:src="@{'/admin/image?id='+ ${documentList.documentId}}"
+                                                                    src="images/documentImage"
+                                                                    class="img-fluid"
+                                                                    style="height: 270px;"
+                                                                >
                                                             </div>
                                                         </a>
                                                     </div>
@@ -294,13 +298,10 @@
                                                         <h5 class="card-title text-center" th:text="${documentList.title}"></h5>
                                                         <div class="row">
                                                             <div class="col-sm mt-2">
-            
-                                                                <a th:href="${documentList.documentId}"
-                                                                    class="w-100 btn btn-primary editDocument">Edit</a>
+                                                                <a th:href="${documentList.documentId}" class="w-100 btn btn-primary editDocument">Edit</a>
                                                             </div>
                                                             <div class="col-sm mt-2">
-                                                                <a th:href="${documentList.documentId}"
-                                                                    class="w-100 btn btn-danger deleteDocument">Delete</a>
+                                                                <a th:href="${documentList.documentId}" class="w-100 btn btn-danger deleteDocument">Delete</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -308,7 +309,6 @@
                                             </div>
                                         </div>
                                     </div>
-            
                                 </div>
                             </main>
                         </div>
@@ -326,8 +326,12 @@
             <script type="text/javascript" th:src="@{/js/a_libraries/waves.js}"></script>
             <script type="text/javascript" th:src="@{/js/a_libraries/sidebarmenu.js}"></script>
             <script type="text/javascript" th:src="@{/js/a_libraries/custom.min.js}"></script>
+            <script type="text/javascript" th:src="@{/js/a_libraries/sockjs.min.js}"></script>
+            <script type="text/javascript" th:src="@{/js/a_libraries/stomp.min.js}"></script>
+            <script type="text/javascript" th:src="@{/js/websocket-config.js}"></script>
+            <script type="text/javascript" th:src="@{/js/userpageJS/realtime_notification.js}"></script>
             <th:block th:if="${page =='documents'}">
-                <script type="text/javascript" th:src="@{/js/manage_document_adding/manageAddingDocument.js}"> </script>
+                <script type="text/javascript" th:src="@{/js/manage_document_adding/manageAddingDocument.js}"></script>
             </th:block>
         </body>
     </html>
