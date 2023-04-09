@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.model.Documents;
@@ -23,7 +22,9 @@ public interface Student_RequestService {
                Map<String, String> params, HttpSession session, HttpServletRequest request);
 
      Optional<Documents> findDocumentByTitle(String title);
-
+     
+     List<Documents> displayAllDocuments(boolean status);
+   
      ResponseEntity<Object> loadAllStudentRequest(HttpSession session);
 
      List<StudentRequest> displayAllRequestByStudent(Users user);

@@ -55,8 +55,6 @@ public class StudentController {
 
           if (globalService.validatePages("student", response, session)) {
 
-               List<Documents> documentList = mainService.getAllDocumentsByStatus(true);
-               model.addAttribute("documentsCards", documentList);
                model.addAttribute("page", "doc_cards");
                model.addAttribute("pageTitle", "Documents");
                return "/student/stud";

@@ -28,6 +28,7 @@ public class Documents {
      private long documentId;
      @Column(unique = true)
      private String title;
+     @Column(columnDefinition = "text")
      private String description;
      @Column(name = "image", columnDefinition = "LONGBLOB")
      private byte[] image;

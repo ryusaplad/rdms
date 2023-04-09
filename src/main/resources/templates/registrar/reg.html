@@ -82,8 +82,30 @@
                                                         <h1 class="font-light text-white">
                                                             <i class="fas fa-table"></i>
                                                         </h1>
-                                                        <h6 class="text-white">Requests</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white">Student Requests</h6>
+                                                        <h6 class="text-white totalStudentRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-primary text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="fas fa-paper-plane"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Sent Teacher Requests</h6>
+                                                        <h6 class="text-white totalTeacherRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-secondary text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="fas fa-thumbtack"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Pending Requests</h6>
+                                                        <h6 class="text-white totalPendingRequests">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -94,7 +116,7 @@
                                                             <i class="far fa-check-square"></i>
                                                         </h1>
                                                         <h6 class="text-white">Approved Requests</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalApprovedRequests">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,7 +127,7 @@
                                                             <i class="fas fa-ban"></i>
                                                         </h1>
                                                         <h6 class="text-white">Rejected Requests</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalRejectedRequests">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -116,7 +138,7 @@
                                                             <i class="mdi mdi-folder"></i>
                                                         </h1>
                                                         <h6 class="text-white">Files Uploaded</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalUploadedFiles">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -228,14 +250,15 @@
                         <div class="page-breadcrumb">
                             <div class="row">
                                 <div class="col-12 d-flex no-block align-items-center">
-                                    <h4 class="page-title">Dashboard</h4>
+                                    <h4 class="page-title">Documents</h4>
                                     <div class="ms-auto text-end">
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a href="#">Home</a>
+                                                    <a href="/registrar/dashboard">Dashboard</a>
                                                 </li>
-                                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                                <li class="breadcrumb-item active">Manage Documents</li>
+                                                <li class="breadcrumb-item active">Documents</li>
                                             </ol>
                                         </nav>
                                     </div>
@@ -248,8 +271,8 @@
                         <!-- ============================================================== -->
                         <!-- Container fluid  -->
                         <!-- ============================================================== -->
-                        <div class="container-fluid px-4">
-                            <main id="mainx">
+                        <div class="container-fluid">
+                            <div class="container" id="mainx">
                                 <!-- Error Display by ajax -->
                                 <div id="resultDiv" style="display:none">
                                     <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -284,12 +307,12 @@
                                                 <div class="card pagesCards ">
                                                     <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                                                         <a href="#!">
-                                                            <div class="imageDiv" style="background-color: rgba(251, 251, 251, 0.15);">
+                                                            <div class="imageDiv  mt-2 text-center" style="background-color: rgba(251, 251, 251, 0.15);">
                                                                 <img
-                                                                    th:src="@{'/admin/image?id='+ ${documentList.documentId}}"
+                                                                    th:src="@{'/registrar/load/image?id='+ ${documentList.documentId}}"
                                                                     src="images/documentImage"
                                                                     class="img-fluid"
-                                                                    style="height: 270px;"
+                                                                    style="height: 250px;  width: 250px;"
                                                                 >
                                                             </div>
                                                         </a>
@@ -310,7 +333,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </main>
+                            </div>
                         </div>
                         <!-- ============================================================== -->
                         <!-- End Page wrapper  -->
@@ -329,7 +352,10 @@
             <script type="text/javascript" th:src="@{/js/a_libraries/sockjs.min.js}"></script>
             <script type="text/javascript" th:src="@{/js/a_libraries/stomp.min.js}"></script>
             <script type="text/javascript" th:src="@{/js/websocket-config.js}"></script>
-            <script type="text/javascript" th:src="@{/js/userpageJS/realtime_notification.js}"></script>
+            <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_notification.js}"></script>
+            <th:block th:if="${page =='dashboard'}">
+                <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_totals.js}"></script>
+            </th:block>
             <th:block th:if="${page =='documents'}">
                 <script type="text/javascript" th:src="@{/js/manage_document_adding/manageAddingDocument.js}"></script>
             </th:block>

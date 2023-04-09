@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,7 @@ public class GlobalLogs {
     @SequenceGenerator(name = "logs_sequence", sequenceName = "logs_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logs_sequence")
     private long logsId;
+    @Column(columnDefinition = "text")
     private String message; // add messages
     private String messageType; // logging
     private String dateAndTime; // what date created

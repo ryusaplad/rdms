@@ -85,7 +85,7 @@
                                                             <i class="fas fa-table"></i>
                                                         </h1>
                                                         <h6 class="text-white">My Total Request</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalRequests">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,7 +97,7 @@
                                                             <i class="far fa-check-square"></i>
                                                         </h1>
                                                         <h6 class="text-white">My Total Approved Request</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalApprovedRequests">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,7 +108,7 @@
                                                             <i class="fas fa-ban"></i>
                                                         </h1>
                                                         <h6 class="text-white">My Total Rejected Request</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalRejectedRequests">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -119,7 +119,7 @@
                                                             <i class="mdi mdi-folder"></i>
                                                         </h1>
                                                         <h6 class="text-white">My Files</h6>
-                                                        <h6 class="text-white">0</h6>
+                                                        <h6 class="text-white totalUploaded">0</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -218,14 +218,14 @@
                         <div class="page-breadcrumb">
                             <div class="row">
                                 <div class="col-12 d-flex no-block align-items-center">
-                                    <h4 class="page-title">Request Document</h4>
+                                    <h4 class="page-title">Available Documents</h4>
                                     <div class="ms-auto text-end">
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a href="#">Request</a>
+                                                    <a href="#">Requests</a>
                                                 </li>
-                                                <li class="breadcrumb-item active" aria-current="page">Documents List</li>
+                                                <li class="breadcrumb-item active" aria-current="page">Documents</li>
                                             </ol>
                                         </nav>
                                     </div>
@@ -243,31 +243,12 @@
                                 <div class="card mb-4 el-card">
                                     <div class="card-header"></div>
                                     <div class="card-body ">
-                                        <div class="row">
-                                            <div class="col-lg-4 mb-2" th:each="documents : ${documentsCards}">
-                                                <div class="card border border-dark shadow card-hover">
-                                                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                                        <a href="#!">
-                                                            <div class="imageDiv mt-2 text-center" style="background-color: rgba(251, 251, 251, 0.15);">
-                                                                <img
-                                                                    th:src="@{'/student/documents/image?id='+ ${documents.documentId}}"
-                                                                    src="images/documentImage"
-                                                                    class="img-fluid"
-                                                                    style="height: 250px; width: 250px;"
-                                                                >
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <h3 class="card-title text-center" th:text="${documents.title}"></h3>
-                                                        <div class="row">
-                                                            <div class="col-sm mt-2">
-                                                                <a th:href="@{'/student/request/'+ ${documents.title}}" class="w-100 btn btn-primary">
-                                                                    Request
-                                                            This Document.
-                                                                </a>
-                                                            </div>
-                                                        </div>
+                                        <div class="row cardRow">
+                                            <div class="mainLoaderDiv">
+                                                <div id="loaderDiv">
+                                                    <div class="cardLoader">
+                                                        <div class="loader-wheel"></div>
+                                                        <div class="loader-text"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -294,12 +275,13 @@
 <script type="text/javascript" th:src="@{/js/a_libraries/sockjs.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/a_libraries/stomp.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/websocket-config.js}"></script>
-<script type="text/javascript" th:src="@{/js/userpageJS/realtime_notification.js}"></script>
-
+<script type="text/javascript" th:src="@{/js/realtime_loads/realtime_notification.js}"></script>
 <th:block th:switch="${page}">
-    <th:block th:case="'dashboard'"></th:block>
+    <th:block th:case="'dashboard'"><script type="text/javascript" th:src="@{/js/realtime_loads/realtime_totals.js}"></script></th:block>
     <th:block th:case="'documents'"></th:block>
-    <th:block th:case="'doc_cards'"></th:block>
+    <th:block th:case="'doc_cards'">
+        <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_doc_cards.js}"></script>
+    </th:block>
 </th:block>
 </body>
 </html>

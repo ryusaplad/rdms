@@ -19,7 +19,6 @@ public class DataWebSocketHandler extends TextWebSocketHandler {
         sessions.forEach(session -> {
             try {
                 session.sendMessage(new TextMessage(data));
-                System.out.println("Message sent: " + data);
             } catch (IOException e) {
                 e.printStackTrace();
             }

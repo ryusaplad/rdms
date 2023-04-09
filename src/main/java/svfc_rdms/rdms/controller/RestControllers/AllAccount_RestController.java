@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller.RestControllers;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +24,11 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
+import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.NotificationRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
+import svfc_rdms.rdms.repository.Teacher.TeacherRepository;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
@@ -50,15 +53,153 @@ public class AllAccount_RestController {
      private GlobalServiceControllerImpl globalService;
 
      @Autowired
-     private UsersRepository usersRepository;
-
-     @Autowired
      private StudentRepository studentRepository;
+     @Autowired
+     private FileRepository fileRepository;
+     @Autowired
+     private UsersRepository usersRepository;
+     @Autowired
+     private TeacherRepository teacherRepository;
+
+     @GetMapping("/{userType}/dashboard/totals")
+     public ResponseEntity<Object> loadAllTotal(@PathVariable("userType") String userType, HttpServletResponse response,
+               HttpServletRequest request,
+               HttpSession session) {
+
+          try {
+
+               String username = "";
+               if ((username = session.getAttribute("username").toString()) != null) {
+
+                    ValidAccounts[] validAccountType = ValidAccounts.values();
+
+                    for (ValidAccounts validAcc : validAccountType) {
+                         if (String.valueOf(validAcc).toLowerCase()
+                                   .contains(userType.toLowerCase())) {
+                              userType = validAcc.toString().toLowerCase();
+                              break;
+                         }
+                    }
+                    if (globalService.validatePages(userType, response, session)) {
+                         if (session.getAttribute("name") != null) {
+                              String name = session.getAttribute("name").toString();
+                              Optional<Users> user = usersRepository.findByName(name);
+                              List<Long> totals = new ArrayList<>();
+
+                              if (user.isPresent()) {
+
+                                   if (user.get().getType().equalsIgnoreCase("student")) {
+                                        long totalRequests = studentRepository.countByRequestBy(user.get());
+                                        long totalApprovedRequests = studentRepository
+                                                  .countByRequestByAndRequestStatus(user.get(), "Approved");
+                                        long totalRejectedRequests = studentRepository
+                                                  .countByRequestByAndRequestStatus(user.get(), "Rejected");
+                                        long totalUploadedFiles = fileRepository.countByUploadedBy(user.get());
+
+                                        totals.add(totalRequests);
+                                        totals.add(totalApprovedRequests);
+                                        totals.add(totalRejectedRequests);
+                                        totals.add(totalUploadedFiles);
+                                        return new ResponseEntity<>(totals, HttpStatus.OK);
+                                   } else if (user.get().getType().equalsIgnoreCase("registrar")) {
+                                        long totalStudentRequests = studentRepository.count();
+                                        long totalTeacherRequests = teacherRepository.count();
+                                        long totalPendingRequests = studentRepository
+                                                  .countByRequestStatus("Pending");
+                                        long totalApprovedRequests = studentRepository
+                                                  .countByRequestStatus("Approved");
+                                        long totalRejectedRequests = studentRepository
+                                                  .countByRequestStatus("Rejected");
+                                        long totalUploadedFiles = fileRepository.countByUploadedBy(user.get());
+
+                                        totals.add(totalStudentRequests);
+                                        totals.add(totalTeacherRequests);
+                                        totals.add(totalPendingRequests);
+                                        totals.add(totalApprovedRequests);
+                                        totals.add(totalRejectedRequests);
+                                        totals.add(totalUploadedFiles);
+                                        return new ResponseEntity<>(totals, HttpStatus.OK);
+                                   } else if (user.get().getType().equalsIgnoreCase("teacher")) {
+                                        long totalRequests = studentRepository.count();
+                                        long totalSentRequests = teacherRepository.totalRequestsByStatus("Sent");
+                                        long totalUploadedFiles = fileRepository
+                                                  .countByUploadedBy(user.get());
+
+                                        totals.add(totalRequests);
+                                        totals.add(totalSentRequests);
+                                        totals.add(totalUploadedFiles);
+                                        return new ResponseEntity<>(totals, HttpStatus.OK);
+                                   } else if (user.get().getType().equalsIgnoreCase("school_admin")) {
+                                        long totalStudentRequests = studentRepository.count();
+                                        long totalRegistrarRequests = teacherRepository.count();
+                                        long totalPendingRequests = studentRepository
+                                                  .countByRequestStatus("Pending");
+                                        long totalApprovedRequests = studentRepository
+                                                  .countByRequestStatus("Approved");
+                                        long totalRejectedRequests = studentRepository
+                                                  .countByRequestStatus("Rejected");
+
+                                        long totalRegistrarAcc = usersRepository.totalUsers("Registrar",
+                                                  "Active");
+                                        long totalTeacherAcc = usersRepository.totalUsers("Teacher",
+                                                  "Active");
+                                        long totalStudentsAcc = usersRepository.totalUsers("Students",
+                                                  "Active");
+
+                                        long totalDelRegistarAcc = usersRepository.totalUsers("Students",
+                                                  "Temporary");
+                                        long totalDelTeacherAcc = usersRepository.totalUsers("Teacher",
+                                                  "Temporary");
+                                        long totalDelStudentsAcc = usersRepository.totalUsers("Students",
+                                                  "Temporary");
+
+                                        long totalGlobalFiles = fileRepository.count();
+
+
+
+                                        totals.add(totalStudentRequests);
+                                        totals.add(totalRegistrarRequests);
+                                        totals.add(totalPendingRequests);
+                                        totals.add(totalApprovedRequests);
+                                        totals.add(totalRejectedRequests);
+
+                                        totals.add(totalRegistrarAcc);
+                                        totals.add(totalTeacherAcc);
+                                        totals.add(totalStudentsAcc);
+
+                                        totals.add(totalDelRegistarAcc);
+                                        totals.add(totalDelTeacherAcc);
+                                        totals.add(totalDelStudentsAcc);
+                                        totals.add(totalGlobalFiles);
+                                        return new ResponseEntity<>(totals, HttpStatus.OK);
+                                   }
+
+                              } else {
+                                   return new ResponseEntity<>(
+                                             "You are performing invalid action, Please try again later.",
+                                             HttpStatus.BAD_REQUEST);
+                              }
+
+                         }
+
+                    } else {
+                         throw new ApiRequestException("You are performing invalid action, Please try again");
+                    }
+
+               } else {
+                    throw new ApiRequestException("You are performing invalid action, Please try again");
+               }
+
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
+          throw new ApiRequestException("You are performing invalid action, Please try again");
+     }
 
      @PostMapping("/change/account/password")
      public ResponseEntity<String> changePassword(@RequestParam("oldPass") String oldPassword,
                @RequestParam("newPass") String newPassword, @RequestParam("confirmPass") String confirmPassword,
-               HttpSession session, HttpServletResponse response,HttpServletRequest request) {
+               HttpSession session, HttpServletResponse response, HttpServletRequest request) {
           long userId = 0;
           String username = "";
           if ((username = session.getAttribute("username").toString()) != null) {
@@ -66,14 +207,15 @@ public class AllAccount_RestController {
                if (optionalUser.isPresent()) {
                     userId = optionalUser.get().getUserId();
                }
-               return accountServiceImpl.changePassword(oldPassword, newPassword, userId,session,request);
+               return accountServiceImpl.changePassword(oldPassword, newPassword, userId, session, request);
           }
           throw new ApiRequestException("Invalid Action");
 
      }
 
      @PostMapping("/change/account/profile-picture")
-     public ResponseEntity<String> changeProfilePicture(@RequestParam MultipartFile image, HttpSession session,HttpServletRequest request) {
+     public ResponseEntity<String> changeProfilePicture(@RequestParam MultipartFile image, HttpSession session,
+               HttpServletRequest request) {
           long userId = 0;
           String username = "";
           if ((username = session.getAttribute("username").toString()) != null) {
@@ -81,7 +223,7 @@ public class AllAccount_RestController {
                if (optionalUser.isPresent()) {
                     userId = optionalUser.get().getUserId();
                }
-               return accountServiceImpl.changeProfilePicture(image, userId,session,request);
+               return accountServiceImpl.changeProfilePicture(image, userId, session, request);
           }
           throw new ApiRequestException("Invalid Action");
      }
@@ -226,7 +368,7 @@ public class AllAccount_RestController {
                               break;
                          }
                     }
-                 
+
                     if (globalService.validatePages(userType, response, session)) {
                          if (userType.equals("student")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
@@ -311,17 +453,19 @@ public class AllAccount_RestController {
      }
 
      @GetMapping("/{userType}/student-request-export/all")
-     public ResponseEntity<String> exportStudentRequestToExcelCheck(@PathVariable("userType")String userType,HttpSession session,
-               HttpServletResponse response,HttpServletRequest request) {          
+     public ResponseEntity<String> exportStudentRequestToExcelCheck(@PathVariable("userType") String userType,
+               HttpSession session,
+               HttpServletResponse response, HttpServletRequest request) {
           List<StudentRequest> studRequest = studentRepository.findAll();
-          return admin_RegistrarAccountServiceImpl.exportingStudentRequestToExcel(response, session, studRequest,request);
+          return admin_RegistrarAccountServiceImpl.exportingStudentRequestToExcel(response, session, studRequest,
+                    request);
      }
 
      @GetMapping("/{userType}/student-request-export/confirm")
-     public void exportStudentRequestToExcelConfirm(@PathVariable("userType")String userType,HttpSession session,
-               HttpServletResponse response,HttpServletRequest request) {
+     public void exportStudentRequestToExcelConfirm(@PathVariable("userType") String userType, HttpSession session,
+               HttpServletResponse response, HttpServletRequest request) {
           List<StudentRequest> studRequest = studentRepository.findAll();
-          admin_RegistrarAccountServiceImpl.exportConfirmation(response, session, studRequest,request);
+          admin_RegistrarAccountServiceImpl.exportConfirmation(response, session, studRequest, request);
      }
 
 }

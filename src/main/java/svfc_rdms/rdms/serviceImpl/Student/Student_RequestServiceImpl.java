@@ -16,9 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
@@ -224,6 +222,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                                    + " is requesting (" + document + ")";
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                          // Send a message over WebSocket
+                          globalService.sendTopic("/topic/totals", "OK");
                          globalService.sendTopic("/topic/student/requests", "OK");
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
@@ -381,6 +380,11 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
           } catch (Exception e) {
                throw new ApiRequestException("Failed to load image Reason: " + e.getMessage());
           }
+     }
+
+     @Override
+     public List<Documents> displayAllDocuments(boolean status) {
+        return documentRepository.findAllByStatus(status);
      }
 
 }

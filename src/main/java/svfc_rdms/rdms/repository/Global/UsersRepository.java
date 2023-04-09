@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import svfc_rdms.rdms.model.Users;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
+
+     
      public Optional<Users> findUserIdByUsername(String username);
 
      public Optional<Users> findByUsername(String username);

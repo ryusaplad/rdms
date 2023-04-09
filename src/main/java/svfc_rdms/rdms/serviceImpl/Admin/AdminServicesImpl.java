@@ -128,7 +128,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                                         + title + "' from the list.";
                               String messageType = "new_document";
                               String dateAndTime = globalService.formattedDate();
-
+                              
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
                                         false, user, session, request)) {
@@ -139,6 +139,8 @@ public class AdminServicesImpl implements AdminService, FileService {
                     }
                     if (notificationCounter >= 0) {
                          docRepo.save(saveDocument);
+                         globalService.sendTopic("/topic/request/cards","OK");
+                         globalService.sendTopic("/topic/totals", "OK");
                          return new ResponseEntity<Object>("success", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<Object>("failed", HttpStatus.BAD_REQUEST);
@@ -218,6 +220,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                     }
                     if (notificationCounter >= 0) {
                          docRepo.save(updateDocument);
+                         globalService.sendTopic("/topic/request/cards","OK");
                          return new ResponseEntity<Object>("success", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<Object>("failed", HttpStatus.BAD_REQUEST);
@@ -239,11 +242,6 @@ public class AdminServicesImpl implements AdminService, FileService {
      @Override
      public List<Documents> getAllDocuments() {
           return docRepo.findAll();
-     }
-
-     @Override
-     public List<Documents> getAllDocumentsByStatus(boolean status) {
-          return docRepo.findAllByStatus(status);
      }
 
      @Override
@@ -509,7 +507,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                          file.getStatus(),
                          file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
           });
-          
+
           model.addAttribute("files", userFiles);
           model.addAttribute("page", "globalfiles");
           model.addAttribute("pageTitle", "Global Files");

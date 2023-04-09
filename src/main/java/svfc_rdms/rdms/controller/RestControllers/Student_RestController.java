@@ -32,7 +32,19 @@ public class Student_RestController {
 
      @Autowired
      private Student_RequirementServiceImpl requirementServiceImpl;
-     
+
+     @GetMapping("/student/document/cards/load")
+     public ResponseEntity<Object> loadAvailableDocuments(HttpServletResponse response, HttpServletRequest request,
+               HttpSession session) {
+
+          if (globalService.validatePages("student", response, session)) {
+
+               return new ResponseEntity<>(requestServiceImpl.displayAllDocuments(true), HttpStatus.OK);
+
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
 
      @PostMapping("/student/request/{document}/sent")
      public ResponseEntity<Object> studRequestSent(@RequestParam("studentId") String id,
@@ -44,7 +56,8 @@ public class Student_RestController {
                return requestServiceImpl.submitRequest(id, files, document, params, session, request);
 
           }
-          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
      }
 
      @PostMapping("/student/request/file/update")
@@ -53,7 +66,8 @@ public class Student_RestController {
           if (globalService.validatePages("student", response, session)) {
                return requirementServiceImpl.updateFileRequirement(file, params);
           }
-          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
      }
 
      @PostMapping("/student/request/info/update")
@@ -63,7 +77,8 @@ public class Student_RestController {
           if (globalService.validatePages("student", response, session)) {
                return requirementServiceImpl.updateInformationRequirement(requestId, params);
           }
-          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
 
      }
 
@@ -74,13 +89,19 @@ public class Student_RestController {
           if (globalService.validatePages("student", response, session)) {
                return requirementServiceImpl.resubmitRequest("Pending", userId, requestId, session, request);
           }
-          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
 
      }
 
      @GetMapping("/student/my-requests/load_all")
      public ResponseEntity<Object> listOfStudentRequest(HttpServletResponse response, HttpSession session) {
-          return requestServiceImpl.loadAllStudentRequest(session);
+          if (globalService.validatePages("student", response, session)) {
+               return requestServiceImpl.loadAllStudentRequest(session);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+
      }
 
      @GetMapping("/student/my-requests/fetch")
@@ -91,7 +112,8 @@ public class Student_RestController {
                String username = session.getAttribute("username").toString();
                return requestServiceImpl.fetchRequestInformationToModals(username, requestId);
           }
-          return new ResponseEntity<>("You are performing invalid action, Please try again later.", HttpStatus.OK);
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
 
      }
 

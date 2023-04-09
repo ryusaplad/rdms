@@ -67,6 +67,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                     userRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Password changed for user " + user.getName() + ".";
+                    
                     globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
                     return new ResponseEntity<>("Password updated.", HttpStatus.OK);
                } else {

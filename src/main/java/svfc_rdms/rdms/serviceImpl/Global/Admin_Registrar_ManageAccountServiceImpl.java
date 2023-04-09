@@ -146,6 +146,7 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
                         String logMessage = "User " + session.getAttribute("name").toString()
                                 + " added a user (" + user.getName() + ") with a user type of " + user.getType()
                                 + ".";
+                        globalService.sendTopic("/topic/totals", "OK");
                         globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                         return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                     }
@@ -159,6 +160,7 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
                     String logMessage = "User " + session.getAttribute("name").toString()
                             + " updated the user (" + user.getName() + ") with a user type of " + user.getType()
                             + ".";
+
                     globalLogsServiceImpl.saveLog(0, logMessage, "Mid_Log", date, "medium", session, request);
                     return new ResponseEntity<Object>(serviceResponseDTO, HttpStatus.OK);
                 }
@@ -205,6 +207,7 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
                 String logMessage = "User " + session.getAttribute("name").toString()
                         + " deleted the user (" + findOneUserById(userId).get().getName()
                         + ")";
+                globalService.sendTopic("/topic/totals", "OK");
                 globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session, request);
                 return true;
             }
@@ -370,18 +373,19 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
                             }
                         }
                         type = "Registrar";
-                    }else{
-                        type =  "School admin";
+                    } else {
+                        type = "School admin";
                     }
-                    String logMessage = type+"  Exporting data User: "
-                    + session.getAttribute("name")
-                    + " Exported the data to spreadsheet";
-            globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session, request);
+                    String logMessage = type + "  Exporting data User: "
+                            + session.getAttribute("name")
+                            + " Exported the data to spreadsheet";
+                    globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session, request);
                 }
 
             } catch (IOException e) {
                 String date = LocalDateTime.now().toString();
-                String logMessage = "Registrar (" + session.getAttribute("name") + ":" + session.getAttribute("username")
+                String logMessage = "Registrar (" + session.getAttribute("name") + ":"
+                        + session.getAttribute("username")
                         + ")failed to export student requests \nSystem Message: " + e.getMessage();
                 globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
 

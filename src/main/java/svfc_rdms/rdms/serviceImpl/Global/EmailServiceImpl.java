@@ -26,6 +26,8 @@ public class EmailServiceImpl implements EmailService {
         helper.setText(text, true);
         helper.setReplyTo("noreply@example.com");
         javaMailSender.send(message);
+       
+       
     }
 
 }

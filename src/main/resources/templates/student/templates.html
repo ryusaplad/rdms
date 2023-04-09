@@ -72,19 +72,19 @@
                             width="31"
                         >
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end s user-dd animated" aria-labelledby="navbarDropdown">
                         <hr class="devider">
-                        <label th:with="name=${#session.getAttribute('name')}" class="dropdown-item bg-success border border-1 b-2 text-white">
-                            Name:
-                            <strong id="nameVal">[[${name}]]</strong>
-                        </label>
-                        <label th:with="type=${#session.getAttribute('accountType')}" class="dropdown-item bg-primary border  border-1 b-2 text-white">
-                            Account
-                                    Type
-                                    :[[${type}]]
-                        </label>
+                        <a class="dropdown-item bg-success border border-1 b-2 text-white">
+                            <span style="font-size: 0.8rem; font-weight: 500; line-height: 1.2;">Name:</span>
+                            <br>
+                            <span th:with="name=${#session.getAttribute('name')}" style="font-size: 0.9rem; font-weight: 600;">[[${name}]]</span>
+                        </a>
+                        <a class="dropdown-item bg-primary border border-1 b-2 text-white">
+                            <span style="font-size: 0.8rem; font-weight: 500; line-height: 1.2;">Login As:</span>
+                            <br>
+                            <span th:with="type=${#session.getAttribute('accountType')}"  style="font-size: 0.9rem; font-weight: 600;">[[${type}]]</span>
+                        </a>
                         <hr class="devider">
-                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
                             <i class="ti-settings me-1 ms-1"></i>
                             Change Password
@@ -101,6 +101,7 @@
                         </a>
                         <div class="dropdown-divider"></div>
                     </ul>
+                    
                 </li>
                 <!-- ============================================================== -->
                 <!-- User profile and search -->

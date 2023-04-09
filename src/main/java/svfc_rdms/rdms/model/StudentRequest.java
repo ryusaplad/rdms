@@ -45,7 +45,7 @@ public class StudentRequest {
       private String requestStatus;
 
       private String releaseDate;
-
+      @Column(columnDefinition = "text")
       private String manageBy;
 
       @ManyToOne

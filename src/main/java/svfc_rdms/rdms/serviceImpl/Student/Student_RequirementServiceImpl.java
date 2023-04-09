@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -164,6 +163,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                                    + studentRequest.getRequestDocument().getTitle() + " User: " + user.getName()
                                    + " resubmit the request of (" + studentRequest.getRequestDocument().getTitle()
                                    + ")";
+                                   globalService.sendTopic("/topic/totals", "OK");
                                    globalService.sendTopic("/topic/student/requests", "OK");
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);

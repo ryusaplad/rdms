@@ -54,8 +54,6 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      @Autowired
      private NotificationServiceImpl notificationService;
 
-     
-
      @Override
      public ResponseEntity<Object> fetchAllStudentRequest() {
           try {
@@ -88,9 +86,6 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
           }
 
      }
-
-   
-         
 
      @Override
      public String displayAllFilesByUserId(HttpSession session, Model model) {
@@ -154,21 +149,26 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                     }
                     String title = "Request Status", notifMessage = "";
                     String documentName = studentRequest.getRequestDocument().getTitle();
+                  
                     if (status.equals("On-Going")) {
 
                          notifMessage = "Hello " + user.getName() + ", the " + documentName
                                    + " request is currently ongoing, please go to the 'My Request' to view the details.";
-
+                      
                     } else if (status.equals("Rejected")) {
 
                          notifMessage = "Hello " + user.getName() + ", unfortunately your request for " + documentName
                                    + " has been rejected. Please review the request provided and resubmit the request if needed.";
+                         
                     }
 
                     String messageType = "requesting_notification";
                     String dateAndTime = globalService.formattedDate();
 
                     if (user != null && studentRequest != null) {
+                         String text = notifMessage + "Please check 'My Requests' for further information.";
+
+                         
 
                          if (notificationService.sendStudentNotification(title, notifMessage, messageType, dateAndTime,
                                    false,
@@ -182,7 +182,10 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               String logMessage = "Registrar changed the request status of " + user.getName() + " to "
                                         + status + ". User: " + manageBy + ".";
                               globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+                              globalService.sendTopic("/topic/totals", "OK");
                               globalService.sendTopic("/topic/student_request/recieved", "OK");
+
+                              
                               return new ResponseEntity<>("Success", HttpStatus.OK);
 
                          } else {
@@ -194,6 +197,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                                         "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
 
                          }
+                         
 
                     }
 
@@ -268,20 +272,22 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               }
                          }
                          String reqStatus = studentRequest.getRequestStatus().toLowerCase();
-                         if (!reqStatus.contains("approved") || !reqStatus.contains("pending") || !reqStatus.contains("on-going")) {
+                         if (!reqStatus.contains("approved") || !reqStatus.contains("pending")
+                                   || !reqStatus.contains("on-going")) {
                               studentRepository.save(studentRequest);
                               String date = LocalDateTime.now().toString();
                               String logMessage = "Registrar Finalized "
                                         + user.getName() + " User: " + manageBy.getName() + ":" + manageBy.getUsername()
                                         + "Finalized/Completed the request of " + user.getName();
-                                        
-                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+
+                              globalService.sendTopic("/topic/totals", "OK");
                               globalService.sendTopic("/topic/student_request/recieved", "OK");
-                              
+                              globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+
                               return new ResponseEntity<>("Success", HttpStatus.OK);
-                          } else {
+                         } else {
                               return new ResponseEntity<>("Request is already completed.", HttpStatus.OK);
-                          }
+                         }
 
                     } else {
                          return new ResponseEntity<>("Failed to save the notification.", HttpStatus.OK);

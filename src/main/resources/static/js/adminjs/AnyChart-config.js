@@ -401,7 +401,7 @@ function loadChart(filterValue, currentDate, action) {
         $("#all-tab").text($("#all-tab").text().replace(" (Not Available)", ""));
       } else {
         $("#all-tab").addClass("disabled");
-        if ($("#all-tab").text().indexOf("(Empty)") == -1) {
+        if ($("#all-tab").text().indexOf("(Not Available)") == -1) {
           $("#all-tab").text($("#all-tab").text() + " (Not Available)");
         }
       }
@@ -707,7 +707,7 @@ $(document).on("click", ".exportBtn", function () {
 function changeTabText() {
   if (preschoolChart.data().getRowsCount() == 0) {
 
-    if ($("#ps-tab").text().indexOf("(Empty)") == -1) {
+    if ($("#ps-tab").text().indexOf("(Not Available)") == -1) {
       $("#ps-tab").text($("#ps-tab").text() + " (Not Available)");
     }
   } else {
@@ -715,7 +715,7 @@ function changeTabText() {
   }
 
   if (highschoolChart.data().getRowsCount() == 0) {
-    if ($("#hs-tab").text().indexOf("(Empty)") == -1) {
+    if ($("#hs-tab").text().indexOf("(Not Available)") == -1) {
       $("#hs-tab").text($("#hs-tab").text() + " (Not Available)");
     }
   } else {
@@ -723,7 +723,7 @@ function changeTabText() {
   }
 
   if (shsChart.data().getRowsCount() == 0) {
-    if ($("#shs-tab").text().indexOf("(Empty)") == -1) {
+    if ($("#shs-tab").text().indexOf("(Not Available)") == -1) {
       $("#shs-tab").text($("#shs-tab").text() + " (Not Available)");
     }
   } else {
@@ -732,7 +732,7 @@ function changeTabText() {
 
 
   if (collegeChart.data().getRowsCount() == 0) {
-    if ($("#college-tab").text().indexOf("(Empty)") == -1) {
+    if ($("#college-tab").text().indexOf("(Not Available)") == -1) {
       $("#college-tab").text($("#college-tab").text() + " (Not Available)");
     }
   } else {

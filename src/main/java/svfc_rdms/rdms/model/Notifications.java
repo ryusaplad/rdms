@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +28,7 @@ public class Notifications {
      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notif_sequence")
      private long notifId;
      private String title;
+     @Column(columnDefinition = "text")
      private String message; // add messages
      private String messageType; // warning / information
      private String dateAndTime; // what date created

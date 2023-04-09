@@ -105,7 +105,7 @@ public class Admin_RestController {
      }
 
      @GetMapping("/admin/update-document-cards")
-     public ResponseEntity<Object> resetDocumentCards() {
+     public ResponseEntity<Object> updateDocumentCard() {
 
           try {
                List<Documents> documents = mainService.getAllDocuments();

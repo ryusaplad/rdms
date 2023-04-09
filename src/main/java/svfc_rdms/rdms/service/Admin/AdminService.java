@@ -45,8 +45,6 @@ public interface AdminService {
 
      String displayAllUserFiles(HttpSession session, Model model);
 
-     List<Documents> getAllDocumentsByStatus(boolean status);
-
      List<String> getAllDocumentTitles();
 
      Optional<Documents> getFileDocumentById(long id);

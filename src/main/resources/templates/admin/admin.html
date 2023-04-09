@@ -104,6 +104,59 @@
                                         <!-- Rows -->
                                         <!-- ============================================================== -->
                                         <div class="row">
+                                            <h5>Student Request Totals</h5>
+                                            <div class="col-md-6">
+                                              
+                                                <div class="card card-hover">
+                                                    <div class="box bg-primary text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="fas fa-table"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Student Requests</h6>
+                                                        <h6 class="text-white totalStudentRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-secondary text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="fas fa-thumbtack"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Pending Requests</h6>
+                                                        <h6 class="text-white totalPendingRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-success text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="far fa-check-square"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Approved Requests</h6>
+                                                        <h6 class="text-white totalApprovedRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-danger text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="fas fa-ban"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Rejected Requests</h6>
+                                                        <h6 class="text-white totalRejectedRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <h5>User Acccounts Totals</h5>
+                                           
+                                            
+                                        
                                             <div class="col-md-6">
                                                 <div class="card card-hover">
                                                     <div class="box bg-success text-center">
@@ -111,7 +164,7 @@
                                                             <i class="fas fa-user"></i>
                                                         </h1>
                                                         <h6 class="text-white">Total Registrar</h6>
-                                                        <h6 class="text-white" th:text="${totalRegistrars}">0</h6>
+                                                        <h6 class="text-white totalRegistrarAcc"></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -123,7 +176,7 @@
                                                             <i class="fas fa-user"></i>
                                                         </h1>
                                                         <h6 class="text-white">Total Teacher</h6>
-                                                        <h6 class="text-white" th:text="${totalTeachers}">0</h6>
+                                                        <h6 class="text-white totalTeacherAcc"></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -133,7 +186,7 @@
                                                         <h1 class="font-light text-white">
                                                             <i class="fas fa-user"></i>
                                                             <h6 class="text-white">Total Students</h6>
-                                                            <h6 class="text-white" th:text="${totalStudents}">0</h6>
+                                                            <h6 class="text-white totalStudentsAcc"></h6>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -147,8 +200,8 @@
                                                         <h6 class="text-white">
                                                             Deleted: Registar
                                                             <h6>
-                                                                <h6 class="text-white" th:text="${totalDeletedReg}">
-                                                                    0
+                                                                <h6 class="text-white totalDelRegistarAcc">
+                                                                    
                                                                 </h6>
                                                             </div>
                                                         </div>
@@ -161,7 +214,7 @@
                                                                 </i>
                                                             </h1>
                                                             <h6 class="text-white">Deleted: Teacher</h6>
-                                                            <h6 class="text-white" th:text="${totalDeletedTeach}">0</h6>
+                                                            <h6 class="text-white totalDelTeacherAcc"></h6>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -173,11 +226,40 @@
                                                             </i>
                                                         </h1>
                                                         <h6 class="text-white">Deleted: Students</h6>
-                                                        <h6 class="text-white" th:text="${totalDeletedStud}">0</h6>
+                                                        <h6 class="text-white totalDelStudentsAcc"></h6>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+
                                         </div>
+                                          <div class="row">
+                                            <h5>Registrar / Total Files</h5>
+                                            <div class="col-md-6">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-primary text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="fas fa-table"></i>
+                                                        </h1>
+                                                        <h6 class="text-white">Registrar Requests</h6>
+                                                        <h6 class="text-white totalRegistrarRequests">0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="card card-hover">
+                                                    <div class="box bg-cyan text-center">
+                                                        <h1 class="font-light text-white">
+                                                            <i class="mdi mdi-folder"></i>
+                                                        </i>
+                                                    </h1>
+                                                    <h6 class="text-white">Total Files</h6>
+                                                    <h6 class="text-white totalGlobalFiles"></h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                          </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-md-3 flex-fill dtcard ">
@@ -403,10 +485,28 @@
                             <!-- ============================================================== -->
                             <!-- Container fluid  -->
                             <!-- ============================================================== -->
-                            <div class="container-fluid">
-                                <div class="container" id="mainx">
+                            <div class="container-fluid ">
+                                <div class="container" id="mainx">.
+                                    <!-- Error Display by ajax -->
+                                <div id="resultDiv" style="display:none">
+                                    <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong id="resultMessage"></strong>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                </div>
                                     <div class="card mb-4 el-card">
-                                        <div class="card-header"></div>
+                                        <div class="card-header">
+                                            <div class="d-flex flex-row-reverse">
+                                                <div class="">
+                                                    <a href="" class="btn btn-primary addDocument">Add Documents</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="card-body ">
                                             <div class="mainLoaderDiv">
                                                 <div id="loaderDiv">
@@ -423,7 +523,7 @@
                                                             <a href="#!">
                                                                 <div class="imageDiv  mt-2 text-center" style="background-color: rgba(251, 251, 251, 0.15);">
                                                                     <img
-                                                                        th:src="@{'/admin/image?id='+ ${documentList.documentId}}"
+                                                                        th:src="@{'/admin/load/image?id='+ ${documentList.documentId}}"
                                                                         src="images/documentImage"
                                                                         class="img-fluid"
                                                                         style="height: 250px;  width: 250px;"
@@ -1308,7 +1408,7 @@
                 <script type="text/javascript" th:src="@{/js/a_libraries/sockjs.min.js}"></script>
                 <script type="text/javascript" th:src="@{/js/a_libraries/stomp.min.js}"></script>
                 <script type="text/javascript" th:src="@{/js/websocket-config.js}"></script>
-                <script type="text/javascript" th:src="@{/js/userpageJS/realtime_notification.js}"></script>
+                <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_notification.js}"></script>
                 <th:block th:switch="${page}">
                     <th:block th:case="'dashboard'">
                         <script type="text/javascript" th:src="@{/js/a_libraries/AnyChart.js}"></script>
@@ -1316,6 +1416,7 @@
                         <script type="text/javascript" th:src="@{/js/a_libraries/html2canvas.js}"></script>
                         <script type="text/javascript" th:src="@{/js/a_libraries/jsPDF.js}"></script>
                         <script type="text/javascript" th:src="@{/js/adminjs/AnyChart-config.js}"></script>
+                        <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_totals.js}"></script>
                     </th:block>
                     <th:block th:case="'settings'">
                         <script type="text/javascript" th:src="@{/js/adminjs/system-settings.js}"></script>

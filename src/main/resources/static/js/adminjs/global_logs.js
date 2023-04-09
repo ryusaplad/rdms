@@ -186,20 +186,25 @@ $(document).ready(function () {
   }
 
 
+  // Web Socket Connection
   function connect() {
-    var socket = new SockJS('/websocket-server');
+    var socket = new SockJS("/websocket-server");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       setConnected(true);
-      stompClient.subscribe('/topic/logs', function (data) {
-        if (data.toString().toLowerCase().includes("ok")) {
-          refreshTable();
-        }
-        //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
-      });
-
-
-
+      if (stompClient.ws.readyState === WebSocket.OPEN) {
+        stompClient.subscribe("/topic/totals", function (data) {
+          if (data.toString().toLowerCase().includes("ok")) {
+            refreshTable();
+          }
+        });
+      } else {
+        console.log("WebSocket not fully loaded yet. Waiting...");
+        setTimeout(function () {
+          connect();
+        }, 1000); // retry after 1 second
+      }
     });
   }
+
 });

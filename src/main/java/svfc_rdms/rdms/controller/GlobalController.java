@@ -1,9 +1,7 @@
 package svfc_rdms.rdms.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import svfc_rdms.rdms.Enums.ValidAccounts;
+import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
@@ -26,8 +26,12 @@ public class GlobalController {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
      @Autowired
      private GlobalLogsServiceImpl globalLogsServiceImpl;
+
+     @Autowired
+     private AdminServicesImpl mainService;
 
      @GetMapping(value = "/")
      public String loginPage(HttpSession session, HttpServletResponse response, HttpServletRequest request,
@@ -82,7 +86,7 @@ public class GlobalController {
                String date = LocalDateTime.now().toString();
                String logMessage = "User Logged Out: " + session.getAttribute("name") + ":"
                          + session.getAttribute("username") + " has logged out";
-               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "low", session,request);
+               globalLogsServiceImpl.saveLog(0, logMessage, "Logout_Log", date, "low", session, request);
                clearSessionAttributes(session);
                session.invalidate();
           }
@@ -129,6 +133,30 @@ public class GlobalController {
 
           }
      }
-     
+
+     @GetMapping("/{userType}/load/image")
+     public void showImage(@PathVariable("userType") String userType, @Param("documentId") long id,
+               HttpServletResponse response, HttpSession session,
+               Optional<Documents> dOptional) {
+                    System.out.println(userType.equalsIgnoreCase("admin"));
+          if (userType.equalsIgnoreCase("admin") || userType.equalsIgnoreCase("registrar")) {
+               if(userType.equalsIgnoreCase("admin")){
+                    userType = "school_admin";
+               }
+               if (globalService.validatePages(userType, response, session)) {
+                    dOptional = mainService.getFileDocumentById(id);
+                    
+                    try {
+                         response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
+                         response.getOutputStream().write(dOptional.get().getImage());
+                         response.getOutputStream().close();
+                    } catch (Exception e) {
+                         System.out.println(e.getMessage());
+                    }
+               }
+
+          }
+
+     }
 
 }

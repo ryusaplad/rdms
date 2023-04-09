@@ -18,3 +18,9 @@ var stompClient = null;
     }
     setConnected(false);
   }
+
+  window.onbeforeunload = function () {
+    if (stompClient && stompClient.connected) {
+      stompClient.disconnect();
+    }
+  };

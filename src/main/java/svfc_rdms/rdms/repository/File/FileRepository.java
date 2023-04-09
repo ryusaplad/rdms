@@ -12,6 +12,9 @@ import svfc_rdms.rdms.model.Users;
 
 public interface FileRepository extends JpaRepository<UserFiles, UUID> {
 
+     Long countByUploadedBy(Users user);
+     Long countByUploadedByAndStatus(Users user, String status);
+
      List<UserFiles> findAllByRequestWith(StudentRequest requestWith);
 
      List<UserFiles> findAllByUploadedBy(Users uploadedBy);

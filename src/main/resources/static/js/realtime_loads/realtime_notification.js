@@ -481,13 +481,20 @@ $(document).ready(function () {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             setConnected(true);
-            stompClient.subscribe("/topic/notifications/", function (data) {
-                if (data.toString().toLowerCase().includes("ok")) {
-                    fetchRightSideNotificationData();
-                    fetchMainNotification();
-                }
-                //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
-            });
+            if (stompClient.ws.readyState === WebSocket.OPEN) {
+                stompClient.subscribe("/topic/notifications/", function (data) {
+                    if (data.toString().toLowerCase().includes("ok")) {
+                        fetchRightSideNotificationData();
+                        fetchMainNotification();
+                    }
+                });
+            } else {
+                console.log("WebSocket not fully loaded yet. Waiting...");
+                setTimeout(function() {
+                    connect();
+                }, 1000); // retry after 1 second
+            }
         });
     }
+    
 });

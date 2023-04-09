@@ -13,6 +13,12 @@ import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 
 public interface StudentRepository extends JpaRepository<StudentRequest, Long> {
+
+     long count();
+     Long countByRequestBy(Users user);
+     Long countByRequestStatus(String status);
+     Long countByRequestByAndRequestStatus(Users user, String status);
+
      List<StudentRequest> findAllByRequestBy(Users user);
 
      Optional<StudentRequest> findOneByRequestByAndRequestId(Users user, long requestId);

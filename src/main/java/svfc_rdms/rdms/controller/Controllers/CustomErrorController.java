@@ -2,6 +2,7 @@ package svfc_rdms.rdms.controller.Controllers;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/error")
 public class CustomErrorController implements ErrorController {
 
+   
+
     @RequestMapping
-    public String handleError(HttpServletRequest request, Model model) {
+    public String handleError(HttpServletRequest request,HttpServletResponse response, Model model) {
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         int statusCode = getStatusCode(request);
         String errorMessage = getErrorMessage(request);
         String errorTitle = getErrorTitle(statusCode);

@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
-import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_AccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
@@ -43,7 +43,7 @@ public class Regs_RestController {
      private UsersRepository userRepository;
 
      @Autowired
-     private StudentRepository studentRepository;
+     private GlobalServiceControllerImpl globalService;
 
      @Autowired
      private Registrar_ServiceImpl regs_ServiceImpl;
@@ -56,59 +56,65 @@ public class Regs_RestController {
      @Autowired
      private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
 
-     @GetMapping(value = "/fetch/test/notif")
-     public ResponseEntity<Object> notifTest(HttpSession session,
-               HttpServletResponse response,
-               Model model) {
-
-          return regs_RequestService.fetchAllStudentRequest();
-
-     }
-
-
      @GetMapping(value = "/fetch/student-requests")
      public ResponseEntity<Object> studentRequests(HttpSession session,
                HttpServletResponse response,
                Model model) {
-
-          return regs_RequestService.fetchAllStudentRequest();
+          if (globalService.validatePages("registrar", response, session)) {
+               return regs_RequestService.fetchAllStudentRequest();
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
 
      }
 
      @PostMapping(value = "/registrar/save/user-account")
-     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session,
+     public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpServletResponse response,
+               HttpSession session,
                HttpServletRequest request) {
+          if (globalService.validatePages("registrar", response, session)) {
+               return adminAccountService.saveUsersAccount(user, 0, session, request);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
 
-          return adminAccountService.saveUsersAccount(user, 0, session, request);
      }
 
      @PostMapping(value = "/registrar/save/update-account")
-     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session,
+     public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpServletResponse response,
+               HttpSession session,
                HttpServletRequest request) {
+          if (globalService.validatePages("registrar", response, session)) {
+               return adminAccountService.saveUsersAccount(user, 1, session, request);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
 
-          return adminAccountService.saveUsersAccount(user, 1, session, request);
      }
 
      @GetMapping("/registrar/user/update")
      @ResponseBody
-     public List<Users> returnUserById(@RequestParam("userId") long id) {
-
-          Optional<Users> users = adminAccountService.findOneUserById(id);
-
+     public List<Users> returnUserById(@RequestParam("userId") long id, HttpServletResponse response,
+               HttpSession session,
+               HttpServletRequest request) {
           List<Users> usersList = new ArrayList<>();
-          if (users.isPresent()) {
-               users.stream().forEach(e -> {
+          if (globalService.validatePages("registrar", response, session)) {
+               Optional<Users> users = adminAccountService.findOneUserById(id);
 
-                    usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getEmail(),
-                              users.get().getUsername(),
-                              users.get().getPassword().replace(users.get()
-                                        .getPassword(), ""),
-                              users.get().getType(), users.get().getStatus(), "update"));
-               });
-               return usersList;
+               if (users.isPresent()) {
+                    users.stream().forEach(e -> {
+
+                         usersList.add(new Users(users.get().getUserId(), users.get().getName(), users.get().getEmail(),
+                                   users.get().getUsername(),
+                                   users.get().getPassword().replace(users.get()
+                                             .getPassword(), ""),
+                                   users.get().getType(), users.get().getStatus(), "update"));
+                    });
+                    return usersList;
+               }
+
           }
           return usersList;
-
      }
 
      @GetMapping(value = "/registrar/user/change/{status}")

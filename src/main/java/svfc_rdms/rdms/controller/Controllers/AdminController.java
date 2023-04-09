@@ -39,9 +39,6 @@ public class AdminController {
      private AdminServicesImpl mainService;
 
      @Autowired
-     private DocumentRepository docRepo;
-
-     @Autowired
      private GlobalServiceControllerImpl globalService;
 
      @Autowired
@@ -153,7 +150,7 @@ public class AdminController {
                     model.addAttribute("hide", hideToggle);
                     model.addAttribute("users", null);
                     model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
-                    
+
                } else {
                     return "redirect:" + "/admin/" + userType + "/admin?error=Invalid User Type";
                }
@@ -163,11 +160,14 @@ public class AdminController {
      }
 
      @GetMapping("/admin/logs")
-     public String viewAdminLogs(Model model) {
-          model.addAttribute("globalLogs", globalLogsService.getAllLogs());
+     public String viewAdminLogs(Model model, HttpServletResponse response, HttpSession session) {
+          if (globalService.validatePages("school_admin", response, session)) {
+               model.addAttribute("globalLogs", globalLogsService.getAllLogs());
                model.addAttribute("page", "globallogs");
                model.addAttribute("pageTitle", "Global Logs");
-          return "/admin/admin";
+               return "/admin/admin";
+          }
+          return "redirect:/";
      }
 
      @GetMapping(value = "/admin/user/{status}")
@@ -221,7 +221,7 @@ public class AdminController {
 
      @GetMapping("/admin/documents-list")
      public String requestForAdmin(HttpServletResponse response, HttpSession session, Model model) {
-       
+
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("documentsList", mainService.getAllDocuments());
                model.addAttribute("page", "documents");
@@ -255,19 +255,7 @@ public class AdminController {
 
      }
 
-     @GetMapping("/admin/image")
-     public void showImage(@Param("documentId") long id, HttpServletResponse response,
-               Optional<Documents> dOptional) {
-
-          dOptional = mainService.getFileDocumentById(id);
-          try {
-               response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
-               response.getOutputStream().write(dOptional.get().getImage());
-               response.getOutputStream().close();
-          } catch (Exception e) {
-               System.out.println(e.getMessage());
-          }
-     }
+    
 
      // end documents managing
 
@@ -291,7 +279,6 @@ public class AdminController {
                model.addAttribute("pageTitle", "Student Requests");
                model.addAttribute("page", "student_request");
                model.addAttribute("studentRequests", storeStudentRequest);
-               
 
                return "/admin/admin";
           }

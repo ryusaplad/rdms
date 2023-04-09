@@ -122,6 +122,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                          response.setHeader("Content-Disposition",
                                    "attachment; filename = " + file.getName().replace(",", "."));
                     }
+                    
                     ServletOutputStream outputStream = response.getOutputStream();
                     outputStream.write(file.getData());
                     outputStream.close();
