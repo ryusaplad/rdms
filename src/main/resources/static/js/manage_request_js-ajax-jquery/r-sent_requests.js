@@ -119,19 +119,19 @@ $(document).ready(function () {
       </div>
       <div class="modal-body s-2">
     
-          <code>Title: ` +
+          <code style="font-size:15px;">Title: ` +
           data[0].requestTitle +
           `</code>
          |
-         <code>To: ` +
+         <code style="font-size:15px;">To: ` +
           data[0].requestTo +
           `</code> 
          
-          <pre style="white-space: pre-wrap;"> ` +
+          <pre style="white-space: pre-wrap; font-size:17px;"> ` +
           data[0].requestMessage +
           `</pre>` +
           htmlModal +
-          `<code>Date/Time: ` +
+          `<code style="font-size:15px;">Date/Time: ` +
           data[0].requestDate +
           `</code>
          

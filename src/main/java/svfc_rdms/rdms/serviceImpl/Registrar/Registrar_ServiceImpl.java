@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
@@ -43,6 +43,43 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
 
      @Autowired
      private NotificationServiceImpl notificationService;
+
+     @Override
+     public ResponseEntity<Object> displayAllRequests(HttpSession session) {
+          List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
+          try {
+               Sort descendingSort = Sort.by("requestId").descending();
+              
+               if (session.getAttribute("username") != null || !session.getAttribute("username").toString().isEmpty()) {
+                    String username = session.getAttribute("username").toString();
+                    Optional<Users> registrar = usersRepository.findByUsername(username);
+
+                    if (registrar.isPresent()) {
+                         List<RegistrarRequest> regRequests = regsRepository.findAllByRequestBy(registrar.get(),descendingSort);
+                         if (regRequests != null) {
+                              regRequests.forEach(request -> {
+
+                                   filteredRequests
+                                             .add(new RegistrarRequest_DTO(request.getRequestId(),
+                                                       request.getRequestTitle(),
+                                                       request.getRequestMessage(), request.getTeacherMessage(),
+                                                       request.getRequestBy().getName(),
+                                                       request.getRequestTo().getName(), request.getRequestDate(),
+                                                       request.getDateOfUpdate(),
+                                                       request.getRequestStatus()));
+
+                              });
+
+                            return new ResponseEntity<>(filteredRequests, HttpStatus.OK);
+                         }
+                    }
+
+               }
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
+          return new ResponseEntity<>("No Data Available", HttpStatus.OK);
+     }
 
      @Override
      public ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params,HttpServletRequest request) {
@@ -102,10 +139,12 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
                               registrarRequest.setRequestMessage(message);
                               registrarRequest.setRequestStatus("pending");
                               registrarRequest.setRequestDate(requestedDate);
+                           
                               globalService.sendTopic("/topic/totals", "OK");
                               if (notificationService.sendNotification(title, notifMessage, messageType, date,
                                         notifStatus, registrar, teacher,session,request)) {
                                    regsRepository.save(registrarRequest);
+                                   globalService.sendTopic("/topic/registrar/requests", "OK");
                                    return new ResponseEntity<>("Success", HttpStatus.OK);
                               }
 
@@ -136,45 +175,9 @@ public class Registrar_ServiceImpl implements Registrar_SelfRequest_Service {
           return Optional.empty();
      }
 
+    
      @Override
-     public String displayAllRequests(HttpSession session, Model model) {
-          List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
-          try {
-
-               String username = session.getAttribute("username").toString();
-               if (!username.isBlank() || !username.isEmpty() || username.length() > -1) {
-                    Optional<Users> user = usersRepository.findByUsername(username);
-
-                    if (user.isPresent()) {
-                         List<RegistrarRequest> regRequests = regsRepository.findAllByRequestBy(user.get());
-                         if (regRequests != null) {
-                              regRequests.forEach(request -> {
-
-                                   filteredRequests.add(
-                                             new RegistrarRequest_DTO(request.getRequestId(), request.getRequestTitle(),
-                                                       request.getRequestMessage(), request.getTeacherMessage(),
-                                                       request.getRequestBy().getName(),
-                                                       request.getRequestTo().getName(), request.getRequestDate(),
-                                                       request.getDateOfUpdate(),
-                                                       request.getRequestStatus()));
-
-                              });
-
-                              model.addAttribute("requests_list", filteredRequests);
-                              return "/registrar/registrar-requests";
-                         }
-                    }
-
-               }
-          } catch (Exception e) {
-               return "/registrar/reg";
-          }
-          model.addAttribute("requests_list", filteredRequests);
-          return "/registrar/registrar-requests";
-     }
-
-     @Override
-     public ResponseEntity<Object> viewRegistrarRequests(long requestsId) {
+     public ResponseEntity<Object> viewRegistrarRequest(long requestsId) {
           Optional<RegistrarRequest> req = getRegistrarRequest(requestsId);
           List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
 

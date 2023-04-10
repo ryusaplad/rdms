@@ -27,7 +27,7 @@ $(document).ready(function () {
       success: function (data) {
         if (data[0].requestStatus == "pending") {
           htmlBtn =
-            `   <button type="button" class="btn btn-success text-white clearModal response" data-value="` +
+            `   <button type="button" class="btn btn-success text-white  response" data-value="` +
             dataVal +
             `" data-bs-dismiss="modal">Response</button>`;
           htmlModalVal = "";
@@ -118,45 +118,49 @@ $(document).ready(function () {
         mainHtmlModal =
           `
 <div class="modal fade" id="sentReqInfo" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="sentReqInfoLabel">` +
+<div class="modal-dialog modal-xl modal-dialog-scrollable">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="sentReqInfoLabel">` +
           data[0].requestTitle +
           `</h5>
-        <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body s-2">
-    
-          <code>Title: ` +
+    <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body s-2">
+
+      <code style="font-size:15px;">Title: ` +
           data[0].requestTitle +
           `</code>
-         |
-         <code>From: ` +
+     |
+     <code style="font-size:15px;">From: ` +
           data[0].requestBy +
           `</code> 
-         
-          <pre style="white-space: pre-wrap;"> ` +
+     
+      <pre style="white-space: pre-wrap; font-size:17px;"> ` +
           data[0].requestMessage +
           `</pre>` +
           htmlModalVal +
-          `<code>Date/Time: ` +
+          `<code style="font-size:15px;">Date/Time: ` +
           data[0].requestDate +
           `</code>
-         
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
-     ` +
+     
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Close</button>
+ ` +
           htmlBtn +
           `
-      </div>
-    </div>
   </div>
+</div>
+</div>
 </div>`;
 
         $(".modalView").append(mainHtmlModal);
         $("#sentReqInfo").modal("toggle");
+        
+      
+
+
       },
       error: function (error) {
         console.log(error.responseText);
@@ -166,8 +170,11 @@ $(document).ready(function () {
 
   $(document).on("click", ".response", function (e) {
     dataVal = $(this).data("value");
-    htmlModal =
-      `
+    if ($(".modalView").find("#responseModal").length > 0) {
+      $("#responseModal").modal("toggle");
+    } else {
+      htmlModal =
+        `
 <div class="modal fade" id="responseModal" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content">
@@ -260,15 +267,17 @@ $(document).ready(function () {
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary backToMainModal" data-bs-dismiss="modal">Back</button>
         <button type="button"  class="btn btn-success text-white sentConfirm clearModal" data-bs-dismiss="modal" data-value="` +
-      dataVal +
-      `" disabled>Sent</button>
+        dataVal +
+        `" disabled>Sent</button>
       </div>
     </div>
   </div>
 </div>`;
 
-    $(".modalView").append(htmlModal);
-    $("#responseModal").modal("toggle");
+      $(".modalView").append(htmlModal);
+      $("#responseModal").modal("toggle");
+    }
+
   });
   $(document).on("click", ".editResponse", function (e) {
     e.preventDefault();
@@ -292,6 +301,7 @@ $(document).ready(function () {
     } else {
       $(".sentConfirm").prop("disabled", true);
       $("#messageVal").focus();
+
       $("#messageVal").addClass("border border-danger");
       $("#messageVal").prop("readonly", false);
       $(".editResponse").prop("disabled", true);
@@ -321,8 +331,11 @@ $(document).ready(function () {
   });
 
   $(document).on("click", ".backToMainModal", function (e) {
-    $(".modalView").append(mainHtmlModal);
-    $("#sentReqInfo").modal("toggle");
+    if ($(".modalView").find("#sentReqInfo").length > 0) {
+      $("#sentReqInfo").modal("toggle");
+    } else {
+      $(".modalView").append(mainHtmlModal);
+    }
   });
 
   // Sending Request
@@ -389,18 +402,18 @@ $(document).ready(function () {
       var name = fileName + "." + extension;
       $("#fileInfoTable").append(
         "'<tr>'" +
-          "<td>" +
-          "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
-          x +
-          ">Cancel</button>" +
-          "</td>" +
-          "<td>" +
-          name +
-          "</td >" +
-          "<td>" +
-          formatFileSize($("#files")[0].files[x].size) +
-          "</td >" +
-          "</tr >"
+        "<td>" +
+        "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
+        x +
+        ">Cancel</button>" +
+        "</td>" +
+        "<td>" +
+        name +
+        "</td >" +
+        "<td>" +
+        formatFileSize($("#files")[0].files[x].size) +
+        "</td >" +
+        "</tr >"
       );
     }
     fileListArr = Array.from($("#files")[0].files);
@@ -431,4 +444,6 @@ $(document).ready(function () {
       formData = new FormData();
     }
   });
+
+
 });

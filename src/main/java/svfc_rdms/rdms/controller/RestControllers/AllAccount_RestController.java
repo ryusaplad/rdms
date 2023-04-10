@@ -120,12 +120,29 @@ public class AllAccount_RestController {
                                         totals.add(totalUploadedFiles);
                                         return new ResponseEntity<>(totals, HttpStatus.OK);
                                    } else if (user.get().getType().equalsIgnoreCase("teacher")) {
-                                        long totalRequests = studentRepository.count();
-                                        long totalSentRequests = teacherRepository.totalRequestsByStatus("Sent");
-                                        long totalUploadedFiles = fileRepository
-                                                  .countByUploadedBy(user.get());
+                                        long totalRequests = teacherRepository.count();
+                                        long totalPendingRequests = teacherRepository.totalRequestsByStatus("pending");
 
+                                        long totalSentRequests_Completed = teacherRepository
+                                                  .totalRequestsByStatus("completed");
+
+                                        long totalSentRequests_NoRecord = teacherRepository
+                                                  .totalRequestsByStatus("norecord");
+
+                                        long totalSentRequests_MessageOnly = teacherRepository
+                                                  .totalRequestsByStatus("messageonly");
+
+                                        long totalSentRequests_RecordOnly = teacherRepository
+                                                  .totalRequestsByStatus("recordonly");
+
+                                        long totalUploadedFiles = fileRepository
+
+                                                  .countByUploadedBy(user.get());
+                                        long totalSentRequests = totalSentRequests_Completed
+                                                  + totalSentRequests_MessageOnly + totalSentRequests_NoRecord
+                                                  + totalSentRequests_RecordOnly;
                                         totals.add(totalRequests);
+                                        totals.add(totalPendingRequests);
                                         totals.add(totalSentRequests);
                                         totals.add(totalUploadedFiles);
                                         return new ResponseEntity<>(totals, HttpStatus.OK);
@@ -154,8 +171,6 @@ public class AllAccount_RestController {
                                                   "Temporary");
 
                                         long totalGlobalFiles = fileRepository.count();
-
-
 
                                         totals.add(totalStudentRequests);
                                         totals.add(totalRegistrarRequests);

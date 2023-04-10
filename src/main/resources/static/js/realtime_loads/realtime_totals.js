@@ -9,7 +9,7 @@ $(document).ready(function () {
         var registrarashboardTotals = ["totalStudentRequests", "totalTeacherRequests", "totalPendingRequests", "totalApprovedRequests", "totalRejectedRequests", "totalUploadedFiles"];
         loadTotals("/registrar/dashboard/totals", registrarashboardTotals);
     } else if (location.includes("teacher")) {
-        var teacherDashboardTotals = ["totalRequests", "totalSentRequests", "totalUploadedFiles"];
+        var teacherDashboardTotals = ["totalRequests","totalPendingRequests", "totalSentRequests", "totalUploadedFiles"];
         loadTotals("/teacher/dashboard/totals", teacherDashboardTotals);
     } else if (location.includes("admin")) {
 

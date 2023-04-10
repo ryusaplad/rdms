@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "GET",
-      url: "/admin/all-requests-view?requestId=" + dataVal,
+      url: "/admin/view/request-data?requestId=" + dataVal,
       success: function (data) {
         if (data[0].requestStatus == "pending") {
           htmlModal = "";
@@ -109,7 +109,7 @@ $(document).ready(function () {
           `
 <div class="modal fade" id="sentReqInfo" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
+    <div class="modal-retent">
       <div class="modal-header">
         <h5 class="modal-title" id="sentReqInfoLabel">` +
           data[0].requestTitle +
@@ -118,19 +118,19 @@ $(document).ready(function () {
       </div>
       <div class="modal-body s-2">
     
-          <code>Title: ` +
+          <code style="font-size:15px;">Title: ` +
           data[0].requestTitle +
           `</code>
          |
-         <code>To: ` +
+         <code style="font-size:15px;">To: ` +
           data[0].requestTo +
           `</code> 
          
-          <pre style="white-space: pre-wrap;"> ` +
+          <pre style="white-space: pre-wrap; font-size:17px;"> ` +
           data[0].requestMessage +
           `</pre>` +
           htmlModal +
-          `<code>Date/Time: ` +
+          `<code style="font-size:15px;">Date/Time: ` +
           data[0].requestDate +
           `</code>
          
@@ -155,4 +155,7 @@ $(document).ready(function () {
   $(document).on("click", ".clearModal", function (e) {
     $(".modalView").empty();
   });
+
+
+  
 });

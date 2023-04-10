@@ -35,6 +35,7 @@ public interface AdminService {
 
      List<StudentRequest> displayRequestByStatus(String status);
 
+
      ResponseEntity<Object> saveDocumentData(MultipartFile multipartFile, Map<String, String> documentsInfo,
                HttpSession session,HttpServletRequest request);
 
@@ -55,7 +56,8 @@ public interface AdminService {
      List<StudentRequest> displayAllRequest();
 
      // Get All Request of registrars
-     ResponseEntity<Object> viewAllRegistrarRequests(long requestsId);
+     ResponseEntity<Object> viewAllRegistrarRequests();
+     ResponseEntity<Object> viewAllRegistrarRequestsByRequestId(long id);
 
      // get all user files;
 

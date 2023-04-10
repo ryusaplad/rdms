@@ -20,8 +20,9 @@ public interface Teacher_Service {
 
      ResponseEntity<String> sendRequestToRegistrar(long requestsId, HttpSession session,
                Optional<MultipartFile[]> files,
-               Map<String, String> params,HttpServletRequest request);
+               Map<String, String> params, HttpServletRequest request);
 
-     String displayAllRequests(HttpSession session, Model model);
+     ResponseEntity<Object> displayAllRequests(HttpSession session);
+
      String displayAllFilesByUserId(HttpSession session, Model model);
 }

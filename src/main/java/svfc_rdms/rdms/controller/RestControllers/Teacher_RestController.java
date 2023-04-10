@@ -23,7 +23,7 @@ import svfc_rdms.rdms.serviceImpl.Teacher.Teacher_ServiceImpl;
 public class Teacher_RestController {
 
      @Autowired
-     private Teacher_ServiceImpl teach_ServiceImpl;
+     private Teacher_ServiceImpl teacherService;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
@@ -35,7 +35,7 @@ public class Teacher_RestController {
 
           if (globalService.validatePages("teacher", response, session)) {
 
-               return teach_ServiceImpl.viewRegistrarRequests(requestId);
+               return teacherService.viewRegistrarRequests(requestId);
 
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.",
@@ -50,11 +50,13 @@ public class Teacher_RestController {
 
           if (globalService.validatePages("teacher", response, session)) {
 
-               return teach_ServiceImpl.sendRequestToRegistrar(requestId, session, files, params, request);
+               return teacherService.sendRequestToRegistrar(requestId, session, files, params, request);
 
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.",
                     HttpStatus.BAD_REQUEST);
 
      }
+
+     
 }

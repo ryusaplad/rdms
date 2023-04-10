@@ -7,19 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 
 import svfc_rdms.rdms.model.RegistrarRequest;
 
 public interface Registrar_SelfRequest_Service {
 
       // Requests for Teachers
+      ResponseEntity<Object> displayAllRequests(HttpSession session);
+
       Optional<RegistrarRequest> getRegistrarRequest(long requestsId);
 
-      ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params,HttpServletRequest request);
+      ResponseEntity<String> sendRequestToTeacher(long userId, HttpSession session, Map<String, String> params,
+                  HttpServletRequest request);
 
-      String displayAllRequests(HttpSession session, Model model);
-
-      ResponseEntity<Object> viewRegistrarRequests(long requestsId);
+      ResponseEntity<Object> viewRegistrarRequest(long requestsId);
 
 }

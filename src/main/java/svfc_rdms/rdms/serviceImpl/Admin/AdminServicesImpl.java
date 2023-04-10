@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -128,7 +129,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                                         + title + "' from the list.";
                               String messageType = "new_document";
                               String dateAndTime = globalService.formattedDate();
-                              
+
                               if (notificationService.sendStudentNotification(notifTitle, message, messageType,
                                         dateAndTime,
                                         false, user, session, request)) {
@@ -139,7 +140,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                     }
                     if (notificationCounter >= 0) {
                          docRepo.save(saveDocument);
-                         globalService.sendTopic("/topic/request/cards","OK");
+                         globalService.sendTopic("/topic/request/cards", "OK");
                          globalService.sendTopic("/topic/totals", "OK");
                          return new ResponseEntity<Object>("success", HttpStatus.OK);
                     } else {
@@ -220,7 +221,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                     }
                     if (notificationCounter >= 0) {
                          docRepo.save(updateDocument);
-                         globalService.sendTopic("/topic/request/cards","OK");
+                         globalService.sendTopic("/topic/request/cards", "OK");
                          return new ResponseEntity<Object>("success", HttpStatus.OK);
                     } else {
                          return new ResponseEntity<Object>("failed", HttpStatus.BAD_REQUEST);
@@ -284,8 +285,9 @@ public class AdminServicesImpl implements AdminService, FileService {
      }
 
      @Override
-     public ResponseEntity<Object> viewAllRegistrarRequests(long requestsId) {
-          List<RegistrarRequest> req = regsRepository.findAll();
+     public ResponseEntity<Object> viewAllRegistrarRequests() {
+          Sort descendingSort = Sort.by("requestId").descending();
+          List<RegistrarRequest> req = regsRepository.findAll(descendingSort);
           List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
           if (req != null) {
                req.forEach(regRequests -> {
@@ -321,6 +323,44 @@ public class AdminServicesImpl implements AdminService, FileService {
      }
 
      @Override
+     public ResponseEntity<Object> viewAllRegistrarRequestsByRequestId(long requestId) {
+          Optional<RegistrarRequest> req = regsRepository.findById(requestId);
+          List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
+          if (req.isPresent()) {
+             
+                    List<UserFiles> regRequestFiles = fileRepository.findAllByRegRequestsWith(req.get());
+
+                    RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
+                         req.get().getRequestId(),
+                         req.get().getRequestTitle(), req.get().getRequestMessage(),
+                         req.get().getTeacherMessage(),
+                         req.get().getRequestBy().getName(),
+                         req.get().getRequestTo().getName(), req.get().getRequestDate(),
+                         req.get().getDateOfUpdate(), req.get().getRequestStatus());
+                    registrarDtoCompressor.add(regDto);
+
+                    if (regRequestFiles != null) {
+                         regRequestFiles.forEach(userFiles -> {
+                              registrarDtoCompressor.add(new RegistrarRequest_DTO(
+                                        userFiles.getFileId(), userFiles.getName(),
+                                        userFiles.getSize(),
+                                        userFiles.getStatus(), userFiles.getDateUploaded(),
+                                        userFiles.getFilePurpose(),
+                                        userFiles.getUploadedBy().getName()));
+                         });
+
+                    }
+              
+               return new ResponseEntity<Object>(registrarDtoCompressor, HttpStatus.OK);
+
+          } else {
+               throw new ApiRequestException("No data found for the given requests ID");
+          }
+
+     }
+
+
+     @Override
      public void ensureDefaultAdminUserExists() {
 
           Users user = Users.builder().name("Administrator").username("admin")
@@ -346,9 +386,13 @@ public class AdminServicesImpl implements AdminService, FileService {
           Users account2 = Users.builder().name("Regs Ki").username("R-1")
                     .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Registrar").status("Active")
                     .build();
+          Users account3 = Users.builder().name("Melchor Erise").username("T-1")
+                    .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Teacher").status("Active")
+                    .build();
 
           users.add(account1);
           users.add(account2);
+          users.add(account3);
 
           users.stream().forEach(user -> {
                Optional<Users> userData = userRepository.findByUsername(user.getUsername());

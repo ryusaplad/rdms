@@ -199,7 +199,7 @@ public class Regs_RestController {
      public ResponseEntity<Object> viewRequestsToTeacher(@RequestParam long requestId, HttpSession session,
                @RequestParam Map<String, String> params) {
 
-          return regs_ServiceImpl.viewRegistrarRequests(requestId);
+          return regs_ServiceImpl.viewRegistrarRequest(requestId);
      }
 
 }

@@ -290,27 +290,11 @@ public class AdminController {
      public String viewAllRegistrarRequests(HttpSession session, HttpServletResponse response,
                Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-               List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
-               List<RegistrarRequest> regRequests = registrarRepo.findAll();
-               if (regRequests != null) {
-                    regRequests.forEach(request -> {
-
-                         filteredRequests.add(
-                                   new RegistrarRequest_DTO(request.getRequestId(), request.getRequestTitle(),
-                                             request.getRequestMessage(), request.getTeacherMessage(),
-                                             request.getRequestBy().getName(),
-                                             request.getRequestTo().getName(), request.getRequestDate(),
-                                             request.getDateOfUpdate(),
-                                             request.getRequestStatus()));
-
-                    });
-
-                    model.addAttribute("registrar_requests", filteredRequests);
                     model.addAttribute("pageTitle", "Registrar Requests");
                     model.addAttribute("page", "registrar_request");
                     return "/admin/admin";
                }
-          }
+          
           return "redirect:/";
 
      }

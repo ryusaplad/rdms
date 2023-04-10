@@ -1,6 +1,5 @@
 package svfc_rdms.rdms.serviceImpl.Teacher;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,6 +59,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      @Override
      public Optional<RegistrarRequest> getRegistrarRequest(long requestsId) {
 
+          
           Optional<RegistrarRequest> registrarRequests = regsRepository.findOneByRequestId(requestsId);
           if (requestsId > -1 && !registrarRequests.isEmpty()) {
                return registrarRequests;
@@ -189,6 +190,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                       
                          String logMessage = "Teacher replied "+registrarRequest.getRequestBy().getName()+ " User: " + registrarRequest.getRequestTo().getName()
                                    + " re-sent requested data";
+                         globalService.sendTopic("/topic/registrar/requests", "OK");
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
 
                          return new ResponseEntity<>("Success", HttpStatus.OK);
@@ -202,16 +204,17 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
      }
 
      @Override
-     public String displayAllRequests(HttpSession session, Model model) {
+     public ResponseEntity<Object> displayAllRequests(HttpSession session) {
           List<RegistrarRequest_DTO> filteredRequests = new ArrayList<>();
           try {
 
-               String username = session.getAttribute("username").toString();
-               if (!username.isBlank() || !username.isEmpty() || username.length() > -1) {
-                    Optional<Users> user = usersRepository.findByUsername(username);
+               Sort descendingSort = Sort.by("requestId").descending();
+               if (session.getAttribute("username") != null || !session.getAttribute("username").toString().isEmpty()) {
+                    String username = session.getAttribute("username").toString();
+                    Optional<Users> teacher = usersRepository.findByUsername(username);
 
-                    if (user.isPresent()) {
-                         List<RegistrarRequest> regRequests = regsRepository.findAllByRequestTo(user.get());
+                    if (teacher.isPresent()) {
+                         List<RegistrarRequest> regRequests = regsRepository.findAllByRequestTo(teacher.get(),descendingSort);
                          if (regRequests != null) {
                               regRequests.forEach(request -> {
 
@@ -226,17 +229,15 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
 
                               });
 
-                              model.addAttribute("requests_list", filteredRequests);
-                              return "/teacher/requests";
+                            return new ResponseEntity<>(filteredRequests, HttpStatus.OK);
                          }
                     }
 
                }
           } catch (Exception e) {
-               return "/teacher/teach";
+               throw new ApiRequestException(e.getMessage());
           }
-          model.addAttribute("requests_list", filteredRequests);
-          return "/teacher/requests";
+          return new ResponseEntity<>("No Data Available", HttpStatus.OK);
      }
 
      @Override
@@ -299,9 +300,11 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                List<UserFiles_Dto> userFiles = new ArrayList<>();
 
                if (getAllFiles == null) {
+                    model.addAttribute("pageTitle", "My Files");
+                    model.addAttribute("page", "myfiles");
                     model.addAttribute("files", userFiles);
                     System.out.println("Files got fire but no item");
-                    return "/teacher/myFiles-list";
+                    return "/teacher/teach";
                }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
@@ -314,8 +317,10 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                               file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
                });
                model.addAttribute("files", userFiles);
-               return "/teacher/myFiles-list";
-
+               model.addAttribute("pageTitle", "My Files");
+               model.addAttribute("page", "myfiles");
+               return "/teacher/teach";
+              
           }
 
           return null;

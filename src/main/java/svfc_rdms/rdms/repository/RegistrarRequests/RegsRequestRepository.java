@@ -3,6 +3,7 @@ package svfc_rdms.rdms.repository.RegistrarRequests;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import svfc_rdms.rdms.model.RegistrarRequest;
@@ -15,8 +16,8 @@ public interface RegsRequestRepository extends JpaRepository<RegistrarRequest, L
 
      List<RegistrarRequest> findAllByRequestStatusAndRequestTo(String requestsStatus, Users requestsTo);
 
-     List<RegistrarRequest> findAllByRequestTo(Users requestsTo);
+     List<RegistrarRequest> findAllByRequestTo(Users requestsTo, Sort sort);
 
-     List<RegistrarRequest> findAllByRequestBy(Users requestsBy);
+     List<RegistrarRequest> findAllByRequestBy(Users requestsBy, Sort sort);
 
 }

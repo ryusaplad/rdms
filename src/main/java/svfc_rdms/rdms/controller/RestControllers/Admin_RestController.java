@@ -199,11 +199,11 @@ public class Admin_RestController {
           return new ResponseEntity<>("Failed", HttpStatus.OK);
      }
 
-     @GetMapping("/admin/all-requests-view")
+     @GetMapping("/admin/view/request-data")
      public ResponseEntity<Object> viewAllRegistrarRequests(@RequestParam long requestId, HttpSession session,
                @RequestParam Map<String, String> params) {
 
-          return mainService.viewAllRegistrarRequests(requestId);
+          return mainService.viewAllRegistrarRequestsByRequestId(requestId);
      }
 
      @GetMapping("/fetch/admin/global_logs")

@@ -9,6 +9,6 @@ public interface TeacherRepository extends JpaRepository<RegistrarRequest, Long>
 
     @Query("SELECT COUNT(u) FROM RegistrarRequest u")
     long totalRequests();
-    @Query("SELECT COUNT(u) FROM RegistrarRequest u WHERE status =:status")
+    @Query("SELECT COUNT(u) FROM RegistrarRequest u WHERE requestStatus =:status")
     long totalRequestsByStatus(String status);
 }

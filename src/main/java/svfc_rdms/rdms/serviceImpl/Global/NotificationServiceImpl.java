@@ -308,7 +308,7 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setTo(to);
             notifRepository.save(notification);
             String date = LocalDateTime.now().toString();
-            String logMessage = "Notification sent by user " + from + " to " + to + " with the message "
+            String logMessage = "Notification sent by user " + from.getName() + " to " + to.getName() + " with the message "
                     + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
             globalService.sendTopic("/topic/notifications/", "OK");

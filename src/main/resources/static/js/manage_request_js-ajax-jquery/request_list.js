@@ -465,6 +465,8 @@ Action
       $(this).val($(this).val().substring(0, 1000));
     }
   });
+
+  // Web Socket Connection
   function connect() {
     var socket = new SockJS("/websocket-server");
     stompClient = Stomp.over(socket);

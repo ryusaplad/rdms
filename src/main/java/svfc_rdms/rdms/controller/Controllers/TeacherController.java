@@ -21,9 +21,11 @@ public class TeacherController {
      private Teacher_ServiceImpl teacherService;
 
      @GetMapping(value = "/teacher/dashboard")
-     public String teacherDashboard(HttpSession session, HttpServletResponse response) {
+     public String teacherDashboard(HttpSession session, HttpServletResponse response,Model model) {
 
           if (globalService.validatePages("teacher", response, session)) {
+               model.addAttribute("pageTitle", "Dashboard");
+               model.addAttribute("page", "dashboard");
                return "/teacher/teach";
 
           }
@@ -34,8 +36,9 @@ public class TeacherController {
      public String viewRegistrarRequests(HttpSession session, HttpServletResponse response, Model model) {
 
           if (globalService.validatePages("teacher", response, session)) {
-               return teacherService.displayAllRequests(session, model);
-
+               model.addAttribute("pageTitle", "Recieved Requests");
+               model.addAttribute("page", "requests");
+               return "/teacher/teach";
           }
           return "redirect:/";
      }

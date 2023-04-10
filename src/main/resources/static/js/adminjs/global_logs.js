@@ -102,6 +102,7 @@ $(document).ready(function () {
     ordering: false
   });
 
+  
   function refreshTable() {
     // Make AJAX request to fetch latest data
     $.ajax({
