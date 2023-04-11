@@ -11,6 +11,40 @@ $(document).ready(function () {
     var secondaryPageCount = 0;
 
 
+    function fetchNotificationCount() {
+
+        getCurrentLoggedIn(function (userType) {
+            $.ajax({
+                url: `/${userType}/notification/false/0/` + totalItems,
+                type: "GET",
+                dataType: "json",
+               
+                success: function (data) {
+                    var datalength = data.body.length;
+
+                    if (datalength == 0 || datalength < -1) {
+                        $(".notifCount").hide();
+                    } else {
+                        $(".notifCount").show();
+                        for (var i = 0; i < data.body.length; i++) {
+                            $(".notifCount").text(datalength);
+                        }
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error fetching count: " + textStatus + " - " + errorThrown);
+                },
+                complete: function () {
+                    $(".load-more-btn").prop("disabled", false);
+                }
+            });
+        });
+
+       
+    }
+
     function fetchMainNotification() {
 
         getCurrentLoggedIn(function (userType) {
@@ -34,9 +68,10 @@ $(document).ready(function () {
 
                     if (datalength == 0 || datalength < -1) {
                         mainNotificationCard.append(`<div style="width: 200px;
-              height: auto;
-              margin: 0 auto;
-              padding: 10px;
+                        width: 100%;
+                        height: auto;
+                        margin: auto;
+                        text-align: center;
               position: relative;">No Latest Notifications Available.</div>`);
                     } else {
 
@@ -77,7 +112,7 @@ $(document).ready(function () {
                             $(".load-more-btn").remove();
                         } else {
                             if (secondaryTotalItems < secondaryPageCount) {
-                                var loadMore = ` <div id="loadm" class="load-more-btn mx-auto d-block btn btn-outline-success">LOAD MORE</div>`;
+                                var loadMore = ` <div id="loadm"  class="load-more-btn mx-auto d-block btn btn-outline-success">LOAD MORE</div>`;
                                 mainNotificationCard.append(loadMore);
                             } else {
                                 $(".load-more-btn").remove();
@@ -100,6 +135,7 @@ $(document).ready(function () {
 
     // fetch data on page load
     fetchMainNotification();
+    fetchNotificationCount()
 
     // handle "load more" button click
     $(document).on("click", ".load-more-btn", function () {
@@ -157,6 +193,7 @@ $(document).ready(function () {
 
 
     $(document).on("click", "#notif", function () {
+        alert("hello")
         var notifId = $(this).data('value');
         getCurrentLoggedIn(function (userType) {
 
@@ -166,6 +203,7 @@ $(document).ready(function () {
                 success: function (data) {
                     fetchRightSideNotificationData();
                     fetchMainNotification();
+                    fetchNotificationCount();
                 }
             });
         });
@@ -486,15 +524,16 @@ $(document).ready(function () {
                     if (data.toString().toLowerCase().includes("ok")) {
                         fetchRightSideNotificationData();
                         fetchMainNotification();
+                        fetchNotificationCount();
                     }
                 });
             } else {
                 console.log("WebSocket not fully loaded yet. Waiting...");
-                setTimeout(function() {
+                setTimeout(function () {
                     connect();
                 }, 1000); // retry after 1 second
             }
         });
     }
-    
+
 });

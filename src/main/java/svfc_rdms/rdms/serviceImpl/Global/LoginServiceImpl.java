@@ -65,8 +65,9 @@ public class LoginServiceImpl implements LoginService {
                                    manageCookie("login_RememberMe", rememberMe, 0, response, "clear");
                               }
                               session.setAttribute("name", foundUser.getName());
-                              session.setAttribute("username", user.getUsername());
-                              session.setAttribute("accountType", user.getType());
+                              session.setAttribute("email", foundUser.getEmail());
+                              session.setAttribute("username", foundUser.getUsername().toUpperCase());
+                              session.setAttribute("accountType", foundUser.getType().toUpperCase());
 
                               String date = LocalDateTime.now().toString();
                               String logMessage = "User Logged In: " + foundUser.getName() + ":" + user.getUsername()

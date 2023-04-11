@@ -94,10 +94,10 @@ public class GlobalController {
      }
 
      private void clearSessionAttributes(HttpSession session) {
-          session.removeAttribute("studentName");
           session.removeAttribute("accountType");
           session.removeAttribute("username");
           session.removeAttribute("name");
+          session.removeAttribute("email");
      }
 
      @GetMapping("/{acctType}/files/download")
