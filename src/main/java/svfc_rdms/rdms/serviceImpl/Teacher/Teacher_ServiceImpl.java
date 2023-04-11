@@ -303,7 +303,6 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                     model.addAttribute("pageTitle", "My Files");
                     model.addAttribute("page", "myfiles");
                     model.addAttribute("files", userFiles);
-                    System.out.println("Files got fire but no item");
                     return "/teacher/teach";
                }
                getAllFiles.stream().forEach(file -> {

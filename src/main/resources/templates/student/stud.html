@@ -14,6 +14,7 @@
         <!-- Custom CSS -->
         <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
         <link th:href="@{/css/croppie.css}" rel="stylesheet">
+        <th:block th:if="${page =='myrequests'}"> <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet"></th:block>
     </head>
     <body>
         <!-- ============================================================== -->
@@ -252,6 +253,404 @@
                         </div>
                     </div>
                 </th:block>
+                <th:block th:case="myrequests">
+                    <div class="page-wrapper">
+                        <!-- ============================================================== -->
+                        <!-- Bread crumb and right sidebar toggle -->
+                        <!-- ============================================================== -->
+                        <div class="page-breadcrumb">
+                            <div class="row">
+                                <div class="col-12 d-flex no-block align-items-center">
+                                    <h4 class="page-title">Request Document</h4>
+                                    <div class="ms-auto text-end">
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item">
+                                                    <a href="#">Request</a>
+                                                </li>
+                                                <li class="breadcrumb-item active" aria-current="page">Documents List</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- End Bread crumb and right sidebar toggle -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Container fluid  -->
+                        <!-- ============================================================== -->
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body table-responsive">
+                                    <h5 class="card-title">My Requests</h5>
+                                    <table id="zero_config" class="table table-striped text-center table-bordered ">
+                                        <thead>
+                                            <tr>
+                                                <th>Request Document</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=""></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modals -->
+        <div
+            class="modal fade"
+            id="detailModal"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="detailModal"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModal">
+                            <span id="titleVal">More Details</span>
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="card-title">Requests Informations</h4>
+                        <div class="container-sm"></div>
+                        <div class="table-responsive">
+                            <table class="table table-primary">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>NAME</th>
+                                        <th>C/Y/SEM</th>
+                                        <th>DOC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="requestbyupar"></td>
+                                        <td class="font-weight-bold" id="requestbynpar"></td>
+                                        <td class="font-weight-bold" id="cysem"></td>
+                                        <td class="font-weight-bold" id="docreqpar"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr>
+                        <div style="display:none" class="detail-alert"></div>
+                        <h4 class="card-title ">Message</h4>
+                        <div class="messHeader" style="display:none;overflow-y: scroll;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-primary">
+                                <thead>
+                                    <tr>
+                                        <th>MANAGE BY</th>
+                                        <th>REQUESTED</th>
+                                        <th>RELEASED</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-weight-bold" id="managebynpar"></td>
+                                        <td class="font-weight-bold" id="datereqpar"></td>
+                                        <td class="font-weight-bold" id="daterelpar"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr>
+                        <h4 class="card-title">Sent Requirements</h4>
+                        <div class="table-responsive">
+                            <table class="table table-white">
+                                <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>File Name</th>
+                                        <th>Uploaded By</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tablebody">
+                                    <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                                <input
+                                    style="display:none"
+                                    class="form-control"
+                                    name="file[]"
+                                    type="file"
+                                    id="files"
+                                    multiple
+                                >
+                            </table>
+                        </div>
+                        <h4 class="card-title">Recieved Documents</h4>
+                        <div class="table-responsive">
+                            <table class="table table-white receievedDocumentTable" style="overflow-y: scroll; height: 100px; display:none">
+                                <thead>
+                                    <tr>
+                                        <th>Download</th>
+                                        <th>File Name</th>
+                                        <th>Uploaded By</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="receievedDoc">
+                                    <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div
+            class="modal fade"
+            id="editRequirements"
+            tabindex="-1"
+            aria-labelledby="editingModalLabel"
+            aria-hidden="true"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+        >
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        File Editing
+                    </div>
+                    <div class="modal-body">
+                        <div
+                            id="editingAlert"
+                            style="display:none"
+                            class="alert alert-danger"
+                            role="alert"
+                        ></div>
+                        <form id="reqUpForm">
+                            <div class="mt-2  form-floating" style="display:none">
+                                <input
+                                    name="fileId"
+                                    type="text"
+                                    class="form-control floatingInput"
+                                    id="fileId"
+                                    readonly
+                                >
+                                <label for="fileId">
+                                    File Id
+                                    <span class="badge badge-secondary text-danger ">*</span>
+                                </label>
+                            </div>
+                            <div class="mt-2  form-floating" style="display:none">
+                                <input
+                                    name="file"
+                                    type="text"
+                                    class="form-control floatingInput"
+                                    id="fileName"
+                                    readonly
+                                >
+                                <label for="fileName">
+                                    Selected File
+                                    <span class="badge badge-secondary text-danger ">*</span>
+                                </label>
+                            </div>
+                            <div id="inputFile" style="display:none">
+                                <input
+                                    style="display:block"
+                                    class="mt-2 form-control"
+                                    name="file"
+                                    type="file"
+                                    id="fileData"
+                                    accept=".jpg,.jpeg,.png"
+                                >
+                                <div class="row mt-3">
+                                    <div class="col-sm">
+                                        <button type="button" class="btn btn-danger text-white w-100 saveChanges">Save</button>
+                                    </div>
+                                    <div class="col-sm">
+                                        <button type="reset" class="btn btn-secondary text-white  w-100 clearRequest">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <label for="files">
+                                Select File to update
+                                <span class="badge badge-secondary text-danger ">*</span>
+                            </label>
+                            <div class="table-responsive">
+                                <table class="table table-white w-100 ">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>File Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="edit-file-table">
+                                        <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary cancelUpdateBtn" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="modal fade"
+            id="resubmitReqModal"
+            tabindex="-1"
+            aria-labelledby="resubmitReqModalLabel"
+            aria-hidden="true"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+        >
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Are you sure to re-submit the request?
+                    </div>
+                    <div class="modal-body">
+                        <b class="text-danger">Note</b>
+                        <ul>
+                            <li>
+                                <p>Make sure that all of the requirements is correct.</p>
+                            </li>
+                            <li>
+                                <p>
+                                    Please keep in mind that if you do not meet all of the
+                                        requirements, your request will be rejected.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary cancelResubmit" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary confirmResubmit">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="modal fade"
+            id="editReqInfos"
+            tabindex="-1"
+            aria-labelledby="editingModalLabel"
+            aria-hidden="true"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+        >
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Informations Editing
+                    </div>
+                    <div class="modal-body">
+                        <div
+                            id="editingInfoAlert"
+                            style="display:none"
+                            class="alert alert-danger"
+                            role="alert"
+                        ></div>
+                        <form id="reqInfoUpForm">
+                            <div class="col-sm ">
+                                <div class="mt-2  form-floating" th:if="${#session.getAttribute('username')!=null}" style="display:none">
+                                    <input
+                                        name="studentId"
+                                        type="text"
+                                        class="form-control floatingInput"
+                                        id="studentId"
+                                        th:value="${#session.getAttribute('username')}"
+                                        placeholder="Student Id"
+                                        readonly
+                                    >
+                                    <label for="userId">
+                                        Student Id
+                                        <span class="badge badge-secondary text-danger ">*</span>
+                                    </div>
+                                    <div class="mt-2 form-floating" th:if="${#session.getAttribute('name')!=null}" style="display:none">
+                                        <input
+                                            id="studName"
+                                            name="name"
+                                            type="text"
+                                            class="form-control floatingInput"
+                                            th:value="${#session.getAttribute('name')}"
+                                            placeholder=" Student Name"
+                                            readonly
+                                        >
+                                        <label for="studName">
+                                            Student Name
+                                            <span class="badge badge-secondary text-danger ">*</span>
+                                        </div>
+                                        <div class=" mt-2 form-floating">
+                                            <select
+                                                id="schoolLevel"
+                                                name="schoolLevel"
+                                                class="form-select"
+                                                placeholder="Select School Level"
+                                            >
+                                                <option value="n/a">--School Level--</option>
+                                                <option value="pre-school">Pre School</option>
+                                                <option value="elementary">Elementary</option>
+                                                <option value="junior-high">Junior High School</option>
+                                                <option value="senior-high">Senior High School</option>
+                                                <option value="college">College</option>
+                                            </select>
+                                            <label for="schoolLevel">
+                                                School Level
+                                                <span class="badge badge-secondary text-danger ">*</span>
+                                            </div>
+                                            <div class="mt-2 form-floating yearSelect" style="display:none"></div>
+                                            <div class=" mt-2 form-floating courseSelect" style="display:none"></div>
+                                            <div class=" mt-2  form-floating semGradeSelect" style="display:none"></div>
+                                            <div class="mt-2 form-floating">
+                                                <textarea
+                                                    id="message"
+                                                    name="message"
+                                                    class="form-control floatingInput"
+                                                    maxlength="1000"
+                                                    style="height:150px"
+                                                ></textarea>
+                                                <label id="messageLengthLabel" for="message">
+                                                    You can add message here with
+                                            maximum of (1000
+                                            letters)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary cancelInfoUpdate" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary saveInfoUpdate">
+                                        Save
+                                Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
             </th:block>
         </div>
     </div>
@@ -275,6 +674,8 @@
     <th:block th:case="'doc_cards'">
         <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_doc_cards.js}"></script>
     </th:block>
+    <th:block th:case="'myrequests'"> <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_list.js}"></script>
+    <script type="text/javascript" th:src="@{/js/userpageJS/course-year-level_Selection.js}"></script></th:block>
 </th:block>
 </body>
 </html>

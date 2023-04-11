@@ -357,7 +357,6 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
 
                 List<Users> adminUsers = usersRepository.findAll();
                 String type = "";
-                System.out.println(session.getAttribute("accountType"));
                 if (session.getAttribute("accountType") != null) {
                     if (!session.getAttribute("accountType").toString().toLowerCase().equals("school_admin")) {
                         for (Users user : adminUsers) {

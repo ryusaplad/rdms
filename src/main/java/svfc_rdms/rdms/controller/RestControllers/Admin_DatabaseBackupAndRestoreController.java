@@ -49,7 +49,6 @@ public class Admin_DatabaseBackupAndRestoreController {
                 File tempFile = File.createTempFile("temp", null);
                 file.get().transferTo(tempFile);
                 String filePath = tempFile.getAbsolutePath();
-                System.out.println(fileName + " To " + filePath);
                 adminDataBaseService.restore(HOST, PORT, DB_NAME, USERNAME, PASSWORD, filePath);
                 return ResponseEntity
                         .ok("Database restored successfully. Filename: " + fileName + ", Path: " + filePath);
@@ -75,6 +74,7 @@ public class Admin_DatabaseBackupAndRestoreController {
             InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(backupBytes));
             return new ResponseEntity<>(isr, headers, HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>("Failed to backup database, Please try again!", HttpStatus.BAD_REQUEST);
         }
     }

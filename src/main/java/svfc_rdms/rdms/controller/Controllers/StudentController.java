@@ -65,7 +65,9 @@ public class StudentController {
      @GetMapping("/student/my-requests")
      public String listOfStudentRequest(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("student", response, session)) {
-               return "/student/student-request-list";
+               model.addAttribute("page", "myrequests");
+               model.addAttribute("pageTitle", "My Requests");
+               return "/student/stud";
           }
           return "redirect:/";
 

@@ -138,7 +138,6 @@ public class GlobalController {
      public void showImage(@PathVariable("userType") String userType, @Param("documentId") long id,
                HttpServletResponse response, HttpSession session,
                Optional<Documents> dOptional) {
-                    System.out.println(userType.equalsIgnoreCase("admin"));
           if (userType.equalsIgnoreCase("admin") || userType.equalsIgnoreCase("registrar")) {
                if(userType.equalsIgnoreCase("admin")){
                     userType = "school_admin";

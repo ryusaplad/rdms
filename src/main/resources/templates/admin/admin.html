@@ -48,15 +48,7 @@
         <!-- ============================================================== -->
         <!-- Main wrapper-->
         <!-- ============================================================== -->
-        <div
-            id="main-wrapper"
-            data-layout="vertical"
-            data-navbarbg="skin5"
-            data-sidebartype="full"
-            data-sidebar-position="absolute"
-            data-header-position="absolute"
-            data-boxed-layout="full"
-        >
+        <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="mini-sidebar" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full" class="mini-sidebar">
             <header th:replace="admin/templates :: header"></header>
             <aside th:replace="admin/templates :: aside"></aside>
             <!-- Page wrapper  -->
@@ -717,46 +709,8 @@
                         <!-- Container fluid  -->
                         <!-- ============================================================== -->
                         <div class="container-fluid px-4 ">
-                            <div class="container-fluid border border-dark">
-                                <form id="form_settings">
-                                    <div class="row ">
-                                        <div class="col-5">
-                                            <h2>Connection Settings</h2>
-                                            <div class="">
-                                                <label for="server-connection" class="form-label">Server Connection</label>
-                                                <div class="form-check form-switch">
-                                                    <input
-                                                        class="form-check-input"
-                                                        type="checkbox"
-                                                        id="server_connection"
-                                                        checked
-                                                    >
-                                                    <label class="form-check-label" for="server_connection">
-                                                        Server
-                                                                   Connection:(Online)
-                                                    </label>
-                                                </div>
-                                                <label for="server-connection" class="form-label">
-                                                    Global
-                                                              Notification
-                                                </label>
-                                                <div class="form-check form-switch">
-                                                    <input
-                                                        class="form-check-input"
-                                                        type="checkbox"
-                                                        id="global_notification"
-                                                        checked
-                                                    >
-                                                    <label class="form-check-label" for="global_notification">
-                                                        Global
-                                                                   Notification:(On)
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                            <button type="reset" class="btn btn-primary">Default</button>
-                                        </div>
-                                    </form>
+                            <div class="container-fluid card">
+                               
                                     <form id="database_back_res">
                                         <div class="col-5">
                                             <h2>Database / Backup and Restore</h2>

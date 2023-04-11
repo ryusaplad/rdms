@@ -169,10 +169,6 @@ public class Regs_RestController {
                @RequestParam("reason") String message,
                HttpServletResponse response,
                HttpSession session, HttpServletRequest request) {
-
-          System.out.println("Datas" + "\nStatus: " + status + "\nUserId: " + userId + "\nRequest Id:" + requestId
-                    + "\nreason:" + message);
-
           return regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
                     session, request);
 

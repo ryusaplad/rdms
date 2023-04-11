@@ -73,7 +73,7 @@ $(document).ready(function () {
         stompClient.connect({}, function (frame) {
             setConnected(true);
             if (stompClient.ws.readyState === WebSocket.OPEN) {
-                stompClient.subscribe("/topic/totals", function (data) {
+                stompClient.subscribe("/topic/request/cards", function (data) {
                     if (data.toString().toLowerCase().includes("ok")) {
                         updateCards();
                     }

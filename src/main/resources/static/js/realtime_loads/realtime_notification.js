@@ -23,10 +23,11 @@ $(document).ready(function () {
                     var datalength = data.body.length;
 
                     if (datalength == 0 || datalength < -1) {
-                        $(".blicon").attr("style","margin-right:-10px");
+                        $(".blicon").css("margin-right", "-10px");
                         $(".notifCount").empty();
+                        $(".notifCount").hide();
                     } else {
-                        $(".blicon").attr("style","margin-right:-25x");
+                        $(".blicon").css("margin-right", "-25px");
                         $(".notifCount").show();
                         for (var i = 0; i < data.body.length; i++) {
                             $(".notifCount").text(datalength);
@@ -195,7 +196,6 @@ $(document).ready(function () {
 
 
     $(document).on("click", "#notif", function () {
-        alert("hello")
         var notifId = $(this).data('value');
         getCurrentLoggedIn(function (userType) {
 
