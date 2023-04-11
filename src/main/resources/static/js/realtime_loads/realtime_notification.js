@@ -23,8 +23,10 @@ $(document).ready(function () {
                     var datalength = data.body.length;
 
                     if (datalength == 0 || datalength < -1) {
-                        $(".notifCount").hide();
+                        $(".blicon").attr("style","margin-right:-10px");
+                        $(".notifCount").empty();
                     } else {
+                        $(".blicon").attr("style","margin-right:-25x");
                         $(".notifCount").show();
                         for (var i = 0; i < data.body.length; i++) {
                             $(".notifCount").text(datalength);
