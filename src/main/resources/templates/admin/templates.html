@@ -51,9 +51,9 @@
             <!-- ============================================================== -->
             <!-- Right side toggle and nav items -->
             <!-- ============================================================== -->
-            <ul class="navbar-nav float-end"  onclick="event.stopPropagation()">
+            <ul class="navbar-nav float-end" >
                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#" id="2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#" id="notifDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="mdi mdi-bell font-24 blicon" ></i>
                   <span style="    position: relative;
                   top: -12px;
@@ -98,6 +98,7 @@
                         role="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
+                        data-bs-auto-close="outside"
                     >
                         <img
                             th:src="@{/images/userImage.png}"
@@ -113,8 +114,8 @@
             <div style="text-align: center">
              
               <div class="row justify-content-center">
-                <div class="col">
-                  <div class="dropdown-item text-white">
+                <div class="col-12">
+                  <div class="text-white">
                     <span
                       class="text-dark"
                       th:with="name=${#session.getAttribute('name')}"
@@ -214,6 +215,7 @@
                                 role="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
+                                data-bs-auto-close="outside"
                             >
                                 <img
                                     th:src="@{/images/userImage.png}"
@@ -226,7 +228,7 @@
              
                                 <div class="row justify-content-center">
                                   <div class="col">
-                                    <div class="dropdown-item text-white">
+                                    <div class="text-white">
                                       <span
                                         class="text-dark"
                                         th:with="name=${#session.getAttribute('name')}"

@@ -89,10 +89,10 @@ $(document).ready(function () {
 
           if (result.data.status == true) {
             $("#status").val(1).change();
-            $("#valueSelected").text("Show");
+
           } else {
             $("#status").val(0).change();
-            $("#valueSelected").text("Hide");
+
           }
           $("#image").val("");
           $("#result").attr(
@@ -180,58 +180,71 @@ $(document).ready(function () {
 
   $(document).on("submit", "#updateDocumentForm", function (event) {
     event.preventDefault();
+    var status = $("#status").prop('selectedIndex');
+    if (status != 0) {
+      $.ajax({
+        url: "/admin/update-document-info?docId=" + id,
+        type: "POST",
+        data: new FormData(this),
+        enctype: "multipart/form-data",
+        processData: false,
+        contentType: false,
+        cache: false,
+        beforeSend: function () {
+          $(".saveEditDocument").attr("disabled", "disabled");
+        },
+        success: function (res) {
+          resetFields(
+            "#title",
+            "#description",
+            "#image",
+            "#result",
+            ".saveEditDocument"
+          );
+          updateCard();
+          $("#editDocumentModal").modal("hide");
 
-    $.ajax({
-      url: "/admin/update-document-info?docId=" + id,
-      type: "POST",
-      data: new FormData(this),
-      enctype: "multipart/form-data",
-      processData: false,
-      contentType: false,
-      cache: false,
-      beforeSend: function () {
-        $(".saveEditDocument").attr("disabled", "disabled");
-      },
-      success: function (res) {
-        resetFields(
-          "#title",
-          "#description",
-          "#image",
-          "#result",
-          ".saveEditDocument"
-        );
-        updateCard();
-        $("#editDocumentModal").modal("hide");
+          $("#resultDiv").fadeOut(100);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
+          $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
+          modalView.empty();
+          $("#resultMessage").html("A Document has been successfully updated.");
+          focusToElement();
+        },
+        error: function (err) {
+          resetFields(
+            "#titleEdit",
+            "#descriptionEdit",
+            "#image",
+            "#result",
+            ".saveEditDocument"
+          );
+          updateCard();
+          $("#editDocumentModal").modal("hide");
 
-        $("#resultDiv").fadeOut(100);
-        $("#resultDiv").fadeIn(100);
-        $("#buttonColor").removeClass("bg-warning").addClass("bg-success");
-        $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
-        modalView.empty();
-        $("#resultMessage").html("A Document has been successfully updated.");
-        focusToElement();
-      },
-      error: function (err) {
-        resetFields(
-          "#titleEdit",
-          "#descriptionEdit",
-          "#image",
-          "#result",
-          ".saveEditDocument"
-        );
-        updateCard();
-        $("#editDocumentModal").modal("hide");
+          $("#resultDiv").fadeOut(1);
+          $("#resultDiv").fadeIn(100);
+          $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+          $("#resultMessage").html(
+            "Insertion/Updating Documents Failed Reason: " + err.responseText
+          );
+          focusToElement();
+        },
+      });
+    } else {
+      $("#editDocumentModal").modal("hide");
 
-        $("#resultDiv").fadeOut(1);
-        $("#resultDiv").fadeIn(100);
-        $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
-        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-        $("#resultMessage").html(
-          "Insertion/Updating Documents Failed Reason: " + err.responseText
-        );
-        focusToElement();
-      },
-    });
+      $("#resultDiv").fadeOut(1);
+      $("#resultDiv").fadeIn(100);
+      $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
+      $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+      $("#resultMessage").html(
+        "Insertion/Updating Documents Failed Reason: Please Select Status."
+      );
+      focusToElement();
+    }
   });
 
   $(".close").on("click", function () {

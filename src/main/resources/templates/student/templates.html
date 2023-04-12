@@ -51,9 +51,9 @@
             <!-- ============================================================== -->
             <!-- Right side toggle and nav items -->
             <!-- ============================================================== -->
-            <ul class="navbar-nav float-end">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" data-bs-auto-close="outside" href="#" id="2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <ul class="navbar-nav float-end" >
+                <li class="nav-item dropdown" >
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark"  data-bs-auto-close="outside" href="#" id="notifDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="mdi mdi-bell font-24 blicon" ></i>
                       <span style="    position: relative;
                       top: -12px;
@@ -87,6 +87,7 @@
                         role="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
+                        data-bs-auto-close="outside"
                     >
                         <img
                             id="profilePicture"
@@ -101,7 +102,7 @@
              
                             <div class="row justify-content-center">
                               <div class="col">
-                                <div class="dropdown-item text-white">
+                                <div class=" text-white">
                                   <span
                                     class="text-dark"
                                     th:with="name=${#session.getAttribute('name')}"
@@ -206,7 +207,7 @@
              
                                 <div class="row justify-content-center">
                                   <div class="col">
-                                    <div class="dropdown-item text-white">
+                                    <div class="text-white">
                                       <span
                                         class="text-dark"
                                         th:with="name=${#session.getAttribute('name')}"

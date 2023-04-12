@@ -63,23 +63,15 @@
       <!-- ============================================================== -->
       <!-- Right side toggle and nav items -->
       <!-- ============================================================== -->
-      <ul class="navbar-nav float-end"  onclick="event.stopPropagation()">
+      <ul class="navbar-nav float-end"  >
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle waves-effect waves-dark"
-            href="#"
-            id="2"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="mdi mdi-bell font-24" style="margin-right: -25px"></i>
-            <span
-              style="position: relative; top: -12px; left: 9px; font-size: 10px"
-              class="badge rounded-pill badge-notification bg-dark notifCount"
-              >10</span
-            >
-          </a>
+          <a class="nav-link dropdown-toggle waves-effect waves-dark" data-bs-auto-close="outside" href="#" id="notifDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="mdi mdi-bell font-24 blicon" ></i>
+                      <span style="    position: relative;
+                      top: -12px;
+                      left: 9px;
+                      font-size: 10px;" class="badge rounded-pill badge-notification bg-dark notifCount"></span>
+                    </a>
           <ul
             class="dropdown-menu dropdown-menu-end mailbox animated"
             aria-labelledby="2"
@@ -108,6 +100,7 @@
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            data-bs-auto-close="outside"
           >
             <img
               id="profilePicture"
@@ -124,8 +117,8 @@
             <div style="text-align: center">
              
               <div class="row justify-content-center">
-                <div class="col">
-                  <div class="dropdown-item text-white">
+                <div class="col-12">
+                  <div class="text-white">
                     <span
                       class="text-dark"
                       th:with="name=${#session.getAttribute('name')}"
@@ -230,6 +223,7 @@
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                data-bs-auto-close="outside"
               >
                 <img
                   th:src="@{/images/userImage.png}"
@@ -242,7 +236,7 @@
              
                 <div class="row justify-content-center">
                   <div class="col">
-                    <div class="dropdown-item text-white">
+                    <div class="text-white">
                       <span
                         class="text-dark"
                         th:with="name=${#session.getAttribute('name')}"

@@ -10,16 +10,46 @@ $(document).ready(function () {
     var mainPageCount = 0;
     var secondaryPageCount = 0;
 
+    var totalItems = 5;
+    var totalPageCount = 0;
+    var maxItems = 7;
+
+
+     // handle "load more" button click
+     $(document).on("click", ".loadMoreBtn", function () {
+        mainTotalItems += 2; // increment page number
+        getCurrentLoggedIn(function (userType) {
+
+            fetchNotificationData(userType, "");
+        });
+        $(mainNotificationCard).animate({
+            scrollTop: $(mainNotificationCard).offset().top
+
+        }, 50);
+
+    });
+    // handle "load more" button click
+    $(document).on("click", ".load-more-btn", function () {
+        secondaryTotalItems += 2; // increment page number
+        fetchMainNotification();
+        fetchNotificationCount();
+        $(mainNotificationCard).animate({
+            scrollTop: $(mainNotificationCard).offset().top
+
+        }, 50);
+    });
+
 
     function fetchNotificationCount() {
 
         getCurrentLoggedIn(function (userType) {
             $.ajax({
-                url: `/${userType}/notification/false/0/` + totalItems,
+                url: `/${userType}/notification/false/0/` + secondaryTotalItems,
                 type: "GET",
                 dataType: "json",
                
                 success: function (data) {
+                    console.log(data.body.length);
                     var datalength = data.body.length;
 
                     if (datalength == 0 || datalength < -1) {
@@ -139,16 +169,6 @@ $(document).ready(function () {
     // fetch data on page load
     fetchMainNotification();
     fetchNotificationCount()
-
-    // handle "load more" button click
-    $(document).on("click", ".load-more-btn", function () {
-        secondaryTotalItems += 2; // increment page number
-        fetchMainNotification();
-        $(mainNotificationCard).animate({
-            scrollTop: $(mainNotificationCard).offset().top
-
-        }, 50);
-    });
 
 
 
@@ -317,18 +337,7 @@ $(document).ready(function () {
 
 
 
-    $(document).on("click", ".loadMoreBtn", function () {
-        mainTotalItems += 2; // increment page number
-        getCurrentLoggedIn(function (userType) {
-
-            fetchNotificationData(userType, "");
-        });
-        $(mainNotificationCard).animate({
-            scrollTop: $(mainNotificationCard).offset().top
-
-        }, 50);
-
-    });
+  
     $(document).on('click', '.accordion-item button', function () {
         var clickedCollapse = $(this).closest('.accordion-item').find('.accordion-collapse');
         var otherCollapses = $('.accordion-item').not($(this).closest('.accordion-item')).find('.accordion-collapse');
@@ -371,10 +380,6 @@ $(document).ready(function () {
 
 
     // Right Side Bar Notification
-
-    var totalItems = 5;
-    var totalPageCount = 0;
-    var maxItems = 7;
 
     //Right Side Bar btn
     $(document).on("click", ".rightSidebarToggle", function (e) {
@@ -537,5 +542,6 @@ $(document).ready(function () {
             }
         });
     }
-
+   
+    
 });
