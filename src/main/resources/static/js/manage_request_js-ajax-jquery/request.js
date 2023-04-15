@@ -5,41 +5,45 @@ $(document).ready(function () {
     formData = new FormData();
     $("#fileInfoTable").empty();
     var totalFiles = $("#files")[0].files.length;
+    var maxSize = 10 * 1024 * 1024; // 10MB in bytes
     for (var x = 0; x < totalFiles; x++) {
-      var fileName = $("#files")[0].files[x].name;
-      var split = fileName.split(".");
-      fileName = split[0];
-      var extension = split[1];
-      if (fileName.length > 10) {
-        fileName = fileName.substring(0, 10);
+      var fileSize = $("#files")[0].files[x].size;
+      if (fileSize > maxSize) {
+        var message = "";
+        message = "Please select a valid file size that does not exceed the maximum limit of 10MB.";
+        $(".message").text(message);
+        $(".errorMessageAlert").show();
+        formData = new FormData();
+        $("#fileInfoTable").empty();
+        return false;
+      } else {
+        var fileName = $("#files")[0].files[x].name;
+        var split = fileName.split(".");
+        fileName = split[0];
+        var extension = split[1];
+        if (fileName.length > 10) {
+          fileName = fileName.substring(0, 10);
+        }
+        var name = fileName + "." + extension;
+        $("#fileInfoTable").append(
+          "'<tr>'" +
+          "<td>" +
+          "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
+          x +
+          ">Delete</button>" +
+          "</td>" +
+          "<td>" +
+          name +
+          "</td >" +
+          "<td>" +
+          formatFileSize($("#files")[0].files[x].size) +
+          "</td >" +
+          "</tr >"
+        );
       }
-      var name = fileName + "." + extension;
-      $("#fileInfoTable").append(
-        "'<tr>'" +
-        "<td>" +
-        "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
-        x +
-        ">Delete</button>" +
-        "</td>" +
-        "<td>" +
-        name +
-        "</td >" +
-        "<td>" +
-        formatFileSize($("#files")[0].files[x].size) +
-        "</td >" +
-        "</tr >"
-      );
+
     }
 
-    function formatFileSize(bytes) {
-      var decimalPoint = 0;
-      if (bytes == 0) return "0 Bytes";
-      var k = 1000,
-        dm = decimalPoint || 2,
-        sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-        i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-    }
 
     fileListArr = Array.from($("#files")[0].files);
     for (var i = 0; i < fileListArr.length; i++) {
@@ -47,6 +51,16 @@ $(document).ready(function () {
     }
     $(".errorMessageAlert").hide();
   });
+  function formatFileSize(bytes) {
+    var decimalPoint = 0;
+    if (bytes == 0) return "0 Bytes";
+    var k = 1000,
+      dm = decimalPoint || 2,
+      sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+      i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
+
 
   $(document).on("click", ".removeItemFile", function () {
     // Get the other input values
@@ -165,7 +179,6 @@ $(document).ready(function () {
   });
 
   $(".confirmRequestModal").on("click", function () {
-    // Serialize the form data as a JSON object
 
 
     $("#reqForm").submit();
@@ -176,6 +189,8 @@ $(document).ready(function () {
 
     if ($("#files").val() === "") {
       alert("please select file");
+    } else if ($("#files")[0].files.size) {
+
     } else {
       var id = $("#documentTypeTitle").text();
       var studId = $("#studentId").val();
@@ -198,38 +213,39 @@ $(document).ready(function () {
       formData.append("semester", studSemester);
       formData.append("message", userMessage);
 
-      var data = {
-        studId: $("#studentId").val(),
-        message: "Data Sent",
-      };
-      $.ajax({
-        url: "/student/request/" + id + "/sent",
-        type: "POST",
-        data: formData,
-        enctype: "multipart/form-data",
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function () {
-          $(".confirmRequestModal").attr("disabled", true);
-          console.log("Please Wait");
-        },
-        success: function (res) {
-          // Send the data via WebSocket after
-          console.log("Request successfully submitted");
-          $("#confirmModal").modal("hide");
-          $("#successModal").modal("toggle");
-          window.location = "/student/my-requests";
-        },
-        error: function (err) {
-          console.log(err);
-        },
-        complete: function () {
-          $(".confirmRequestModal").attr("disabled", false);
-          console.log("Request complete");
-        },
-      });
+     
+
     }
+    $.ajax({
+      url: "/student/request/" + id + "/sent",
+      type: "POST",
+      data: formData,
+      enctype: "multipart/form-data",
+      processData: false,
+      contentType: false,
+      cache: false,
+      beforeSend: function () {
+        $(".confirmRequestModal").attr("disabled", true);
+        console.log("Please Wait");
+      },
+      success: function (res) {
+        // Send the data via WebSocket after
+        console.log("Request successfully submitted");
+        $("#confirmModal").modal("hide");
+        $("#successModal").modal("toggle");
+        window.location = "/student/my-requests";
+      },
+      error: function (err) {
+        $(".confirmRequestModal").attr("disabled", false);
+        $("#confirmModal").modal("hide");
+        $(".message").text(err.responseText);
+        $(".errorMessageAlert").show();
+      },
+      complete: function () {
+        $(".confirmRequestModal").attr("disabled", false);
+        console.log("Request complete");
+      },
+    });
   });
 
 

@@ -24,13 +24,14 @@ $(document).ready(function () {
             success: function (data) {
                 // Empty table body
                 var table = $("#zero_config").DataTable({
-                    "ordering": false
+                    "ordering": false,
+                    "destroy": true
                 });
                 table.clear();
 
                 for (let i = 0; i < data.length; i++) {
                     var requests = data[i];
-                  
+
                     var tableItem = `
                     <strong style="opacity:.75;">${requests.requestTitle}</strong>
                     <strong id="message" style="opacity:.50;" >${requests.requestMessage}</strong>`;
@@ -57,7 +58,7 @@ $(document).ready(function () {
             setConnected(true);
             if (stompClient.ws.readyState === WebSocket.OPEN) {
                 refreshTable();
-                
+
                 stompClient.subscribe("/topic/registrar/requests", function (data) {
                     if (data.toString().toLowerCase().includes("ok")) {
                         refreshTable();

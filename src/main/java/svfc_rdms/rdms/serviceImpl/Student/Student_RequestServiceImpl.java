@@ -235,7 +235,6 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                }
 
           } catch (Exception ex) {
-               ex.printStackTrace();
                return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
           }
 

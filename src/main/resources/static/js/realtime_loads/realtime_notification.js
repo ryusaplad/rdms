@@ -49,7 +49,7 @@ $(document).ready(function () {
                 dataType: "json",
                
                 success: function (data) {
-                    console.log(data.body.length);
+                    
                     var datalength = data.body.length;
 
                     if (datalength == 0 || datalength < -1) {

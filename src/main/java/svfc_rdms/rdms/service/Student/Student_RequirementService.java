@@ -15,9 +15,12 @@ public interface Student_RequirementService {
      ResponseEntity<Object> updateFileRequirement(Optional<MultipartFile> file,
                Map<String, String> params);
 
+     ResponseEntity<Object> addFileRequirement(Map<String, MultipartFile> params, long requestId, HttpSession session);
+
      ResponseEntity<Object> updateInformationRequirement(long requestId, Map<String, String> params);
 
-     ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId,HttpSession session,HttpServletRequest request);
+     ResponseEntity<Object> resubmitRequest(String status, long userId, long requestId, HttpSession session,
+               HttpServletRequest request);
 
      String displayAllFilesByUserId(HttpSession session, Model model);
 

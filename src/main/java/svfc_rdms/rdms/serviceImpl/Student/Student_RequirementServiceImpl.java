@@ -52,7 +52,6 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
      @Autowired
      private GlobalLogsServiceImpl globalLogsServiceImpl;
 
-
      @Override
      public List<UserFiles> getAllFilesByUser(long userId) {
 
@@ -97,6 +96,44 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                     return new ResponseEntity<>("Success", HttpStatus.OK);
                }
                return new ResponseEntity<>("Please Select File!", HttpStatus.BAD_REQUEST);
+          } catch (Exception e) {
+               throw new ApiRequestException(e.getMessage());
+          }
+     }
+
+     @Override
+     public ResponseEntity<Object> addFileRequirement(Map<String, MultipartFile> params, long requestId, HttpSession session) {
+          try {
+
+               if (params.size() != 0) {
+                    if (session.getAttribute("username") != null) {
+                         String username = session.getAttribute("username").toString();
+                         Optional<Users> user = usersRepository.findByUsername(username);
+                         Optional<StudentRequest> studRequest = studentRepository.findById(requestId);
+                         if(user.isPresent() && studRequest.isPresent()){
+
+                              for (Map.Entry<String, MultipartFile> entry : params.entrySet()) {
+                                   UserFiles userFiles = new UserFiles();
+                                   userFiles.setData(entry.getValue().getBytes());
+                                   userFiles.setName(entry.getValue().getOriginalFilename());
+                                   userFiles.setSize(globalService.formatFileUploadSize(entry.getValue().getSize()));
+                                   userFiles.setUploadedBy(user.get());
+                                   userFiles.setDateUploaded(globalService.formattedDate());
+                                   userFiles.setStatus("Pending");
+                                   userFiles.setFilePurpose("requirement");
+                                   userFiles.setRequestWith(studRequest.get());
+                                   fileRepository.save(userFiles);
+
+                              }
+          
+                              return new ResponseEntity<>("Success", HttpStatus.OK);
+                         }
+                    } else {
+                         return new ResponseEntity<>("You are performing invalid action!", HttpStatus.BAD_REQUEST);
+                    }
+
+               }
+               return new ResponseEntity<>("Please add a file!", HttpStatus.BAD_REQUEST);
           } catch (Exception e) {
                throw new ApiRequestException(e.getMessage());
           }
@@ -163,8 +200,8 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                                    + studentRequest.getRequestDocument().getTitle() + " User: " + user.getName()
                                    + " resubmit the request of (" + studentRequest.getRequestDocument().getTitle()
                                    + ")";
-                                   globalService.sendTopic("/topic/totals", "OK");
-                                   globalService.sendTopic("/topic/student/requests", "OK");
+                         globalService.sendTopic("/topic/totals", "OK");
+                         globalService.sendTopic("/topic/student/requests", "OK");
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {

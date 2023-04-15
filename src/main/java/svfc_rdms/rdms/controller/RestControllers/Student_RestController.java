@@ -70,6 +70,17 @@ public class Student_RestController {
                     HttpStatus.BAD_REQUEST);
      }
 
+     @PostMapping("/student/request/file/add")
+     public ResponseEntity<Object> addFileRequirement(
+               @RequestParam Map<String, MultipartFile> params, @RequestParam long requestId,
+               HttpServletResponse response, HttpSession session) {
+          if (globalService.validatePages("student", response, session)) {
+               return requirementServiceImpl.addFileRequirement(params, requestId, session);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
      @PostMapping("/student/request/info/update")
      public ResponseEntity<Object> updateInformationRequirement(
                @RequestParam long requestId, @RequestParam Map<String, String> params, HttpServletResponse response,

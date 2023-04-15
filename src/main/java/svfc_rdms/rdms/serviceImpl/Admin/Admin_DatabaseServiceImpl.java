@@ -53,28 +53,28 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
     }
 
     @Override
-public byte[] backUpDatabase(String host, String port, String dbName, String username, String password) {
-    try {
-        String[] command = new String[] { "mysqldump", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
-                dbName };
+    public byte[] backUpDatabase(String host, String port, String dbName, String username, String password) {
+        try {
+            String[] command = new String[] { "mysqldump", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
+                    dbName };
 
-        Process process = Runtime.getRuntime().exec(command);
-        InputStream inputStream = process.getInputStream();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Process process = Runtime.getRuntime().exec(command);
+            InputStream inputStream = process.getInputStream();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, bytesRead);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            inputStream.close();
+            outputStream.close();
+            process.waitFor();
+
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
         }
-
-        inputStream.close();
-        outputStream.close();
-        process.waitFor();
-
-        return outputStream.toByteArray();
-    } catch (Exception e) {
-        throw new ApiRequestException(e.getMessage());
     }
-}
 }

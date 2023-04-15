@@ -236,7 +236,7 @@ public class NotificationServiceImpl implements NotificationService {
                 
                 String userEmail = user.getEmail();
                 
-                myEmailService.sendEmail("noreply@gmail.com", userEmail, "Test Email",message);
+                myEmailService.sendEmail("noreply@rdmssvfc2023.com", userEmail, "Requests Status",message);
                 return true;
             }else{
                 return true;

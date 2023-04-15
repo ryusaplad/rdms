@@ -33,6 +33,7 @@
 > :white_check_mark: :arrow_right: **View Requests (Table,Status,Details)**
 
 > :white_check_mark: :arrow_right: **Edit and Resubmit Request (Rejected Only)**
+    >> - in Editing requirements the student can now add additional files.
 
 > :white_check_mark: :arrow_right: **Request Document**
 

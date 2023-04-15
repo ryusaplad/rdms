@@ -24,7 +24,7 @@ public class CustomErrorController implements ErrorController {
         int statusCode = getStatusCode(request);
         String errorMessage = getErrorMessage(request);
         String errorTitle = getErrorTitle(statusCode);
-
+        
         model.addAttribute("errorNumber", statusCode);
         model.addAttribute("errorTitle", errorTitle);
         model.addAttribute("errorMessage", errorMessage);

@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(textWithHtml, true);
-        helper.setReplyTo("noreply@example.com");
+        helper.setReplyTo("noreply@svfcrdms2023.com");
 
      
         javaMailSender.send(emailMessage);

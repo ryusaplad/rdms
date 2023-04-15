@@ -9,8 +9,6 @@ $(document).ready(function () {
   refreshTable();
 
   function refreshTable() {
-  
-
     // Make AJAX request to fetch latest data
     $.ajax({
       url: "/student/my-requests/load_all",
@@ -18,7 +16,10 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         // Empty table body
-        var table = $("#zero_config").DataTable();
+        var table = $("#zero_config").DataTable({
+          "ordering": false,
+          "destroy": true
+        });
         table.clear();
         var tableBodyItems = ``;
         var buttons = ``;
@@ -26,7 +27,7 @@ $(document).ready(function () {
         for (let i = 0; i < data.length; i++) {
           var myrequest = data[i];
 
-          if (myrequest.requestStatus == "Pending") {
+          if (myrequest.requestStatus == "Pending" || myrequest.requestStatus == "On-Going" || myrequest.requestStatus == "Approved") {
             buttons = ` <a
            
             title="View Full Details"
@@ -46,7 +47,7 @@ data-bs-toggle="dropdown"
 
 aria-expanded="false"
 >
-Action
+Edit|<b>Re</b>submit
 </button> 
 <ul class="dropdown-menu">
 <li>
@@ -105,12 +106,21 @@ Action
           }
 
 
-
+          var statusIcon = "";
+          if (myrequest.requestStatus.toLowerCase().includes("approved")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-success" > <i class="fas fa-check text-success" aria-hidden="true"></i> Completed</strong></td>`;
+          } else if (myrequest.requestStatus.toLowerCase().includes("pending")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
+          } else if (myrequest.requestStatus.toLowerCase().includes("on-going")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-half text-primary" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
+          } else if (myrequest.requestStatus.toLowerCase().includes("rejected")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
+          }
 
           tableBodyItems = `
             <tr>
               <td>${myrequest.requestDocument}</td>
-              <td>${myrequest.requestStatus}</td>
+            ${statusIcon}
               <td>
               <div class="btn-group dropstart">
               ${buttons}
@@ -119,12 +129,12 @@ Action
           </td>
           </tr> `;
 
-         
+
           $("#zero_config")
             .DataTable()
             .row.add([
               myrequest.requestDocument,
-              myrequest.requestStatus,
+              statusIcon,
               buttons,
             ])
             .draw();
@@ -141,8 +151,8 @@ Action
     id = $(this).attr("href");
     rid = $(this).attr("href");
     link = "/student/my-requests/fetch?requestId=" + id;
-  
-  
+
+
     $.get(link, function (request) {
       $(".tablebody").empty();
       $(".receievedDoc").empty();
@@ -215,38 +225,30 @@ Action
         var message =
           request.data[0].requestStatus + ", " + request.data[0].reply;
         var alertType = "";
-        var alertLabel = "";
-        var svgIcon = "";
+
         if (status.toLowerCase() == "approved") {
           alertType = "alert-success";
-          alertLabel = "Success:";
-          svgIcon = "#check-circle-fill";
+          faIcon = "fa fa-check-circle";
           message = request.data[0].requestStatus;
         } else if (status.toLowerCase() == "pending") {
           alertType = "alert-info";
-          alertLabel = "Pending:";
-          svgIcon = "#arrow-clockwise";
+          faIcon = "fa fa-clock-o";
           message = request.data[0].requestStatus;
         } else if (status.toLowerCase() == "on-going") {
           alertType = "alert-info";
-          alertLabel = "Pending:";
-          svgIcon = "#arrow-clockwise";
+          faIcon = "fa fa-spinner fa-spin";
           message = request.data[0].requestStatus;
         } else {
           alertType = "alert-danger";
-          alertLabel = "Danger:";
-          svgIcon = "#exclamation-triangle-fill";
+          faIcon = "fa fa-exclamation-triangle";
         }
         var htmlDiv =
           "  <div class='alert " +
           alertType +
           " d-flex align-items-center' role='alert'>" +
-          "<svg class='bi flex-shrink-0 me-2' width='16' height='16' role='img' aria-label='" +
-          alertLabel +
-          "'>" +
-          "<use xlink:href='" +
-          svgIcon +
-          "' /></svg>" +
+          "<i class='" +
+          faIcon +
+          " fa-fw'></i>" +
           "Requests " +
           message +
           "</div>";
@@ -263,8 +265,8 @@ Action
     link = "/student/my-requests/fetch?requestId=" + id;
     finalValue = "";
     fetchReqFiles(id, link, finalValue);
-    rid = $(this).data("value");
-  
+    rid = id;
+
     $("#editRequirements").modal("toggle");
     // $.get(link, function (request) {});
   });
@@ -305,9 +307,9 @@ Action
   $(document).on("click", ".toggleEditInfosModal", function (e) {
     e.preventDefault();
     id = $(this).attr("href");
-   
+
     rid = $(this).data("value");
-  
+
     $("#editReqInfos").modal("toggle");
   });
   $(".saveInfoUpdate").on("click", function (e) {
@@ -359,38 +361,149 @@ Action
 
   $(document).on("click", ".editItem", function (e) {
     e.preventDefault();
-    var row = $(this).closest("tr");
-
     var fileId = $(this).closest("a").attr("href");
-    var filename = row.find("#fileN").text();
     $(".editItem").addClass("btn-danger");
     $(".editItem").removeClass("disabled");
     $(this).closest("a").addClass("disabled");
     $(this).closest("a").removeClass("btn-danger");
     $(this).closest("a").addClass("btn-success");
     $("#fileId").val(fileId);
-    $("#fileName").val(filename);
     $("#inputFile").show();
   });
+
+
+  $(document).on("click", '.toggleAddNewFile', function () {
+    $("#editRequirements").modal("hide");
+    $("#addRequirements").modal("toggle");
+  });
+
+  $(document).on("click", ".cancelAddBtn", function () {
+    $("#editRequirements").modal("toggle");
+    $("#addRequirements").modal("hide");
+  });
+
+  var addFileFormData = new FormData();
+  var fileCount = 0;
+  $(".addFileData").on("click", function (e) {
+    e.preventDefault();
+    var addFileData = $("#inputAddFile")[0].files;
+    if (addFileData.length != 0) {
+      var fileName = addFileData[0].name;
+      var extension = fileName.split('.').pop();
+      var shortFileName = fileName.slice(0, 10);
+      if (fileName.length > 10) {
+        shortFileName += '...';
+      }
+      var finalFileName = shortFileName + extension;
+      var fileId = "file_" + fileCount; // generate a unique id for the file
+      addFileFormData.append(fileId, addFileData[0]);
+      fileCount++;
+      // Add the file to the table
+      var $tableRow = $("<tr>");
+      var $deleteButton = $("<button>")
+        .text("Delete")
+        .addClass("delete-file")
+        .addClass("btn btn-warning")
+        .data("fileId", fileId); // store the unique id with the delete button
+      $tableRow.append($("<td>").append($deleteButton));
+      $tableRow.append($("<td>").text(finalFileName));
+      $(".add-file-table").append($tableRow);
+      $("#inputAddFile").val('');
+    }
+  });
+  $(".clearAddingData").on("click", function () {
+    addFileFormData = new FormData();
+    fileCount = 0;
+  });
+  $(document).on("click", ".delete-file", function () {
+    var fileId = $(this).data("fileId");
+
+    $(this).closest("tr").remove();
+
+    addFileFormData.delete(fileId);
+
+    if (Array.from(addFileFormData).length === 0) {
+      fileCount = 0;
+    }
+  });
+
+  $('.saveFiles').on("click", function (e) {
+    e.preventDefault();
+    if (Array.from(addFileFormData).length != 0) {
+      $("#reqAddForm").submit();
+    } else {
+      alert("Please add a file!");
+    }
+  })
+
+  $("#reqAddForm").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/student/request/file/add?requestId=" + rid,
+      type: "POST",
+      data: addFileFormData,
+      enctype: "multipart/form-data",
+      processData: false,
+      contentType: false,
+      cache: false,
+      beforeSend: function () {
+        $(".saveFiles").attr("disabled", true);
+
+      },
+      success: function (res) {
+        $("#fileData").val('');
+        $(".saveFiles").attr("disabled", false);
+        $("#addingAlert").empty();
+        $("#addingAlert").removeClass("alert-danger");
+        $("#addingAlert").addClass("alert-success");
+        $("#addingAlert").text(res);
+        $("#addingAlert").show();
+        setTimeout(function () {
+          $(".clearAddingData").click();
+          $(".cancelAddBtn").click();
+          $(".add-file-table").empty();
+          $("#addingAlert").hide();
+
+          link = "/student/my-requests/fetch?requestId=" + id;
+          finalValue = "";
+          fetchReqFiles(id, link, finalValue);
+        }, 2500);
+
+
+      },
+      error: function (err) {
+        $("#addingAlert").empty();
+        $("#addingAlert").removeClass("alert-success");
+        $("#addingAlert").addClass("alert-danger");
+        $("#addingAlert").text(err.responseText);
+        $("#addingAlert").show();
+        $(".saveFiles").attr("disabled", false);
+      },
+    });
+  });
+
   $(document).on("click", ".saveChanges", function (e) {
     e.preventDefault();
     var fileData = $("#fileData")[0].files;
     if (fileData.length == 0) {
       $("#editingAlert").empty();
-
+      $("#editingAlert").removeClass("alert-success");
+      $("#editingAlert").addClass("alert-danger");
       $("#editingAlert").text(
         "Please select / upload a file in your directory!."
       );
       $("#editingAlert").show();
     } else {
+      $("#reqUpForm").submit();
     }
-    $("#reqUpForm").submit();
+
   });
   $(document).on("click", ".cancelUpdateBtn", function (e) {
     $(".clearRequest").click();
   });
   $(document).on("click", ".clearRequest", function (e) {
     $("#inputFile").hide();
+    $("#fileData").val('');
     e.preventDefault();
     $(".editItem").removeClass("disabled");
     $(this).closest("a").removeClass("btn-success");
@@ -411,18 +524,18 @@ Action
       cache: false,
       beforeSend: function () {
         $(".saveChanges").attr("disabled", true);
+
+      },
+      success: function (res) {
+        $("#fileData").val('');
+        $(".saveChanges").attr("disabled", false);
         $("#editingAlert").empty();
         $("#editingAlert").removeClass("alert-danger");
         $("#editingAlert").addClass("alert-success");
         $("#editingAlert").text("File Succesfully Updated");
         $("#editingAlert").show();
-      },
-      success: function (res) {
-        $(".clearRequest").click();
-        $(".saveChanges").attr("disabled", false);
-        $("#editingAlert").empty();
-        $("#editingAlert").hide();
         fetchReqFiles(id, link, finalValue);
+
       },
       error: function (err) {
         $("#editingAlert").empty();
@@ -440,7 +553,7 @@ Action
     $("#resubmitReqModal").modal("toggle");
     id = $(this).attr("href");
     rid = $(this).data("value");
-  
+
   });
   $(".confirmResubmit").on("click", function (e) {
     e.preventDefault();
@@ -472,7 +585,7 @@ Action
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       setConnected(true);
-    stompClient.subscribe("/topic/student_request/recieved", function (data) {
+      stompClient.subscribe("/topic/student_request/recieved", function (data) {
         if (data.toString().toLowerCase().includes("ok")) {
           refreshTable();
         }
