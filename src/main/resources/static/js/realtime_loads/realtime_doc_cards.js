@@ -1,6 +1,6 @@
 $(document).ready(function () {
     updateCards();
-    connect();
+    docCardsonnection();
 
 
 
@@ -66,8 +66,9 @@ $(document).ready(function () {
         });
     }
 
+
     // Web Socket Connection
-    function connect() {
+    function docCardsonnection() {
         var socket = new SockJS("/websocket-server");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -79,13 +80,23 @@ $(document).ready(function () {
                     }
                 });
             } else {
-                console.log("WebSocket not fully loaded yet. Waiting...");
-                setTimeout(function () {
-                    connect();
-                }, 1000); // retry after 1 second
+                console.log("Documents WebSocket not fully loaded yet. Waiting...");
+                setConnected(false);
             }
+        }, function (error) {
+            console.log("Documents Socket, lost connection to WebSocket. Retrying...");
+            setConnected(false);
+
         });
     }
 
+
+    // Check the connection status every second
+    setInterval(function () {
+        if (!connected) {
+        console.log("Documents connection lost. Attempting to reconnect...");
+            docCardsonnection();
+        }
+    }, 5000); // check every second
 
 });

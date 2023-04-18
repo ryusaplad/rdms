@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     var location = window.location.href;
-    connect();
+    totalConnection();
     if (location.includes("student")) {
         var studentDashboardTotals = ["totalRequests", "totalApprovedRequests", "totalRejectedRequests", "totalUploaded"];
         loadTotals("/student/dashboard/totals", studentDashboardTotals);
@@ -9,7 +9,7 @@ $(document).ready(function () {
         var registrarashboardTotals = ["totalStudentRequests", "totalTeacherRequests", "totalPendingRequests", "totalApprovedRequests", "totalRejectedRequests", "totalUploadedFiles"];
         loadTotals("/registrar/dashboard/totals", registrarashboardTotals);
     } else if (location.includes("teacher")) {
-        var teacherDashboardTotals = ["totalRequests","totalPendingRequests", "totalSentRequests", "totalUploadedFiles"];
+        var teacherDashboardTotals = ["totalRequests", "totalPendingRequests", "totalSentRequests", "totalUploadedFiles"];
         loadTotals("/teacher/dashboard/totals", teacherDashboardTotals);
     } else if (location.includes("admin")) {
 
@@ -25,7 +25,7 @@ $(document).ready(function () {
             "totalDelStudentsAcc",
             "totalGlobalFiles"];
 
-        loadTotals("/admin/dashboard/totals", adminDashboardTotals);
+        loadTotals("/svfc-admin/dashboard/totals", adminDashboardTotals);
     }
 
     function loadTotals(url, elements) {
@@ -56,7 +56,7 @@ $(document).ready(function () {
         });
     }
     // Web Socket Connection
-    function connect() {
+    function totalConnection() {
         var socket = new SockJS("/websocket-server");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -71,19 +71,28 @@ $(document).ready(function () {
                         } else if (location.includes("teacher")) {
                             loadTotals("/teacher/dashboard/totals", teacherDashboardTotals);
                         } else if (location.includes("admin")) {
-                            loadTotals("/admin/dashboard/totals", adminDashboardTotals);
+                            loadTotals("/svfc-admin/dashboard/totals", adminDashboardTotals);
                         }
                     }
                 });
             } else {
-                console.log("WebSocket not fully loaded yet. Waiting...");
-                setTimeout(function () {
-                    connect();
-                }, 1000); // retry after 1 second
+                console.log("Dashboard Totals, WebSocket not fully loaded yet. Waiting...");
+                setConnected(false);
             }
-        });
-    }
+        }, function (error) {
+            console.log("Dashboard Totals, lost connection to WebSocket. Retrying...");
+            setConnected(false);
 
-   
+        });
+
+
+    }
+    // Check the connection status every second
+    setInterval(function () {
+        if (!connected) {
+            console.log("Dashboard Totals, Connection lost. Attempting to reconnect...");
+            totalConnection();
+        }
+    }, 5000); // check every second
 
 });

@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    connect();
+    notifConnection();
 
 
     var mainNotificationCard = $(".ntcardMain");
@@ -15,8 +15,8 @@ $(document).ready(function () {
     var maxItems = 7;
 
 
-     // handle "load more" button click
-     $(document).on("click", ".loadMoreBtn", function () {
+    // handle "load more" button click
+    $(document).on("click", ".loadMoreBtn", function () {
         mainTotalItems += 2; // increment page number
         getCurrentLoggedIn(function (userType) {
 
@@ -47,9 +47,9 @@ $(document).ready(function () {
                 url: `/${userType}/notification/false/0/` + secondaryTotalItems,
                 type: "GET",
                 dataType: "json",
-               
+
                 success: function (data) {
-                    
+
                     var datalength = data.body.length;
 
                     if (datalength == 0 || datalength < -1) {
@@ -75,7 +75,7 @@ $(document).ready(function () {
             });
         });
 
-       
+
     }
 
     function fetchMainNotification() {
@@ -337,7 +337,7 @@ $(document).ready(function () {
 
 
 
-  
+
     $(document).on('click', '.accordion-item button', function () {
         var clickedCollapse = $(this).closest('.accordion-item').find('.accordion-collapse');
         var otherCollapses = $('.accordion-item').not($(this).closest('.accordion-item')).find('.accordion-collapse');
@@ -520,8 +520,7 @@ $(document).ready(function () {
     }
 
     // Web Socket Connection
-
-    function connect() {
+    function notifConnection() {
         var socket = new SockJS("/websocket-server");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -535,13 +534,20 @@ $(document).ready(function () {
                     }
                 });
             } else {
-                console.log("WebSocket not fully loaded yet. Waiting...");
-                setTimeout(function () {
-                    connect();
-                }, 1000); // retry after 1 second
+                console.log("Notification webSocket not fully loaded yet. Waiting...");
+                setConnected(false);
             }
+        }, function (error) {
+            console.log("Notification Socket, lost connection to WebSocket. Retrying...");
+            setConnected(false);
         });
     }
-   
-    
+
+    // Check the connection status every second
+    setInterval(function () {
+        if (!connected) {
+            console.log("Notification connection lost. Attempting to reconnect...");
+            notifConnection();
+        }
+    }, 5000); // check every second
 });

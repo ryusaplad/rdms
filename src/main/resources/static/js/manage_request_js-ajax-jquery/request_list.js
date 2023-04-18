@@ -1,6 +1,6 @@
 $(document).ready(function () {
   //Web Socket Connect;
-  connect();
+  studRequestConnection();
   var id = "";
   var rid = "";
   var link = "";
@@ -580,17 +580,35 @@ Edit|<b>Re</b>submit
   });
 
   // Web Socket Connection
-  function connect() {
+  function studRequestConnection() {
     var socket = new SockJS("/websocket-server");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       setConnected(true);
-      stompClient.subscribe("/topic/student_request/recieved", function (data) {
-        if (data.toString().toLowerCase().includes("ok")) {
-          refreshTable();
-        }
-        //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
-      });
+      if (stompClient.ws.readyState === WebSocket.OPEN) {
+        stompClient.subscribe("/topic/student_request/recieved", function (data) {
+          if (data.toString().toLowerCase().includes("ok")) {
+            refreshTable();
+          }
+          //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
+        });
+      } else {
+        console.log("Student Request Socket not fully loaded yet. Waiting...");
+        setConnected(false);
+      }
+    }, function (error) {
+      console.log("Student Request Socket Lost connection to WebSocket. Retrying...");
+      setConnected(false);
+
     });
+
+
   }
+  // Check the connection status every second
+  setInterval(function () {
+    if (!connected) {
+      console.log("Connection lost. Attempting to reconnect...");
+      studRequestConnection();
+    }
+  }, 5000); // check every second
 });

@@ -1,6 +1,6 @@
 $(document).ready(function () {
   //Web Socket Connect;
-  connect();
+  regRequestListsConnection();
   var htmlTable = "";
   var htmlModal = "";
   var formData = new FormData();
@@ -23,7 +23,7 @@ $(document).ready(function () {
         // Empty table body
         var table = $("#zero_config").DataTable();
         table.clear();
-       
+
         var tableBodyItems = ``;
         var actions = "";
         for (var i = 0; i < data.length; i++) {
@@ -68,7 +68,7 @@ $(document).ready(function () {
           </div>
       </div>`;
           // Append new data to table body
-         
+
           $("#zero_config")
             .DataTable()
             .row.add([
@@ -124,95 +124,14 @@ $(document).ready(function () {
                     <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h4 class="card-title">Requests Informations</h4>
-                    <div class="container-sm"></div>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>C/Y/SEM</th>
-                                <th>Document</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td id="requestbyupar">
-                                </td>
-                                <td class="font-weight-bold" id="requestbynpar">
-                                </td>
-                                <td class="font-weight-bold" id="cysem">
-                                </td>
-                                <td class="font-weight-bold" id="docreqpar"></td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title ">Message</h4>
-                    <pre class="messHeader" style="display:none;overflow-y: scroll; font-size:14px; white-space: pre-wrap;">
-
-                    </pre>
-                    <hr>
-                    <h4 class="card-title">Request Status</h4>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Date Request</th>
-                                <th>Request Status</th>
-                                <th>Manage by</th>
-                            </tr>
-
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-weight-bold" id="datereqpar">N/A</td>
-                                <td class="font-weight-bold" id="reqstatuspar">N/A</td>
-                                <td class="font-weight-bold" id="manageby"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title">Receieved Requirements</h4>
-                    <table class="table table-white table-responsive receiveRequirementsTable"
-                        style="overflow-y: scroll; height: 100px;">
-                        <thead>
-                            <tr>
-
-                                <th>Download</th>
-                                <th>File Name</th>
-                                <th>Uploaded By</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="tablebody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h4 class="card-title">Sent Documents</h4>
-                    <table class="table table-white table-responsive sentDocumentTable"
-                        style="overflow-y: scroll; height: 100px; display:none">
-                        <thead>
-                            <tr>
-
-                                <th>Download</th>
-                                <th>File Name</th>
-                                <th>Uploaded By</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="sentDocsBody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="reqDetailedLoaderDiv">
+                <div id="loaderDiv">
+                    <div class="cardLoader">
+                        <div class="loader-wheel"></div>
+                        <div class="loader-text"></div>
+                    </div>
+                </div>
+            </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary cancelFinalizing clearModal"
@@ -223,12 +142,103 @@ $(document).ready(function () {
         </div>
     </div>
       `;
-    $(".modalView").append(htmlModal);
 
+    $(".reqDetailedLoaderDiv").show();
+    $(".modalView").append(htmlModal);
+    $("#reqDetailModal").modal("toggle");
     $.ajax({
       url: link,
       type: "GET",
       success: function (result) {
+        $(".reqDetailedLoaderDiv").replaceWith(`<h4 class="card-title">Requests Informations</h4>
+        <div class="container-sm"></div>
+        <table class="table table-primary table-responsive">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>C/Y/SEM</th>
+                    <th>Document</th>
+    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="requestbyupar">
+                    </td>
+                    <td class="font-weight-bold" id="requestbynpar">
+                    </td>
+                    <td class="font-weight-bold" id="cysem">
+                    </td>
+                    <td class="font-weight-bold" id="docreqpar"></td>
+    
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <h4 class="card-title ">Message</h4>
+        <pre class="messHeader" style="display:none;overflow-y: scroll; font-size:14px; white-space: pre-wrap;">
+    
+        </pre>
+        <hr>
+        <h4 class="card-title">Request Status</h4>
+        <table class="table table-primary table-responsive">
+            <thead>
+                <tr>
+                    <th>Date Request</th>
+                    <th>Request Status</th>
+                    <th>Manage by</th>
+                </tr>
+    
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="font-weight-bold" id="datereqpar">N/A</td>
+                    <td class="font-weight-bold" id="reqstatuspar">N/A</td>
+                    <td class="font-weight-bold" id="manageby"></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <h4 class="card-title">Receieved Requirements</h4>
+        <table class="table table-white table-responsive receiveRequirementsTable"
+            style="overflow-y: scroll; height: 100px;">
+            <thead>
+                <tr>
+    
+                    <th>Download</th>
+                    <th>File Name</th>
+                    <th>Uploaded By</th>
+                </tr>
+    
+            </thead>
+            <tbody class="tablebody">
+                <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                    <td>
+    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h4 class="card-title">Sent Documents</h4>
+        <table class="table table-white table-responsive sentDocumentTable"
+            style="overflow-y: scroll; height: 100px; display:none">
+            <thead>
+                <tr>
+    
+                    <th>Download</th>
+                    <th>File Name</th>
+                    <th>Uploaded By</th>
+                </tr>
+    
+            </thead>
+            <tbody class="sentDocsBody">
+                <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>`);
         $(".tablebody").empty();
         $(".sentDocsBody").empty();
         var dlAnchor = "";
@@ -356,7 +366,8 @@ $(document).ready(function () {
             $(".messHeader").append(htmlP);
           }
         }
-        $("#reqDetailModal").modal("toggle");
+        $(".reqDetailedLoaderDiv").hide();
+        $(".reqDetailedLoaderDiv").remove();
       },
       error: function (error) { },
     });
@@ -509,7 +520,7 @@ $(document).ready(function () {
   $(document).on("click", ".confirmCompleteFinal", function (e) {
     e.preventDefault();
     $("#f-reqs-upload").submit();
-   
+
   });
 
   // Finalized Requests with uploaded files
@@ -705,13 +716,13 @@ $(document).ready(function () {
   $(document).on("click", ".confirmProcess", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    console.log(userId +"And" +rId);
+    console.log(userId + "And" + rId);
     updateStudentRequests(userId, "N/A", "On-Going");
   });
   $(document).on("click", ".confirmReject", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    console.log(userId +"And" +rId);
+    console.log(userId + "And" + rId);
     var message = $("#reason").val();
     if (message.length < -1) {
       updateStudentRequests(userId, "N/A", "Rejected");
@@ -747,21 +758,36 @@ $(document).ready(function () {
     }
   });
 
-  function connect() {
+  function regRequestListsConnection() {
     var socket = new SockJS('/websocket-server');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       setConnected(true);
-      stompClient.subscribe('/topic/student/requests', function (data) {
+      if (stompClient.ws.readyState === WebSocket.OPEN) {
+        stompClient.subscribe('/topic/student/requests', function (data) {
 
-        if (data.toString().toLowerCase().includes("ok")) {
-          refreshTable();
-        }
-        //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
-      });
-
-
+          if (data.toString().toLowerCase().includes("ok")) {
+            refreshTable();
+          }
+          //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
+        });
+      } else {
+        console.log("Registrar Student Request View Socket not fully loaded yet. Waiting...");
+        setConnected(false);
+      }
+    }, function (error) {
+      console.log("Registrar Student Request View Socket, Lost connection to WebSocket. Retrying...");
+      setConnected(false);
 
     });
+
+
   }
+  // Check the connection status every second
+  setInterval(function () {
+    if (!connected) {
+      console.log("Registrar Student Request View Socket, connection lost. Attempting to reconnect...");
+      regRequestListsConnection();
+    }
+  }, 5000); // check every second
 });

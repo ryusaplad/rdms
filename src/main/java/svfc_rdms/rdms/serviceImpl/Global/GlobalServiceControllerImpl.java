@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -108,7 +110,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
      }
 
      @Override
-     public void DownloadFile(String id, Model model, HttpServletResponse response) {
+     public void downloadFile(String id, Model model, HttpServletResponse response) {
           try {
                String stringValue = id.toString();
                UUID uuidValue = UUID.fromString(stringValue);
@@ -122,13 +124,30 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                          response.setHeader("Content-Disposition",
                                    "attachment; filename = " + file.getName().replace(",", "."));
                     }
-                    
+
                     ServletOutputStream outputStream = response.getOutputStream();
                     outputStream.write(file.getData());
                     outputStream.close();
+
                }
           } catch (Exception e) {
                throw new ApiRequestException("Failed to download Reason: " + e.getMessage());
+          }
+     }
+
+     @Override
+     public ResponseEntity<String> deleteFile(String id) {
+          try {
+               String stringValue = id.toString();
+               UUID uuidValue = UUID.fromString(stringValue);
+               Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
+               if (fileOptional.isPresent()) {
+                    fileRepository.delete(fileOptional.get());
+                    return new ResponseEntity<String>("success", HttpStatus.OK);
+               }
+               return new ResponseEntity<String>("failed to delete this file", HttpStatus.OK);
+          } catch (Exception e) {
+               throw new ApiRequestException("Failed to delete this file Reason: " + e.getMessage());
           }
      }
 

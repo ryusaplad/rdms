@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    connect();
+    regRequestConnection();
 
     function refreshTable() {
         var url = "";
@@ -10,7 +10,7 @@ $(document).ready(function () {
             url = "/registrar/registrar/requests/load";
         } else if (location.includes("/teacher/registrar-requests")) {
             url = "/teacher/registrar/requests/load";
-        } else if (location.includes("/admin/registrar_requests")) {
+        } else if (location.includes("/svfc-admin/registrar_requests")) {
             url = "/school_admin/registrar/requests/load";
         } else {
             url = "/invalid/";
@@ -51,7 +51,7 @@ $(document).ready(function () {
     }
 
     // Web Socket Connection
-    function connect() {
+    function regRequestConnection() {
         var socket = new SockJS("/websocket-server");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -65,11 +65,22 @@ $(document).ready(function () {
                     }
                 });
             } else {
-                console.log("WebSocket not fully loaded yet. Waiting...");
-                setTimeout(function () {
-                    connect();
-                }, 1000); // retry after 1 second
+                console.log("Registrar Requests WebSocket not fully loaded yet. Waiting...");
+                setConnected(false);
             }
+        }, function (error) {
+            console.log("Registrar Requests Socket, lost connection to WebSocket. Retrying...");
+            setConnected(false);
+
         });
+
+
     }
+    // Check the connection status every second
+    setInterval(function () {
+        if (!connected) {
+            console.log("Registrar Requests, connection lost. Attempting to reconnect...");
+            regRequestConnection();
+        }
+    }, 5000); // check every second
 });

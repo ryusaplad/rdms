@@ -168,7 +168,7 @@ $(document).ready(function () {
         confirmPassword
       )
     ) {
-      url = "/admin/saveUserAcc";
+      url = "/svfc-admin/saveUserAcc";
       ajaxPost(url);
     }
   });
@@ -202,7 +202,7 @@ $(document).ready(function () {
         confirmPassword
       )
     ) {
-      url = "/admin/updateUserAcc";
+      url = "/svfc-admin/updateUserAcc";
       ajaxPost(url);
     }
   });
@@ -285,7 +285,7 @@ $(document).ready(function () {
   function ajaxGet(type, stat) {
     $.ajax({
       type: "GET",
-      url: "/admin/getAllUser?account-type=" + type.trim() + "&status=" + stat,
+      url: "/svfc-admin/getAllUser?account-type=" + type.trim() + "&status=" + stat,
       success: function (result) {
         if (result.status == "success") {
           var table = $("#zero_config").DataTable();
@@ -332,7 +332,7 @@ $(document).ready(function () {
                   "</td><td>" +
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/admin/user/update/?userId=" +
+                  "<a href='/svfc-admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -345,7 +345,7 @@ $(document).ready(function () {
                 actions =
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/admin/user/update/?userId=" +
+                  "<a href='/svfc-admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -367,7 +367,7 @@ $(document).ready(function () {
                   "</td><td>" +
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/admin/user/update/?userId=" +
+                  "<a href='/svfc-admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -380,7 +380,7 @@ $(document).ready(function () {
                 actions =
                   "<div class='row'>" +
                   "<div class='col-sm'>" +
-                  "<a href='/admin/user/update/?userId=" +
+                  "<a href='/svfc-admin/user/update/?userId=" +
                   user.userId +
                   "' type='button' class='edit btn btn-primary w-100'>Edit</a>" +
                   "</div>" +
@@ -438,7 +438,7 @@ $(document).ready(function () {
 
   $(".undoAccount").on("click", function (event) {
     userId = $(".undo").data("value");
-    var undoStatus = "/admin/user/active/?userId=" + userId;
+    var undoStatus = "/svfc-admin/user/active/?userId=" + userId;
     $.ajax({
       url: undoStatus,
       type: "GET",
@@ -489,7 +489,7 @@ $(document).ready(function () {
   });
 
   $(".deleteTemporarily").on("click", function (event) {
-    var tempStatus = "/admin/user/temporary/?userId=" + userId;
+    var tempStatus = "/svfc-admin/user/temporary/?userId=" + userId;
 
     $.ajax({
       url: tempStatus,
@@ -516,7 +516,7 @@ $(document).ready(function () {
   });
 
   $(document).on("click", ".deletePermanently", function (event) {
-    var permStatus = "/admin/user/delete/?userId=" + userId;
+    var permStatus = "/svfc-admin/user/delete/?userId=" + userId;
 
     $.ajax({
       url: permStatus,

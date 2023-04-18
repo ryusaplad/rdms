@@ -50,28 +50,19 @@ public class AdminController {
      @Autowired
      private GlobalLogsServiceImpl globalLogsService;
 
-     @GetMapping("/admin/dashboard")
+     @GetMapping("/svfc-admin/dashboard")
      public String dashboard_View(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-               model.addAttribute("totalStudents", mainService.displayCountsByStatusAndType("Active", "Student"));
-               model.addAttribute("totalRegistrars", mainService.displayCountsByStatusAndType("Active", "Registrar"));
-               model.addAttribute("totalTeachers", mainService.displayCountsByStatusAndType("Active", "Teacher"));
-
-               model.addAttribute("totalDeletedStud", mainService.displayCountsByStatusAndType("Temporary", "Student"));
-               model.addAttribute("totalDeletedReg",
-                         mainService.displayCountsByStatusAndType("Temporary", "Registrar"));
-               model.addAttribute("totalDeletedTeach",
-                         mainService.displayCountsByStatusAndType("Temporary", "Teacher"));
-
+              
                model.addAttribute("page", "dashboard");
                model.addAttribute("pageTitle", "Dashboard");
 
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
      }
 
-     @GetMapping("/admin/{userType}")
+     @GetMapping("/svfc-admin/{userType}")
      public String accountsViews(@PathVariable("userType") String userType, HttpServletResponse response,
                HttpSession session, Model model) {
 
@@ -114,13 +105,13 @@ public class AdminController {
                     return "redirect:/";
                }
 
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
      }
 
      // Deleted pages
-     @GetMapping("/admin/{userType}/deleted-accounts")
+     @GetMapping("/svfc-admin/{userType}/deleted-accounts")
      public String deletedAccounts_View(@PathVariable String userType, HttpServletResponse response,
                HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
@@ -152,25 +143,25 @@ public class AdminController {
                     model.addAttribute("usersLists", mainService.diplayAllAccounts(dataStatus, accountType));
 
                } else {
-                    return "redirect:" + "/admin/" + userType + "/admin?error=Invalid User Type";
+                    return "redirect:" + "/svfc-admin/" + userType + "/admin?error=Invalid User Type";
                }
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
      }
 
-     @GetMapping("/admin/logs")
+     @GetMapping("/svfc-admin/logs")
      public String viewAdminLogs(Model model, HttpServletResponse response, HttpSession session) {
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("globalLogs", globalLogsService.getAllLogs());
                model.addAttribute("page", "globallogs");
                model.addAttribute("pageTitle", "Global Logs");
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
      }
 
-     @GetMapping(value = "/admin/user/{status}")
+     @GetMapping(value = "/svfc-admin/user/{status}")
      @ResponseBody
      public String changeStatus(@PathVariable("status") String status, @RequestParam("userId") long userId,
 
@@ -192,7 +183,7 @@ public class AdminController {
           return "redirect:/";
      }
 
-     @GetMapping("/admin/user/update")
+     @GetMapping("/svfc-admin/user/update")
      @ResponseBody
      public List<Users> returnUserById(@RequestParam("userId") long id, HttpServletResponse response,
                HttpSession session, Model model) {
@@ -219,19 +210,19 @@ public class AdminController {
      }
      // Viewing - Adding Document
 
-     @GetMapping("/admin/documents-list")
+     @GetMapping("/svfc-admin/documents-list")
      public String requestForAdmin(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("documentsList", mainService.getAllDocuments());
                model.addAttribute("page", "documents");
                model.addAttribute("pageTitle", "Documents");
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
      }
 
-     @GetMapping("/admin/global_files")
+     @GetMapping("/svfc-admin/global_files")
      public String allUserFiles(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("school_admin", response, session)) {
@@ -243,7 +234,7 @@ public class AdminController {
 
      }
 
-     @RequestMapping(value = "/admin/delete-document-card", method = RequestMethod.GET)
+     @RequestMapping(value = "/svfc-admin/delete-document-card", method = RequestMethod.GET)
      public String deleteFile(@RequestParam("docid") long documentId, HttpServletResponse response, HttpSession session,
                Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
@@ -260,7 +251,7 @@ public class AdminController {
      // end documents managing
 
      // Test Student Request
-     @GetMapping("/admin/student_requests")
+     @GetMapping("/svfc-admin/student_requests")
      public String viewAllStudentRequests(HttpServletResponse response, HttpSession session, Model model) {
           List<StudentRequest> studentsRequest = mainService.displayAllRequest();
           List<StudentRequest_Dto> storeStudentRequest = new ArrayList<>();
@@ -280,31 +271,31 @@ public class AdminController {
                model.addAttribute("page", "student_request");
                model.addAttribute("studentRequests", storeStudentRequest);
 
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
 
      }
 
-     @GetMapping("/admin/registrar_requests")
+     @GetMapping("/svfc-admin/registrar_requests")
      public String viewAllRegistrarRequests(HttpSession session, HttpServletResponse response,
                Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
                     model.addAttribute("pageTitle", "Registrar Requests");
                     model.addAttribute("page", "registrar_request");
-                    return "/admin/admin";
+                    return "/svfc-admin/admin";
                }
           
           return "redirect:/";
 
      }
 
-     @GetMapping("/admin/settings")
+     @GetMapping("/svfc-admin/settings")
      public String settingViews(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("page", "settings");
                model.addAttribute("pageTitle", "Settings");
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           return "redirect:/";
 

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
 public interface GlobalControllerService {
@@ -14,7 +15,8 @@ public interface GlobalControllerService {
 
       String removeDuplicateInManageBy(String manageBy);
 
-      void DownloadFile(String id, Model model, HttpServletResponse response);
+      void downloadFile(String id, Model model, HttpServletResponse response);
+      ResponseEntity<String> deleteFile(String id);
 
       String formattedDate();
 

@@ -69,11 +69,15 @@ public class AllAccount_RestController {
           try {
 
                String username = "";
-               if ((username = session.getAttribute("username").toString()) != null) {
 
+               if ((username = session.getAttribute("username").toString()) != null) {
+                    if (userType.equalsIgnoreCase("svfc-admin")) {
+                         userType = "admin";
+                    }
                     ValidAccounts[] validAccountType = ValidAccounts.values();
 
                     for (ValidAccounts validAcc : validAccountType) {
+
                          if (String.valueOf(validAcc).toLowerCase()
                                    .contains(userType.toLowerCase())) {
                               userType = validAcc.toString().toLowerCase();
@@ -81,6 +85,7 @@ public class AllAccount_RestController {
                          }
                     }
                     if (globalService.validatePages(userType, response, session)) {
+
                          if (session.getAttribute("name") != null) {
                               String name = session.getAttribute("name").toString();
                               Optional<Users> user = usersRepository.findByName(name);
@@ -481,6 +486,21 @@ public class AllAccount_RestController {
                HttpServletResponse response, HttpServletRequest request) {
           List<StudentRequest> studRequest = studentRepository.findAll();
           admin_RegistrarAccountServiceImpl.exportConfirmation(response, session, studRequest, request);
+     }
+
+     // Test Message
+
+     @GetMapping("/send/global/users/message")
+     public ResponseEntity<String> sendGlobalMessage(@RequestParam("m") String message, HttpServletResponse response,
+               HttpServletRequest request) {
+
+          if (!message.isBlank() || !message.isBlank()) {
+               globalService.sendTopic("/topic/all/user/message", message);
+               return new ResponseEntity<>("ok", HttpStatus.OK);
+          } else {
+               return new ResponseEntity<>("Failed to sent no message found", HttpStatus.BAD_REQUEST);
+          }
+
      }
 
 }

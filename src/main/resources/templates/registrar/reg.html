@@ -213,7 +213,7 @@
                                             <tbody>
                                                 <tr th:each="file : ${files}">
                                                     <td>
-                                                        <a th:href="@{'/registrar/files/download?id='} + ${file.fileId}" type="button" class="btn btn-warning">
+                                                        <a th:href="@{'/registrar/files/download?id='} + ${file.fileId}" type="button" class="btn btn-primary w-100">
                                                             Download
                                                         </a>
                                                     </td>
@@ -391,7 +391,7 @@
                 <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_totals.js}"></script>
             </th:block>
             <th:block th:if="${page =='documents'}">
-                <script type="text/javascript" th:src="@{/js/manage_document_adding/manageAddingDocument.js}"></script>
+                <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageAddingDocument.js}"></script>
             </th:block>
             <th:block th:if="${page =='myrequest'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>

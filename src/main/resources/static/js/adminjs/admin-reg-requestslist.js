@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "GET",
-      url: "/admin/view/request-data?requestId=" + dataVal,
+      url: "/svfc-admin/view/request-data?requestId=" + dataVal,
       success: function (data) {
         if (data[0].requestStatus == "pending") {
           htmlModal = "";
@@ -82,7 +82,7 @@ $(document).ready(function () {
             htmlModal +=
               `
     <div  class="col m-1">
-      <a href="/admin/files/download?id=` +
+      <a href="/svfc-admin/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +
               data[dataIndex].name +

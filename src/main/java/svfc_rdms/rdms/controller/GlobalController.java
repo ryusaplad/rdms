@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -10,12 +11,15 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import svfc_rdms.rdms.Enums.ValidAccounts;
+import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
@@ -51,7 +55,7 @@ public class GlobalController {
                     }
                }
                if (accType.contains("admin")) {
-                    accType = "admin";
+                    accType = "svfc-admin";
                }
 
                return "redirect:/" + accType + "/dashboard";
@@ -109,6 +113,10 @@ public class GlobalController {
 
                if (session.getAttribute("accountType") != null) {
 
+                    if (acctType.equalsIgnoreCase("svfc-admin")) {
+                         acctType = "admin";
+                    }
+
                     for (ValidAccounts validAcc : validAccountType) {
                          if (String.valueOf(validAcc).toLowerCase()
                                    .contains(acctType)) {
@@ -117,7 +125,7 @@ public class GlobalController {
                          }
                     }
                     if (globalService.validatePages(accType, response, session)) {
-                         globalService.DownloadFile(id, model, response);
+                         globalService.downloadFile(id, model, response);
                     }
                } else {
                     response.sendRedirect("/");
@@ -132,19 +140,43 @@ public class GlobalController {
                }
 
           }
+
+     }
+
+     @GetMapping("/{accountType}/delete/file")
+     public ResponseEntity<String> deleteFile(
+               @PathVariable String accountType,
+               @RequestParam("id") String fileId,
+               HttpServletResponse response,
+               HttpSession session) throws IOException {
+
+          if (session == null) {
+               throw new ApiRequestException("Invalid session or service");
+          }
+
+          if (accountType.equalsIgnoreCase("svfc-admin")) {
+               accountType = "school_admin";
+          }
+
+          if (!globalService.validatePages(accountType, response, session)) {
+               throw new ApiRequestException("Invalid session requests");
+          }
+
+          globalService.deleteFile(fileId);
+          return ResponseEntity.ok("File deleted");
      }
 
      @GetMapping("/{userType}/load/image")
      public void showImage(@PathVariable("userType") String userType, @Param("documentId") long id,
                HttpServletResponse response, HttpSession session,
                Optional<Documents> dOptional) {
-          if (userType.equalsIgnoreCase("admin") || userType.equalsIgnoreCase("registrar")) {
-               if(userType.equalsIgnoreCase("admin")){
+          if (userType.equalsIgnoreCase("svfc-admin") || userType.equalsIgnoreCase("registrar")) {
+               if (userType.equalsIgnoreCase("svfc-admin")) {
                     userType = "school_admin";
                }
                if (globalService.validatePages(userType, response, session)) {
                     dOptional = mainService.getFileDocumentById(id);
-                    
+
                     try {
                          response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
                          response.getOutputStream().write(dOptional.get().getImage());

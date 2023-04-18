@@ -8,7 +8,7 @@ $(document).ready(function () {
 
     // AJAX request to fetch data
     $.ajax({
-      url: "/admin/globallog/fetch?logId=" + logId,
+      url: "/svfc-admin/globallog/fetch?logId=" + logId,
       method: "GET",
       success: function (data) {
         // Clear modalView
@@ -96,17 +96,17 @@ $(document).ready(function () {
     });
   });
   refreshTable();
-  connect();
+  logConnection();
   // Initialize the DataTable
   var table = $('#zero_config').DataTable({
     ordering: false
   });
 
-  
+
   function refreshTable() {
     // Make AJAX request to fetch latest data
     $.ajax({
-      url: "/fetch/admin/global_logs",
+      url: "/fetch/svfc-admin/global_logs",
       type: "GET",
       dataType: "json",
       success: function (data) {
@@ -188,24 +188,33 @@ $(document).ready(function () {
 
 
   // Web Socket Connection
-  function connect() {
+  function logConnection() {
     var socket = new SockJS("/websocket-server");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       setConnected(true);
       if (stompClient.ws.readyState === WebSocket.OPEN) {
-        stompClient.subscribe("/topic/totals", function (data) {
+        stompClient.subscribe("/topic/logs", function (data) {
           if (data.toString().toLowerCase().includes("ok")) {
             refreshTable();
           }
         });
       } else {
-        console.log("WebSocket not fully loaded yet. Waiting...");
-        setTimeout(function () {
-          connect();
-        }, 1000); // retry after 1 second
+        console.log("Notification webSocket not fully loaded yet. Waiting...");
+        setConnected(false);
       }
+    }, function (error) {
+      console.log("Notification Socket, lost connection to WebSocket. Retrying...");
+      setConnected(false);
     });
   }
+
+  // Check the connection status every second
+  setInterval(function () {
+    if (!connected) {
+      console.log("Notification connection lost. Attempting to reconnect...");
+      logConnection();
+    }
+  }, 5000); // check every second
 
 });

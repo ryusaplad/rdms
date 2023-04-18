@@ -54,19 +54,19 @@ public class Admin_RestController {
      @Autowired
      private StudentRequest_ChartsLogicServiceImpl student_RequestChartServiceImpl;
 
-     @PostMapping(value = "/admin/saveUserAcc")
+     @PostMapping(value = "/svfc-admin/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
 
           return adminAccountService.saveUsersAccount(user, 0, session,request);
      }
 
-     @PostMapping(value = "/admin/updateUserAcc")
+     @PostMapping(value = "/svfc-admin/updateUserAcc")
      public ResponseEntity<Object> updateUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
 
           return adminAccountService.saveUsersAccount(user, 1, session,request);
      }
 
-     @GetMapping(value = "/admin/getAllUser")
+     @GetMapping(value = "/svfc-admin/getAllUser")
      public ResponseEntity<Object> getAllUser(@RequestParam("account-type") String accountType,
                @RequestParam("status") String status) {
 
@@ -88,7 +88,7 @@ public class Admin_RestController {
 
      }
 
-     @GetMapping("/admin/dashboard/studentrequest/fetch")
+     @GetMapping("/svfc-admin/dashboard/studentrequest/fetch")
      public ResponseEntity<Object> getRequestInformation(
                @RequestParam("s") Long userId,
                @RequestParam("req") Long requestId,
@@ -104,7 +104,7 @@ public class Admin_RestController {
           return requestServiceImpl.fetchRequestInformationToModals(username, requestId);
      }
 
-     @GetMapping("/admin/update-document-cards")
+     @GetMapping("/svfc-admin/update-document-cards")
      public ResponseEntity<Object> updateDocumentCard() {
 
           try {
@@ -123,7 +123,7 @@ public class Admin_RestController {
           }
      }
 
-     @PostMapping("/admin/save-document-info")
+     @PostMapping("/svfc-admin/save-document-info")
      public void saveDocument(@RequestParam("image") MultipartFile partFile,
                @RequestParam Map<String, String> params, HttpSession session,HttpServletRequest request) {
 
@@ -131,7 +131,7 @@ public class Admin_RestController {
 
      }
 
-     @DeleteMapping("/admin/delete-document-info")
+     @DeleteMapping("/svfc-admin/delete-document-info")
      public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId, HttpSession session) {
 
           try {
@@ -151,7 +151,7 @@ public class Admin_RestController {
           }
      }
 
-     @PostMapping("/admin/update-document-info")
+     @PostMapping("/svfc-admin/update-document-info")
      public void updateDocument(@RequestParam("docId") long id,
                @RequestParam("image") MultipartFile partFile,
                @RequestParam Map<String, String> params, HttpSession session,HttpServletRequest request) {
@@ -160,7 +160,7 @@ public class Admin_RestController {
 
      }
 
-     @GetMapping(value = "/admin/fetch-document-to-modal")
+     @GetMapping(value = "/svfc-admin/fetch-document-to-modal")
      public ResponseEntity<Object> getAllDocument(@RequestParam("docId") long docId) {
 
           try {
@@ -181,7 +181,7 @@ public class Admin_RestController {
 
      }
 
-     @GetMapping(value = "/admin/user/delete")
+     @GetMapping(value = "/svfc-admin/user/delete")
 
      public ResponseEntity<String> deleteUsers(@RequestParam("userId") long userId, HttpServletRequest request,
                HttpSession session) {
@@ -199,24 +199,24 @@ public class Admin_RestController {
           return new ResponseEntity<>("Failed", HttpStatus.OK);
      }
 
-     @GetMapping("/admin/view/request-data")
+     @GetMapping("/svfc-admin/view/request-data")
      public ResponseEntity<Object> viewAllRegistrarRequests(@RequestParam long requestId, HttpSession session,
                @RequestParam Map<String, String> params) {
 
           return mainService.viewAllRegistrarRequestsByRequestId(requestId);
      }
 
-     @GetMapping("/fetch/admin/global_logs")
+     @GetMapping("/fetch/svfc-admin/global_logs")
      public ResponseEntity<Object> viewAdminLogs(Model model) {
        return new ResponseEntity<>(globalLogsService.getAllLogs(),HttpStatus.OK);
      }
 
-     @GetMapping("/admin/globallog/fetch")
+     @GetMapping("/svfc-admin/globallog/fetch")
      public ResponseEntity<GlobalLogs> fetchGlobalLogs(@RequestParam("logId") long logId) {
           return globalLogsService.loadSpecificLogs(logId);
      }
 
-     @GetMapping("/admin/chart/data-filter")
+     @GetMapping("/svfc-admin/chart/data-filter")
      public ResponseEntity<?> fetchFilterChartData(@RequestParam("s") String status,@RequestParam("d") String date) {
           return student_RequestChartServiceImpl.getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(status,date);
      }

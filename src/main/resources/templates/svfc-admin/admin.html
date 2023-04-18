@@ -44,13 +44,13 @@
         <!-- ============================================================== -->
         <!-- Pre Loader-->
         <!-- ============================================================== -->
-        <preloader th:replace="admin/templates :: preloader"></preloader>
+        <preloader th:replace="svfc-admin/templates :: preloader"></preloader>
         <!-- ============================================================== -->
         <!-- Main wrapper-->
         <!-- ============================================================== -->
         <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="mini-sidebar" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full" class="mini-sidebar">
-            <header th:replace="admin/templates :: header"></header>
-            <aside th:replace="admin/templates :: aside"></aside>
+            <header th:replace="svfc-admin/templates :: header"></header>
+            <aside th:replace="svfc-admin/templates :: aside"></aside>
             <!-- Page wrapper  -->
             <!-- ============================================================== -->
             <!-- ============================================================== -->
@@ -432,7 +432,7 @@
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a href="/admin/dashboard">Dashboard</a>
+                                                    <a href="/svfc-admin/dashboard">Dashboard</a>
                                                 </li>
                                                 <li class="breadcrumb-item active">Manage Documents</li>
                                                 <li class="breadcrumb-item active">Documents</li>
@@ -487,7 +487,7 @@
                                                         <a href="#!">
                                                             <div class="imageDiv  mt-2 text-center" style="background-color: rgba(251, 251, 251, 0.15);">
                                                                 <img
-                                                                    th:src="@{'/admin/load/image?id='+ ${documentList.documentId}}"
+                                                                    th:src="@{'/svfc-admin/load/image?id='+ ${documentList.documentId}}"
                                                                     src="images/documentImage"
                                                                     class="img-fluid"
                                                                     style="height: 250px;  width: 250px;"
@@ -534,7 +534,7 @@
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a href="/admin/dashboard">Dashboard</a>
+                                                    <a href="/svfc-admin/dashboard">Dashboard</a>
                                                 </li>
                                                 <li class="breadcrumb-item active">Global Activity</li>
                                                 <li class="breadcrumb-item active">Logs</li>
@@ -626,7 +626,7 @@
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a href="/admin/dashboard">Dashboard</a>
+                                                    <a href="/svfc-admin/dashboard">Dashboard</a>
                                                 </li>
                                                 <li class="breadcrumb-item active" aria-current="page">User Files List</li>
                                             </ol>
@@ -658,11 +658,20 @@
                                             </thead>
                                             <tbody>
                                                 <tr th:each="file : ${files}">
-                                                    <td>
-                                                        <a th:href="@{'/school_admin/files/download?id='} + ${file.fileId}" type="button" class="btn btn-warning">
-                                                            Download
-                                                        </a>
+                                                    <td  class="row">
+                                                        
+                                                        <div class="col-sm">
+                                                            <a th:href="@{'/school_admin/files/download?id='} + ${file.fileId}" type="button" class="btn btn-primary w-100">
+                                                                Download
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-sm">
+                                                            <a type="button" th:data-value="${file.fileId}" class="btn btn-danger w-100 deleteFile">
+                                                                Delete
+                                                            </a>
+                                                        </div>
                                                     </td>
+                                                  
                                                     <td th:text="${file.name}"></td>
                                                     <td th:text="${file.uploadedBy}"></td>
                                                 </tr>
@@ -693,7 +702,7 @@
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb">
                                                 <li class="breadcrumb-item">
-                                                    <a href="/admin/dashboard">Dashboard</a>
+                                                    <a href="/svfc-admin/dashboard">Dashboard</a>
                                                 </li>
                                                 <li class="breadcrumb-item active">Settings</li>
                                             </ol>
@@ -749,7 +758,7 @@
                                             <nav aria-label="breadcrumb">
                                                 <ol class="breadcrumb">
                                                     <li class="breadcrumb-item">
-                                                        <a href="/admin/dashboard">Dashboard</a>
+                                                        <a href="/svfc-admin/dashboard">Dashboard</a>
                                                     </li>
                                                     <li class="breadcrumb-item">Requests</li>
                                                     <li class="breadcrumb-item active">Student Requests</li>
@@ -819,7 +828,7 @@
                                             <nav aria-label="breadcrumb">
                                                 <ol class="breadcrumb">
                                                     <li class="breadcrumb-item">
-                                                        <a href="/admin/dashboard">Dashboard</a>
+                                                        <a href="/svfc-admin/dashboard">Dashboard</a>
                                                     </li>
                                                     <li class="breadcrumb-item">Requests</li>
                                                     <li class="breadcrumb-item active">Registrar Requests</li>
@@ -867,7 +876,7 @@
                                             <nav aria-label="breadcrumb">
                                                 <ol class="breadcrumb">
                                                     <li class="breadcrumb-item">
-                                                        <a href="/admin/dashboard">Dashboard</a>
+                                                        <a href="/svfc-admin/dashboard">Dashboard</a>
                                                     </li>
                                                     <li class="breadcrumb-item active" th:text="${title}"></li>
                                                 </ol>
@@ -952,7 +961,7 @@
                                                         <div th:if="${!hide}">
                                                             <div class="row">
                                                                 <div class="col-sm">
-                                                                    <a th:href="@{/admin/user/update/(userId=${userList.userId})}" type="button" class="edit btn btn-primary w-100">Edit</a>
+                                                                    <a th:href="@{/svfc-admin/user/update/(userId=${userList.userId})}" type="button" class="edit btn btn-primary w-100">Edit</a>
                                                                 </div>
                                                                 <div class="col-sm">
                                                                     <a
@@ -1339,8 +1348,11 @@
                     <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
                     <script type="text/javascript" th:src="@{/js/adminjs/global_logs.js}"></script>
                 </th:block>
+                <th:block th:case="'globalfiles'">
+                    <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageDeletingFiles.js}"></script>
+                </th:block>
                 <th:block th:case="'documents'">
-                    <script type="text/javascript" th:src="@{/js/manage_document_adding/manageAddingDocument.js}"></script>
+                    <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageAddingDocument.js}"></script>
                 </th:block>
                 <th:block th:case="'student_request'">
                     <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>

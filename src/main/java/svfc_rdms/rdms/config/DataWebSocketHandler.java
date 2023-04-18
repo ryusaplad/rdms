@@ -20,7 +20,7 @@ public class DataWebSocketHandler extends TextWebSocketHandler {
             try {
                 session.sendMessage(new TextMessage(data));
             } catch (IOException e) {
-                e.printStackTrace();
+             System.out.println(e.getMessage());
             }
         });
     }
@@ -36,7 +36,7 @@ public class DataWebSocketHandler extends TextWebSocketHandler {
         try {
             session.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

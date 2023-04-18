@@ -22,7 +22,7 @@ $(document).ready(function () {
     }
 
     var link =
-      "/admin/dashboard/studentrequest/fetch?s=" +
+      "/svfc-admin/dashboard/studentrequest/fetch?s=" +
       paramMap.s +
       "&req=" +
       paramMap.req;
@@ -39,95 +39,15 @@ $(document).ready(function () {
                     <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h4 class="card-title">Requests Informations</h4>
-                    <div class="container-sm"></div>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>C/Y/SEM</th>
-                                <th>Document</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td id="requestbyupar">
-                                </td>
-                                <td class="font-weight-bold" id="requestbynpar">
-                                </td>
-                                <td class="font-weight-bold" id="cysem">
-                                </td>
-                                <td class="font-weight-bold" id="docreqpar"></td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title ">Message</h4>
-                    <pre class="messHeader" style="display:none;overflow-y: scroll; font-size:14px; white-space: pre-wrap;">
-
-                    </pre>
-                    <hr>
-                    <h4 class="card-title">Request Status</h4>
-                    <table class="table table-primary table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Date Request</th>
-                                <th>Request Status</th>
-                                <th>Manage by</th>
-                            </tr>
-
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-weight-bold" id="datereqpar">N/A</td>
-                                <td class="font-weight-bold" id="reqstatuspar">N/A</td>
-                                <td class="font-weight-bold" id="manageby"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr>
-                    <h4 class="card-title">Receieved Requirements</h4>
-                    <table class="table table-white table-responsive receiveRequirementsTable"
-                        style="overflow-y: scroll; height: 100px;">
-                        <thead>
-                            <tr>
-
-                                <th>Download</th>
-                                <th>File Name</th>
-                                <th>Uploaded By</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="tablebody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h4 class="card-title">Sent Documents</h4>
-                    <table class="table table-white table-responsive sentDocumentTable"
-                        style="overflow-y: scroll; height: 100px; display:none">
-                        <thead>
-                            <tr>
-
-                                <th>Download</th>
-                                <th>File Name</th>
-                                <th>Uploaded By</th>
-                            </tr>
-
-                        </thead>
-                        <tbody class="sentDocsBody">
-                            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                <td>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="reqDetailedLoaderDiv">
+                <div id="loaderDiv">
+                    <div class="cardLoader">
+                        <div class="loader-wheel"></div>
+                        <div class="loader-text"></div>
+                    </div>
+                </div>
+            </div>
+                   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary cancelFinalizing clearModal"
@@ -138,12 +58,105 @@ $(document).ready(function () {
         </div>
     </div>
       `;
+    $
+    
+    $(".reqDetailedLoaderDiv").show();
     $(".modalView").append(htmlModal);
-
+    $("#reqDetailModal").modal("toggle");
     $.ajax({
       url: link,
       type: "GET",
       success: function (result) {
+        $(".reqDetailedLoaderDiv").replaceWith(` <h4 class="card-title">Requests Informations</h4>
+    <div class="container-sm"></div>
+    <table class="table table-primary table-responsive">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>C/Y/SEM</th>
+                <th>Document</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="requestbyupar">
+                </td>
+                <td class="font-weight-bold" id="requestbynpar">
+                </td>
+                <td class="font-weight-bold" id="cysem">
+                </td>
+                <td class="font-weight-bold" id="docreqpar"></td>
+
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <h4 class="card-title ">Message</h4>
+    <pre class="messHeader" style="display:none;overflow-y: scroll; font-size:14px; white-space: pre-wrap;">
+
+    </pre>
+    <hr>
+    <h4 class="card-title">Request Status</h4>
+    <table class="table table-primary table-responsive">
+        <thead>
+            <tr>
+                <th>Date Request</th>
+                <th>Request Status</th>
+                <th>Manage by</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td class="font-weight-bold" id="datereqpar">N/A</td>
+                <td class="font-weight-bold" id="reqstatuspar">N/A</td>
+                <td class="font-weight-bold" id="manageby"></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <h4 class="card-title">Receieved Requirements</h4>
+    <table class="table table-white table-responsive receiveRequirementsTable"
+        style="overflow-y: scroll; height: 100px;">
+        <thead>
+            <tr>
+
+                <th>Download</th>
+                <th>File Name</th>
+                <th>Uploaded By</th>
+            </tr>
+
+        </thead>
+        <tbody class="tablebody">
+            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                <td>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 class="card-title">Sent Documents</h4>
+    <table class="table table-white table-responsive sentDocumentTable"
+        style="overflow-y: scroll; height: 100px; display:none">
+        <thead></thead>
+            <tr>
+
+                <th>Download</th>
+                <th>File Name</th>
+                <th>Uploaded By</th>
+            </tr>
+
+        </thead>
+        <tbody class="sentDocsBody">
+            <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
+                <td>
+                </td>
+            </tr>
+        </tbody>
+    </table>`);
+       
         $(".tablebody").empty();
         $(".sentDocsBody").empty();
         var dlAnchor = "";
@@ -165,7 +178,7 @@ $(document).ready(function () {
               dlAnchor =
                 "<tr>" +
                 "<td>" +
-                "<a href = '/admin/dashboard/files/download?id=" +
+                "<a href = '/svfc-admin/files/download?id=" +
                 result.data[x].fileId +
                 "'class='btn btn-danger text-white'>Download</a>" +
                 "</td>" +
@@ -181,7 +194,7 @@ $(document).ready(function () {
               dlAnchor =
                 "<tr>" +
                 "<td>" +
-                "<a href = '/admin/dashboard/files/download?id=" +
+                "<a href = '/svfc-admin/files/download?id=" +
                 result.data[x].fileId +
                 "'class='btn btn-danger text-white'>Download</a>" +
                 "</td>" +
@@ -201,10 +214,10 @@ $(document).ready(function () {
           $("#requestbynpar").text(result.data[0].name);
           $("#cysem").text(
             result.data[0].course +
-              "," +
-              result.data[0].year +
-              "," +
-              result.data[0].semester.substring(0, 3)
+            "," +
+            result.data[0].year +
+            "," +
+            result.data[0].semester.substring(0, 3)
           );
           var requestStatusValue = result.data[0].requestStatus.toLowerCase();
 
@@ -271,9 +284,11 @@ $(document).ready(function () {
             $(".messHeader").append(htmlP);
           }
         }
-        $("#reqDetailModal").modal("toggle");
+        $(".reqDetailedLoaderDiv").hide();
+        $(".reqDetailedLoaderDiv").remove();
+        // $("#reqDetailModal").modal("toggle");
       },
-      error: function (error) {},
+      error: function (error) { },
     });
   });
 });

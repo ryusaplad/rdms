@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  alert;
+ 
   var htmlModal = "";
   var modalView = $(".modalView");
   var cards = "";
@@ -12,7 +12,7 @@ $(document).ready(function () {
     id = docId;
     $.ajax({
       type: "GET",
-      url: "/admin/fetch-document-to-modal?docId=" + id,
+      url: "/svfc-admin/fetch-document-to-modal?docId=" + id,
       success: function (result) {
         if (result.status == "success") {
           modalView.empty();
@@ -123,7 +123,7 @@ $(document).ready(function () {
     cards = "";
     $.ajax({
       type: "GET",
-      url: "/admin/update-document-cards",
+      url: "/svfc-admin/update-document-cards",
       beforeSend: function () {
         $(".card-secbody").hide();
         $(".mainLoaderDiv").show();
@@ -183,7 +183,7 @@ $(document).ready(function () {
     var status = $("#status").prop('selectedIndex');
     if (status != 0) {
       $.ajax({
-        url: "/admin/update-document-info?docId=" + id,
+        url: "/svfc-admin/update-document-info?docId=" + id,
         type: "POST",
         data: new FormData(this),
         enctype: "multipart/form-data",
@@ -319,7 +319,7 @@ $(document).ready(function () {
   $(document).on("submit", "#addDocumentForm", function (event) {
     event.preventDefault();
     $.ajax({
-      url: "/admin/save-document-info",
+      url: "/svfc-admin/save-document-info",
       type: "POST",
       data: new FormData(this),
       enctype: "multipart/form-data",
@@ -408,7 +408,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     $.ajax({
-      url: "/admin/delete-document-info?docId=" + docId,
+      url: "/svfc-admin/delete-document-info?docId=" + docId,
       type: "DELETE",
       success: function (res) {
         updateCard();

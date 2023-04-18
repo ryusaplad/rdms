@@ -539,7 +539,7 @@ public class AdminServicesImpl implements AdminService, FileService {
 
           if (getAllFiles == null) {
                model.addAttribute("files", userFiles);
-               return "/admin/admin";
+               return "/svfc-admin/admin";
           }
           getAllFiles.stream().forEach(file -> {
                String stringValue = file.getFileId().toString();
@@ -555,7 +555,7 @@ public class AdminServicesImpl implements AdminService, FileService {
           model.addAttribute("files", userFiles);
           model.addAttribute("page", "globalfiles");
           model.addAttribute("pageTitle", "Global Files");
-          return "/admin/admin";
+          return "/svfc-admin/admin";
      }
 
 }

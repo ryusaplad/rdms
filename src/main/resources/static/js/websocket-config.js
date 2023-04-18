@@ -1,26 +1,13 @@
-var stompClient = null;
+var connected = false;
+var stompClient;
 
-  function setConnected(connected) {
+function setConnected(value) {
+  connected = value;
+}
 
-    if (connected) {
-      console.log("Web Server : Online");
-    }
-    else {
-      console.log("Web Server : Offline");
-    }
 
+window.onbeforeunload = function () {
+  if (stompClient && stompClient.connected) {
+    stompClient.disconnect();
   }
- 
-
-  function disconnect() {
-    if (stompClient !== null) {
-      stompClient.disconnect();
-    }
-    setConnected(false);
-  }
-
-  window.onbeforeunload = function () {
-    if (stompClient && stompClient.connected) {
-      stompClient.disconnect();
-    }
-  };
+};

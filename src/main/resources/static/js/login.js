@@ -206,7 +206,7 @@ $(document).ready(function () {
             }
             if (formData.type == "School_Admin") {
               setTimeout(function () {
-                window.location = "/admin/dashboard";
+                window.location = "/svfc-admin/dashboard";
               }, 1000);
             }
           } else {

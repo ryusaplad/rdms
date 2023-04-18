@@ -181,7 +181,7 @@ function loadChart(filterValue, currentDate, action) {
   collegeChartData = [];
 
   $.ajax({
-    url: "/admin/chart/data-filter?s=" + filterValue + "&d=" + currentDate, // replace with the URL to your server-side script that retrieves the data
+    url: "/svfc-admin/chart/data-filter?s=" + filterValue + "&d=" + currentDate, // replace with the URL to your server-side script that retrieves the data
     method: "GET",
     dataType: "json",
     success: function (data) {
