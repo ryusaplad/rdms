@@ -2,7 +2,10 @@ package svfc_rdms.rdms.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.Documents;
+import svfc_rdms.rdms.model.UserFiles;
+import svfc_rdms.rdms.model.Users;
+import svfc_rdms.rdms.repository.File.FileRepository;
+import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
@@ -33,6 +42,12 @@ public class GlobalController {
 
      @Autowired
      private GlobalLogsServiceImpl globalLogsServiceImpl;
+
+     @Autowired
+     private FileRepository fileRepository;
+
+     @Autowired
+     private UsersRepository userRepository;
 
      @Autowired
      private AdminServicesImpl mainService;
@@ -140,6 +155,63 @@ public class GlobalController {
                }
 
           }
+
+     }
+
+     @GetMapping("/{userType}/load/userfiles")
+     public ResponseEntity<Object> myDocuments(@PathVariable String userType, HttpServletResponse response,
+               HttpSession session, Model model) {
+
+          if (userType.equalsIgnoreCase("svfc-admin")) {
+               userType = "school_admin";
+
+          }
+
+          if (session == null || session.getAttribute("username") == null) {
+               return new ResponseEntity<>("You are performing invalid action, Session Empty", HttpStatus.BAD_REQUEST);
+          }
+
+          if (!globalService.validatePages(userType, response, session)) {
+               return new ResponseEntity<>("You are performing invalid action, Failed to validate page", HttpStatus.BAD_REQUEST);
+
+          }
+
+          String username = session.getAttribute("username").toString();
+          Optional<Users> user = userRepository.findByUsername(username);
+          if (!user.isPresent()) {
+               return new ResponseEntity<>("You are performing invalid action, User Not Found", HttpStatus.BAD_REQUEST);
+          }
+
+          // as admin
+          if (userType.equalsIgnoreCase("school_admin")) {
+               List<UserFiles> userFiles = fileRepository.findAll();
+               List<UserFiles_Dto> userFiles_Dto = new ArrayList<>();
+               for (UserFiles file : userFiles) {
+                    String stringValue = file.getFileId().toString();
+                    UUID uuidValue = UUID.fromString(stringValue);
+                    String uploadedBy = file.getUploadedBy().getUsername() + ":"
+                              + file.getUploadedBy().getName();
+                    userFiles_Dto.add(new UserFiles_Dto(
+                              uuidValue, file.getName(), file.getSize(),
+                              file.getStatus(),
+                              file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
+               }
+               return new ResponseEntity<Object>(userFiles_Dto, HttpStatus.OK);
+          }
+          // none admin
+          List<UserFiles> userFiles = fileRepository.findAllByUploadedBy(user.get());
+          List<UserFiles_Dto> userFiles_Dto = new ArrayList<>();
+          for (UserFiles file : userFiles) {
+               String stringValue = file.getFileId().toString();
+               UUID uuidValue = UUID.fromString(stringValue);
+               String uploadedBy = file.getUploadedBy().getUsername() + ":"
+                         + file.getUploadedBy().getName();
+               userFiles_Dto.add(new UserFiles_Dto(
+                         uuidValue, file.getName(), file.getSize(),
+                         file.getStatus(),
+                         file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
+          }
+          return new ResponseEntity<Object>(userFiles_Dto, HttpStatus.OK);
 
      }
 

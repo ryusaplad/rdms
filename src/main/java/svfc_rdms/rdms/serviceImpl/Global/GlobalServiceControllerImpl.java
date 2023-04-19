@@ -24,7 +24,9 @@ import org.springframework.ui.Model;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.UserFiles;
+import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
+import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.service.Global.GlobalControllerService;
 
 @Service
@@ -32,6 +34,9 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
 
      @Autowired
      private FileRepository fileRepository;
+
+     @Autowired
+     private UsersRepository userRepository;
      // WebSocket
      @Autowired
      private SimpMessagingTemplate messagingTemplate;
@@ -140,12 +145,33 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
           try {
                String stringValue = id.toString();
                UUID uuidValue = UUID.fromString(stringValue);
+               UserFiles newUserFiles = null;
                Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
-               if (fileOptional.isPresent()) {
-                    fileRepository.delete(fileOptional.get());
-                    return new ResponseEntity<String>("success", HttpStatus.OK);
+               if (!fileOptional.isPresent()) {
+                    return new ResponseEntity<String>("failed to delete this file", HttpStatus.OK);
                }
-               return new ResponseEntity<String>("failed to delete this file", HttpStatus.OK);
+               newUserFiles = fileOptional.get();
+
+               Optional<Users> studentRequestWith = userRepository
+                         .findById(newUserFiles.getRequestWith().getRequestBy().getUserId());
+               Optional<Users> userRequestBy = userRepository
+                         .findById(newUserFiles.getUploadedBy().getUserId());
+               Optional<Users> registrarRequestWith = userRepository
+                         .findById(newUserFiles.getUploadedBy().getUserId());
+
+               if (studentRequestWith.isPresent()) {
+                    newUserFiles.setRequestWith(null);
+               }
+               if (userRequestBy.isPresent()) {
+                    newUserFiles.setUploadedBy(null);
+               }
+               if (registrarRequestWith.isPresent()) {
+                    newUserFiles.setRegRequestsWith(null);
+               }
+               fileRepository.save(newUserFiles);
+               fileRepository.deleteById(uuidValue);
+               return new ResponseEntity<String>("success", HttpStatus.OK);
+
           } catch (Exception e) {
                throw new ApiRequestException("Failed to delete this file Reason: " + e.getMessage());
           }

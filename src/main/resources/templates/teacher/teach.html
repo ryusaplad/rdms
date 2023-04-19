@@ -222,7 +222,7 @@
                                                     <th>Upload By</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="fileBody">
                                                 <tr th:each="file : ${files}">
                                                     <td>
                                                         <a th:href="@{'/teacher/files/download?id='} + ${file.fileId}" type="button" class="btn btn-primary w-100">
@@ -263,6 +263,7 @@
             </th:block>
             <th:block th:case="'myfiles'">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageDeletingFiles.js}"></script>
             </th:block>
         </th:block>
         <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_notification.js}"></script>
