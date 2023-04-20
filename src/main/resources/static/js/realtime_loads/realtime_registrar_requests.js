@@ -31,10 +31,15 @@ $(document).ready(function () {
 
                 for (let i = 0; i < data.length; i++) {
                     var requests = data[i];
-
+                    var status = ``;
+                    if(requests.requestStatus.includes("completed")){
+                        status= `<span class=" btn bg-success text-white">${requests.requestStatus}</span>`;
+                    }else if(requests.requestStatus.includes("pending")){
+                        status= `<span class=" btn bg-secondary text-white">${requests.requestStatus}</span>`;
+                    }
                     var tableItem = `
                     <strong style="opacity:.75;">${requests.requestTitle}</strong>
-                    <strong id="message" style="opacity:.50;" >${requests.requestMessage}</strong>`;
+                    <strong id="message" style="opacity:.50;" >${requests.requestMessage} </strong> ${status}`;
                     var tableRowNode = table.row.add([tableItem]).draw();
                     $(tableRowNode.node()).find("td").addClass("link");
                     $(tableRowNode.node()).find("td").attr('id', 'tdMessage')

@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,28 +46,36 @@ public class NotificationServiceImpl implements NotificationService {
     public ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
             int totalPage) {
         Sort descendingSort = Sort.by("notifId").descending();
+
         Page<Notifications> page = null;
+        List<Notifications> notifications = new ArrayList<>();
 
         if (userType.equals("student")) {
             page = notifRepository.findAllByTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
-
+            notifications = page.getContent();
         } else if (userType.equals("registrar")) {
-            page = notifRepository.findAllByToIsNull(
+            // Get Student Nofication check if the to is null, (why null?)
+            /*
+             * findAllByToIsNullOrTo = Find All By Users/Sender is Null if null that is
+             * student.
+             * if the to is not null that is from or
+             * between registrar and teacher notification
+             */
+            page = notifRepository.findAllByToIsNullOrTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
 
+            notifications = page.getContent();
         } else if (userType.equals("teacher")) {
             page = notifRepository.findAllByTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
-
+            notifications = page.getContent();
         }
         if (userType.equals("school_admin")) {
             page = notifRepository.findAllByTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
-
+            notifications = page.getContent();
         }
-
-        List<Notifications> notifications = page.getContent();
 
         List<Notification_Dto> notifsDto = new ArrayList<>();
         for (Notifications notifData : notifications) {
@@ -180,24 +189,34 @@ public class NotificationServiceImpl implements NotificationService {
             int totalPage, boolean status) {
         Sort descendingSort = Sort.by("notifId").descending();
         Page<Notifications> page = null;
-
+        List<Notifications> notifications = new ArrayList<>();
         if (userType.equals("student")) {
             page = notifRepository.findAllByToAndStatus(user, status,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
-
+            notifications = page.getContent();
         } else if (userType.equals("registrar")) {
-            page = notifRepository.findAllByToIsNullAndStatus(status,
+
+            // Get Student Nofication check if the to is null, (why null?)
+            /*
+             * findAllByToIsNullOrTo = Find All By Users/Sender is Null if null that is
+             * student.
+             * if the to is not null that is from or
+             * between registrar and teacher notification
+             */
+            page = notifRepository.findAllByToIsNullOrTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
+
+            notifications = page.getContent();
 
         } else if (userType.equals("teacher")) {
             page = notifRepository.findAllByToAndStatus(user, status,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
+            notifications = page.getContent();
         } else if (userType.equals("school_admin")) {
             page = notifRepository.findAllByToAndStatus(user, status,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
+            notifications = page.getContent();
         }
-
-        List<Notifications> notifications = page.getContent();
 
         List<Notification_Dto> notifsDto = new ArrayList<>();
         for (Notifications notifData : notifications) {
@@ -230,15 +249,14 @@ public class NotificationServiceImpl implements NotificationService {
                     + " with the message: " + message + ".";
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
             globalService.sendTopic("/topic/notifications/", "OK");
-           
 
             if (status == true) {
-                
+
                 String userEmail = user.getEmail();
-                
-                myEmailService.sendEmail("noreply@rdmssvfc2023.com", userEmail, "Requests Status",message);
+
+                myEmailService.sendEmail("noreply@rdmssvfc2023.com", userEmail, "Requests Status", message);
                 return true;
-            }else{
+            } else {
                 return true;
             }
 

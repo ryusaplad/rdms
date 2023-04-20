@@ -27,10 +27,7 @@
           border-bottom: 1px solid #ddd;
          
         }
-        .card-body-table {
-          max-height: 400px;
-          padding: 0;
-        }
+       
         .table {
           margin-bottom: 0;
          
@@ -199,7 +196,7 @@
                                 <div class="card-body table-responsive">
                                     <h5 class="
                             card-title
-                            ">My Requests</h5>
+                            ">My Files</h5>
                                     <div>
                                         <table id="zero_config" class="table table-bordered">
                                             <thead>
@@ -306,20 +303,22 @@
                         <!-- ============================================================== -->
                         <div class="container-fluid">
                             <div class="card shadow rounded rounded-3">
-                                <div class="card-header-table  mb-4">
-                                    <h5 class="card-title">My Requests</h5>
-                                </div>
-                                <div class="card-body-table table-responsive ">
-                                    <table id="zero_config" class="table  text-center">
-                                        <thead class="bg-light bg-gradient text-danger">
-                                            <tr>
-                                                <th>Request Document</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
+                                
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <h5 class="card-title">My Requests</h5>
+                                        <table id="zero_config" class="table  text-center">
+                                            <thead class="bg-light bg-gradient text-danger">
+                                                <tr>
+                                                    <th>Request Document</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -769,7 +768,7 @@
         });
 
         </script>
-        <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageDeletingFiles.js}"></script>
+        <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageFiles.js}"></script>
 
     </th:block>
     <th:block th:case="'doc_cards'">

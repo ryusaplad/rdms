@@ -16,8 +16,11 @@ public interface NotificationRepository extends JpaRepository<Notifications, Lon
     Page<Notifications> findAllByStatus(boolean status, Pageable pageable);
 
     Page<Notifications> findAllByToAndStatus(Users to, boolean status, Pageable pageable);
-    
+
     Page<Notifications> findAllByToIsNull(Pageable pageable);
+
+    Page<Notifications> findAllByToIsNullOrTo(Users to, Pageable pageable);
+
     Page<Notifications> findAllByTo(Users to, Pageable pageable);
 
     Page<Notifications> findAllByFromAndToAndStatus(Users from, Users to, boolean status, Pageable pageable);

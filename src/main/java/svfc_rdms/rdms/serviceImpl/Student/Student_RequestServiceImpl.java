@@ -117,8 +117,8 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                                                   req.getRequestDate(),
                                                   req.getRequestStatus(), req.getReleaseDate(), req.getManageBy()));
                          });
-                        
-                         return new ResponseEntity<>(studentRequests,HttpStatus.OK);
+
+                         return new ResponseEntity<>(studentRequests, HttpStatus.OK);
                     }
                     throw new ApiRequestException("No Data Available");
                }
@@ -129,8 +129,6 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
           }
      }
 
-
-    
      @Override
      public ResponseEntity<Object> submitRequest(String requestId,
                Optional<MultipartFile[]> uploadedFiles, String document,
@@ -222,7 +220,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                                    + " is requesting (" + document + ")";
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                          // Send a message over WebSocket
-                          globalService.sendTopic("/topic/totals", "OK");
+                         globalService.sendTopic("/topic/totals", "OK");
                          globalService.sendTopic("/topic/student/requests", "OK");
                          return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
                     } else {
@@ -343,13 +341,16 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                               e.getRequestDate(), e.getRequestStatus(), e.getReleaseDate(), e.getManageBy()));
 
                });
-               ufOptional.stream().forEach(files -> {
-                    String stringValue = files.getFileId().toString();
-                    UUID uuidValue = UUID.fromString(stringValue);
-                    studentRequestCompress.add(new StudentRequest_Dto(uuidValue, files.getData(), files.getName(),
-                              files.getSize(), files.getStatus(), files.getDateUploaded(), files.getFilePurpose(),
-                              files.getRequestWith().getRequestId(), files.getUploadedBy().getName()));
-               });
+               if (ufOptional != null) {
+                    ufOptional.stream().forEach(files -> {
+                         String stringValue = files.getFileId().toString();
+                         UUID uuidValue = UUID.fromString(stringValue);
+                         studentRequestCompress.add(new StudentRequest_Dto(uuidValue, files.getData(), files.getName(),
+                                   files.getSize(), files.getStatus(), files.getDateUploaded(), files.getFilePurpose(),
+                                   files.getRequestWith().getRequestId(), files.getUploadedBy().getName()));
+                    });
+               }
+
                ServiceResponse<List<StudentRequest_Dto>> serviceResponse = new ServiceResponse<>("success",
                          studentRequestCompress);
                if (!studentRequest.isEmpty()) {
@@ -383,7 +384,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
 
      @Override
      public List<Documents> displayAllDocuments(boolean status) {
-        return documentRepository.findAllByStatus(status);
+          return documentRepository.findAllByStatus(status);
      }
 
 }

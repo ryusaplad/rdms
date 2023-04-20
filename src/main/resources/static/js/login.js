@@ -186,7 +186,6 @@ $(document).ready(function () {
 
           if (response == "success") {
             responseTextVal = "Login SuccessFul!, Redirecting..";
-            console.log(formData.type);
             if (formData.type == "Student") {
               setTimeout(function () {
                 window.location = "/student/dashboard";
@@ -228,7 +227,6 @@ $(document).ready(function () {
           $(".loginBtn").attr("disabled", false);
         },
         error: function (error) {
-          console.log(error);
           $("#loginMessageDiv").empty();
           loginMessageAlert =
             `
