@@ -21,7 +21,7 @@ $(document).ready(function () {
           "destroy": true
         });
         table.clear();
-        var tableBodyItems = ``;
+       
         var buttons = ``;
 
         for (let i = 0; i < data.length; i++) {
@@ -117,17 +117,7 @@ Edit|<b>Re</b>submit
             statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
           }
 
-          tableBodyItems = `
-            <tr>
-              <td>${myrequest.requestDocument}</td>
-            ${statusIcon}
-              <td>
-              <div class="btn-group dropstart">
-              ${buttons}
-              </ul>
-              </div>
-          </td>
-          </tr> `;
+         
 
 
           $("#zero_config")

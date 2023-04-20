@@ -6,11 +6,11 @@ $(document).ready(function () {
   var accountType = "";
   if (loc.includes("admin")) {
     accountType = "svfc-admin";
-  }else if(loc.includes("registrar")){
+  } else if (loc.includes("registrar")) {
     accountType = "registrar";
-  }else if(loc.includes("teacher")){
+  } else if (loc.includes("teacher")) {
     accountType = "teacher";
-  }else if(loc.includes("student")){
+  } else if (loc.includes("student")) {
     accountType = "student";
   }
   $(document).on("click", ".deleteFile", function (event) {
@@ -21,25 +21,36 @@ $(document).ready(function () {
 
     var fileId = $(this).data("value");
     modalView.empty();
+    var message = "";
+    if (accountType == "svfc-admin" || accountType == "registrar" || accountType == "teacher") {
+      message = `Deleting this data will permanently remove it from the system. This action cannot be undone.
+       Please note that any users who have uploaded or have access to this data will no longer be able to view or download it.`;
+    } else {
+      message = `If you proceed with deleting your uploaded files, any <strong>Pending/On-going</strong> requests associated with them will be automatically rejected.
+      <br/> <br/>
+      Please note that this action is irreversible and will permanently remove the data from the system.
+         Once deleted, the files cannot be downloaded again, and we are not responsible for any loss of your documents. `;
+    }
+
     modalView.append(`<div class="modal fade" id="deletionModal" tabindex="-1" aria-labelledby="deletionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="deletionModalLabel"><i class="fa fa-exclamation-triangle text-warning" aria-hidden="true"></i>Delition Warning</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            <p><strong class="bg-warning">Warning:</strong> Deleting this data will permanently remove it from the system. This action cannot be undone. Please note that any users who have uploaded or have access to this data will no longer be able to view or download it.</p>
-            <p><em>Are you absolutely sure you want to proceed with the deletion?</em></p>
-              
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary clearDeleteModal" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary deleteConfirm">Confirm</button>
-            </div>
-          </div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deletionModalLabel"><i class="fa fa-exclamation-triangle text-warning" aria-hidden="true"></i>Delition Warning</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-      </div>`);
+        <div class="modal-body">
+        <p><strong class="bg-warning">Warning:</strong>${message}</p>
+        <p><em>Are you absolutely sure you want to proceed with the deletion?</em></p>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary clearDeleteModal" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary deleteConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
     $('.deleteConfirm').attr('data-value', fileId);
     $("#deletionModal").modal("toggle");
   });
@@ -79,7 +90,8 @@ $(document).ready(function () {
           $('.successCheck').addClass('animate__animated animate__heartBeat');
           $('#successModal').modal('hide');
           modalView.empty();
-        }, 500);
+          
+        }, 1500);
         // Refresh File table
         loadUserFiles();
       },

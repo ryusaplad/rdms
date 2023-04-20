@@ -24,46 +24,32 @@ $(document).ready(function () {
         var table = $("#zero_config").DataTable();
         table.clear();
 
-        var tableBodyItems = ``;
         var actions = "";
         for (var i = 0; i < data.length; i++) {
-
-
           var studRequest = data[i];
-          tableBodyItems = `
-            <tr>
-                <td>${studRequest.requestBy}</td>
-                <td>${studRequest.requestDate}</td>
-                <td>${studRequest.requestStatus}</td>
-                <td>
-                <div class="row">
-                <div class="col-sm">
-                    <a href="?s=${studRequest.studentId}&req=${studRequest.requestId}" type="button" class="btn btn-primary w-100 toggleRequestDetail">Details</a>
-                </div>
-                <div class="col-sm" ${studRequest.requestStatus == 'Pending' ? '' : 'style="display:none;"'}>
-                    <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white processBtn">Approved</a>
-                </div>
-                <div class="col-sm" ${studRequest.requestStatus == 'On-Going' ? '' : 'style="display:none;"'}>
-                    <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white completeBtn">Complete</a>
-                </div>
-                <div class="col-sm" ${studRequest.requestStatus != 'On-Going' && studRequest.requestStatus != 'Approved' && studRequest.requestStatus != 'Rejected' ? '' : 'style="display:none;"'}>
-                    <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-danger w-100 text-white rejectBtn">Reject</a>
-                </div>
-            </div>
-                </td>
-            </tr>
-          `;
+          var statusIcon = "";
+          if (studRequest.requestStatus.toLowerCase().includes("approved")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-success" > <i class="fas fa-check text-success" aria-hidden="true"></i> Completed</strong></td>`;
+          } else if (studRequest.requestStatus.toLowerCase().includes("pending")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+          } else if (studRequest.requestStatus.toLowerCase().includes("on-going")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-half text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+          } else if (studRequest.requestStatus.toLowerCase().includes("rejected")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+          }
+
+          
           actions = `<div class="row">
           <div class="col-sm">
               <a href="?s=${studRequest.studentId}&req=${studRequest.requestId}" type="button" class="btn btn-primary w-100 toggleRequestDetail">Details</a>
           </div>
           <div class="col-sm" ${studRequest.requestStatus == 'Pending' ? '' : 'style="display:none;"'}>
-              <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white processBtn">Approved</a>
+              <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white processBtn">Process</a>
           </div>
           <div class="col-sm" ${studRequest.requestStatus == 'On-Going' ? '' : 'style="display:none;"'}>
               <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-success w-100 text-white completeBtn">Complete</a>
           </div>
-          <div class="col-sm" ${studRequest.requestStatus != 'On-Going' && studRequest.requestStatus != 'Approved' && studRequest.requestStatus != 'Rejected' ? '' : 'style="display:none;"'}>
+          <div class="col-sm" ${studRequest.requestStatus != 'Approved' && studRequest.requestStatus != 'Rejected' ? '' : 'style="display:none;"'}>
               <a href="${studRequest.studentId}" data-value="${studRequest.requestId}" type="button" class="btn btn-danger w-100 text-white rejectBtn">Reject</a>
           </div>
       </div>`;
@@ -74,7 +60,7 @@ $(document).ready(function () {
             .row.add([
               studRequest.requestBy,
               studRequest.requestDate,
-              studRequest.requestStatus,
+              statusIcon,
               actions,
             ])
             .draw();
@@ -390,7 +376,7 @@ $(document).ready(function () {
                 <div class="modal-body mBody">
                     <p>Are you sure you want to process this requests.?</p>
                     <b> Note:</b>
-                    <p>This action cannot be undo, after submission.</p>
+                    <p>This action can be undone and changed to <strong>'REJECTED'</strong> if necessary.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>

@@ -61,11 +61,13 @@ public class RegistrarController {
 
                          return "redirect:/";
                     }
+                    model.addAttribute("page", "accview");
+                    model.addAttribute("pageTitle", "Uploaded Files");
                     model.addAttribute("accType", accountType);
                     model.addAttribute("idFormat", idFormat);
                     model.addAttribute("users", new Users());
                     model.addAttribute("usersLists", mainService.diplayAllAccountsByType(accountType));
-                    return "/registrar/accounts-view";
+                    return "/registrar/reg";
 
                } catch (Exception e) {
                     System.out.println("Error: " + e.getMessage());
@@ -79,7 +81,9 @@ public class RegistrarController {
      public String studentRequests(@PathVariable String userType, HttpSession session, HttpServletResponse response,
                Model model) {
           if (globalService.validatePages(userType, response, session)) {
-               return "/registrar/studreq-view";
+               model.addAttribute("page", "studrequest");
+               model.addAttribute("pageTitle", "Student Requests");
+               return "/registrar/reg";
           }
           return "redirect:/";
 

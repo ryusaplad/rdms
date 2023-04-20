@@ -72,7 +72,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
           Optional<RegistrarRequest> req = getRegistrarRequest(requestsId);
           List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
 
-          if (req.isPresent()) {
+          if (req.isPresent() && !req.get().getRequestStatus().equals("rejected")) {
                List<UserFiles> regRequestFiles = fileRepository.findAllByRegRequestsWith(req.get());
                RegistrarRequest regReq = req.get();
                RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(

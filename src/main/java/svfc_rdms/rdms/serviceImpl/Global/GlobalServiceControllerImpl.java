@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.model.RegistrarRequest;
+import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
+import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
+import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Global.GlobalControllerService;
 
 @Service
@@ -37,6 +44,12 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
 
      @Autowired
      private UsersRepository userRepository;
+
+     @Autowired
+     private StudentRepository studentRequestRepository;
+
+     @Autowired
+     private RegsRequestRepository regsRequestRepository;
      // WebSocket
      @Autowired
      private SimpMessagingTemplate messagingTemplate;
@@ -159,15 +172,57 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                Optional<Users> registrarRequestWith = userRepository
                          .findById(newUserFiles.getUploadedBy().getUserId());
 
+               // cleaning associate keys and Reject any associated requests
                if (studentRequestWith.isPresent()) {
+                    List<StudentRequest> studentRequest = studentRequestRepository
+                              .findAllByRequestBy(studentRequestWith.get());
+
+                    List<UserFiles> userFiles = fileRepository.findAllByRequestWith(newUserFiles.getRequestWith());
+
+                    // Create a map to group UserFiles by StudentRequest
+                    Map<StudentRequest, List<UserFiles>> filesByRequest = userFiles.stream()
+                              .collect(Collectors.groupingBy(UserFiles::getRequestWith));
+
+                    // Loop over the StudentRequest objects and update their properties based on the
+                    // associated UserFiles
+                    for (StudentRequest studRequest : studentRequest) {
+                         List<UserFiles> associatedFiles = filesByRequest.get(studRequest);
+                         if (associatedFiles != null && !associatedFiles.isEmpty()) {
+                              studRequest.setManageBy("Admin");
+                              studRequest.setRequestStatus("Rejected");
+                              studentRequestRepository.save(studRequest);
+                         }
+                    }
                     newUserFiles.setRequestWith(null);
                }
                if (userRequestBy.isPresent()) {
                     newUserFiles.setUploadedBy(null);
                }
+               // cleaning associate keys and Reject any associated requests
                if (registrarRequestWith.isPresent()) {
+                    List<RegistrarRequest> registrarRequest = regsRequestRepository
+                              .findAllByRequestBy(registrarRequestWith.get(), null);
+
+                    List<UserFiles> userFiles = fileRepository.findAllByRequestWith(newUserFiles.getRequestWith());
+
+                    // Create a map to group UserFiles by RegistrarRequest
+                    Map<RegistrarRequest, List<UserFiles>> filesByRequest = userFiles.stream()
+                              .collect(Collectors.groupingBy(UserFiles::getRegRequestsWith));
+
+                    // Loop over the RegistrarRequest objects and update their properties based on
+                    // the
+                    // associated UserFiles
+                    for (RegistrarRequest regRequest : registrarRequest) {
+                         List<UserFiles> associatedFiles = filesByRequest.get(regRequest);
+                         if (associatedFiles != null && !associatedFiles.isEmpty()) {
+
+                              regsRequestRepository.save(regRequest);
+                         }
+                    }
+                    newUserFiles.setRequestWith(null);
                     newUserFiles.setRegRequestsWith(null);
                }
+
                fileRepository.save(newUserFiles);
                fileRepository.deleteById(uuidValue);
                return new ResponseEntity<String>("success", HttpStatus.OK);
