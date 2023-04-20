@@ -51,42 +51,49 @@
             <!-- ============================================================== -->
             <!-- Right side toggle and nav items -->
             <!-- ============================================================== -->
-            <ul class="navbar-nav float-end" >
-               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#" id="notifDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-bell font-24 blicon" ></i>
-                  <span style="    position: relative;
+            <ul class="navbar-nav float-end">
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle waves-effect waves-dark"
+                        href="#"
+                        id="notifDrop"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <i class="mdi mdi-bell font-24 blicon"></i>
+                        <span style="    position: relative;
                   top: -12px;
                   left: 9px;
                   font-size: 10px;" class="badge rounded-pill badge-notification bg-dark notifCount"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end mailbox animated " aria-labelledby="2">
-                  <ul class="list-style-none">
-                    <li>
-                        <div class="card ntcard">
-                            <div class="card-body">
-                                <h4 class="card-title ">Notifications</h4>
-                                <hr class="hr">
-                                <div class="ntcardMain" style="overflow-y: auto;">
-                                    <a href="javascript:void(0)" class="link border-top">
-                                        <div class="d-flex no-block align-items-center p-10">
-                                            <span class="btn btn-success btn-circle">
-                                                <i class="ti-check-box"></i>
-                                            </span>
-                                            <div class="ms-2 mainNotificationInfo">
-                                                <h5 class="mb-0 title">Requests Status</h5>
-                                                <span class="description"></span>
-                                            </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end mailbox animated " aria-labelledby="2">
+                        <ul class="list-style-none">
+                            <li>
+                                <div class="card ntcard">
+                                    <div class="card-body">
+                                        <h4 class="card-title ">Notifications</h4>
+                                        <hr class="hr">
+                                        <div class="ntcardMain" style="overflow-y: auto;">
+                                            <a href="javascript:void(0)" class="link border-top">
+                                                <div class="d-flex no-block align-items-center p-10">
+                                                    <span class="btn btn-success btn-circle">
+                                                        <i class="ti-check-box"></i>
+                                                    </span>
+                                                    <div class="ms-2 mainNotificationInfo">
+                                                        <h5 class="mb-0 title">Requests Status</h5>
+                                                        <span class="description"></span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <hr class="hr">
                                         </div>
-                                    </a>
-                                    <hr class="hr">
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </li>
-                  </ul>
-                </ul>
-              </li>
+                            </li>
+                        </ul>
+                    </ul>
+                </li>
                 <!-- ============================================================== -->
                 <!-- User profile and search -->
                 <!-- ============================================================== -->
@@ -107,90 +114,64 @@
                             width="31"
                         >
                     </a>
-                    <ul
-            class="dropdown-menu dropdown-menu-end user-dd animated"
-            aria-labelledby="navbarDropdown"
-          >
-            <div style="text-align: center">
-             
-              <div class="row justify-content-center">
-                <div class="col-12">
-                  <div class="text-white">
-                    <span
-                      class="text-dark"
-                      th:with="name=${#session.getAttribute('name')}"
-                      style="font-size: 14px; display: block; font-weight: 700"
-                      >[[${name}]]</span
+                    <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                        <div style="text-align: center">
+                            <div class="row justify-content-center">
+                                <div class="col-12">
+                                    <div class="text-white">
+                                        <span class="text-dark" th:with="name=${#session.getAttribute('name')}" style="font-size: 14px; display: block; font-weight: 700">[[${name}]]
+                                        </span
                     >
-                    <span
-                      class="text-muted"
-                      th:with="email=${#session.getAttribute('email')}"
-                      style="font-size: 14px; display: block; margin: 0"
-                      >[[${email}]]</span
+                                        <span class="text-muted" th:with="email=${#session.getAttribute('email')}" style="font-size: 14px; display: block; margin: 0">[[${email}]]
+                                        </span
                     >
-                  </div>
-                </div>
-                <div class="col-6">
-                  <span
-                    style="
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <span style="
                       font-size: 0.8rem;
                       font-weight: 500;
                       line-height: 1.2;
-                    "
-                    class="text-muted"
-                    >Username:</span
-                  ><br />
-                  <span
-                    class="bg-info text-white rounded"
-                    th:with="username=${#session.getAttribute('username')}"
-                    style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;"
-                    >[[${username}]]</span
+                    " class="text-muted">Username:
+                                    </span
                   >
-                </div>
-                <div class="col-6">
-                  <span
-                    style="
+                                    <br>
+                                    <span class="bg-info text-white rounded" th:with="username=${#session.getAttribute('username')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">[[${username}]]
+                                    </span
+                  >
+                                </div>
+                                <div class="col-6">
+                                    <span style="
                       font-size: 0.8rem;
                       font-weight: 500;
                       line-height: 1.2;
-                    "
-                    class="text-muted"
-                    >Account Type:</span
-                  ><br />
-                  <span
-                    class="bg-primary text-white rounded"
-                    th:with="type=${#session.getAttribute('accountType')}"
-                    style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;"
-                    >[[${type}]]</span
+                    " class="text-muted">Account Type:
+                                    </span
                   >
-                </div>
-              </div>
-              <hr class="devider" />
-            </div>
-
-            <a
-              class="dropdown-item changeAccountPassword"
-              href="javascript:void(0)"
-            >
-              <i class="ti-settings me-1 ms-1"></i>
-              Change Password
-            </a>
-            <div class="dropdown-divider"></div>
-            <a
-              class="dropdown-item changeAccountProfile"
-              href="javascript:void(0)"
-            >
-              <i class="ti-settings me-1 ms-1"></i>
-              Change Profile Picture
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">
-              <i class="fa fa-power-off me-1 ms-1"></i>
-              Logout
-            </a>
-            <div class="dropdown-divider"></div>
-          </ul>
-                    
+                                    <br>
+                                    <span class="bg-primary text-white rounded" th:with="type=${#session.getAttribute('accountType')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">[[${type}]]
+                                    </span
+                  >
+                                </div>
+                            </div>
+                            <hr class="devider">
+                        </div>
+                        <a class="dropdown-item changeAccountPassword text-dark" href="javascript:void(0)">
+                            <i class="ti-settings me-1 ms-1"></i>
+                            Change Password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item changeAccountProfile text-dark" href="javascript:void(0)">
+                            <i class="ti-settings me-1 ms-1"></i>
+                            Change Profile Picture
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-dark" href="/logout">
+                            <i class="fa fa-power-off me-1 ms-1"></i>
+                            <strong>Logout</strong>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    </ul>
                 </li>
                 <!-- ============================================================== -->
                 <!-- User profile and search -->
@@ -208,94 +189,89 @@
                 <div class="card  ">
                     <div class="card-body">
                         <div class="dropdown">
-                            <a
-                                class="nav-link  text-muted waves-effect waves-dark pro-pic"
-                                href="#"
-                                id="navbarDropdown"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                data-bs-auto-close="outside"
-                            >
-                                <img
-                                    th:src="@{/images/userImage.png}"
-                                    alt="user"
-                                    class="rounded-circle"
-                                    width="31"
+                            <div style="display: flex;
+                            justify-content: space-around;">
+                                <a
+                                    class="nav-link  text-muted waves-effect waves-dark pro-pic"
+                                    href="#"
+                                    id="rightSideNavbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
                                 >
-                            </a>
-                            <div style="text-align: center">
-             
-                                <div class="row justify-content-center">
-                                  <div class="col">
-                                    <div class="text-white">
-                                      <span
-                                        class="text-dark"
-                                        th:with="name=${#session.getAttribute('name')}"
-                                        style="font-size: 14px; display: block; font-weight: 700"
-                                        >[[${name}]]</span
-                                      >
-                                      <span
-                                        class="text-muted"
-                                        th:with="email=${#session.getAttribute('email')}"
-                                        style="font-size: 14px; display: block; margin: 0"
-                                        >[[${email}]]</span
-                                      >
-                                    </div>
-                                  </div>
-                                  <div class="col">
-                                    <span
-                                      style="
-                                        font-size: 0.8rem;
-                                        font-weight: 500;
-                                        line-height: 1.2;
-                                      "
-                                      class="text-muted"
-                                      >Username:</span
-                                    ><br />
-                                    <span
-                                      class="bg-info text-white rounded"
-                                      th:with="username=${#session.getAttribute('username')}"
-                                      style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;"
-                                      >[[${username}]]</span
+                                    <img
+                                        id="rightSideProfilePic"
+                                        src="../../assets/images/users/1.jpg"
+                                        alt="user"
+                                        class="rounded-circle"
+                                        width="31"
                                     >
-                                  </div>
-                                  <div class="col">
-                                    <span
-                                      style="
-                                        font-size: 0.8rem;
-                                        font-weight: 500;
-                                        line-height: 1.2;
-                                      "
-                                      class="text-muted"
-                                      >Account Type:</span
-                                    ><br />
-                                    <span
-                                      class="bg-primary text-white rounded"
-                                      th:with="type=${#session.getAttribute('accountType')}"
-                                      style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;"
-                                      >[[${type}]]</span
-                                    >
-                                  </div>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item changeAccountPassword " href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Password
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item changeAccountProfile " href="javascript:void(0)">
+                                        <i class="ti-settings me-1 ms-1"></i>
+                                        Change Profile Picture
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item " href="/logout">
+                                        <i class="fa fa-power-off me-1 ms-1"></i>
+                                       <strong>Logout</strong>
+                                    </a>
                                 </div>
-                                <hr class="devider" />
-                              </div>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item changeAccountPassword" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Password
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item changeAccountProfile" href="javascript:void(0)">
-                                    <i class="ti-settings me-1 ms-1"></i>
-                                    Change Profile Picture
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout">
-                                    <i class="fa fa-power-off me-1 ms-1"></i>
-                                    Logout
-                                </a>
                             </div>
+                            <div style="text-align: center">
+                                <div class="row justify-content-center">
+                                    <div class="col">
+                                        <div class="text-white">
+                                            <span class="text-dark" th:with="name=${#session.getAttribute('name')}" style="font-size: 14px; display: block; font-weight: 700">
+                                                [[${name}]]
+                                            </span
+                                      >
+                                            <span class="text-muted" th:with="email=${#session.getAttribute('email')}" style="font-size: 14px; display: block; margin: 0">
+                                                [[${email}]]
+                                            </span
+                                      >
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <span style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        line-height: 1.2;
+                                      " class="text-muted">
+                                            Username:
+                                        </span
+                                    >
+                                        <br>
+                                        <span class="bg-info text-white rounded" th:with="username=${#session.getAttribute('username')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">
+                                            [[${username}]]
+                                        </span
+                                    >
+                                    </div>
+                                    <div class="col">
+                                        <span style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        line-height: 1.2;
+                                      " class="text-muted">
+                                            Account Type:
+                                        </span
+                                    >
+                                        <br>
+                                        <span class="bg-primary text-white rounded" th:with="type=${#session.getAttribute('accountType')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">
+                                            [[${type}]]
+                                        </span
+                                    >
+                                    </div>
+                                </div>
+                                <hr class="devider">
+                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -509,7 +485,7 @@
                     <a href="/logout" class="sidebar-link">
                         <i class="fas fa-power-off"></i>
                         <span class="hide-menu">
-                            Logout
+                            <strong>Logout</strong>
                         </span>
                     </a>
                 </li>

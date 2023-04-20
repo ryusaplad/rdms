@@ -397,7 +397,14 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
 
             throw new ApiRequestException(e.getMessage());
-        }
+        }finally{
+            try {
+                 
+                 response.getOutputStream().close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+       }
     }
 
 }

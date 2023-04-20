@@ -255,6 +255,13 @@ public class GlobalController {
                          response.getOutputStream().close();
                     } catch (Exception e) {
                          System.out.println(e.getMessage());
+                    }finally{
+                         try {
+                              
+                              response.getOutputStream().close();
+                         } catch (Exception e) {
+                             e.printStackTrace();
+                         }
                     }
                }
 

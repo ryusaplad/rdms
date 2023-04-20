@@ -15,7 +15,7 @@
         <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
         <link th:href="@{/css/croppie.css}" rel="stylesheet">
         <th:block th:if="${page =='myrequests' || page =='documents'}">
-            <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet"/>
+            <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
         </th:block>
     </head>
     <style>
@@ -204,6 +204,7 @@
                                                     <th>Action</th>
                                                     <th>File</th>
                                                     <th>Upload By</th>
+                                                    <th>Size</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="fileBody">
@@ -215,6 +216,7 @@
                                                     </td>
                                                     <td th:text="${file.name}"></td>
                                                     <td th:text="${file.uploadedBy}"></td>
+                                                    <td th:text="${file.size}"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -303,7 +305,6 @@
                         <!-- ============================================================== -->
                         <div class="container-fluid">
                             <div class="card shadow rounded rounded-3">
-                                
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <h5 class="card-title">My Requests</h5>
@@ -318,7 +319,6 @@
                                             <tbody></tbody>
                                         </table>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -328,7 +328,7 @@
         </div>
         <!-- Modals -->
         <div
-            class="modal fade"
+            class="modal fade "
             id="detailModal"
             data-bs-backdrop="static"
             data-bs-keyboard="false"
@@ -340,107 +340,21 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModal">
+                        <h5 class="modal-title">
                             <span id="titleVal">More Details</span>
                         </h5>
                         <button
                             type="button"
-                            class="btn-close"
+                            class="btn-close clearDetailModal"
                             data-bs-dismiss="modal"
                             aria-label="Close"
                         ></button>
                     </div>
-                    <div class="modal-body">
-                        <h4 class="card-title">Requests Informations</h4>
-                        <div class="container-sm"></div>
-                        <div class="table-responsive">
-                            <table class="table table-primary">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>NAME</th>
-                                        <th>C/Y/SEM</th>
-                                        <th>DOC</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="requestbyupar"></td>
-                                        <td class="font-weight-bold" id="requestbynpar"></td>
-                                        <td class="font-weight-bold" id="cysem"></td>
-                                        <td class="font-weight-bold" id="docreqpar"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <hr>
-                        <div style="display:none" class="detail-alert"></div>
-                        <h4 class="card-title ">Message</h4>
-                        <div class="messHeader" style="display:none;overflow-y: scroll;"></div>
-                        <div class="table-responsive">
-                            <table class="table table-primary">
-                                <thead>
-                                    <tr>
-                                        <th>MANAGE BY</th>
-                                        <th>REQUESTED</th>
-                                        <th>RELEASED</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="font-weight-bold" id="managebynpar"></td>
-                                        <td class="font-weight-bold" id="datereqpar"></td>
-                                        <td class="font-weight-bold" id="daterelpar"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <hr>
-                        <h4 class="card-title">Sent Requirements</h4>
-                        <div class="table-responsive">
-                            <table class="table table-white">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>File Name</th>
-                                        <th>Uploaded By</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="tablebody">
-                                    <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                                <input
-                                    style="display:none"
-                                    class="form-control"
-                                    name="file[]"
-                                    type="file"
-                                    id="files"
-                                    multiple
-                                >
-                            </table>
-                        </div>
-                        <h4 class="card-title">Recieved Documents</h4>
-                        <div class="table-responsive">
-                            <table class="table table-white receievedDocumentTable" style="overflow-y: scroll; height: 100px; display:none">
-                                <thead>
-                                    <tr>
-                                        <th>Download</th>
-                                        <th>File Name</th>
-                                        <th>Uploaded By</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="receievedDoc">
-                                    <tr style="width:2px; white-space: pre-wrap; word-spacing: 1px; ">
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div id="detail-modal-body" class="modal-body">
+                        
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary clearDetailModal" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -766,10 +680,7 @@
                 "ordering": false,
                 "destroy": true
         });
-
         </script>
-        <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageFiles.js}"></script>
-
     </th:block>
     <th:block th:case="'doc_cards'">
         <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_doc_cards.js}"></script>

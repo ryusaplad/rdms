@@ -172,7 +172,7 @@
             </div>
 
             <a
-              class="dropdown-item changeAccountPassword"
+              class="dropdown-item changeAccountPassword text-dark"
               href="javascript:void(0)"
             >
               <i class="ti-settings me-1 ms-1"></i>
@@ -180,16 +180,16 @@
             </a>
             <div class="dropdown-divider"></div>
             <a
-              class="dropdown-item changeAccountProfile"
+              class="dropdown-item changeAccountProfile text-dark"
               href="javascript:void(0)"
             >
               <i class="ti-settings me-1 ms-1"></i>
               Change Profile Picture
             </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">
+            <a class="dropdown-item text-dark" href="/logout">
               <i class="fa fa-power-off me-1 ms-1"></i>
-              Logout
+             <strong>Logout</strong>
             </a>
             <div class="dropdown-divider"></div>
           </ul>
@@ -216,101 +216,90 @@
         <div class="card">
           <div class="card-body">
             <div class="dropdown">
-              <a
-                class="nav-link text-muted waves-effect waves-dark pro-pic"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                data-bs-auto-close="outside"
-              >
-                <img
-                  th:src="@{/images/userImage.png}"
-                  alt="user"
-                  class="rounded-circle"
-                  width="31"
-                />
-              </a>
+              <div style="display: flex;
+              justify-content: space-around;">
+                  <a
+                      class="nav-link  text-muted waves-effect waves-dark pro-pic"
+                      href="#"
+                      id="rightSideNavbarDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                  >
+                      <img
+                          id="rightSideProfilePic"
+                          src="../../assets/images/users/1.jpg"
+                          alt="user"
+                          class="rounded-circle"
+                          width="31"
+                      >
+                  </a>
+                  <div class="dropdown-menu">
+                      <a class="dropdown-item changeAccountPassword " href="javascript:void(0)">
+                          <i class="ti-settings me-1 ms-1"></i>
+                          Change Password
+                      </a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item changeAccountProfile " href="javascript:void(0)">
+                          <i class="ti-settings me-1 ms-1"></i>
+                          Change Profile Picture
+                      </a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item " href="/logout">
+                          <i class="fa fa-power-off me-1 ms-1"></i>
+                         <strong>Logout</strong>
+                      </a>
+                  </div>
+              </div>
               <div style="text-align: center">
+                  <div class="row justify-content-center">
+                      <div class="col">
+                          <div class="text-white">
+                              <span class="text-dark" th:with="name=${#session.getAttribute('name')}" style="font-size: 14px; display: block; font-weight: 700">
+                                  [[${name}]]
+                              </span
+                        >
+                              <span class="text-muted" th:with="email=${#session.getAttribute('email')}" style="font-size: 14px; display: block; margin: 0">
+                                  [[${email}]]
+                              </span
+                        >
+                          </div>
+                      </div>
+                      <div class="col">
+                          <span style="
+                          font-size: 0.8rem;
+                          font-weight: 500;
+                          line-height: 1.2;
+                        " class="text-muted">
+                              Username:
+                          </span
+                      >
+                          <br>
+                          <span class="bg-info text-white rounded" th:with="username=${#session.getAttribute('username')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">
+                              [[${username}]]
+                          </span
+                      >
+                      </div>
+                      <div class="col">
+                          <span style="
+                          font-size: 0.8rem;
+                          font-weight: 500;
+                          line-height: 1.2;
+                        " class="text-muted">
+                              Account Type:
+                          </span
+                      >
+                          <br>
+                          <span class="bg-primary text-white rounded" th:with="type=${#session.getAttribute('accountType')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">
+                              [[${type}]]
+                          </span
+                      >
+                      </div>
+                  </div>
+                  <hr class="devider">
+              </div>
              
-                <div class="row justify-content-center">
-                  <div class="col">
-                    <div class="text-white">
-                      <span
-                        class="text-dark"
-                        th:with="name=${#session.getAttribute('name')}"
-                        style="font-size: 14px; display: block; font-weight: 700"
-                        >[[${name}]]</span
-                      >
-                      <span
-                        class="text-muted"
-                        th:with="email=${#session.getAttribute('email')}"
-                        style="font-size: 14px; display: block; margin: 0"
-                        >[[${email}]]</span
-                      >
-                    </div>
-                  </div>
-                  <div class="col">
-                    <span
-                      style="
-                        font-size: 0.8rem;
-                        font-weight: 500;
-                        line-height: 1.2;
-                      "
-                      class="text-muted"
-                      >Username:</span
-                    ><br />
-                    <span
-                      class="bg-info text-white rounded"
-                      th:with="username=${#session.getAttribute('username')}"
-                      style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;"
-                      >[[${username}]]</span
-                    >
-                  </div>
-                  <div class="col">
-                    <span
-                      style="
-                        font-size: 0.8rem;
-                        font-weight: 500;
-                        line-height: 1.2;
-                      "
-                      class="text-muted"
-                      >Account Type:</span
-                    ><br />
-                    <span
-                      class="bg-primary text-white rounded"
-                      th:with="type=${#session.getAttribute('accountType')}"
-                      style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;"
-                      >[[${type}]]</span
-                    >
-                  </div>
-                </div>
-                <hr class="devider" />
-              </div>
-              <div class="dropdown-menu">
-                <a
-                  class="dropdown-item changeAccountPassword"
-                  href="javascript:void(0)"
-                >
-                  <i class="ti-settings me-1 ms-1"></i>
-                  Change Password
-                </a>
-                <div class="dropdown-divider"></div>
-                <a
-                  class="dropdown-item changeAccountProfile"
-                  href="javascript:void(0)"
-                >
-                  <i class="ti-settings me-1 ms-1"></i>
-                  Change Profile Picture
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/logout">
-                  <i class="fa fa-power-off me-1 ms-1"></i>
-                  Logout
-                </a>
-              </div>
-            </div>
+          </div>
           </div>
         </div>
       </div>
@@ -396,7 +385,7 @@
         <li class="sidebar-item">
           <a href="/logout" class="sidebar-link">
             <i class="fas fa-power-off"></i>
-            <span class="hide-menu"> Logout </span>
+            <span class="hide-menu"><strong>Logout</strong> </span>
           </a>
         </li>
       </ul>

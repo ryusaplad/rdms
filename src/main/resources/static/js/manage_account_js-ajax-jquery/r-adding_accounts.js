@@ -270,7 +270,10 @@ $(document).ready(function () {
         if (result.status == "success") {
           $("#tableBody").empty();
           var htmlTable = "";
-          var table = $("#zero_config").DataTable();
+          var table = $("#zero_config").DataTable({
+            "ordering": false,
+            "destroy": true
+          });
           table.clear();
           var action = "";
           $.each(result.data, function (count, user) {

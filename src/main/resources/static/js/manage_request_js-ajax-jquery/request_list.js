@@ -21,7 +21,7 @@ $(document).ready(function () {
           "destroy": true
         });
         table.clear();
-       
+
         var buttons = ``;
 
         for (let i = 0; i < data.length; i++) {
@@ -117,7 +117,7 @@ Edit|<b>Re</b>submit
             statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
           }
 
-         
+
 
 
           $("#zero_config")
@@ -141,13 +141,109 @@ Edit|<b>Re</b>submit
     id = $(this).attr("href");
     rid = $(this).attr("href");
     link = "/student/my-requests/fetch?requestId=" + id;
-
+    $("#detail-modal-body").empty();
+    $("#detail-modal-body").append(`<div class="studDetailedLoaderDiv " style="display: none;">
+    <div id="loaderDiv">
+        <div class="cardLoader">
+            <div class="loader-wheel"></div>
+            <div class="loader-text"></div>
+        </div>
+    </div>
+</div>
+<div class="detailsBody"></div>`);
+    $("#detailModal").modal("toggle");
+    $(".studDetailedLoaderDiv").show();
 
     $.get(link, function (request) {
-      $(".tablebody").empty();
-      $(".receievedDoc").empty();
+
+
       var dlAnchor = "";
       if (request.status == "success") {
+        $(".detailsBody").empty();
+        $(".detailsBody").replaceWith(`<h4 class="card-title">Requests Informations</h4>
+        <div class="container-sm"></div>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>C/Y/SEM</th>
+                        <th>DOC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="requestbyupar"></td>
+                        <td class="font-weight-bold" id="requestbynpar"></td>
+                        <td class="font-weight-bold" id="cysem"></td>
+                        <td class="font-weight-bold" id="docreqpar"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div style="display:none" class="detail-alert"></div>
+        <h4 class="card-title ">Message</h4>
+        <div class="messHeader" style="display:none;overflow-y: scroll;"></div>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th>MANAGE BY</th>
+                        <th>REQUESTED</th>
+                        <th>RELEASED</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-weight-bold" id="managebynpar"></td>
+                        <td class="font-weight-bold" id="datereqpar"></td>
+                        <td class="font-weight-bold" id="daterelpar"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <h4 class="card-title">Sent Requirements</h4>
+        <div class="table-responsive">
+            <table class="table table-white">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>File Name</th>
+                        <th>Uploaded By</th>
+                    </tr>
+                </thead>
+                <tbody class="tablebody">
+                   
+                </tbody>
+                <input
+                    style="display:none"
+                    class="form-control"
+                    name="file[]"
+                    type="file"
+                    id="files"
+                    multiple
+                >
+            </table>
+        </div>
+        <h4 class="card-title">Recieved Documents</h4>
+        <div class="table-responsive">
+            <table class="table table-white receievedDocumentTable" style="overflow-y: scroll; height: 100px; display:none">
+                <thead>
+                    <tr>
+                        <th>Download</th>
+                        <th>File Name</th>
+                        <th>Uploaded By</th>
+                    </tr>
+                </thead>
+                <tbody class="receievedDoc">
+                  
+                </tbody>
+            </table>
+        </div>`);
+
         for (var x = 1; x < request.data.length; x++) {
           var findDot = request.data[x].fname.indexOf(".");
           var newValue = request.data[x].fname.substring(0, findDot);
@@ -192,8 +288,13 @@ Edit|<b>Re</b>submit
               request.data[x].uploaderName +
               "</td>" +
               "</tr > ";
-            $(".receievedDocumentTable").show();
+
+
+
+
+
             $(".receievedDoc").append(dlAnchor);
+
           }
         }
 
@@ -222,7 +323,7 @@ Edit|<b>Re</b>submit
           message = request.data[0].requestStatus;
         } else if (status.toLowerCase() == "pending") {
           alertType = "alert-info";
-          faIcon = "fa fa-clock-o";
+          faIcon = "fa fa-clock";
           message = request.data[0].requestStatus;
         } else if (status.toLowerCase() == "on-going") {
           alertType = "alert-info";
@@ -245,10 +346,17 @@ Edit|<b>Re</b>submit
         $(".detail-alert").empty();
         $(".detail-alert").append(htmlDiv);
         $(".detail-alert").show();
+        $(".receievedDocumentTable").show();
+        $(".studDetailedLoaderDiv").remove();
+        $("#detailsBody").show();
       }
     });
-    $("#detailModal").modal("toggle");
+   
+
   });
+  $(".clearDetailModal").on("click",function(e){
+    $("#detail-modal-body").empty();
+  })
   $(document).on("click", ".toggleEditReqModal", function (e) {
     e.preventDefault();
     id = $(this).attr("href");

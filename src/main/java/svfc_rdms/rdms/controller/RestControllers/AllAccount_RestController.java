@@ -326,7 +326,7 @@ public class AllAccount_RestController {
                          if (userType.equals("student")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.fetchDasboardAndSidebarNotif(user.get(), userType,
+                                        notificationServiceImpl.fetchTopNavBarAndSidebarNotif(user.get(), userType,
                                                   lowestPage,
                                                   totalPage, status),
                                         HttpStatus.OK);
@@ -334,21 +334,21 @@ public class AllAccount_RestController {
 
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.fetchDasboardAndSidebarNotif(user.get(), userType,
+                                        notificationServiceImpl.fetchTopNavBarAndSidebarNotif(user.get(), userType,
                                                   lowestPage,
                                                   totalPage, status),
                                         HttpStatus.OK);
                          } else if (userType.equals("teacher")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.fetchDasboardAndSidebarNotif(user.get(), userType,
+                                        notificationServiceImpl.fetchTopNavBarAndSidebarNotif(user.get(), userType,
                                                   lowestPage,
                                                   totalPage, status),
                                         HttpStatus.OK);
                          } else if (userType.equals("school_admin")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.fetchDasboardAndSidebarNotif(user.get(), userType,
+                                        notificationServiceImpl.fetchTopNavBarAndSidebarNotif(user.get(), userType,
                                                   lowestPage,
                                                   totalPage, status),
                                         HttpStatus.OK);
@@ -393,7 +393,8 @@ public class AllAccount_RestController {
                          if (userType.equals("student")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.getAllNotificationsByUser(user.get(), userType,
+                                        notificationServiceImpl.fetchAllNotificationsByUserToMainNotifModal(user.get(),
+                                                  userType,
                                                   lowestPage,
                                                   totalPage),
                                         HttpStatus.OK);
@@ -402,21 +403,24 @@ public class AllAccount_RestController {
                               Optional<Users> user = usersRepository.findByUsername(username);
 
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.getAllNotificationsByUser(user.get(), userType,
+                                        notificationServiceImpl.fetchAllNotificationsByUserToMainNotifModal(user.get(),
+                                                  userType,
                                                   lowestPage,
                                                   totalPage),
                                         HttpStatus.OK);
                          } else if (userType.equals("teacher")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.getAllNotificationsByUser(user.get(), userType,
+                                        notificationServiceImpl.fetchAllNotificationsByUserToMainNotifModal(user.get(),
+                                                  userType,
                                                   lowestPage,
                                                   totalPage),
                                         HttpStatus.OK);
                          } else if (userType.equals("school_admin")) {
                               Optional<Users> user = usersRepository.findByUsername(username);
                               return new ResponseEntity<>(
-                                        notificationServiceImpl.getAllNotificationsByUser(user.get(), userType,
+                                        notificationServiceImpl.fetchAllNotificationsByUserToMainNotifModal(user.get(),
+                                                  userType,
                                                   lowestPage,
                                                   totalPage),
                                         HttpStatus.OK);
@@ -456,8 +460,10 @@ public class AllAccount_RestController {
                          break;
                     }
                }
+               System.out.println(userType);
                if (globalService.validatePages(userType, response, session)) {
                     if (notification.isPresent()) {
+                         System.out.println("lol");
                          Notifications notifData = notification.get();
                          notifData.setStatus(status);
                          notificationRepository.save(notifData);

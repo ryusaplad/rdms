@@ -15363,7 +15363,7 @@ span:nth-child(5) {
   border-radius: 50%;
 }
 
-#profilePicture {
+#profilePicture,#rightSideProfilePic {
   width: 40px;
   height: 40px;
 }

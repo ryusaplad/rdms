@@ -379,7 +379,14 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                response.getOutputStream().close();
           } catch (Exception e) {
                throw new ApiRequestException("Failed to load image Reason: " + e.getMessage());
-          }
+          }finally{
+            try {
+                 
+                 response.getOutputStream().close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+       }
      }
 
      @Override

@@ -150,6 +150,13 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                }
           } catch (Exception e) {
                throw new ApiRequestException("Failed to download Reason: " + e.getMessage());
+          }finally{
+               try {
+                    
+                    response.getOutputStream().close();
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
           }
      }
 

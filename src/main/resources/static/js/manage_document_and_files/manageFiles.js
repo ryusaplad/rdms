@@ -6,12 +6,6 @@ $(document).ready(function () {
   var accountType = "";
   if (loc.includes("admin")) {
     accountType = "svfc-admin";
-  } else if (loc.includes("registrar")) {
-    accountType = "registrar";
-  } else if (loc.includes("teacher")) {
-    accountType = "teacher";
-  } else if (loc.includes("student")) {
-    accountType = "student";
   }
   $(document).on("click", ".deleteFile", function (event) {
     event.preventDefault();
@@ -22,16 +16,10 @@ $(document).ready(function () {
     var fileId = $(this).data("value");
     modalView.empty();
     var message = "";
-    if (accountType == "svfc-admin" || accountType == "registrar" || accountType == "teacher") {
+    if (accountType == "svfc-admin") {
       message = `Deleting this data will permanently remove it from the system. This action cannot be undone.
        Please note that any users who have uploaded or have access to this data will no longer be able to view or download it.`;
-    } else {
-      message = `If you proceed with deleting your uploaded files, any <strong>Pending/On-going</strong> requests associated with them will be automatically rejected.
-      <br/> <br/>
-      Please note that this action is irreversible and will permanently remove the data from the system.
-         Once deleted, the files cannot be downloaded again, and we are not responsible for any loss of your documents. `;
     }
-
     modalView.append(`<div class="modal fade" id="deletionModal" tabindex="-1" aria-labelledby="deletionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

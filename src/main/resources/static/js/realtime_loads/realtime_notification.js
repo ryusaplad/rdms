@@ -216,6 +216,7 @@ $(document).ready(function () {
 
 
     $(document).on("click", "#notif", function () {
+        
         var notifId = $(this).data('value');
         getCurrentLoggedIn(function (userType) {
 
@@ -226,6 +227,8 @@ $(document).ready(function () {
                     fetchRightSideNotificationData();
                     fetchMainNotification();
                     fetchNotificationCount();
+                },error : function(error){
+                    console.log(error);
                 }
             });
         });

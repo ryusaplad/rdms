@@ -43,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
     private EmailServiceImpl myEmailService;
 
     @Override
-    public ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
+    public ResponseEntity<Object> fetchAllNotificationsByUserToMainNotifModal(Users user, String userType, int lowestPage,
             int totalPage) {
         Sort descendingSort = Sort.by("notifId").descending();
 
@@ -64,7 +64,7 @@ public class NotificationServiceImpl implements NotificationService {
              */
             page = notifRepository.findAllByToIsNullOrTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
-
+            
             notifications = page.getContent();
         } else if (userType.equals("teacher")) {
             page = notifRepository.findAllByTo(user,
@@ -185,7 +185,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public ResponseEntity<Object> fetchDasboardAndSidebarNotif(Users user, String userType, int lowestPage,
+    public ResponseEntity<Object> fetchTopNavBarAndSidebarNotif(Users user, String userType, int lowestPage,
             int totalPage, boolean status) {
         Sort descendingSort = Sort.by("notifId").descending();
         Page<Notifications> page = null;
@@ -198,12 +198,12 @@ public class NotificationServiceImpl implements NotificationService {
 
             // Get Student Nofication check if the to is null, (why null?)
             /*
-             * findAllByToIsNullOrTo = Find All By Users/Sender is Null if null that is
+             * findAllByToIsNullAndStatusOrTo = Find All By Users/Sender is Null if null that is
              * student.
              * if the to is not null that is from or
              * between registrar and teacher notification
              */
-            page = notifRepository.findAllByToIsNullOrTo(user,
+            page = notifRepository.findAllByToIsNullAndStatusOrTo(status,user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
 
             notifications = page.getContent();

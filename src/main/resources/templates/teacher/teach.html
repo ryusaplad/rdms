@@ -133,7 +133,6 @@
                                             <div class="todo-widget text-black-50 text-center" style="height:20px;"></div>
                                         </div>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -220,6 +219,7 @@
                                                     <th>Action</th>
                                                     <th>File</th>
                                                     <th>Upload By</th>
+                                                    <th>Size</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="fileBody">
@@ -231,6 +231,7 @@
                                                     </td>
                                                     <td th:text="${file.name}"></td>
                                                     <td th:text="${file.uploadedBy}"></td>
+                                                    <td th:text="${file.size}"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -263,7 +264,11 @@
             </th:block>
             <th:block th:case="'myfiles'">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
-                <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageFiles.js}"></script>
+                <script type="text/javascript">$("#zero_config").DataTable({
+                    "ordering": false,
+                    "destroy": true
+            });
+                </script>
             </th:block>
         </th:block>
         <script type="text/javascript" th:src="@{/js/realtime_loads/realtime_notification.js}"></script>

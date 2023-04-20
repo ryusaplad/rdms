@@ -9,10 +9,10 @@ import svfc_rdms.rdms.model.Users;
 
 public interface NotificationService {
 
-        ResponseEntity<Object> getAllNotificationsByUser(Users user, String userType, int lowestPage,
+        ResponseEntity<Object> fetchAllNotificationsByUserToMainNotifModal(Users user, String userType, int lowestPage,
         int totalPage);
 
-        ResponseEntity<Object> fetchDasboardAndSidebarNotif(Users user, String userType, int lowestPage,
+        ResponseEntity<Object> fetchTopNavBarAndSidebarNotif(Users user, String userType, int lowestPage,
                         int totalPage,boolean status);
 
         boolean sendStudentNotification(String title, String message, String messageType, String timeAndDate,

@@ -16,7 +16,7 @@
         <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
         <link th:href="@{/css/croppie.css}" rel="stylesheet">
         <th:block th:if="${page == 'myrequest' || page == 'myfiles' || page == 'studrequest' || page == 'accview'}">
-            <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet"/>
+            <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
         </th:block>
         <th:block th:if="${page == 'studrequest'}">
             <style> .file-upload {
@@ -131,7 +131,8 @@
                 100% {
                     transform: rotate(360deg);
                 }
-            }</style>
+            }
+            </style>
         </th:block>
     </head>
     <body>
@@ -273,9 +274,7 @@
                                             <div class="todo-widget text-black-50 text-center" style="height:20px;"></div>
                                         </div>
                                     </div>
-                                    <div class="card ntcard">
-                                        
-                                    </div>
+                                    <div class="card ntcard"></div>
                                 </div>
                             </div>
                         </div>
@@ -327,7 +326,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="fileBody">
-                                                
+                                                <tr th:each="file : ${files}">
+                                                    <td>
+                                                        <a th:href="@{'/registrar/files/download?id='} + ${file.fileId}" type="button" class="btn btn-primary w-100">
+                                                            Download
+                                                        </a>
+                                                    </td>
+                                                    <td th:text="${file.name}"></td>
+                                                    <td th:text="${file.uploadedBy}"></td>
+                                                    <td th:text="${file.size}"></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -543,440 +551,438 @@
                     <!-- ============================================================== -->
                     <!-- End Page wrapper  -->
                     <!-- ============================================================== -->
-               
-               
-                <div
-                    class="modal fade"
-                    id="registerModal"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="registerModal"
-                    aria-hidden="true"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="registerModal">
-                                    <span id="titleVal" th:text="${accType}"></span>
-                                    Informations
-                                </h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="modal-body">
-                                <form
-                                    id="form-insert"
-                                    method="POST"
-                                    action="/saveUser"
-                                    th:object="${users}"
-                                >
-                                    <div class="form-group has-validation">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{name}"
-                                            id="name"
-                                            placeholder="Name:"
-                                            name="name"
-                                        >
-                                        <div id="alertMessage1" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{email}"
-                                            id="email"
-                                            placeholder="Email"
-                                            name="email"
-                                        >
-                                        <div id="alertMessageEmail" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{username}"
-                                            id="username"
-                                            th:placeholder="${idFormat}"
-                                            name="username"
-                                        >
-                                        <div id="alertMessage2" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            th:field="*{password}"
-                                            id="password"
-                                            placeholder="Password:"
-                                            name="password"
-                                        >
-                                        <div id="alertMessage3" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="confirmPass" class="form-label">Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            id="confirmPass"
-                                            placeholder="Confirm Password:"
-                                        >
-                                        <div id="alertMessage4" class="invalid-feedback" style="display:none"></div>
-                                    </div>
+                    <div
+                        class="modal fade"
+                        id="registerModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="registerModal"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="registerModal">
+                                        <span id="titleVal" th:text="${accType}"></span>
+                                        Informations
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success">
-                                        Save
+                                <div class="modal-body">
+                                    <form
+                                        id="form-insert"
+                                        method="POST"
+                                        action="/saveUser"
+                                        th:object="${users}"
+                                    >
+                                        <div class="form-group has-validation">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{name}"
+                                                id="name"
+                                                placeholder="Name:"
+                                                name="name"
+                                            >
+                                            <div id="alertMessage1" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{email}"
+                                                id="email"
+                                                placeholder="Email"
+                                                name="email"
+                                            >
+                                            <div id="alertMessageEmail" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="username" class="form-label">Username</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{username}"
+                                                id="username"
+                                                th:placeholder="${idFormat}"
+                                                name="username"
+                                            >
+                                            <div id="alertMessage2" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                th:field="*{password}"
+                                                id="password"
+                                                placeholder="Password:"
+                                                name="password"
+                                            >
+                                            <div id="alertMessage3" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="confirmPass" class="form-label">Confirm Password</label>
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                id="confirmPass"
+                                                placeholder="Confirm Password:"
+                                            >
+                                            <div id="alertMessage4" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success">
+                                            Save
                             changes
-                                    </button>
-                                </div>
-                            </form>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Modal -->
-                <div
-                    class="modal fade"
-                    id="updateModal"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="updateModal"
-                    aria-hidden="true"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateModal">
-                                    <span id="titleVal" th:text="${accType}"></span>
-                                    Update Informations
-                                </h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
+                    <!-- Modal -->
+                    <div
+                        class="modal fade"
+                        id="updateModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="updateModal"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateModal">
+                                        <span id="titleVal" th:text="${accType}"></span>
+                                        Update Informations
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form
+                                        id="form-update"
+                                        method="POST"
+                                        th:action="@{/updateUser}"
+                                        th:object="${users}"
+                                    >
+                                        <div class="form-group" style="display:none">
+                                            <label for="name">userId</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{userId}"
+                                                id="userIdEdit"
+                                                placeholder="userId:"
+                                                name="userId"
+                                                required
+                                            >
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{name}"
+                                                id="nameEdit"
+                                                placeholder="Name:"
+                                                name="name"
+                                            >
+                                            <div id="alertMessage5" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{email}"
+                                                id="emailEdit"
+                                                placeholder="Email"
+                                                name="email"
+                                            >
+                                            <div id="alertMessageEmailEdit" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="username" class="form-label">Username</label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{username}"
+                                                id="usernameEdit"
+                                                th:placeholder="${idFormat}"
+                                                name="username"
+                                            >
+                                            <div id="alertMessage6" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                th:field="*{password}"
+                                                id="passwordEdit"
+                                                placeholder="Password:"
+                                                name="password"
+                                            >
+                                            <div id="alertMessage7" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                        <div class="form-group has-validation">
+                                            <label for="confirmPass" class="form-label">Confirm Password</label>
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                id="confirmPassEdit"
+                                                placeholder="Confirm Password:"
+                                            >
+                                            <div id="alertMessage8" class="invalid-feedback" style="display:none"></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                                        <input type="submit" value="Save Changes" class=" text-white btn btn-success save">
+                                    </div>
+                                </form>
                             </div>
-                            <div class="modal-body">
-                                <form
-                                    id="form-update"
-                                    method="POST"
-                                    th:action="@{/updateUser}"
-                                    th:object="${users}"
-                                >
-                                    <div class="form-group" style="display:none">
-                                        <label for="name">userId</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{userId}"
-                                            id="userIdEdit"
-                                            placeholder="userId:"
-                                            name="userId"
-                                            required
-                                        >
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{name}"
-                                            id="nameEdit"
-                                            placeholder="Name:"
-                                            name="name"
-                                        >
-                                        <div id="alertMessage5" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{email}"
-                                            id="emailEdit"
-                                            placeholder="Email"
-                                            name="email"
-                                        >
-                                        <div id="alertMessageEmailEdit" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            th:field="*{username}"
-                                            id="usernameEdit"
-                                            th:placeholder="${idFormat}"
-                                            name="username"
-                                        >
-                                        <div id="alertMessage6" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            th:field="*{password}"
-                                            id="passwordEdit"
-                                            placeholder="Password:"
-                                            name="password"
-                                        >
-                                        <div id="alertMessage7" class="invalid-feedback" style="display:none"></div>
-                                    </div>
-                                    <div class="form-group has-validation">
-                                        <label for="confirmPass" class="form-label">Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            id="confirmPassEdit"
-                                            placeholder="Confirm Password:"
-                                        >
-                                        <div id="alertMessage8" class="invalid-feedback" style="display:none"></div>
-                                    </div>
+                        </div>
+                    </div>
+                    <!-- Delete Modal -->
+                    <div
+                        class="modal fade"
+                        id="deleteModal"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="deleteModalLabel"
+                        aria-hidden="true"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Select Delitition Type</h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>
+                                        <li>
+                                            If you choose
+                                            <b>temporary</b>
+                                            , the account will be
+                                            <u>
+                                                <b>Not Usable</b>
+                                            </u>
+                                            but can be
+                                            <b>undone</b>
+                                            ..
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            If you choose
+                                            <b>permanently</b>
+                                            , the account will be
+                                            <u>
+                                                <b>permanently deleted</b>
+                                            </u>
+                                            and
+                                cannot be
+                                            <b>undone</b>
+                                            .
+                                            <hr>
+                                            <p>
+                                                <b>NOTE:</b>
+                                                You cannot delete accounts if they have existing requests.
+                                            </p>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-                                    <input type="submit" value="Save Changes" class=" text-white btn btn-success save">
+                                    <button type="button" class="btn text-white btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button
+                                        type="button"
+                                        data-bs-target="#deleteTempModalConfirm"
+                                        data-bs-toggle="modal"
+                                        data-bs-dismiss="modal"
+                                        class="btn text-white  btn-warning "
+                                    >Temporary</button>
+                                    <button
+                                        type="button"
+                                        data-bs-target="#deleteModalConfirm"
+                                        data-bs-toggle="modal"
+                                        data-bs-dismiss="modal"
+                                        class="btn text-white  btn-danger"
+                                    >Permanently</button>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- Delete Modal -->
-                <div
-                    class="modal fade"
-                    id="deleteModal"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="deleteModalLabel"
-                    aria-hidden="true"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Select Delitition Type</h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul>
-                                    <li>
-                                        If you choose
-                                        <b>temporary</b>
-                                        , the account will be
-                                        <u>
-                                            <b>Not Usable</b>
-                                        </u>
-                                        but can be
-                                        <b>undone</b>
-                                        ..
-                                    </li>
-                                </ul>
-                                <ul>
-                                    <li>
-                                        If you choose
-                                        <b>permanently</b>
-                                        , the account will be
-                                        <u>
-                                            <b>permanently deleted</b>
-                                        </u>
-                                        and
-                                cannot be
-                                        <b>undone</b>
-                                        .
-                                        <hr>
-                                        <p>
-                                            <b>NOTE:</b>
-                                            You cannot delete accounts if they have existing requests.
-                                        </p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn text-white btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button
-                                    type="button"
-                                    data-bs-target="#deleteTempModalConfirm"
-                                    data-bs-toggle="modal"
-                                    data-bs-dismiss="modal"
-                                    class="btn text-white  btn-warning "
-                                >Temporary</button>
-                                <button
-                                    type="button"
-                                    data-bs-target="#deleteModalConfirm"
-                                    data-bs-toggle="modal"
-                                    data-bs-dismiss="modal"
-                                    class="btn text-white  btn-danger"
-                                >Permanently</button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div
-                    class="modal fade"
-                    id="undoModal"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="undoModalLabel"
-                    aria-hidden="true"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="undoModalLabel">Undoing Deleted Account.</h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="modal-body">
-                                By
-                                <b>undoing</b>
-                                , this account will become
-                                <b>active and usable.</b>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button
-                                    type="button"
-                                    data-bs-target="#undoModalConfirm"
-                                    data-bs-toggle="modal"
-                                    data-bs-dismiss="modal"
-                                    class="btn btn-warning"
-                                >Proceed</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="modal fade"
-                    id="undoModalConfirm"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="undoModalConfirmLabel"
-                    aria-hidden="true"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="undoModalConfirmLabel">Performing Action Confirmation</h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="modal-body">
-                                <b>Are you sure?</b>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warning undoAccount">Yes</button>
+                    <div
+                        class="modal fade"
+                        id="undoModal"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="undoModalLabel"
+                        aria-hidden="true"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="undoModalLabel">Undoing Deleted Account.</h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    By
+                                    <b>undoing</b>
+                                    , this account will become
+                                    <b>active and usable.</b>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button
+                                        type="button"
+                                        data-bs-target="#undoModalConfirm"
+                                        data-bs-toggle="modal"
+                                        data-bs-dismiss="modal"
+                                        class="btn btn-warning"
+                                    >Proceed</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div
-                    class="modal fade"
-                    id="deleteModalConfirm"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="deleteModalConfirmLabel"
-                    aria-hidden="true"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalConfirmLabel">Performing Action Confirmation</h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="modal-body">
-                                <b>Are you sure?</b>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warning deletePermanently">Yes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="modal fade"
-                    id="deleteTempModalConfirm"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="deleteTempModalConfirmLabel"
-                    aria-hidden="true"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                >
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteTempModalConfirmLabel">Performing Action Confirmation</h5>
-                                <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div class="modal-body">
-                                <b>Are you sure?</b>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-warning deleteTemporarily">Yes</button>
+                    <div
+                        class="modal fade"
+                        id="undoModalConfirm"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="undoModalConfirmLabel"
+                        aria-hidden="true"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="undoModalConfirmLabel">Performing Action Confirmation</h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <b>Are you sure?</b>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-warning undoAccount">Yes</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- request modal for registrar -->
-                <div
-                    class="modal fade"
-                    id="requestsModal"
-                    data-bs-backdrop="static"
-                    data-bs-keyboard="false"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="requestsModal"
-                    aria-hidden="true"
-                ></div>
+                    <div
+                        class="modal fade"
+                        id="deleteModalConfirm"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="deleteModalConfirmLabel"
+                        aria-hidden="true"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalConfirmLabel">Performing Action Confirmation</h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <b>Are you sure?</b>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-warning deletePermanently">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="modal fade"
+                        id="deleteTempModalConfirm"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="deleteTempModalConfirmLabel"
+                        aria-hidden="true"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                    >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteTempModalConfirmLabel">Performing Action Confirmation</h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <b>Are you sure?</b>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-warning deleteTemporarily">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- request modal for registrar -->
+                    <div
+                        class="modal fade"
+                        id="requestsModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="requestsModal"
+                        aria-hidden="true"
+                    ></div>
                 </th:block>
                 <th:block th:case="'studrequest'">
                     <div class="page-wrapper">
@@ -1041,51 +1047,48 @@
                     </div>
                 </th:block>
                 <th:block th:case="'myrequest'">
-
-                <div class="page-wrapper">
-                    <!-- ============================================================== -->
-                    <!-- Bread crumb and right sidebar toggle -->
-                    <!-- ============================================================== -->
-                    <div class="page-breadcrumb">
-                        <div class="row">
-                            <div class="col-12 d-flex no-block align-items-center">
-                                <h4 class="page-title">Sent Requests</h4>
-                                <div class="ms-auto text-end">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item">
-                                                <a href="#">Requests</a>
-                                            </li>
-                                            <li class="breadcrumb-item active" aria-current="page">Sent Requests</li>
-                                        </ol>
-                                    </nav>
+                    <div class="page-wrapper">
+                        <!-- ============================================================== -->
+                        <!-- Bread crumb and right sidebar toggle -->
+                        <!-- ============================================================== -->
+                        <div class="page-breadcrumb">
+                            <div class="row">
+                                <div class="col-12 d-flex no-block align-items-center">
+                                    <h4 class="page-title">Sent Requests</h4>
+                                    <div class="ms-auto text-end">
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item">
+                                                    <a href="#">Requests</a>
+                                                </li>
+                                                <li class="breadcrumb-item active" aria-current="page">Sent Requests</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- End Bread crumb and right sidebar toggle -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Container fluid  -->
-                    <!-- ============================================================== -->
-                    <div class="container-fluid">
-                        <div class="card table-responsive">
-                            <ul class="l"></ul>
-                            <table id="zero_config" class="table  text-center table-bordered ">
-                                <thead>
-                                    <tr>
-                                        <th>Title/Message</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                </tbody>
-                            </table>
+                        <!-- ============================================================== -->
+                        <!-- End Bread crumb and right sidebar toggle -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Container fluid  -->
+                        <!-- ============================================================== -->
+                        <div class="container-fluid">
+                            <div class="card table-responsive">
+                                <ul class="l"></ul>
+                                <table id="zero_config" class="table  text-center table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th>Title/Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </th:block>
-                
             </div>
             <div class="modalView"></div>
             <script type="text/javascript" th:src="@{/js/a_libraries/jquery.js}"></script>
@@ -1107,17 +1110,26 @@
             </th:block>
             <th:block th:if="${page =='myfiles'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
-                <script type="text/javascript" th:src="@{/js/manage_document_and_files/manageFiles.js}"></script>
+                <script type="text/javascript">$("#zero_config").DataTable({
+                    "ordering": false,
+                    "destroy": true
+            });
+                </script>
             </th:block>
             <th:block th:if="${page == 'accview'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
+                <script type="text/javascript">$("#zero_config").DataTable({
+                    "ordering": false,
+                    "destroy": true
+            });
+                </script>
                 <script type="text/javascript" th:src="@{/js/manage_account_js-ajax-jquery/r-adding_accounts.js}"></script>
                 <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/r-send_request.js}"></script>
             </th:block>
             <th:block th:if="${page == 'studrequest'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
                 <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/r_request_list.js}"></script>
-            <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_exporting.js}"></script>
+                <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/request_exporting.js}"></script>
             </th:block>
             <th:block th:if="${page =='myrequest'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
