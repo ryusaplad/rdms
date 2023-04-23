@@ -77,10 +77,10 @@ public class RegistrarController {
           return "redirect:/";
      }
 
-     @GetMapping(value = "/{userType}/studrequest")
-     public String studentRequests(@PathVariable String userType, HttpSession session, HttpServletResponse response,
+     @GetMapping(value = "/registrar/studrequest")
+     public String studentRequests(HttpSession session, HttpServletResponse response,
                Model model) {
-          if (globalService.validatePages(userType, response, session)) {
+          if (globalService.validatePages("registrar", response, session)) {
                model.addAttribute("page", "studrequest");
                model.addAttribute("pageTitle", "Student Requests");
                return "/registrar/reg";
@@ -104,7 +104,6 @@ public class RegistrarController {
      public String listOfDocuments(HttpServletResponse response, HttpSession session, Model model) {
           
           if (globalService.validatePages("registrar", response, session)) {
-               model.addAttribute("documentsList", mainService.getAllDocuments());
                model.addAttribute("pageTitle", "Documents");
                model.addAttribute("page", "documents");
                return "/registrar/reg";

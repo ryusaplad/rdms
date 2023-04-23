@@ -54,38 +54,6 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      @Autowired
      private NotificationServiceImpl notificationService;
 
-     @Override
-     public ResponseEntity<Object> fetchAllStudentRequest() {
-          try {
-
-               List<StudentRequest> fetchStudentRequest = studentRepository.findAll();
-
-               if (fetchStudentRequest.size() > -1) {
-                    List<StudentRequest_Dto> studentRequests = new ArrayList<>();
-
-                    fetchStudentRequest.stream().forEach(req -> {
-
-                         studentRequests
-                                   .add(new StudentRequest_Dto(req.getRequestId(),
-                                             req.getRequestBy().getUserId(),
-                                             req.getRequestBy().getType(), req.getYear(),
-                                             req.getCourse(), req.getSemester(),
-                                             req.getRequestDocument().getTitle(),
-                                             req.getMessage(), req.getReply(), req.getRequestBy().getName(),
-                                             req.getRequestDate(),
-                                             req.getRequestStatus(), req.getReleaseDate(),
-                                             req.getManageBy()));
-
-                    });
-                    return new ResponseEntity<>(studentRequests, HttpStatus.OK);
-               }
-               return new ResponseEntity<>("Invalid Action", HttpStatus.BAD_REQUEST);
-
-          } catch (Exception e) {
-               throw new ApiRequestException(e.getMessage());
-          }
-
-     }
 
      @Override
      public String displayAllFilesByUserId(HttpSession session, Model model) {

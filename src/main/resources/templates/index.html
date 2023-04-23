@@ -4,6 +4,11 @@
         <meta charset="utf-8">
         <title>RDMS - Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Login to the RDMS portal to access your account information.">
+        <meta name="keywords" content="RDMS, login, account, information">
+        <meta name="author" content="Ryu,Ronald,Given,Erangie,Krystal,Kaye">
+        <link rel="icon" type="image/png" href="images/svfclog.png">
+       
         <!-- MATERIAL DESIGN ICONIC FONT -->
         <link
             rel="icon"
@@ -140,10 +145,23 @@
                     </div>
                     <button class=" btn btn-danger btnSubmit" type="submit">Login</button>
                     <div id="loginMessageDiv" class="form-group"></div>
+                    <footer class="footer mt-auto py-3">
+                        <span class="text-muted">© 2023 RDMS - St.Vincent De Ferrer College of Camarin Inc.</span>
+                        <div class="container howContainer">
+                            <div class="footer-links float-end">
+                                <a href="javascript:void(0)" class="text-muted triggerUserManual">How to login</a>
+                                <a href="javascript:void(0)" class="text-muted triggerAbout">About</a>
+                            </div>
+                        </div>
+                    </footer>
                 </form>
             </div>
         </div>
+        <div class="modalView"></div>
+       
         <script type="text/javascript" th:src="@{js/a_libraries/jquery.js}"></script>
+        <script type="text/javascript" th:src="@{js/a_libraries/bootstrap.bundle.js}"></script>
+        <script type="text/javascript" th:src="@{js/userpageJS/usermanual.js}"></script>
         <script type="text/javascript" th:src="@{js/login.js}"></script>
         <script id="scriptX">
              $(window).on("load",function(){

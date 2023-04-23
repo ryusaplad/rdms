@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
@@ -29,19 +30,24 @@ import svfc_rdms.rdms.repository.Global.NotificationRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.repository.Teacher.TeacherRepository;
-import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 
 @RestController
 public class AllAccount_RestController {
 
      @Autowired
+     private AdminServicesImpl mainService;
+
+     @Autowired
      private AllAccountServiceImpl accountServiceImpl;
 
      @Autowired
-     private Admin_Registrar_ManageAccountServiceImpl admin_RegistrarAccountServiceImpl;
+     private Admin_Registrar_ManageServiceImpl admin_RegistrarServiceImpl;
 
      @Autowired
      private NotificationServiceImpl notificationServiceImpl;
@@ -51,6 +57,9 @@ public class AllAccount_RestController {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private Reg_RequestServiceImpl regs_RequestService;
 
      @Autowired
      private StudentRepository studentRepository;
@@ -254,7 +263,7 @@ public class AllAccount_RestController {
      }
 
      @GetMapping("/load/image")
-     public ResponseEntity<Object> loadImage(@RequestParam("username") String username, HttpSession session) {
+     public ResponseEntity<Object> loadUserProfileImage(@RequestParam("username") String username, HttpSession session) {
           Optional<Users> user = usersRepository.findByUsername(username);
           try {
                byte[] image = null;
@@ -483,7 +492,7 @@ public class AllAccount_RestController {
                HttpSession session,
                HttpServletResponse response, HttpServletRequest request) {
           List<StudentRequest> studRequest = studentRepository.findAll();
-          return admin_RegistrarAccountServiceImpl.exportingStudentRequestToExcel(response, session, studRequest,
+          return admin_RegistrarServiceImpl.exportingStudentRequestToExcel(response, session, studRequest,
                     request);
      }
 
@@ -491,7 +500,7 @@ public class AllAccount_RestController {
      public void exportStudentRequestToExcelConfirm(@PathVariable("userType") String userType, HttpSession session,
                HttpServletResponse response, HttpServletRequest request) {
           List<StudentRequest> studRequest = studentRepository.findAll();
-          admin_RegistrarAccountServiceImpl.exportConfirmation(response, session, studRequest, request);
+          admin_RegistrarServiceImpl.exportConfirmation(response, session, studRequest, request);
      }
 
      // Test Message
@@ -507,6 +516,40 @@ public class AllAccount_RestController {
                return new ResponseEntity<>("Failed to sent no message found", HttpStatus.BAD_REQUEST);
           }
 
+     }
+
+     //
+     @GetMapping(value = "/{userType}/fetch/student-requests")
+     public ResponseEntity<Object> fetchstudentRequests(@PathVariable("userType")String userType, HttpSession session,
+               HttpServletResponse response) {
+
+          if(userType.equalsIgnoreCase("svfc-admin")){
+               userType = "school_admin";
+          }
+          if (globalService.validatePages(userType, response, session)) {
+               return admin_RegistrarServiceImpl.fetchAllStudentRequest();
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+
+     }
+
+     @GetMapping("/{userType}/load/document-info")
+     public ResponseEntity<Object> showImage(@PathVariable("userType") String userType,
+               HttpSession session) {
+
+          try {
+               List<Documents> documents = mainService.getAllDocuments();
+               if (documents.size() > -1) {
+
+                    return new ResponseEntity<Object>(documents, HttpStatus.OK);
+               } else {
+                    return new ResponseEntity<Object>("Failed to retrieve document, Please Try Again!",
+                              HttpStatus.BAD_REQUEST);
+               }
+          } catch (Exception e) {
+               return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+          }
      }
 
 }

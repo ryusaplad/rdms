@@ -1,5 +1,58 @@
 $(document).ready(function () {
   var htmlModal = "";
+  admin_StudentRequestConnection();
+  refreshTable();
+
+  function refreshTable() {
+
+    
+
+    // Make AJAX request to fetch latest data
+    $.ajax({
+      url: `/svfc-admin/fetch/student-requests`,
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        // Empty table body
+        var table = $("#zero_config").DataTable();
+        table.clear();
+
+        var actions = "";
+        for (var i = 0; i < data.length; i++) {
+          var studRequest = data[i];
+          var statusIcon = "";
+          if (studRequest.requestStatus.toLowerCase().includes("approved")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-success" > <i class="fas fa-check text-success" aria-hidden="true"></i> Completed</strong></td>`;
+          } else if (studRequest.requestStatus.toLowerCase().includes("pending")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+          } else if (studRequest.requestStatus.toLowerCase().includes("on-going")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-half text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+          } else if (studRequest.requestStatus.toLowerCase().includes("rejected")) {
+            statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+          }
+
+
+          actions = `<a href="?s=${studRequest.studentId}&req=${studRequest.requestId}" type="button" class="btn btn-primary w-100 toggleRequestDetail">Details</a>`;
+          // Append new data to table body
+
+          $("#zero_config")
+            .DataTable()
+            .row.add([
+              studRequest.requestBy,
+              studRequest.requestDate,
+              statusIcon,
+              actions,
+            ])
+            .draw();
+        }
+
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error("Error refreshing table: ", errorThrown);
+      }
+    });
+
+  }
 
   $(document).on("click", ".clearModal", function (e) {
     $(".modalView").empty();
@@ -59,7 +112,7 @@ $(document).ready(function () {
     </div>
       `;
     $
-    
+
     $(".reqDetailedLoaderDiv").show();
     $(".modalView").append(htmlModal);
     $("#reqDetailModal").modal("toggle");
@@ -156,7 +209,7 @@ $(document).ready(function () {
             </tr>
         </tbody>
     </table>`);
-       
+
         $(".tablebody").empty();
         $(".sentDocsBody").empty();
         var dlAnchor = "";
@@ -291,4 +344,37 @@ $(document).ready(function () {
       error: function (error) { },
     });
   });
+
+  function admin_StudentRequestConnection() {
+    var socket = new SockJS('/websocket-server');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+      setConnected(true);
+      if (stompClient.ws.readyState === WebSocket.OPEN) {
+        stompClient.subscribe('/topic/student/requests', function (data) {
+
+          if (data.toString().toLowerCase().includes("ok")) {
+            refreshTable();
+          }
+          //  stompClient.send("/app/student/request/ID", {}, "I Got Send");
+        });
+      } else {
+        console.log("Admin Student Request View Socket not fully loaded yet. Waiting...");
+        setConnected(false);
+      }
+    }, function (error) {
+      console.log("Admin Student Request View Socket, Lost connection to WebSocket. Retrying...");
+      setConnected(false);
+
+    });
+
+
+  }
+  // Check the connection status every second
+  setInterval(function () {
+    if (!connected) {
+      console.log("Admin Student Request View Socket, connection lost. Attempting to reconnect...");
+      admin_StudentRequestConnection();
+    }
+  }, 5000); // check every second
 });

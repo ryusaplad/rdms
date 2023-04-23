@@ -1,4 +1,4 @@
-package svfc_rdms.rdms.service.Registrar;
+package svfc_rdms.rdms.service.Global;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 
-public interface Admin_RegistrarAccountService {
+public interface Admin_RegistrarService {
     ResponseEntity<Object> saveUsersAccount(Users user, int actions, HttpSession session,HttpServletRequest request);
 
     boolean findUserName(String username);
@@ -27,4 +27,6 @@ public interface Admin_RegistrarAccountService {
 
     void exportConfirmation(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq,HttpServletRequest request);
 
+
+    ResponseEntity<Object> fetchAllStudentRequest();
 }

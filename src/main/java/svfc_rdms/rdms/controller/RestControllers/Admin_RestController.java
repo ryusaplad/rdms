@@ -28,7 +28,7 @@ import svfc_rdms.rdms.model.GlobalLogs;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
-import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.StudentRequest_ChartsLogicServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
@@ -46,7 +46,7 @@ public class Admin_RestController {
      private Student_RequestServiceImpl requestServiceImpl;
 
      @Autowired
-     private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
+     private Admin_Registrar_ManageServiceImpl adminAccountService;
 
      @Autowired
      private GlobalLogsServiceImpl globalLogsService;
@@ -105,7 +105,7 @@ public class Admin_RestController {
      }
 
      @GetMapping("/svfc-admin/update-document-cards")
-     public ResponseEntity<Object> updateDocumentCard() {
+     public ResponseEntity<Object> loadAllDocumentCards() {
 
           try {
                List<Documents> documents = mainService.getAllDocuments();

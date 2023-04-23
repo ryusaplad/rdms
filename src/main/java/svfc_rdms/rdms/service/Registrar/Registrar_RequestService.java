@@ -14,8 +14,6 @@ public interface Registrar_RequestService {
 
      // Manage Students Request
 
-     ResponseEntity<Object> fetchAllStudentRequest();
-
      ResponseEntity<Object> finalizedRequestsWithFiles(long userId, long requestId,
                Optional<MultipartFile[]> files, Map<String, String> params,
                HttpSession session,HttpServletRequest request);

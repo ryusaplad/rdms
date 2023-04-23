@@ -9,14 +9,14 @@ $(document).ready(function () {
   var finalValue = "";
   var usId = "";
   var rId = "";
+
   refreshTable();
 
   function refreshTable() {
-    var tableBody = $(".requestTableBody");
 
     // Make AJAX request to fetch latest data
     $.ajax({
-      url: "/fetch/student-requests",
+      url: "/registrar/fetch/student-requests",
       type: "GET",
       dataType: "json",
       success: function (data) {

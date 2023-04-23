@@ -369,27 +369,6 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
      }
 
      @Override
-     public void student_showImageFiles(long id, HttpServletResponse response,
-               Optional<Documents> dOptional) {
-
-          dOptional = getFileDocumentById(id);
-          try {
-               response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
-               response.getOutputStream().write(dOptional.get().getImage());
-               response.getOutputStream().close();
-          } catch (Exception e) {
-               throw new ApiRequestException("Failed to load image Reason: " + e.getMessage());
-          }finally{
-            try {
-                 
-                 response.getOutputStream().close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-       }
-     }
-
-     @Override
      public List<Documents> displayAllDocuments(boolean status) {
           return documentRepository.findAllByStatus(status);
      }

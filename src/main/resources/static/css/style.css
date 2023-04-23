@@ -14,6 +14,44 @@
   font-family: "Muli-SemiBold";
   src: url("../fonts/muli/Muli-SemiBold.ttf");
 }
+@import url("userPageCss/modal.css");
+
+@media (max-width: 767px) {
+
+  
+  #user-manual,
+  #about-icon {
+    display: none;
+  }
+}
+.footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .footer-links {
+    justify-content: center;
+  }
+
+  .footer-links a {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -93,11 +131,10 @@ a {
 
 .form-inner {
   background: #fff;
-  padding-top: 10.36vh;
+  padding-top: 13.36vh;
   padding-left: 4vw;
   padding-right: 4vw;
-  margin:auto;
- 
+  margin: auto;
 }
 
 form {
@@ -180,12 +217,6 @@ button {
   transition-duration: 0.3s;
 }
 
-button:hover {
-  background: #e83749e9;
-
-  transition: background 0.3s ease-in-out;
-}
-
 .socials {
   text-align: center;
   margin-top: 59px;
@@ -204,7 +235,6 @@ p {
     padding-top: 0;
     padding-left: 4vw;
     padding-right: 4vw;
-   
   }
 }
 @media (max-width: 1199px) {
@@ -236,7 +266,7 @@ p {
     height: 37vh;
   }
   .wrapper .form-inner {
-    height: 63vh;
+    height: 67vh;
   }
 
   .socials {
@@ -248,7 +278,7 @@ p {
   }
 }
 .form-inner {
-  padding-top: 10.36vh;
+  padding-top: 13.36vh;
   padding-left: 4vw;
   padding-right: 4vw;
 }
@@ -258,10 +288,6 @@ p {
   height: 45px;
 }
 
-button {
-  width: 100%;
-  height: 46px;
-}
 .endText {
   position: absolute;
   bottom: 90px;
@@ -282,7 +308,6 @@ button {
   .bottomText span {
     bottom: 50px !important;
   }
- 
 }
 .logo {
   width: 180px;

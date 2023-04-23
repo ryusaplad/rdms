@@ -26,7 +26,7 @@ import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
-import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_AccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
@@ -54,19 +54,9 @@ public class Regs_RestController {
      private Reg_RequestServiceImpl regs_RequestService;
 
      @Autowired
-     private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
+     private Admin_Registrar_ManageServiceImpl adminAccountService;
 
-     @GetMapping(value = "/fetch/student-requests")
-     public ResponseEntity<Object> studentRequests(HttpSession session,
-               HttpServletResponse response,
-               Model model) {
-          if (globalService.validatePages("registrar", response, session)) {
-               return regs_RequestService.fetchAllStudentRequest();
-          }
-          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
-                    HttpStatus.BAD_REQUEST);
-
-     }
+     
 
      @PostMapping(value = "/registrar/save/user-account")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpServletResponse response,

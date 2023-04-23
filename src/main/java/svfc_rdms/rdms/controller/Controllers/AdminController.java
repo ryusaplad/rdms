@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import svfc_rdms.rdms.dto.RegistrarRequest_DTO;
-import svfc_rdms.rdms.dto.StudentRequest_Dto;
-import svfc_rdms.rdms.model.Documents;
-import svfc_rdms.rdms.model.RegistrarRequest;
-import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
-import svfc_rdms.rdms.repository.Document.DocumentRepository;
-import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
-import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageAccountServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
@@ -42,10 +34,7 @@ public class AdminController {
      private GlobalServiceControllerImpl globalService;
 
      @Autowired
-     private RegsRequestRepository registrarRepo;
-
-     @Autowired
-     private Admin_Registrar_ManageAccountServiceImpl adminAccountService;
+     private Admin_Registrar_ManageServiceImpl adminAccountService;
 
      @Autowired
      private GlobalLogsServiceImpl globalLogsService;
@@ -53,7 +42,7 @@ public class AdminController {
      @GetMapping("/svfc-admin/dashboard")
      public String dashboard_View(HttpServletResponse response, HttpSession session, Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-              
+
                model.addAttribute("page", "dashboard");
                model.addAttribute("pageTitle", "Dashboard");
 
@@ -214,7 +203,6 @@ public class AdminController {
      public String requestForAdmin(HttpServletResponse response, HttpSession session, Model model) {
 
           if (globalService.validatePages("school_admin", response, session)) {
-               model.addAttribute("documentsList", mainService.getAllDocuments());
                model.addAttribute("page", "documents");
                model.addAttribute("pageTitle", "Documents");
                return "/svfc-admin/admin";
@@ -246,31 +234,14 @@ public class AdminController {
 
      }
 
-    
-
      // end documents managing
 
-     // Test Student Request
      @GetMapping("/svfc-admin/student_requests")
      public String viewAllStudentRequests(HttpServletResponse response, HttpSession session, Model model) {
-          List<StudentRequest> studentsRequest = mainService.displayAllRequest();
-          List<StudentRequest_Dto> storeStudentRequest = new ArrayList<>();
           if (globalService.validatePages("school_admin", response, session)) {
-               for (StudentRequest studReq : studentsRequest) {
-                    storeStudentRequest
-                              .add(new StudentRequest_Dto(studReq.getRequestId(), studReq.getRequestBy().getUserId(),
-                                        studReq.getRequestBy().getType(), studReq.getYear(),
-                                        studReq.getCourse(), studReq.getSemester(),
-                                        studReq.getRequestDocument().getTitle(),
-                                        studReq.getMessage(), studReq.getReply(), studReq.getRequestBy().getName(),
-                                        studReq.getRequestDate(),
-                                        studReq.getRequestStatus(), studReq.getReleaseDate(), studReq.getManageBy()));
 
-               }
                model.addAttribute("pageTitle", "Student Requests");
                model.addAttribute("page", "student_request");
-               model.addAttribute("studentRequests", storeStudentRequest);
-
                return "/svfc-admin/admin";
           }
           return "redirect:/";
@@ -281,11 +252,11 @@ public class AdminController {
      public String viewAllRegistrarRequests(HttpSession session, HttpServletResponse response,
                Model model) {
           if (globalService.validatePages("school_admin", response, session)) {
-                    model.addAttribute("pageTitle", "Registrar Requests");
-                    model.addAttribute("page", "registrar_request");
-                    return "/svfc-admin/admin";
-               }
-          
+               model.addAttribute("pageTitle", "Registrar Requests");
+               model.addAttribute("page", "registrar_request");
+               return "/svfc-admin/admin";
+          }
+
           return "redirect:/";
 
      }

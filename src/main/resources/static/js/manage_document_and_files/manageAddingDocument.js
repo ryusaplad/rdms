@@ -1,10 +1,14 @@
 $(document).ready(function () {
- 
+
   var htmlModal = "";
   var modalView = $(".modalView");
+
   var cards = "";
   var id = "";
   var docId = "";
+  var loc = window.location.href;
+  var type = "";
+
   $(document).on("click", ".editDocument", function (event) {
     event.preventDefault();
 
@@ -119,48 +123,54 @@ $(document).ready(function () {
     var status = $("#status").val();
   });
 
+
+  updateCard();
   function updateCard() {
-    cards = "";
+    if (loc.includes("admin")) {
+      type = "svfc-admin";
+    } else if (loc.includes("registrar")) {
+      type = "registrar";
+    }
     $.ajax({
       type: "GET",
-      url: "/svfc-admin/update-document-cards",
+      url: `/${type}/load/document-info`,
       beforeSend: function () {
         $(".card-secbody").hide();
         $(".mainLoaderDiv").show();
       },
-      success: function (result) {
-        if (result.status == "success") {
-          $(".mainLoaderDiv").hide();
-          $(".card-secbody").show();
-          $(".card-secbody").empty();
+      success: function (data) {
 
-          $.each(result.data, function (count, documents) {
-            var cards =
-              '<div class="col-lg-4 mb-2">' +
-              '    <div class="card pagesCards">' +
-              '    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">' +
-              '     <a href="#!">       <div class="imageDiv"   style="background-color: rgba(251, 251, 251, 0.15);">' +
-              '   <img src="data:image/jpg;base64,' +
-              documents.image +
-              '" class="img-fluid" style="height: 270px;" />  </div>     </a>    </div>' +
-              '       <div class="card-body">' +
-              ' <h5 class="card-title text-center">' +
-              documents.title +
-              "</h5>" +
-              '     <div class="row">' +
-              ' <div class="col-sm mt-2">' +
-              "     <a href=" +
-              documents.documentId +
-              ' class="w-100 btn btn-primary editDocument">Edit</a>' +
-              "    </div>" +
-              '     <div class="col-sm mt-2">' +
-              "          <a href=" +
-              documents.documentId +
-              ' class="w-100 btn btn-danger deleteDocument">Delete</a>' +
-              "     </div></div></div></div></div>";
-            $(".card-secbody").append(cards);
-          });
-        }
+        $(".mainLoaderDiv").hide();
+        $(".card-secbody").show();
+        $(".card-secbody").empty();
+
+        $.each(data, function (count, documents) {
+          cards =
+            '<div class="col-lg-4 mb-2">' +
+            '    <div class="card pagesCards">' +
+            '    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">' +
+            '     <a href="#!">       <div class="imageDiv"   style="background-color: rgba(251, 251, 251, 0.15);">' +
+            '   <img src="data:image/jpg;base64,' +
+            documents.image +
+            '" class="img-fluid" style="height: 270px;" />  </div>     </a>    </div>' +
+            '       <div class="card-body">' +
+            ' <h5 class="card-title text-center">' +
+            documents.title +
+            "</h5>" +
+            '     <div class="row">' +
+            ' <div class="col-sm mt-2">' +
+            "     <a href=" +
+            documents.documentId +
+            ' class="w-100 btn btn-primary editDocument">Edit</a>' +
+            "    </div>" +
+            '     <div class="col-sm mt-2">' +
+            "          <a href=" +
+            documents.documentId +
+            ' class="w-100 btn btn-danger deleteDocument">Delete</a>' +
+            "     </div></div></div></div></div>";
+          $(".card-secbody").append(cards);
+        });
+
       },
       error: function (e) {
         $("#resultDiv").fadeOut(1);

@@ -55,11 +55,15 @@ public class AllAccountServiceImpl implements AllAccountServices {
                Users user = optionalUser.get();
                boolean isOldPasswordValid = passwordEncoder.matches(oldPassword, user.getPassword());
 
+               if(oldPassword.equals(newPassword)){
+                    return new ResponseEntity<>("Your new password cannot be the same as your previous password. Please choose a different password.", HttpStatus.BAD_REQUEST);
+               }
+
                if (isOldPasswordValid) {
                     String hashedPassword = passwordEncoder.encode(newPassword);
                     user.setPassword(hashedPassword);
-
-                    if (user.getProfilePicture()[0] == 48) {
+                  
+                    if (user.getProfilePicture()[0] == 48 || user.getProfilePicture() == null) {
                          byte[] profilePicture = new byte[1];
                          profilePicture[0] = 0;
                          user.setProfilePicture(profilePicture);

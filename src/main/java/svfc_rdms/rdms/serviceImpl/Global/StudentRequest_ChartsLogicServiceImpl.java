@@ -87,7 +87,7 @@ public class StudentRequest_ChartsLogicServiceImpl implements StudentRequest_Cha
             modifiedData.add(newObj);
         }
         if (modifiedData.isEmpty()) {
-            throw new ApiRequestException("No Data has been found.");
+            throw new ApiRequestException("No Chart Data has been found.");
         }
         return new ResponseEntity<>(modifiedData, HttpStatus.OK);
     }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,16 +32,21 @@ import org.springframework.stereotype.Service;
 import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.ServiceResponse;
+import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.service.Registrar.Admin_RegistrarAccountService;
+import svfc_rdms.rdms.repository.Student.StudentRepository;
+import svfc_rdms.rdms.service.Global.Admin_RegistrarService;
 
 @Service
-public class Admin_Registrar_ManageAccountServiceImpl implements Admin_RegistrarAccountService {
+public class Admin_Registrar_ManageServiceImpl implements Admin_RegistrarService {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private GlobalServiceControllerImpl globalService;
@@ -397,14 +403,46 @@ public class Admin_Registrar_ManageAccountServiceImpl implements Admin_Registrar
             globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
 
             throw new ApiRequestException(e.getMessage());
-        }finally{
+        } finally {
             try {
-                 
-                 response.getOutputStream().close();
+
+                response.getOutputStream().close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-       }
+        }
     }
 
+    @Override
+    public ResponseEntity<Object> fetchAllStudentRequest() {
+        try {
+
+            List<StudentRequest> fetchStudentRequest = studentRepository.findAll();
+
+            if (fetchStudentRequest.size() > -1) {
+                List<StudentRequest_Dto> studentRequests = new ArrayList<>();
+
+                fetchStudentRequest.stream().forEach(req -> {
+
+                    studentRequests
+                            .add(new StudentRequest_Dto(req.getRequestId(),
+                                    req.getRequestBy().getUserId(),
+                                    req.getRequestBy().getType(), req.getYear(),
+                                    req.getCourse(), req.getSemester(),
+                                    req.getRequestDocument().getTitle(),
+                                    req.getMessage(), req.getReply(), req.getRequestBy().getName(),
+                                    req.getRequestDate(),
+                                    req.getRequestStatus(), req.getReleaseDate(),
+                                    req.getManageBy()));
+
+                });
+                return new ResponseEntity<>(studentRequests, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Invalid Action", HttpStatus.BAD_REQUEST);
+
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage());
+        }
+
+    }
 }

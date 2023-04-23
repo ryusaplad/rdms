@@ -1,22 +1,16 @@
 package svfc_rdms.rdms.controller.Controllers;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.repository.Document.DocumentRepository;
-import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequirementServiceImpl;
@@ -24,8 +18,6 @@ import svfc_rdms.rdms.serviceImpl.Student.Student_RequirementServiceImpl;
 @Controller
 public class StudentController {
 
-     @Autowired
-     private AdminServicesImpl mainService;
 
      @Autowired
      private Student_RequestServiceImpl requestServiceImpl;
@@ -108,11 +100,6 @@ public class StudentController {
 
      }
 
-     @GetMapping("/student/documents/image")
-     public void showImage(@Param("documentId") long id, HttpServletResponse response,
-               Optional<Documents> dOptional) {
-          requestServiceImpl.student_showImageFiles(id, response, dOptional);
-
-     }
+     
 
 }

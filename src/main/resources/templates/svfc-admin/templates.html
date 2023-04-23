@@ -119,10 +119,12 @@
                             <div class="row justify-content-center">
                                 <div class="col-12">
                                     <div class="text-white">
-                                        <span class="text-dark" th:with="name=${#session.getAttribute('name')}" style="font-size: 14px; display: block; font-weight: 700">[[${name}]]
+                                        <span class="text-dark" th:with="name=${#session.getAttribute('name')}" style="font-size: 14px; display: block; font-weight: 700">
+                                            [[${name}]]
                                         </span
                     >
-                                        <span class="text-muted" th:with="email=${#session.getAttribute('email')}" style="font-size: 14px; display: block; margin: 0">[[${email}]]
+                                        <span class="text-muted" th:with="email=${#session.getAttribute('email')}" style="font-size: 14px; display: block; margin: 0">
+                                            [[${email}]]
                                         </span
                     >
                                     </div>
@@ -132,11 +134,13 @@
                       font-size: 0.8rem;
                       font-weight: 500;
                       line-height: 1.2;
-                    " class="text-muted">Username:
+                    " class="text-muted">
+                                        Username:
                                     </span
                   >
                                     <br>
-                                    <span class="bg-info text-white rounded" th:with="username=${#session.getAttribute('username')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">[[${username}]]
+                                    <span class="bg-info text-white rounded" th:with="username=${#session.getAttribute('username')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">
+                                        [[${username}]]
                                     </span
                   >
                                 </div>
@@ -145,11 +149,13 @@
                       font-size: 0.8rem;
                       font-weight: 500;
                       line-height: 1.2;
-                    " class="text-muted">Account Type:
+                    " class="text-muted">
+                                        Account Type:
                                     </span
                   >
                                     <br>
-                                    <span class="bg-primary text-white rounded" th:with="type=${#session.getAttribute('accountType')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">[[${type}]]
+                                    <span class="bg-primary text-white rounded" th:with="type=${#session.getAttribute('accountType')}" style="font-size: 0.7rem; font-weight: 600; display: inline-block; padding: 3px 5px;">
+                                        [[${type}]]
                                     </span
                   >
                                 </div>
@@ -220,7 +226,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item " href="/logout">
                                         <i class="fa fa-power-off me-1 ms-1"></i>
-                                       <strong>Logout</strong>
+                                        <strong>Logout</strong>
                                     </a>
                                 </div>
                             </div>
@@ -271,7 +277,6 @@
                                 </div>
                                 <hr class="devider">
                             </div>
-                           
                         </div>
                     </div>
                 </div>
@@ -478,6 +483,14 @@
                         <i class=" fas fa-bell"></i>
                         <span class="hide-menu">
                             Notifications
+                        </span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link userManual">
+                        <i class="fas fa-question-circle" style="color: #000000;"></i>
+                        <span class="hide-menu">
+                            Users Manual
                         </span>
                     </a>
                 </li>

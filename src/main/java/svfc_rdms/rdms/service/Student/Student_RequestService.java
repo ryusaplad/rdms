@@ -33,8 +33,6 @@ public interface Student_RequestService {
 
      Optional<Users> displayAllRequestByStudent(String username);
 
-     void student_showImageFiles(long id, HttpServletResponse response, Optional<Documents> dOptional);
-
      ResponseEntity<Object> fetchRequestInformationToModals(String username, Long requestId);
 
 }

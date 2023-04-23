@@ -237,36 +237,4 @@ public class GlobalController {
           globalService.deleteFile(fileId);
           return ResponseEntity.ok("File deleted");
      }
-
-     @GetMapping("/{userType}/load/image")
-     public void showImage(@PathVariable("userType") String userType, @Param("documentId") long id,
-               HttpServletResponse response, HttpSession session,
-               Optional<Documents> dOptional) {
-          if (userType.equalsIgnoreCase("svfc-admin") || userType.equalsIgnoreCase("registrar")) {
-               if (userType.equalsIgnoreCase("svfc-admin")) {
-                    userType = "school_admin";
-               }
-               if (globalService.validatePages(userType, response, session)) {
-                    dOptional = mainService.getFileDocumentById(id);
-
-                    try {
-                         response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
-                         response.getOutputStream().write(dOptional.get().getImage());
-                         response.getOutputStream().close();
-                    } catch (Exception e) {
-                         System.out.println(e.getMessage());
-                    }finally{
-                         try {
-                              
-                              response.getOutputStream().close();
-                         } catch (Exception e) {
-                             e.printStackTrace();
-                         }
-                    }
-               }
-
-          }
-
-     }
-
 }

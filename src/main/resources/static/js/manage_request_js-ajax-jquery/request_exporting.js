@@ -56,7 +56,7 @@ $(document).ready(function () {
                   <div class="alert alert-primary d-flex align-items-center" role="alert">
                       <div style="margin: auto; text-align: center;">
                           <img src="/images/infoIcon.png" alt="checkmark-icon.png" style="max-width: 50%; height: auto;">
-                          <h4 style="margin-top: 1rem;"> No data has been found.</h4>
+                          <h4 style="margin-top: 1rem;"> No Chart Data has been found.</h4>
                       </div>
                   </div>
               `);
