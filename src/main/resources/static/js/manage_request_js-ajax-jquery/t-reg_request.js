@@ -157,8 +157,8 @@ $(document).ready(function () {
 
         $(".modalView").append(mainHtmlModal);
         $("#sentReqInfo").modal("toggle");
-        
-      
+
+
 
 
       },
@@ -192,14 +192,14 @@ $(document).ready(function () {
   <ul>
   <li>Response Message is required.</li>
     <li>You can still send a response even if you don't upload any files.</li>
-    <li>Insert Text Here</li>
+   
   </li>
 </div>
 <div class="alert alert-danger message errorMessageAlert" style="display:none"
                                             role="alert"></div>
        <div class="row">
       <div class="col-6">
-      <label  for="message">Message</label>
+      <label  for="message">Message<span class="badge badge-secondary text-danger">*</span></label>
       <div class="mt-2 form-floating">
       <textarea id="messageVal" name="message" class="form-control floatingInput" maxlength="1000" style="height:150px" required></textarea> 
       <label id="messageLengthLabel" style="height:10px;" class="w-100" for="message">maximum of (1000 letters)</label>
@@ -214,7 +214,7 @@ $(document).ready(function () {
                                                 <div class="col col-lg-8">
 
                                                     <h5>Upload file here.
-                                                        <span class="badge badge-secondary text-danger">*</span>
+                                                       
                                                     </h5>
                                                 </div>
 

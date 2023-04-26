@@ -170,19 +170,19 @@ public class AllAccount_RestController {
                                         long totalRejectedRequests = studentRepository
                                                   .countByRequestStatus("Rejected");
 
-                                        long totalRegistrarAcc = usersRepository.totalUsers("Registrar",
-                                                  "Active");
-                                        long totalTeacherAcc = usersRepository.totalUsers("Teacher",
-                                                  "Active");
-                                        long totalStudentsAcc = usersRepository.totalUsers("Students",
-                                                  "Active");
+                                        long totalRegistrarAcc = usersRepository.totalUsers("Active",
+                                                  "Registrar");
+                                        long totalTeacherAcc = usersRepository.totalUsers("Active",
+                                                  "Teacher");
+                                        long totalStudentsAcc = usersRepository.totalUsers("Active",
+                                                  "Student");
 
-                                        long totalDelRegistarAcc = usersRepository.totalUsers("Students",
-                                                  "Temporary");
-                                        long totalDelTeacherAcc = usersRepository.totalUsers("Teacher",
-                                                  "Temporary");
-                                        long totalDelStudentsAcc = usersRepository.totalUsers("Students",
-                                                  "Temporary");
+                                        long totalDelRegistarAcc = usersRepository.totalUsers("Temporary",
+                                                  "Registrar");
+                                        long totalDelTeacherAcc = usersRepository.totalUsers("Temporary",
+                                                  "Teacher");
+                                        long totalDelStudentsAcc = usersRepository.totalUsers("Temporary",
+                                                  "Student");
 
                                         long totalGlobalFiles = fileRepository.count();
 
@@ -503,22 +503,7 @@ public class AllAccount_RestController {
           admin_RegistrarServiceImpl.exportConfirmation(response, session, studRequest, request);
      }
 
-     // Test Message
-
-     @GetMapping("/send/global/users/message")
-     public ResponseEntity<String> sendGlobalMessage(@RequestParam("m") String message, HttpServletResponse response,
-               HttpServletRequest request) {
-
-          if (!message.isBlank() || !message.isBlank()) {
-               globalService.sendTopic("/topic/all/user/message", message);
-               return new ResponseEntity<>("ok", HttpStatus.OK);
-          } else {
-               return new ResponseEntity<>("Failed to sent no message found", HttpStatus.BAD_REQUEST);
-          }
-
-     }
-
-     //
+    
      @GetMapping(value = "/{userType}/fetch/student-requests")
      public ResponseEntity<Object> fetchstudentRequests(@PathVariable("userType")String userType, HttpSession session,
                HttpServletResponse response) {

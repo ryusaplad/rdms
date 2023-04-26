@@ -279,53 +279,64 @@ $(document).ready(function () {
             },
             success: function (data) {
                 mainNotificationCard.empty();
-                for (var i = 0; i < data.body.length; i++) {
-                    var notification = data.body[i];
-                    var btnColor = "";
-                    if (notification.message.toLowerCase().includes("ongoing")) {
-                        btnColor = "btn-primary";
-                    } else if (notification.message.toLowerCase().includes("rejected")) {
-                        btnColor = "btn-danger";
-                    } else if (notification.message.toLowerCase().includes("approved")) {
-                        btnColor = "btn-success";
-                    }
-
-                    var notificationHtml = `
-              <div class=" accordion-item ${notification.notifId === reqId ? 'highlight highlight-item' : ''}">
-                <h2 class="accordion-header">
-                  <button class=" accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#notification-${i}" aria-expanded="false" aria-controls="notification-${i}">
-                    <span class="btn ${btnColor} btn-circle left-icon">
-                      <i class="ti-info-alt" style="font-size: 15px;"></i>
-                    </span>
-                    <div class="ms-2">
-                      <h5 class="text-start">${notification.title}</h5>
-                      <p style="margin-bottom:-5px;" class="mail-desc ">${notification.message}</p>
-                    </div>
-                  </button>
-                </h2>
-                <div id="notification-${i}" class="accordion-collapse collapse ${notification.notifId === reqId ? 'show' : ''}" aria-labelledby="notification-${i}" data-bs-parent="#notification-list">
-                  <div class="accordion-body">
-                    <p><strong>Message:</strong> ${notification.message}</p>
-                    <p><strong>Date and Time:</strong> ${notification.dateAndTime}</p>
-                    <p><strong>From:</strong> System</p>
-                    <p><strong>Receiver:</strong> ${notification.to}</p>
-                  </div>
-                </div>
-              </div>
-            `;
-
-                    mainNotificationCard.append(notificationHtml);
-
-                    mainPageCount = notification.pageCount;
-                }
-
-                if (mainTotalItems < mainPageCount) {
-                    var loadMore = `<div id="" class="loadMoreBtn mx-auto d-block btn btn-outline-success">LOAD MORE</div>`;
-                    mainNotificationCard.append(loadMore);
+                var datalength = data.body.length;
+                if (datalength == 0 || datalength < -1) {
+                    $(mainNotificationCard).append(`<div style="width: 250px;
+        height: auto;
+        margin: 0 auto;
+        padding: 10px;
+        font-size:15px;
+        position: relative;">No Latest Notifications Available.</div>`);
                 } else {
-                    $(".loadMoreBtn").remove();
+                    for (var i = 0; i < datalength; i++) {
+                        var notification = data.body[i];
+                        var btnColor = "";
+                        if (notification.message.toLowerCase().includes("ongoing")) {
+                            btnColor = "btn-primary";
+                        } else if (notification.message.toLowerCase().includes("rejected")) {
+                            btnColor = "btn-danger";
+                        } else if (notification.message.toLowerCase().includes("approved")) {
+                            btnColor = "btn-success";
+                        }
+    
+                        var notificationHtml = `
+                  <div class=" accordion-item ${notification.notifId === reqId ? 'highlight highlight-item' : ''}">
+                    <h2 class="accordion-header">
+                      <button class=" accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#notification-${i}" aria-expanded="false" aria-controls="notification-${i}">
+                        <span class="btn ${btnColor} btn-circle left-icon">
+                          <i class="ti-info-alt" style="font-size: 15px;"></i>
+                        </span>
+                        <div class="ms-2">
+                          <h5 class="text-start">${notification.title}</h5>
+                          <p style="margin-bottom:-5px;" class="mail-desc ">${notification.message}</p>
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="notification-${i}" class="accordion-collapse collapse ${notification.notifId === reqId ? 'show' : ''}" aria-labelledby="notification-${i}" data-bs-parent="#notification-list">
+                      <div class="accordion-body">
+                        <p><strong>Message:</strong> ${notification.message}</p>
+                        <p><strong>Date and Time:</strong> ${notification.dateAndTime}</p>
+                        <p><strong>From:</strong> System</p>
+                        <p><strong>Receiver:</strong> ${notification.to}</p>
+                      </div>
+                    </div>
+                  </div>
+                `;
+    
+                        mainNotificationCard.append(notificationHtml);
+    
+                        mainPageCount = notification.pageCount;
+                    }
+    
+                    if (mainTotalItems < mainPageCount) {
+                        var loadMore = `<div id="" class="loadMoreBtn mx-auto d-block btn btn-outline-success">LOAD MORE</div>`;
+                        mainNotificationCard.append(loadMore);
+                    } else {
+                        $(".loadMoreBtn").remove();
+                    }
+    
                 }
-
+             
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
