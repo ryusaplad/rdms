@@ -27,111 +27,105 @@
 
 ### Student
 
-> :white_check_mark: :arrow_right: **View Requests (Table,Status,Details)**
+> :white_check_mark: **View Requests (Table,Status,Details)**
 
-> :white_check_mark: :arrow_right: **Edit and Resubmit Request (Rejected Only)**
+> :white_check_mark: **Edit and Resubmit Request (Rejected Only)**
     >> - in Editing requirements the student can now add additional files.
 
-> :white_check_mark: :arrow_right: **Request Document**
+> :white_check_mark: **Request Document**
 
 ---
 
 ### Registrar
 
-> :white_check_mark: :arrow_right: **View (Table,Details)/Manage Student Request ( Pending, On-Going, Approved)**
+> :white_check_mark: **View (Table,Details)/Manage Student Request ( Pending, On-Going, Approved)**
 
-> :white_check_mark: :arrow_right: **View/Manage Users(Student,Teacher) Account (Add,Update,Delete)**
+> :white_check_mark: **View/Manage Users(Student,Teacher) Account (Add,Update,Delete)**
 
-> :white_check_mark: :arrow_right: **View / Sent Request to the teacher**
+> :white_check_mark: **View / Sent Request to the teacher**
 
-> :white_check_mark: :arrow_right: **View/Manage(Add,Update,Delete) Available Documents that can be requested**
+> :white_check_mark: **View/Manage(Add,Update,Delete) Available Documents that can be requested**
 
 ---
 
 ### Teacher
 
-> :white_check_mark: :arrow_right: **View / Reply Registrar Request**.
+> :white_check_mark: **View / Reply Registrar Request**.
 
 ---
 
 ### Admin
 
-> :white_check_mark: :arrow_right: **View/Manage Users(Student,Teacher,Registrar) Account (Add,Update,Delete)**
+> :white_check_mark: **View/Manage Users(Student,Teacher,Registrar) Account (Add,Update,Delete)**
 
-> :white_check_mark: :arrow_right: **View All Requests of Student and Registrar**
+> :white_check_mark: **View All Requests of Student and Registrar**
 
-> :white_check_mark: :arrow_right: **View/Manage(Add,Update,Delete) Available Documents that can be requested**
+> :white_check_mark: **View/Manage(Add,Update,Delete) Available Documents that can be requested**
 
-> :white_check_mark: :arrow_right: **View global logs (all of the user activity)**
+> :white_check_mark: **View global logs (all of the user activity)**
 
 > :white_check_mark: **Restore and Backup Database Files.**
 
-:pushpin: :chart: **Statistic Pie Chart Using AnyChart Js with export and additional features  ("On-Going")**
+> :white_check_mark: :chart: **Statistic Pie Chart Using AnyChart Js with export and additional features**
 - Filteration, Export to Pdf
-
 ---
 
 ### All Users
 
-> :white_check_mark: :arrow_right: **Login(B-,S-,R-,T-)**
+> :white_check_mark: **Login(B-,S-,R-,T-)**
 
-> :white_check_mark: :arrow_right: **Dashboard View**
+> :white_check_mark: **Dashboard View**
 
-> :white_check_mark: :arrow_right: **View/Recieve Notification**
+> :white_check_mark: **View/Recieve Notification**
 
-> :white_check_mark: :arrow_right: **View Date and Time**
+> :white_check_mark: **View Date and Time**
 
-> :white_check_mark: :arrow_right: **Change Password**
+> :white_check_mark: **Change Password**
 
-> :white_check_mark: :arrow_right: **Change Profile Picture**
+> :white_check_mark: **Change Profile Picture**
 
-> :white_check_mark: :arrow_right: **View/Upload/Download Files**
+> :white_check_mark: **View/Upload/Download Files**
 
 ---
 
 # System
 
-> :white_check_mark: :arrow_right: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
+> :white_check_mark: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
 
-> :white_check_mark: :arrow_right: **Automatically Send Notification to the student if the request has change status(On-Going, Rejected, Approved)**
+> :white_check_mark: **Automatically Send Notification to the student if the request has change status(On-Going, Rejected, Approved)**
 
-- :x: **Automatically reload data without refreshing the page using WebSocket and SockJs (Not Completed - On Going).**
+> :white_check_mark: **Automatically reload data without refreshing the page using WebSocket and SockJs (Not Completed - Stoped).**
 
 ---
 
-> :white_check_mark: :arrow_right: **Pre-school to high school start with B-**
+> :white_check_mark: **Login Remember Me using Cookies**
 
-> :white_check_mark: :arrow_right: **SHS - start with SHS-**
+> :white_check_mark: **Session Management**
 
-> :white_check_mark: :arrow_right: **College start the username with C-**
+> :white_check_mark: **Logout**
 
-> :white_check_mark: :arrow_right: **Login Remember Me using Cookies**
-
-> :white_check_mark: :arrow_right: **Session Management**
-
-> :white_check_mark: :arrow_right: **Logout**
-
-> :white_check_mark: :arrow_right: **Clear Session and invalidate**
+> :white_check_mark: **Clear Session and invalidate**
 
 ---
 # Users Dashboard for different user account types
 
-> :white_check_mark: :arrow_right: **Notification**
+> :white_check_mark: **Notification**
 
-> :white_check_mark: :arrow_right: **Date and Time**
+> :white_check_mark: **Date and Time**
 
-> :white_check_mark: :arrow_right: **Change Password**
+> :white_check_mark: **Change Password**
 
-> :white_check_mark: :arrow_right: **Change Profile Picture**
+> :white_check_mark: **Change Profile Picture**
 
 # Admin Control
 
-> :white_check_mark: :arrow_right: **Restore and Backup Database Files.**
-> :white_check_mark: :arrow_right: **Download Latest Backup Database Files.**
+> :white_check_mark: **Restore and Backup Database Files.**
+
+> :white_check_mark: **Download Latest Backup Database Files.**
 
 # System Control
 
-> :white_check_mark: :arrow_right: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
+> :white_check_mark: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
 
 - :x: **Automatically send notification by email every student request approval completed (On-going)**
-> :white_check_mark: :arrow_right: **Automatically Backup database every 12 Midnight**
+> :white_check_mark: **Automatically Backup database every 12 Midnight**
