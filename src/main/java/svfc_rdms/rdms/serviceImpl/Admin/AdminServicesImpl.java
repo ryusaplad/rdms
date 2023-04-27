@@ -105,12 +105,24 @@ public class AdminServicesImpl implements AdminService, FileService {
                          if (entry.getKey().equals("title")) {
                               title = entry.getValue();
                               if (title.replace(" ", "").length() <= 0) {
-                                   throw new ApiRequestException("Invalid Title, Title Cannot be empty.");
+                                   throw new ApiRequestException("Invalid Length Title, Title Cannot be empty.");
                               }
                          } else if (entry.getKey().equals("description")) {
                               description = entry.getValue();
                               if (description.replace(" ", "").length() <= 0) {
-                                   throw new ApiRequestException("Invalid Description, Description Cannot be empty.");
+                                   throw new ApiRequestException(
+                                             "Invalid Length Description, Description Cannot be empty.");
+                              }
+                         } else if (entry.getKey().equals("title")) {
+                              title = entry.getValue();
+                              if (title.replace(" ", "").length() > 20) {
+                                   throw new ApiRequestException("Invalid Length Title, Cannot be greater than 20");
+                              }
+                         } else if (entry.getKey().equals("description")) {
+                              description = entry.getValue();
+                              if (description.replace(" ", "").length() > 1000) {
+                                   throw new ApiRequestException(
+                                             "Invalid Length Description, Cannot be greater than 1000");
                               }
                          } else {
                               throw new ApiRequestException("No Documents Information has been found.");
@@ -183,15 +195,26 @@ public class AdminServicesImpl implements AdminService, FileService {
                     for (Map.Entry<String, String> entry : documentsInfo.entrySet()) {
 
                          if (entry.getKey().equals("title")) {
-
                               title = entry.getValue();
                               if (title.replace(" ", "").length() <= 0) {
-                                   throw new ApiRequestException("Invalid Title, Title Cannot be empty.");
+                                   throw new ApiRequestException("Invalid Length Title, Title Cannot be empty.");
                               }
                          } else if (entry.getKey().equals("description")) {
                               description = entry.getValue();
                               if (description.replace(" ", "").length() <= 0) {
-                                   throw new ApiRequestException("Invalid Description, Description Cannot be empty.");
+                                   throw new ApiRequestException(
+                                             "Invalid Length Description, Description Cannot be empty.");
+                              }
+                         } else if (entry.getKey().equals("title")) {
+                              title = entry.getValue();
+                              if (title.replace(" ", "").length() > 20) {
+                                   throw new ApiRequestException("Invalid Length Title, Cannot be greater than 20");
+                              }
+                         } else if (entry.getKey().equals("description")) {
+                              description = entry.getValue();
+                              if (description.replace(" ", "").length() > 1000) {
+                                   throw new ApiRequestException(
+                                             "Invalid Length Description, Cannot be greater than 1000");
                               }
                          } else if (entry.getKey().equals("status")) {
                               status = (entry.getValue().equals("1")) ? true : false;
@@ -327,30 +350,30 @@ public class AdminServicesImpl implements AdminService, FileService {
           Optional<RegistrarRequest> req = regsRepository.findById(requestId);
           List<RegistrarRequest_DTO> registrarDtoCompressor = new ArrayList<>();
           if (req.isPresent()) {
-             
-                    List<UserFiles> regRequestFiles = fileRepository.findAllByRegRequestsWith(req.get());
 
-                    RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
+               List<UserFiles> regRequestFiles = fileRepository.findAllByRegRequestsWith(req.get());
+
+               RegistrarRequest_DTO regDto = new RegistrarRequest_DTO(
                          req.get().getRequestId(),
                          req.get().getRequestTitle(), req.get().getRequestMessage(),
                          req.get().getTeacherMessage(),
                          req.get().getRequestBy().getName(),
                          req.get().getRequestTo().getName(), req.get().getRequestDate(),
                          req.get().getDateOfUpdate(), req.get().getRequestStatus());
-                    registrarDtoCompressor.add(regDto);
+               registrarDtoCompressor.add(regDto);
 
-                    if (regRequestFiles != null) {
-                         regRequestFiles.forEach(userFiles -> {
-                              registrarDtoCompressor.add(new RegistrarRequest_DTO(
-                                        userFiles.getFileId(), userFiles.getName(),
-                                        userFiles.getSize(),
-                                        userFiles.getStatus(), userFiles.getDateUploaded(),
-                                        userFiles.getFilePurpose(),
-                                        userFiles.getUploadedBy().getName()));
-                         });
+               if (regRequestFiles != null) {
+                    regRequestFiles.forEach(userFiles -> {
+                         registrarDtoCompressor.add(new RegistrarRequest_DTO(
+                                   userFiles.getFileId(), userFiles.getName(),
+                                   userFiles.getSize(),
+                                   userFiles.getStatus(), userFiles.getDateUploaded(),
+                                   userFiles.getFilePurpose(),
+                                   userFiles.getUploadedBy().getName()));
+                    });
 
-                    }
-              
+               }
+
                return new ResponseEntity<Object>(registrarDtoCompressor, HttpStatus.OK);
 
           } else {
@@ -358,7 +381,6 @@ public class AdminServicesImpl implements AdminService, FileService {
           }
 
      }
-
 
      @Override
      public void ensureDefaultAdminUserExists() {
@@ -379,7 +401,7 @@ public class AdminServicesImpl implements AdminService, FileService {
 
           List<Users> users = new ArrayList<>();
 
-          Users account1 = Users.builder().name("Ryu Saplad").username("C-082095")
+          Users account1 = Users.builder().name("Ryu Saplad").username("S-082095")
                     .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Student").status("Active")
                     .build();
 

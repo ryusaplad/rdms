@@ -8,11 +8,8 @@
 
 # Login and Validation
 
-> :white_check_mark: **Pre-school to high school start with (B-)**
 
-> :white_check_mark: **SHS - start with (SHS-)**
-
-> :white_check_mark: **College start the username with (C-)**
+> :white_check_mark: **Students start the username with (S-)**
 
 > :white_check_mark: **Registrar start the username with (R-)**
 
@@ -76,7 +73,7 @@
 
 ### All Users
 
-> :white_check_mark: :arrow_right: **Login(B-,C-,R-,T-)**
+> :white_check_mark: :arrow_right: **Login(B-,S-,R-,T-)**
 
 > :white_check_mark: :arrow_right: **Dashboard View**
 

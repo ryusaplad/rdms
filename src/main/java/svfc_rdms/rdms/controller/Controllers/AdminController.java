@@ -72,7 +72,7 @@ public class AdminController {
                          status = "Active";
                     } else if (userType.equals("students")) {
                          accType = "Student";
-                         idFormat = "C- / c-";
+                         idFormat = "S- / s-";
                          status = "Active";
                     } else {
 

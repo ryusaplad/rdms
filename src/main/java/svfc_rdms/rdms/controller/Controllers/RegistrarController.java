@@ -56,7 +56,7 @@ public class RegistrarController {
                          idFormat = "T- / t-";
                     } else if (accountType.equals("Student")) {
                          accType = "Student";
-                         idFormat = "C- / c-";
+                         idFormat = "S- / s-";
                     } else {
 
                          return "redirect:/";

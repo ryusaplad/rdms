@@ -35,12 +35,16 @@ public class AllAccountServiceImpl implements AllAccountServices {
           PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
           if (newPassword.length() < 8) {
-               return new ResponseEntity<>("New password must be at least 8 characters long", HttpStatus.BAD_REQUEST);
+               return new ResponseEntity<>("Password must be at least 8 characters long.", HttpStatus.BAD_REQUEST);
+          }
+
+          if (newPassword.length() > 26) {
+               return new ResponseEntity<>("Password cannot be greater than 26 characters.", HttpStatus.BAD_REQUEST);
           }
 
           if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$")) {
                return new ResponseEntity<>(
-                         "New password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number",
+                         "New password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character, and 1 number.",
                          HttpStatus.BAD_REQUEST);
           } else {
                oldPassword = oldPassword.replaceAll("\\s", "");

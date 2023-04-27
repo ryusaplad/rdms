@@ -100,7 +100,7 @@ public class Admin_Registrar_ManageServiceImpl implements Admin_RegistrarService
                     currentUserAccType = session.getAttribute("accountType").toString().toUpperCase();
                 }
                 if (currentUserAccType.equals(ValidAccounts.SCHOOL_ADMIN.toString())) {
-                    if (userIdFormat.contains("C-")) {
+                    if (userIdFormat.contains("S-")) {
 
                         user.setType("Student");
                     } else if (userIdFormat.contains("R-")) {
@@ -115,7 +115,7 @@ public class Admin_Registrar_ManageServiceImpl implements Admin_RegistrarService
                         throw new ApiRequestException(error);
                     }
                 } else if (currentUserAccType.equals(ValidAccounts.REGISTRAR.toString())) {
-                    if (userIdFormat.contains("C-")) {
+                    if (userIdFormat.contains("S-")) {
 
                         user.setType("Student");
                     } else if (userIdFormat.contains("T-")) {
