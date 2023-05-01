@@ -3,6 +3,8 @@ $(document).ready(function () {
     regRequestConnection();
 
     function refreshTable() {
+        $(".registrarRequestCard").hide();
+        $(".mainLoaderDiv").show();
         var url = "";
         var location = window.location.href;
 
@@ -48,6 +50,8 @@ $(document).ready(function () {
 
 
                 }
+                $(".mainLoaderDiv").remove();
+               $(".registrarRequestCard").show();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error("Error refreshing table: ", errorThrown);

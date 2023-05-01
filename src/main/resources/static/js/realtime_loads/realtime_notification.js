@@ -286,7 +286,7 @@ $(document).ready(function () {
         margin: 0 auto;
         padding: 10px;
         font-size:15px;
-        position: relative;">No Latest Notifications Available.</div>`);
+        position: relative;">No Notifications Available.</div>`);
                 } else {
                     for (var i = 0; i < datalength; i++) {
                         var notification = data.body[i];

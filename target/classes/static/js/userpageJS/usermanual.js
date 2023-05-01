@@ -37,23 +37,23 @@ $(document).ready(function () {
               <h4 class="text-center mb-4">About Us</h4>
               <div class="row mt-5">
                 <div class="col-md-4 mb-4">
-                  <img src="image1.jpg" alt="Image 1" class="img-fluid">
+                  <img src="/images/edano.jpg" alt="Ronald_Galve_Edano_Image" class="img-fluid">
                   <p class="text-center mt-2">Ronald Galve Edano</p>
                 </div>
                 <div class="col-md-4 mb-4">
-                <img src="image2.jpg" alt="Image 2" class="img-fluid">
+                <img src="/images/kaye.jpeg" alt=Kaye_Torrecampo_Image" class="img-fluid">
                 <p class="text-center mt-2">Kaye Torrecampo</p>
               </div>
               <div class="col-md-4 mb-4">
-                <img src="image3.jpg" alt="Image 3" class="img-fluid">
-                <p class="text-center mt-2">Krystal Alviza Mhae</p>
+                <img src="/images/mhae.jpg" alt="Krystal_Mhae_Alviza__Image" class="img-fluid">
+                <p class="text-center mt-2">Krystal Mhae Alviza</p>
               </div>
               <div class="col-md-4 mb-4">
-                <img src="image4.jpg" alt="Image 4" class="img-fluid">
+                <img src="image4.jpg" alt="Erangie_Macaspac_Image" class="img-fluid">
                 <p class="text-center mt-2">Erangie Macaspac</p>
               </div>
               <div class="col-md-4 mb-4">
-                <img src="image5.jpg" alt="Image 5" class="img-fluid">
+                <img src="/images/given.jpg" alt="Given_Valenzuela_Image" class="img-fluid">
                 <p class="text-center mt-2">Given Valenzuela</p>
               </div>
               <div class="col-md-4 mb-4">
@@ -180,7 +180,7 @@ $(document).ready(function () {
                       <strong>Step 3</strong>
                       :
                   </h4>
-                  <p>Once you've submitted your request, you can check on its status in the My Requests section. There are four different status options:</p>
+                  <p> <strong>Finalized</strong> your requests then click the submit, Once you've submitted your request, you can check on its status in the My Requests section. There are four different status options:</p>
                   <ul>
                       <li>
                           <strong>Pending</strong>
@@ -199,7 +199,17 @@ $(document).ready(function () {
                           : This means that your request has been declined, but you have the option to edit the information and files you uploaded.
                       </li>
                   </ul>
-              </div>
+                  <strong>Notes</strong>
+                 
+                  <ul>
+                  <li>
+                  After clicking "<strong>Finalized</strong>", all fields will be disabled, and you will be able to submit your request.
+                  </li>
+                  <li>
+                  By clicking "<strong>Finalized</strong>", you can still edit the information you inputted by clicking "Edit." This will enable all fields again.
+                  </li>
+                  </ul>
+                  </div>
           </div>
       </div>
       <div class="accordion-item">

@@ -79,144 +79,141 @@ public class AllAccount_RestController {
 
                String username = "";
 
-               if ((username = session.getAttribute("username").toString()) != null) {
-                    if (userType.equalsIgnoreCase("svfc-admin")) {
-                         userType = "admin";
-                    }
-                    ValidAccounts[] validAccountType = ValidAccounts.values();
-
-                    for (ValidAccounts validAcc : validAccountType) {
-
-                         if (String.valueOf(validAcc).toLowerCase()
-                                   .contains(userType.toLowerCase())) {
-                              userType = validAcc.toString().toLowerCase();
-                              break;
-                         }
-                    }
-                    if (globalService.validatePages(userType, response, session)) {
-
-                         if (session.getAttribute("name") != null) {
-                              String name = session.getAttribute("name").toString();
-                              Optional<Users> user = usersRepository.findByName(name);
-                              List<Long> totals = new ArrayList<>();
-
-                              if (user.isPresent()) {
-
-                                   if (user.get().getType().equalsIgnoreCase("student")) {
-                                        long totalRequests = studentRepository.countByRequestBy(user.get());
-                                        long totalApprovedRequests = studentRepository
-                                                  .countByRequestByAndRequestStatus(user.get(), "Approved");
-                                        long totalRejectedRequests = studentRepository
-                                                  .countByRequestByAndRequestStatus(user.get(), "Rejected");
-                                        long totalUploadedFiles = fileRepository.countByUploadedBy(user.get());
-
-                                        totals.add(totalRequests);
-                                        totals.add(totalApprovedRequests);
-                                        totals.add(totalRejectedRequests);
-                                        totals.add(totalUploadedFiles);
-                                        return new ResponseEntity<>(totals, HttpStatus.OK);
-                                   } else if (user.get().getType().equalsIgnoreCase("registrar")) {
-                                        long totalStudentRequests = studentRepository.count();
-                                        long totalTeacherRequests = teacherRepository.count();
-                                        long totalPendingRequests = studentRepository
-                                                  .countByRequestStatus("Pending");
-                                        long totalApprovedRequests = studentRepository
-                                                  .countByRequestStatus("Approved");
-                                        long totalRejectedRequests = studentRepository
-                                                  .countByRequestStatus("Rejected");
-                                        long totalUploadedFiles = fileRepository.countByUploadedBy(user.get());
-
-                                        totals.add(totalStudentRequests);
-                                        totals.add(totalTeacherRequests);
-                                        totals.add(totalPendingRequests);
-                                        totals.add(totalApprovedRequests);
-                                        totals.add(totalRejectedRequests);
-                                        totals.add(totalUploadedFiles);
-                                        return new ResponseEntity<>(totals, HttpStatus.OK);
-                                   } else if (user.get().getType().equalsIgnoreCase("teacher")) {
-                                        long totalRequests = teacherRepository.count();
-                                        long totalPendingRequests = teacherRepository.totalRequestsByStatus("pending");
-
-                                        long totalSentRequests_Completed = teacherRepository
-                                                  .totalRequestsByStatus("completed");
-
-                                        long totalSentRequests_NoRecord = teacherRepository
-                                                  .totalRequestsByStatus("norecord");
-
-                                        long totalSentRequests_MessageOnly = teacherRepository
-                                                  .totalRequestsByStatus("messageonly");
-
-                                        long totalSentRequests_RecordOnly = teacherRepository
-                                                  .totalRequestsByStatus("recordonly");
-
-                                        long totalUploadedFiles = fileRepository
-
-                                                  .countByUploadedBy(user.get());
-                                        long totalSentRequests = totalSentRequests_Completed
-                                                  + totalSentRequests_MessageOnly + totalSentRequests_NoRecord
-                                                  + totalSentRequests_RecordOnly;
-                                        totals.add(totalRequests);
-                                        totals.add(totalPendingRequests);
-                                        totals.add(totalSentRequests);
-                                        totals.add(totalUploadedFiles);
-                                        return new ResponseEntity<>(totals, HttpStatus.OK);
-                                   } else if (user.get().getType().equalsIgnoreCase("school_admin")) {
-                                        long totalStudentRequests = studentRepository.count();
-                                        long totalRegistrarRequests = teacherRepository.count();
-                                        long totalPendingRequests = studentRepository
-                                                  .countByRequestStatus("Pending");
-                                        long totalApprovedRequests = studentRepository
-                                                  .countByRequestStatus("Approved");
-                                        long totalRejectedRequests = studentRepository
-                                                  .countByRequestStatus("Rejected");
-
-                                        long totalRegistrarAcc = usersRepository.totalUsers("Active",
-                                                  "Registrar");
-                                        long totalTeacherAcc = usersRepository.totalUsers("Active",
-                                                  "Teacher");
-                                        long totalStudentsAcc = usersRepository.totalUsers("Active",
-                                                  "Student");
-
-                                        long totalDelRegistarAcc = usersRepository.totalUsers("Temporary",
-                                                  "Registrar");
-                                        long totalDelTeacherAcc = usersRepository.totalUsers("Temporary",
-                                                  "Teacher");
-                                        long totalDelStudentsAcc = usersRepository.totalUsers("Temporary",
-                                                  "Student");
-
-                                        long totalGlobalFiles = fileRepository.count();
-
-                                        totals.add(totalStudentRequests);
-                                        totals.add(totalRegistrarRequests);
-                                        totals.add(totalPendingRequests);
-                                        totals.add(totalApprovedRequests);
-                                        totals.add(totalRejectedRequests);
-
-                                        totals.add(totalRegistrarAcc);
-                                        totals.add(totalTeacherAcc);
-                                        totals.add(totalStudentsAcc);
-
-                                        totals.add(totalDelRegistarAcc);
-                                        totals.add(totalDelTeacherAcc);
-                                        totals.add(totalDelStudentsAcc);
-                                        totals.add(totalGlobalFiles);
-                                        return new ResponseEntity<>(totals, HttpStatus.OK);
-                                   }
-
-                              } else {
-                                   return new ResponseEntity<>(
-                                             "You are performing invalid action, Please try again later.",
-                                             HttpStatus.BAD_REQUEST);
-                              }
-
-                         }
-
-                    } else {
-                         throw new ApiRequestException("You are performing invalid action, Please try again");
-                    }
-
-               } else {
+               if ((username = session.getAttribute("username").toString()) == null) {
                     throw new ApiRequestException("You are performing invalid action, Please try again");
+               }
+               if (userType.equalsIgnoreCase("svfc-admin")) {
+                    userType = "admin";
+               }
+               ValidAccounts[] validAccountType = ValidAccounts.values();
+
+               for (ValidAccounts validAcc : validAccountType) {
+
+                    if (String.valueOf(validAcc).toLowerCase()
+                              .contains(userType.toLowerCase())) {
+                         userType = validAcc.toString().toLowerCase();
+                         break;
+                    }
+               }
+               if (!globalService.validatePages(userType, response, session)) {
+                    throw new ApiRequestException("You are performing invalid action");
+
+               }
+               Optional<Users> user = usersRepository.findUserIdByUsername(username);
+            
+               List<Long> totals = new ArrayList<>();
+
+               if (!user.isPresent()) {
+
+                    return new ResponseEntity<>(
+                              "You are performing invalid action, Please try again later.",
+                              HttpStatus.BAD_REQUEST);
+               }
+
+               Users userInfo = user.get();
+
+               if (userInfo.getType().equalsIgnoreCase("student")) {
+                    long totalRequests = studentRepository.countByRequestBy(userInfo);
+                    long totalApprovedRequests = studentRepository
+                              .countByRequestByAndRequestStatus(userInfo, "Approved");
+                    long totalRejectedRequests = studentRepository
+                              .countByRequestByAndRequestStatus(userInfo, "Rejected");
+                    long totalUploadedFiles = fileRepository.countByUploadedBy(userInfo);
+
+                    totals.add(totalRequests);
+                    totals.add(totalApprovedRequests);
+                    totals.add(totalRejectedRequests);
+                    totals.add(totalUploadedFiles);
+                    return new ResponseEntity<>(totals, HttpStatus.OK);
+               }
+               if (userInfo.getType().equalsIgnoreCase("registrar")) {
+                    long totalStudentRequests = studentRepository.count();
+                    long totalTeacherRequests = teacherRepository.count();
+                    long totalPendingRequests = studentRepository
+                              .countByRequestStatus("Pending");
+                    long totalApprovedRequests = studentRepository
+                              .countByRequestStatus("Approved");
+                    long totalRejectedRequests = studentRepository
+                              .countByRequestStatus("Rejected");
+                    long totalUploadedFiles = fileRepository.countByUploadedBy(userInfo);
+
+                    totals.add(totalStudentRequests);
+                    totals.add(totalTeacherRequests);
+                    totals.add(totalPendingRequests);
+                    totals.add(totalApprovedRequests);
+                    totals.add(totalRejectedRequests);
+                    totals.add(totalUploadedFiles);
+                    return new ResponseEntity<>(totals, HttpStatus.OK);
+               }
+               if (userInfo.getType().equalsIgnoreCase("teacher")) {
+
+                    long totalRequests = teacherRepository.totalRequests(userInfo);
+                    long totalPendingRequests = teacherRepository.totalRequestByUserAndStatus(userInfo,
+                              "pending");
+
+                    long totalSentRequests_Completed = teacherRepository
+                              .totalRequestByUserAndStatus(userInfo, "completed");
+
+                    long totalSentRequests_NoRecord = teacherRepository
+                              .totalRequestByUserAndStatus(userInfo, "norecord");
+
+                    long totalSentRequests_MessageOnly = teacherRepository
+                              .totalRequestByUserAndStatus(userInfo, "messageonly");
+
+                    long totalSentRequests_RecordOnly = teacherRepository
+                              .totalRequestByUserAndStatus(userInfo, "recordonly");
+
+                    long totalUploadedFiles = fileRepository.countByUploadedBy(userInfo);
+                    long totalSentRequests = totalSentRequests_Completed
+                              + totalSentRequests_MessageOnly + totalSentRequests_NoRecord
+                              + totalSentRequests_RecordOnly;
+                    totals.add(totalRequests);
+                    totals.add(totalPendingRequests);
+                    totals.add(totalSentRequests);
+                    totals.add(totalUploadedFiles);
+                    return new ResponseEntity<>(totals, HttpStatus.OK);
+               }
+               if (userInfo.getType().equalsIgnoreCase("school_admin")) {
+                    long totalStudentRequests = studentRepository.count();
+                    long totalRegistrarRequests = teacherRepository.count();
+                    long totalPendingRequests = studentRepository
+                              .countByRequestStatus("Pending");
+                    long totalApprovedRequests = studentRepository
+                              .countByRequestStatus("Approved");
+                    long totalRejectedRequests = studentRepository
+                              .countByRequestStatus("Rejected");
+
+                    long totalRegistrarAcc = usersRepository.totalUsers("Active",
+                              "Registrar");
+                    long totalTeacherAcc = usersRepository.totalUsers("Active",
+                              "Teacher");
+                    long totalStudentsAcc = usersRepository.totalUsers("Active",
+                              "Student");
+
+                    long totalDelRegistarAcc = usersRepository.totalUsers("Temporary",
+                              "Registrar");
+                    long totalDelTeacherAcc = usersRepository.totalUsers("Temporary",
+                              "Teacher");
+                    long totalDelStudentsAcc = usersRepository.totalUsers("Temporary",
+                              "Student");
+
+                    long totalGlobalFiles = fileRepository.count();
+
+                    totals.add(totalStudentRequests);
+                    totals.add(totalRegistrarRequests);
+                    totals.add(totalPendingRequests);
+                    totals.add(totalApprovedRequests);
+                    totals.add(totalRejectedRequests);
+
+                    totals.add(totalRegistrarAcc);
+                    totals.add(totalTeacherAcc);
+                    totals.add(totalStudentsAcc);
+
+                    totals.add(totalDelRegistarAcc);
+                    totals.add(totalDelTeacherAcc);
+                    totals.add(totalDelStudentsAcc);
+                    totals.add(totalGlobalFiles);
+                    return new ResponseEntity<>(totals, HttpStatus.OK);
                }
 
           } catch (Exception e) {
@@ -231,14 +228,17 @@ public class AllAccount_RestController {
                HttpSession session, HttpServletResponse response, HttpServletRequest request) {
           long userId = 0;
           String username = "";
-          if ((username = session.getAttribute("username").toString()) != null) {
-               Optional<Users> optionalUser = usersRepository.findByUsername(username);
-               if (optionalUser.isPresent()) {
-                    userId = optionalUser.get().getUserId();
-               }
-               return accountServiceImpl.changePassword(oldPassword, newPassword, userId, session, request);
+          if ((username = session.getAttribute("username").toString()) == null) {
+               throw new ApiRequestException("Invalid Action");
+             
           }
-          throw new ApiRequestException("Invalid Action");
+          Optional<Users> optionalUser = usersRepository.findByUsername(username);
+          if (!optionalUser.isPresent()) {
+               throw new ApiRequestException("Invalid Action, Please Try Again.");
+          }
+          userId = optionalUser.get().getUserId();
+          return accountServiceImpl.changePassword(oldPassword, newPassword, userId, session, request);
+         
 
      }
 
@@ -247,14 +247,17 @@ public class AllAccount_RestController {
                HttpServletRequest request) {
           long userId = 0;
           String username = "";
-          if ((username = session.getAttribute("username").toString()) != null) {
-               Optional<Users> optionalUser = usersRepository.findByUsername(username);
-               if (optionalUser.isPresent()) {
-                    userId = optionalUser.get().getUserId();
-               }
-               return accountServiceImpl.changeProfilePicture(image, userId, session, request);
+         
+          if ((username = session.getAttribute("username").toString()) == null) {
+               throw new ApiRequestException("Invalid Action");
+             
           }
-          throw new ApiRequestException("Invalid Action");
+          Optional<Users> optionalUser = usersRepository.findByUsername(username);
+          if (!optionalUser.isPresent()) {
+               throw new ApiRequestException("Invalid Action Failed To Change Profile Picture, Please Try Again.");
+          }
+          userId = optionalUser.get().getUserId();
+          return accountServiceImpl.changeProfilePicture(image, userId, session, request);
      }
 
      @GetMapping("/session/{sessionKey}")
@@ -263,7 +266,8 @@ public class AllAccount_RestController {
      }
 
      @GetMapping("/load/image")
-     public ResponseEntity<Object> loadUserProfileImage(@RequestParam("username") String username, HttpSession session) {
+     public ResponseEntity<Object> loadUserProfileImage(@RequestParam("username") String username,
+               HttpSession session) {
           Optional<Users> user = usersRepository.findByUsername(username);
           try {
                byte[] image = null;
@@ -472,7 +476,6 @@ public class AllAccount_RestController {
                System.out.println(userType);
                if (globalService.validatePages(userType, response, session)) {
                     if (notification.isPresent()) {
-                         System.out.println("lol");
                          Notifications notifData = notification.get();
                          notifData.setStatus(status);
                          notificationRepository.save(notifData);
@@ -503,12 +506,11 @@ public class AllAccount_RestController {
           admin_RegistrarServiceImpl.exportConfirmation(response, session, studRequest, request);
      }
 
-    
      @GetMapping(value = "/{userType}/fetch/student-requests")
-     public ResponseEntity<Object> fetchstudentRequests(@PathVariable("userType")String userType, HttpSession session,
+     public ResponseEntity<Object> fetchstudentRequests(@PathVariable("userType") String userType, HttpSession session,
                HttpServletResponse response) {
 
-          if(userType.equalsIgnoreCase("svfc-admin")){
+          if (userType.equalsIgnoreCase("svfc-admin")) {
                userType = "school_admin";
           }
           if (globalService.validatePages(userType, response, session)) {

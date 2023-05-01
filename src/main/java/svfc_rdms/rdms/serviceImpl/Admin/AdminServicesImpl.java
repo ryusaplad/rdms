@@ -402,19 +402,33 @@ public class AdminServicesImpl implements AdminService, FileService {
           List<Users> users = new ArrayList<>();
 
           Users account1 = Users.builder().name("Ryu Saplad").username("S-082095")
-                    .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Student").status("Active")
+                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Student").status("Active")
                     .build();
 
           Users account2 = Users.builder().name("Regs Ki").username("R-1")
-                    .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Registrar").status("Active")
+                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Registrar").status("Active")
                     .build();
           Users account3 = Users.builder().name("Melchor Erise").username("T-1")
-                    .password(new BCryptPasswordEncoder().encode("rdms123@")).type("Teacher").status("Active")
+                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Teacher").status("Active")
+                    .build();
+
+          Users accountTest1 = Users.builder().name("Test Account").username("S-0")
+                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Student").status("Active")
+                    .build();
+
+          Users accountTest2 = Users.builder().name("Test Account").username("R-0")
+                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Registrar").status("Active")
+                    .build();
+          Users accountTest3 = Users.builder().name("Test Account").username("T-0")
+                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Teacher").status("Active")
                     .build();
 
           users.add(account1);
           users.add(account2);
           users.add(account3);
+          users.add(accountTest1);
+          users.add(accountTest2);
+          users.add(accountTest3);
 
           users.stream().forEach(user -> {
                Optional<Users> userData = userRepository.findByUsername(user.getUsername());
@@ -430,39 +444,13 @@ public class AdminServicesImpl implements AdminService, FileService {
      @Override
      public void ensureDefaultDocumentsExist() {
 
-          ClassPathResource idFile = new ClassPathResource("static/images/ID.png");
-          ClassPathResource comImage = new ClassPathResource("static/images/COM.png");
-          ClassPathResource corImage = new ClassPathResource("static/images/COR.png");
           ClassPathResource gradeImage = new ClassPathResource("static/images/GRADES.jpg");
 
           // List all the files in the folder
           List<ClassPathResource> images = new ArrayList<>();
-          images.add(idFile);
-          images.add(comImage);
-          images.add(corImage);
           images.add(gradeImage);
 
-          String[] documentTitles = { "ID", "COM", "COR", "GRADES" };
-          String idDescription = "Student Information - Requirements\n" +
-                    "1. Year\n" +
-                    "2. Course\n" +
-                    "3. Semester\n\n" +
-                    "File Requirements\n" +
-                    "1. ID PICTURE\n- ID Picture must be white background." +
-                    "\n-Wear Uniform/Org Shirt." +
-                    "1. Signature Image\n- Signature Image must be in PNG format with a white background.";
-          String comDescription = "Student Information - Requirements\n" +
-                    "1. Year\n" +
-                    "2. Course\n" +
-                    "3. Semester\n\n" +
-                    "File Requirements\n" +
-                    "1. Signature Image\n- Signature Image must be in PNG format with a white background.";
-          String corDescription = "Student Information - Requirements\n" +
-                    "1. Year\n" +
-                    "2. Course\n" +
-                    "3. Semester\n\n" +
-                    "File Requirements\n" +
-                    "1. Signature Image\n- Signature Image must be in a PNG format and white background";
+          String[] documentTitles = { "GRADES" };
 
           String gradeDescription = "Student Information - Requirements\n" +
                     "1. Year\n" +
@@ -470,8 +458,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                     "3. Semester\n" +
                     "4. List of Subjects & Professors (Upload in a pdf/doc/docx/jpeg/jpg/png format)";
 
-          String[] documentDescriptions = { idDescription, comDescription,
-                    corDescription, gradeDescription };
+          String[] documentDescriptions = { gradeDescription };
 
           // Iterate through the files and upload them to the database
           for (int index = 0; index < images.size(); index++) {

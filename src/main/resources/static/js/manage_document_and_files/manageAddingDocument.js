@@ -308,7 +308,7 @@ $(document).ready(function () {
                                                                     <input id="title" name="title" type="text" class="required form-control" maxlength="20">
                                                                     <label for="description">Description</label>
                                                                     <textarea contenteditable="true" id="description" name="description"
-                                                                        class="required form-control " rows="3" style="height:300px"></textarea>
+                                                                        class="required form-control" maxlength="1000" rows="3" style="height:300px"></textarea>
                                                                     <label for="course">Image</label>
                                         
                                                                     <div class="row">

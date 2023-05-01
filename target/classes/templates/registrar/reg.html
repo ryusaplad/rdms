@@ -1099,7 +1099,23 @@
                         <!-- Container fluid  -->
                         <!-- ============================================================== -->
                         <div class="container-fluid">
-                            <div class="card table-responsive">
+                            <div class="container-fluid">
+                                <div class="mainLoaderDiv">
+                                    <div id="loaderDiv">
+                                        <div class="cardLoader">
+                                            <div class="loader-wheel"></div>
+                                            <div class="loader-text"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="resultDiv" style="display:none">
+                                <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong id="resultMessage"></strong>
+                                    <button type="button" class="btn-close btn-close-alert"  aria-label="Close"></button>
+                                </div>
+                            </div>
+                            <div class="card table-responsive registrarRequestCard">
                                 <ul class="l"></ul>
                                 <table id="zero_config" class="table  text-center table-bordered ">
                                     <thead>

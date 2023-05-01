@@ -266,7 +266,7 @@ $(document).ready(function () {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary backToMainModal" data-bs-dismiss="modal">Back</button>
-        <button type="button"  class="btn btn-success text-white sentConfirm clearModal" data-bs-dismiss="modal" data-value="` +
+        <button type="button"  class="btn btn-success text-white sentConfirm"  data-value="` +
         dataVal +
         `" disabled>Sent</button>
       </div>
@@ -337,11 +337,12 @@ $(document).ready(function () {
       $(".modalView").append(mainHtmlModal);
     }
   });
-
+  var alertBox = $("#resultDiv");
+  var alertMessage = $("#resultMessage");
   // Sending Request
   $(document).on("click", ".sentConfirm", function (e) {
     formData.append("message", $("#messageVal").val());
-
+   
     $.ajax({
       type: "POST",
       url: "/teacher/re-sent-request?requestId=" + dataVal,
@@ -353,16 +354,26 @@ $(document).ready(function () {
         $(".sentConfirm").attr("disabled", true);
       },
       success: function (result) {
-        console.log(result);
+        alertBox.show();
+        alertMessage.val("Requests have been sent back to the registrar.");
         $(".sentConfirm").attr("disabled", false);
+        $("#responseModal").modal("hide");
+        $(".modalView").empty();
       },
       error: function (error) {
-        console.log(error);
+        $("#responseModal").modal("hide");
+        if(!error.responseText.includes("<!DOCTYPE html>")){
+          alertBox.show();
+          alertMessage.text(`Failed to Sent: ${error.responseText}`);
+          
+        }
         $(".sentConfirm").attr("disabled", false);
       },
     });
   });
-
+  $(".btn-close-alert").on("click", function () {
+    alertBox.hide();
+  });
   $(document).on("click", ".clearModal", function (e) {
     $(".modalView").empty();
   });
