@@ -132,10 +132,10 @@ public class Admin_RestController {
      }
 
      @DeleteMapping("/svfc-admin/delete-document-info")
-     public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId, HttpSession session) {
+     public ResponseEntity<Object> deleteDocument(@RequestParam("docId") long documentId, HttpSession session,HttpServletRequest request) {
 
           try {
-               if (mainService.deleteDocumentFile(documentId, session)) {
+               if (mainService.deleteDocumentFile(documentId, session,request)) {
                     return new ResponseEntity<Object>("success", HttpStatus.OK);
                } else {
                     return new ResponseEntity<Object>("Invalid Document ID, Must be valid Document Id.",

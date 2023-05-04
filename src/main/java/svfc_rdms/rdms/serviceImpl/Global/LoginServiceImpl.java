@@ -76,7 +76,7 @@ public class LoginServiceImpl implements LoginService {
                               
                               return new ResponseEntity<>("success", HttpStatus.OK);
                          } else {
-                              return new ResponseEntity<>("Sorry, This is account is not currently Active.",
+                              return new ResponseEntity<>("Sorry, This account is not currently active.",
                                         HttpStatus.UNAUTHORIZED);
                          }
                     } else {

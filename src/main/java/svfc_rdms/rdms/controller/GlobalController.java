@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
-import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;

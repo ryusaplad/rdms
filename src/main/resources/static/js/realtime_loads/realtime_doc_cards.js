@@ -8,7 +8,7 @@ $(document).ready(function () {
     function updateCards() {
         $.ajax({
             type: "GET",
-            url: "/student/load/document-info",
+            url: "/student/document/cards/load",
             beforeSend: function () {
                 $(".mainLoaderDiv").show();
             },

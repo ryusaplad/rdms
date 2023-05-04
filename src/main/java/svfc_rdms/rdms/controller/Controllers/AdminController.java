@@ -224,9 +224,9 @@ public class AdminController {
 
      @RequestMapping(value = "/svfc-admin/delete-document-card", method = RequestMethod.GET)
      public String deleteFile(@RequestParam("docid") long documentId, HttpServletResponse response, HttpSession session,
-               Model model) {
+               Model model, HttpServletRequest request) {
           if (globalService.validatePages("school_admin", response, session)) {
-               String message = (mainService.deleteDocumentFile(documentId, session)) ? "Document Deleted"
+               String message = (mainService.deleteDocumentFile(documentId, session, request)) ? "Document Deleted"
                          : "Not Deleted";
                return "redirect:/documents-list?message=" + message;
           }

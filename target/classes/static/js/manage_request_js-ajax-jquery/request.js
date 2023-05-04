@@ -119,6 +119,7 @@ $(document).ready(function () {
         $(".finalizedBtn").addClass("btn-danger");
         $(".clearRequest").attr("disabled", false);
         $(".removeItemFile").attr("disabled", false);
+        $("#schoolLevel").attr("disabled", false);
       } else {
         $("#savebtn").addClass("saveRequest");
         $("#savebtn").attr("disabled", false);
@@ -133,6 +134,7 @@ $(document).ready(function () {
         $("#message").attr("disabled", true);
         $(".clearRequest").attr("disabled", true);
         $(".removeItemFile").attr("disabled", true);
+        $("#schoolLevel").attr("disabled", true);
       }
     }
   });
@@ -213,7 +215,7 @@ $(document).ready(function () {
       formData.append("semester", studSemester);
       formData.append("message", userMessage);
 
-     
+
 
     }
     $.ajax({

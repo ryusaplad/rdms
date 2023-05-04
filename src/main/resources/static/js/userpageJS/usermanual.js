@@ -49,7 +49,7 @@ $(document).ready(function () {
                 <p class="text-center mt-2">Krystal Mhae Alviza</p>
               </div>
               <div class="col-md-4 mb-4">
-                <img src="image4.jpg" alt="Erangie_Macaspac_Image" class="img-fluid">
+                <img src="/images/erangie.jpg" alt="Erangie_Macaspac_Image" class="img-fluid">
                 <p class="text-center mt-2">Erangie Macaspac</p>
               </div>
               <div class="col-md-4 mb-4">
@@ -539,16 +539,16 @@ $(document).ready(function () {
     var userType = window.location.href.toLowerCase();
     modalView.empty();
     modalView.append(modal);
-    if (userType.includes("student")) {
+    if (userType.includes("/student/")) {
       $("#userManualModalLabel").text("Student Manual");
       $(".userManualBody").append(studentManual);
-    } else if (userType.includes("registrar")) {
+    } else if (userType.includes("/registrar/")) {
       $("#userManualModalLabel").text("Registrar Manual");
       $(".userManualBody").append(registrarManual);
-    } else if (userType.includes("teacher")) {
+    } else if (userType.includes("/teacher/")) {
       $("#userManualModalLabel").text("Teacher Manual");
       $(".userManualBody").append(teacherManual);
-    } else if (userType.includes("admin")) {
+    } else if (userType.includes("/svfc-admin/")) {
       $("#userManualModalLabel").text("School Admin Personel Manual");
       $(".userManualBody").append(adminManual);
     }

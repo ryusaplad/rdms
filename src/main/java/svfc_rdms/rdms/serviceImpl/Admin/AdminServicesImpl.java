@@ -3,6 +3,7 @@ package svfc_rdms.rdms.serviceImpl.Admin;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ import svfc_rdms.rdms.repository.RegistrarRequests.RegsRequestRepository;
 import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.service.Admin.AdminService;
 import svfc_rdms.rdms.service.File.FileService;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 
@@ -45,22 +47,25 @@ import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 public class AdminServicesImpl implements AdminService, FileService {
 
      @Autowired
-     UsersRepository userRepository;
+     private UsersRepository userRepository;
 
      @Autowired
-     StudentRepository studRepo;
+     private StudentRepository studRepo;
 
      @Autowired
-     DocumentRepository docRepo;
+     private DocumentRepository docRepo;
 
      @Autowired
-     FileRepository fileRepository;
+     private FileRepository fileRepository;
 
      @Autowired
-     RegsRequestRepository regsRepository;
+     private RegsRequestRepository regsRepository;
 
      @Autowired
-     GlobalServiceControllerImpl globalService;
+     private GlobalServiceControllerImpl globalService;
+
+     @Autowired
+     private GlobalLogsServiceImpl globalLogsService;
 
      @Autowired
      private NotificationServiceImpl notificationService;
@@ -294,9 +299,14 @@ public class AdminServicesImpl implements AdminService, FileService {
      }
 
      @Override
-     public Boolean deleteDocumentFile(long id, HttpSession session) {
+     public Boolean deleteDocumentFile(long id, HttpSession session,HttpServletRequest request) {
           if (id > -1) {
                docRepo.deleteById(id);
+               String date = LocalDateTime.now().toString();
+               String logMessage = "A Document has been deleted by the user " + session.getAttribute("name").toString()
+                         + " with the username of : " + session.getAttribute("username").toString() + ".";
+                         globalLogsService.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+               globalService.sendTopic("/topic/request/cards", "OK");
                return true;
           }
           return null;

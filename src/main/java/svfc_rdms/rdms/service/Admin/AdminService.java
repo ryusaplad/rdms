@@ -50,7 +50,7 @@ public interface AdminService {
 
      Optional<Documents> getFileDocumentById(long id);
 
-     Boolean deleteDocumentFile(long id, HttpSession session);
+     Boolean deleteDocumentFile(long id, HttpSession session,HttpServletRequest request);
 
      // Get All Request of Students
      List<StudentRequest> displayAllRequest();
