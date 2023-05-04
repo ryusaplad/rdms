@@ -4,7 +4,7 @@
 
  #### The primary goal of this project is to design and develop an efficient Request and Document Management System (RDMS) for St. Vincent de Ferrer College of Camarin Inc., which will provide an organized approach to managing student documents.
 
-# Progress Checklist - Tentative Checklist.
+# Progress Checklist
 
 # Login and Validation
 
@@ -127,5 +127,6 @@
 
 > :white_check_mark: **Automatically Send Notification to all registrars if the student request has already been sent to the registrar.**
 
-- :x: **Automatically send notification by email every student request approval completed (On-going)**
+- :x: **Automatically send notification by email every student request approval completed (Canceled - For Recommendation)**
+
 > :white_check_mark: **Automatically Backup database every 12 Midnight**
