@@ -38,7 +38,7 @@ $(document).ready(function () {
             statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           }
 
-          
+
           actions = `<div class="row">
           <div class="col-sm">
               <a href="?s=${studRequest.studentId}&req=${studRequest.requestId}" type="button" class="btn btn-primary w-100 toggleRequestDetail">Details</a>
@@ -243,36 +243,28 @@ $(document).ready(function () {
               finalValue = newValue + secondValue;
             }
             if (result.data[x].status == "Pending") {
-              dlAnchor =
-                "<tr>" +
-                "<td>" +
-                "<a href = '/registrar/files/download?id=" +
-                result.data[x].fileId +
-                "'class='btn btn-danger text-white'>Download</a>" +
-                "</td>" +
-                "<td>" +
-                finalValue +
-                "</td>" +
-                "<td>" +
-                result.data[x].uploaderName +
-                "</td>" +
-                "</tr > ";
+              dlAnchor = `<tr><td>
+              <a class="btn btn-primary text-white viewFile" data-value="${result.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+              <a href = "/registrar/files/download?id=${result.data[x].fileId}"
+               class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
+               </td>
+            
+              <td>${finalValue}</td>
+              <td>${result.data[x].uploaderName}</td></tr>`;
+
               $(".tablebody").append(dlAnchor);
             } else if (result.data[x].status == "Approved") {
-              dlAnchor =
-                "<tr>" +
-                "<td>" +
-                "<a href = '/registrar/files/download?id=" +
-                result.data[x].fileId +
-                "'class='btn btn-danger text-white'>Download</a>" +
-                "</td>" +
-                "<td>" +
-                finalValue +
-                "</td>" +
-                "<td>" +
-                result.data[x].uploaderName +
-                "</td>" +
-                "</tr > ";
+
+              dlAnchor = `<tr><td>
+              <a class="btn btn-primary text-white viewFile" data-value="${result.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+              <a href = "/registrar/files/download?id=${result.data[x].fileId}"
+               class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
+               </td>
+            
+              <td>${finalValue}</td>
+              <td>${result.data[x].uploaderName}</td></tr>`;
+
+
               $(".sentDocumentTable").show();
               $(".sentDocsBody").append(dlAnchor);
             }
@@ -526,29 +518,40 @@ $(document).ready(function () {
       var split = fileName.split(".");
       fileName = split[0];
       var extension = split[1];
-      if (fileName.length > 10) {
-        fileName = fileName.substring(0, 10);
+      if (!["jpg", "jpeg", "png", "pdf"].includes(extension)) {
+        var message = "";
+        message = "Please select a valid file type (JPG, PNG, or PDF).";
+        $(".message").text(message);
+        $(".errorMessageAlert").show();
+        formData = new FormData();
+        $("#fileInfoTable").empty();
+        return false;
+      } else {
+        if (fileName.length > 10) {
+          fileName = fileName.substring(0, 10);
+        }
+        var name = fileName + "." + extension;
+        htmlTable =
+          " <tr style='width: 2px; white-space:pre-wrap; word-spacing: 1px;'>" +
+          "<td> <a href='#' class='btn btn-danger f-removeItem'  data-index=" +
+          x +
+          ">Cancel</td>" +
+          "<td title='" +
+          $("#rfile")[0].files[x].name +
+          "'>" +
+          name +
+          "</td>" +
+          "<td>" +
+          formatFileSize($("#rfile")[0].files[x].size) +
+          "</td>" +
+          "</tr>";
+        $(".r-file-table").append(htmlTable);
+        $(".errorMessageAlert").hide();
       }
-      var name = fileName + "." + extension;
-      htmlTable =
-        " <tr style='width: 2px; white-space:pre-wrap; word-spacing: 1px;'>" +
-        "<td> <a href='#' class='btn btn-danger f-removeItem'  data-index=" +
-        x +
-        ">Cancel</td>" +
-        "<td title='" +
-        $("#rfile")[0].files[x].name +
-        "'>" +
-        name +
-        "</td>" +
-        "<td>" +
-        formatFileSize($("#rfile")[0].files[x].size) +
-        "</td>" +
-        "</tr>";
-      $(".r-file-table").append(htmlTable);
-    }
 
-    for (var i = 0; i < fileListArr.length; i++) {
-      formData.append("rfile[]", fileListArr[i]);
+      for (var i = 0; i < fileListArr.length; i++) {
+        formData.append("rfile[]", fileListArr[i]);
+      }
     }
   });
   $(document).on("click", ".f-removeItem", function (e) {

@@ -303,7 +303,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                     model.addAttribute("pageTitle", "My Files");
                     model.addAttribute("page", "myfiles");
                     model.addAttribute("files", userFiles);
-                    return "/teacher/teach";
+                    return "teacher/teach";
                }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
@@ -318,7 +318,7 @@ public class Teacher_ServiceImpl implements Teacher_Service, FileService {
                model.addAttribute("files", userFiles);
                model.addAttribute("pageTitle", "My Files");
                model.addAttribute("page", "myfiles");
-               return "/teacher/teach";
+               return "teacher/teach";
               
           }
 

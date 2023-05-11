@@ -10,10 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -370,7 +370,8 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
 
      @Override
      public List<Documents> displayAllDocuments(boolean status) {
-          return documentRepository.findAllByStatus(status);
+          Sort ascending = Sort.by("title").ascending();
+          return documentRepository.findAllByStatus(status,ascending);
      }
 
 }

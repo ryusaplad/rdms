@@ -46,7 +46,7 @@ public class GlobalController {
      private FileRepository fileRepository;
 
      @Autowired
-     private UsersRepository userRepository;
+     private UsersRepository usersRepository;
 
      @Autowired
      private AdminServicesImpl mainService;
@@ -95,7 +95,7 @@ public class GlobalController {
                     }
                }
           }
-          return "/index";
+          return "index";
      }
 
      @GetMapping(value = "/logout")
@@ -171,12 +171,13 @@ public class GlobalController {
           }
 
           if (!globalService.validatePages(userType, response, session)) {
-               return new ResponseEntity<>("You are performing invalid action, Failed to validate page", HttpStatus.BAD_REQUEST);
+               return new ResponseEntity<>("You are performing invalid action, Failed to validate page",
+                         HttpStatus.BAD_REQUEST);
 
           }
 
           String username = session.getAttribute("username").toString();
-          Optional<Users> user = userRepository.findByUsername(username);
+          Optional<Users> user = usersRepository.findByUsername(username);
           if (!user.isPresent()) {
                return new ResponseEntity<>("You are performing invalid action, User Not Found", HttpStatus.BAD_REQUEST);
           }
@@ -214,8 +215,8 @@ public class GlobalController {
 
      }
 
-     @GetMapping("/{accountType}/delete/file")
-     public ResponseEntity<String> deleteFile(
+     @GetMapping("/{accountType}/get/file/info")
+     public ResponseEntity<Object> getFileInfo(
                @PathVariable String accountType,
                @RequestParam("id") String fileId,
                HttpServletResponse response,
@@ -233,7 +234,6 @@ public class GlobalController {
                throw new ApiRequestException("Invalid session requests");
           }
 
-          globalService.deleteFile(fileId);
-          return ResponseEntity.ok("File deleted");
+          return globalService.getFileInformations(fileId);
      }
 }

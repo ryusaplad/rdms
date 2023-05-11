@@ -46,7 +46,7 @@ public class AdminController {
                model.addAttribute("page", "dashboard");
                model.addAttribute("pageTitle", "Dashboard");
 
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
      }
@@ -94,7 +94,7 @@ public class AdminController {
                     return "redirect:/";
                }
 
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
      }
@@ -134,7 +134,7 @@ public class AdminController {
                } else {
                     return "redirect:" + "/svfc-admin/" + userType + "/admin?error=Invalid User Type";
                }
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
      }
@@ -145,7 +145,7 @@ public class AdminController {
                model.addAttribute("globalLogs", globalLogsService.getAllLogs());
                model.addAttribute("page", "globallogs");
                model.addAttribute("pageTitle", "Global Logs");
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
      }
@@ -205,7 +205,7 @@ public class AdminController {
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("page", "documents");
                model.addAttribute("pageTitle", "Documents");
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
      }
@@ -242,7 +242,7 @@ public class AdminController {
 
                model.addAttribute("pageTitle", "Student Requests");
                model.addAttribute("page", "student_request");
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
 
@@ -254,7 +254,7 @@ public class AdminController {
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("pageTitle", "Registrar Requests");
                model.addAttribute("page", "registrar_request");
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
 
           return "redirect:/";
@@ -266,10 +266,12 @@ public class AdminController {
           if (globalService.validatePages("school_admin", response, session)) {
                model.addAttribute("page", "settings");
                model.addAttribute("pageTitle", "Settings");
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           return "redirect:/";
 
      }
+
+    
 
 }

@@ -131,6 +131,7 @@ $(document).ready(function () {
 
   var prefixInitial = "";
   if (title.includes("Student")) {
+
     prefixInitial = "S-";
   } else if (title.includes("Registrar")) {
     prefixInitial = "R-";
@@ -139,6 +140,7 @@ $(document).ready(function () {
   }
 
 
+  ajaxGet(userType);
   $('#username,#usernameEdit').on('keypress', function (event) {
     var keyCode = event.which;
     /* Numbers have keyCodes between 48 and 57*/
@@ -294,205 +296,16 @@ $(document).ready(function () {
         $("#updateModal").modal("hide");
         $("#registerModal").modal("hide");
       },
+      
     });
+    $('#resultDiv').get(0).scrollIntoView({ behavior: 'smooth' });
   }
   // close alert card
   $(".close").on("click", function () {
     $("#resultDiv").fadeOut(100);
   });
 
-  function ajaxGet(userType) {
-    $.ajax({
-      type: "GET",
-      url: "/registrar/getAllAccounts?account-type=" + userType.trim(),
-      success: function (result) {
-        if (result.status == "success") {
-          $("#tableBody").empty();
-          var htmlTable = "";
-          var table = $("#zero_config").DataTable({
-            "ordering": false,
-            "destroy": true
-          });
-          table.clear();
-          var action = "";
-          $.each(result.data, function (count, user) {
-            if (user.status.toLowerCase() == "temporary") {
-              htmlTable =
-                "<tr><td style='width: 300px;'>" +
-                user.name +
-                "</td><td style='width: 300px;'>" +
-                user.status +
-                "</td><td>" +
-                "<div class='row'>" +
-                "<div class='col-sm'>" +
-                "<a href='" +
-                user.userId +
-                "' type='button' class='undo  btn btn-warning  text-white w-100'>Undo</a>" +
-                "</div> </div>" +
-                "</td></tr>";
-              actions =
-                "<div class='row'>" +
-                "<div class='col-sm'>" +
-                "<a href='" +
-                user.userId +
-                "' type='button' class='undo btn btn-warning  text-white w-100'>Undo</a>" +
-                "</div> </div>";
-            } else {
-              if (user.type != "Teacher") {
-                htmlTable =
-                  "<tr><td style='width: 300px;'>" +
-                  user.name +
-                  "</td><td style='width: 300px;'>" +
-                  user.status +
-                  "</td><td>" +
-                  `
-                  <div class="btn-group dropstart">
-                      <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          Action
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                              <a href="/registrar/user/update/?userId=` +
-                  user.userId +
-                  `"type="button" class="edit   dropdown-item link text-primary">Edit</a>
-                        </li>
-                          <li>
-                              <a id="delete" href="` +
-                  user.userId +
-                  `" type="button"
-                                  class="delete dropdown-item  text-danger">Delete</a>
-                          </li>
-                      </ul>
-                  </div>` +
-                  "</td></tr>";
-                actions =
-                  `
-                  <div class="btn-group dropstart">
-                      <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          Action
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                              <a href="/registrar/user/update/?userId=` +
-                  user.userId +
-                  `
-                                  "type="button" class="edit dropdown-item link text-primary">Edit</a>
-                        </li>
-                          <li>
-                              <a id="delete" href="` +
-                  user.userId +
-                  `" type="button"
-                                  class="delete dropdown-item  text-danger">Delete</a>
-                          </li>
-                      </ul>
-                  </div>`;
-              } else {
-                htmlTable =
-                  " <tr><td style='width: 300px;'>" +
-                  user.name +
-                  "</td><td style='width: 300px;'>" +
-                  user.status +
-                  "</td><td style='width:5%'>" +
-                  `
-                  <div class="btn-group dropstart">
-                      <button  type="button" class="btn btn-danger text-white" data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          Action
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                              <a href="/registrar/user/update/?userId=` +
-                  user.userId +
-                  `
-                                  "type="button" class="edit  dropdown-item link text-primary">Edit</a>
-                        </li>
-                         
-                          <li ><a id="send_requests"
-                                href="userId=` +
-                  user.userId +
-                  "&to=" +
-                  user.name +
-                  `" type="button"
-                                  class="sendRequests  dropdown-item link text-success">
-                                  Requests</a></li>
-                                   <li>
-                              <a id="delete" href="` +
-                  user.userId +
-                  `" type="button"
-                                  class="delete dropdown-item  text-danger">Delete</a>
-                          </li>
-                      </ul>
-                  </div>` +
-                  "</td></tr>";
 
-                actions =
-                  `
-                  <div class="btn-group dropstart">
-                      <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
-                          aria-expanded="false">
-                          Action
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li>
-                              <a href="/registrar/user/update/?userId=` +
-                  user.userId +
-                  `
-                                  "type="button" class="edit  dropdown-item link text-primary">Edit</a>
-                        </li>
-                         
-                           <li ><a id="send_requests"
-                                 href="/?userId=` +
-                  user.userId +
-                  "&sendTo=" +
-                  user.name +
-                  `" type="button"
-                                  class="sendRequests  dropdown-item link text-success">
-                                  Requests</a></li>
-                                   <li>
-                              <a id="delete" href="` +
-                  user.userId +
-                  `" type="button"
-                                  class="delete dropdown-item  text-danger">Delete</a>
-                          </li>
-                      </ul>
-                  </div>`;
-              }
-            }
-            $("#tableBody").append(htmlTable);
-
-            $("#zero_config")
-              .DataTable()
-              .row.add([user.name, user.status, actions])
-              .draw();
-          });
-        } else {
-          $("#resultDiv").fadeOut(1);
-
-          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-          $("#resultMessage").html(userType + " Deletion Failed :(");
-          $("#resultDiv").fadeIn(100);
-          $("#deleteTempModalConfirm").modal("hide");
-        }
-      },
-      error: function (e) {
-        if (e.responseText != null) {
-          e = e.responseText;
-        } else {
-          e = e.responseJSON.message;
-        }
-
-        $("#resultDiv").fadeOut(1);
-        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-        $("#resultMessage").html(e + ' <a class="link" href="#">Contact</a>');
-        $("#resultDiv").fadeIn(100);
-        $("#deleteTempModalConfirm").modal("hide");
-      },
-    });
-
-    //updating modal
-  }
   $(document).on("click", ".delete", function (event) {
     event.preventDefault();
     userId = $(this).attr("href");
@@ -518,15 +331,19 @@ $(document).ready(function () {
         $("#resultMessage").html("The account has been temporarily removed.");
       },
       error: function (error) {
-        $("#deleteTempModalConfirm").modal("hide");
-        $("#resultDiv").hide();
-        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-        $("#resultMessage").html(
-          error.responseText + ' <a class="link" href="#">Contact</a>'
-        );
-        $("#resultDiv").fadeIn(100);
+        if (!error.includes("<!DOCTYPE html>")) {
+          $("#deleteTempModalConfirm").modal("hide");
+          $("#resultDiv").hide();
+          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+          $("#resultMessage").html(
+            error.responseText + ' <a class="link" href="#">Contact</a>'
+          );
+          $("#resultDiv").fadeIn(100);
+        }
+
       },
     });
+    $('#resultDiv').get(0).scrollIntoView({ behavior: 'smooth' });
   });
   $(".deletePermanently").on("click", function (event) {
     userId = $(".delete").data("value");
@@ -542,18 +359,25 @@ $(document).ready(function () {
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
         $("#resultMessage").html("The account has been deleted permanently.");
         $("#resultDiv").fadeIn(100);
+       
       },
       error: function (error) {
         console.log(error);
-        $("#deleteModalConfirm").modal("hide");
-        $("#resultDiv").hide();
-        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
-        $("#resultMessage").html(
-          error.responseText + ' <a class="link" href="#">Contact</a>'
-        );
-        $("#resultDiv").fadeIn(100);
+        if (!error.includes("<!DOCTYPE html>")) {
+          $("#deleteModalConfirm").modal("hide");
+          $("#resultDiv").hide();
+          $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+          $("#resultMessage").html(
+            error.responseText + ' <a class="link" href="#">Contact</a>'
+          );
+          $("#resultDiv").fadeIn(100);
+          
+        }
+
       },
+   
     });
+    $('#resultDiv').get(0).scrollIntoView({ behavior: 'smooth' });
   });
 
   $(document).on("click", ".edit", function (event) {
@@ -604,3 +428,126 @@ $(document).ready(function () {
     });
   });
 });
+function ajaxGet(userType) {
+ 
+  $.ajax({
+    type: "GET",
+    url: "/registrar/getAllAccounts?account-type=" + userType.trim(),
+    success: function (result) {
+      if (result.status == "success") {
+        var table = $("#zero_config").DataTable({
+          "ordering": false,
+          "destroy": true,
+        });
+        table.clear();
+        // Save the current page index and page length
+        var currentPageIndex = table.page();
+        var currentPageLength = table.page.len();
+        console.log(currentPageIndex + "And " + currentPageLength);
+        var actions = "";
+        $.each(result.data, function (count, user) {
+          if (user.status.toLowerCase() == "temporary") {
+
+            actions =
+              "<div class='row'>" +
+              "<div class='col-sm'>" +
+              "<a href='" +
+              user.userId +
+              "' type='button' class='undo btn btn-warning  text-white w-100'>Undo</a>" +
+              "</div> </div>";
+          } else {
+            if (user.type != "Teacher") {
+
+              actions =
+                `
+                <div class="btn-group dropstart">
+                    <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                            <a href="/registrar/user/update/?userId=` +
+                user.userId +
+                `
+                                "type="button" class="edit dropdown-item link text-primary">Edit</a>
+                      </li>
+                        <li>
+                            <a id="delete" href="` +
+                user.userId +
+                `" type="button"
+                                class="delete dropdown-item  text-danger">Delete</a>
+                        </li>
+                    </ul>
+                </div>`;
+            } else {
+
+
+              actions =
+                `
+                <div class="btn-group dropstart">
+                    <button  type="button" class="btn btn-danger text-white " data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                            <a href="/registrar/user/update/?userId=` +
+                user.userId +
+                `
+                                "type="button" class="edit  dropdown-item link text-primary">Edit</a>
+                      </li>
+                       
+                         <li ><a id="send_requests"
+                               href="/?userId=` +
+                user.userId +
+                "&sendTo=" +
+                user.name +
+                `" type="button"
+                                class="sendRequests  dropdown-item link text-success">
+                                Requests</a></li>
+                                 <li>
+                            <a id="delete" href="` +
+                user.userId +
+                `" type="button"
+                                class="delete dropdown-item  text-danger">Delete</a>
+                        </li>
+                    </ul>
+                </div>`;
+            }
+          }
+
+          table.row.add([user.name, user.status, actions])
+            .draw();
+
+        });
+
+      } else {
+        $("#resultDiv").fadeOut(1);
+
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(userType + " Deletion Failed :(");
+        $("#resultDiv").fadeIn(100);
+        $("#deleteTempModalConfirm").modal("hide");
+      }
+     
+    },
+    error: function (e) {
+      if (e.responseText != null) {
+        e = e.responseText;
+      } else {
+        e = e.responseJSON.message;
+      }
+      if (!e.includes("<!DOCTYPE html>")) {
+        $("#resultDiv").fadeOut(1);
+        $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
+        $("#resultMessage").html(e + ' <a class="link" href="#">Contact</a>');
+        $("#resultDiv").fadeIn(100);
+        $("#deleteTempModalConfirm").modal("hide");
+      }
+
+    },
+  });
+
+  //updating modal
+}

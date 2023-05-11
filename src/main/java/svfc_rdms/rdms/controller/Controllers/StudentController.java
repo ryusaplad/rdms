@@ -37,7 +37,7 @@ public class StudentController {
           if (globalService.validatePages("student", response, session)) {
                model.addAttribute("page", "dashboard");
                model.addAttribute("pageTitle", "Dashboard");
-               return "/student/stud";
+               return "student/stud";
           }
           return "redirect:/";
      }
@@ -49,7 +49,7 @@ public class StudentController {
 
                model.addAttribute("page", "doc_cards");
                model.addAttribute("pageTitle", "Documents");
-               return "/student/stud";
+               return "student/stud";
           }
           return "redirect:/";
      }
@@ -59,7 +59,7 @@ public class StudentController {
           if (globalService.validatePages("student", response, session)) {
                model.addAttribute("page", "myrequests");
                model.addAttribute("pageTitle", "My Requests");
-               return "/student/stud";
+               return "student/stud";
           }
           return "redirect:/";
 
@@ -91,7 +91,7 @@ public class StudentController {
 
                model.addAttribute("documentType", document);
                model.addAttribute("description", description);
-               return "/student/student-request-form";
+               return "student/student-request-form";
           } catch (Exception e) {
                e.printStackTrace();
           }

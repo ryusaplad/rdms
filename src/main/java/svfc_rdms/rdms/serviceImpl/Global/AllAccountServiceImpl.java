@@ -23,14 +23,14 @@ import svfc_rdms.rdms.service.Global.AllAccountServices;
 public class AllAccountServiceImpl implements AllAccountServices {
 
      @Autowired
-     private UsersRepository userRepository;
+     private UsersRepository usersRepository;
      @Autowired
      private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
      public ResponseEntity<String> changePassword(String oldPassword, String newPassword, long userId,
                HttpSession session,HttpServletRequest request) {
-          Optional<Users> optionalUser = userRepository.findById(userId);
+          Optional<Users> optionalUser = usersRepository.findById(userId);
 
           PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -72,7 +72,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          profilePicture[0] = 0;
                          user.setProfilePicture(profilePicture);
                     }
-                    userRepository.save(user);
+                    usersRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Password changed for user " + user.getName() + ".";
                     
@@ -91,12 +91,12 @@ public class AllAccountServiceImpl implements AllAccountServices {
      public ResponseEntity<String> changeProfilePicture(MultipartFile image, long userId, HttpSession session,HttpServletRequest request) {
           try {
 
-               Optional<Users> optionalUser = userRepository.findById(userId);
+               Optional<Users> optionalUser = usersRepository.findById(userId);
                if (image == null || image.getSize() == 0) {
                     byte[] byteImage = new byte[] { 0 };
                     Users user = optionalUser.get();
                     user.setProfilePicture(byteImage);
-                    userRepository.save(user);
+                    usersRepository.save(user);
                     String date = LocalDateTime.now().toString();
                     String logMessage = "Profile picture changed for user " + user.getName() + ".";
                     globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);
@@ -108,7 +108,7 @@ public class AllAccountServiceImpl implements AllAccountServices {
                          byte[] bytes = image.getBytes();
                          Users user = optionalUser.get();
                          user.setProfilePicture(bytes);
-                         userRepository.save(user);
+                         usersRepository.save(user);
                          String date = LocalDateTime.now().toString();
                          String logMessage = "Profile picture changed for user " + user.getName() + ".";
                          globalLogsServiceImpl.saveLog(0, logMessage, "Normal_Log", date, "low", session,request);

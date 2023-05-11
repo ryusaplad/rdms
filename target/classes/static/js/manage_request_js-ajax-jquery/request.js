@@ -2,6 +2,8 @@ $(document).ready(function () {
   var formData = new FormData();
   var fileListArr;
   $("#files").change(function () {
+
+
     formData = new FormData();
     $("#fileInfoTable").empty();
     var totalFiles = $("#files")[0].files.length;
@@ -18,29 +20,43 @@ $(document).ready(function () {
         return false;
       } else {
         var fileName = $("#files")[0].files[x].name;
-        var split = fileName.split(".");
-        fileName = split[0];
-        var extension = split[1];
-        if (fileName.length > 10) {
-          fileName = fileName.substring(0, 10);
+        var lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex !== -1) {
+          var extension = fileName.substring(lastDotIndex + 1);
+          fileName = fileName.substring(0, lastDotIndex);
         }
-        var name = fileName + "." + extension;
-        $("#fileInfoTable").append(
-          "'<tr>'" +
-          "<td>" +
-          "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
-          x +
-          ">Delete</button>" +
-          "</td>" +
-          "<td>" +
-          name +
-          "</td >" +
-          "<td>" +
-          formatFileSize($("#files")[0].files[x].size) +
-          "</td >" +
-          "</tr >"
-        );
+        if (!["jpg", "jpeg", "png", "pdf"].includes(extension)) {
+          var message = "";
+          message = "Please select a valid file type (JPG, PNG, or PDF).";
+          $(".message").text(message);
+          $(".errorMessageAlert").show();
+          formData = new FormData();
+          $("#fileInfoTable").empty();
+          return false;
+        } else {
+
+          if (fileName.length > 10) {
+            fileName = fileName.substring(0, 10);
+          }
+          var name = fileName + "." + extension;
+          $("#fileInfoTable").append(
+            "'<tr>'" +
+            "<td>" +
+            "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
+            x +
+            ">Delete</button>" +
+            "</td>" +
+            "<td>" +
+            name +
+            "</td >" +
+            "<td>" +
+            formatFileSize($("#files")[0].files[x].size) +
+            "</td >" +
+            "</tr >"
+          );
+        }
       }
+
 
     }
 
@@ -95,7 +111,15 @@ $(document).ready(function () {
     event.preventDefault();
     var file = $("#files").val();
     var userMessage = $("#message").val();
-    if (file === "") {
+    
+    var levelSelected = $("#schoolLevel");
+    // check if empty
+    if (levelSelected.prop("selectedIndex") === 0) {
+      // show error message
+      alert("Please select a school level.");
+    }
+  
+    else if (file === "") {
       message = "Please Select File";
       $(".message").text(message);
       $(".errorMessageAlert").show();

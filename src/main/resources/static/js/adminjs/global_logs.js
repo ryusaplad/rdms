@@ -119,7 +119,8 @@ $(document).ready(function () {
           var tableBodyItems = `
           <tr>
             <td>${log.dateAndTime}</td>
-            <td>${log.message}</td>
+
+            <td style=" max-width:100px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${log.message}</td>
             <td>
               <span>
                 ${(() => {

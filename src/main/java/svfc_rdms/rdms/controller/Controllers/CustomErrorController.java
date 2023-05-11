@@ -29,7 +29,7 @@ public class CustomErrorController implements ErrorController {
         model.addAttribute("errorTitle", errorTitle);
         model.addAttribute("errorMessage", errorMessage);
 
-        return "/error/custom-error";
+        return "error/custom-error";
     }
 
     private int getStatusCode(HttpServletRequest request) {

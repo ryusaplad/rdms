@@ -16,7 +16,7 @@ $(document).ready(function () {
             courseSelectHtml.empty();
             semGradeSelectHtml.empty();
 
-            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level">
+            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level" required>
             <option value="kinder1">Kinder Garten 1</option>
             <option value="kinder2">Kinder Garten 2</option>
         </select>
@@ -32,7 +32,7 @@ $(document).ready(function () {
             courseSelectHtml.empty();
             semGradeSelectHtml.empty();
 
-            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level">
+            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level" required>
             <option value="grade1">Grade 1</option>
             <option value="grade2">Grade 2</option>
             <option value="grade3">Grade 3</option>
@@ -50,7 +50,7 @@ $(document).ready(function () {
             courseSelectHtml.empty();
             semGradeSelectHtml.empty();
 
-            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level">
+            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level" required>
             <option value="grade7">Grade 7</option>
             <option value="grade8">Grade 8</option>
             <option value="grade9">Grade 9</option>
@@ -66,7 +66,7 @@ $(document).ready(function () {
             yearSelectHtml.empty();
             courseSelectHtml.empty();
             semGradeSelectHtml.empty();
-            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level">
+            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level" required>
             <option value="grade11">Grade 11</option>
             <option value="grade12">Grade 12</option>
         </select>
@@ -74,7 +74,7 @@ $(document).ready(function () {
             <span class="badge badge-secondary text-danger ">*</span>`);
 
             courseSelectHtml.append(`<div class="mt-2 form-floating">
-            <select id="course" name="course" class="form-select">
+            <select id="course" name="course" class="form-select" required>
             <option value="ABM">Accountancy and Business Management (ABM)</option>
 <option value="HUMSS">Humanities and Social Sciences (HUMSS)</option>
 <option value="STEM">Science, Technology, Engineering &amp; Mathematics (STEM)
@@ -114,7 +114,7 @@ $(document).ready(function () {
             courseSelectHtml.empty();
             semGradeSelectHtml.empty();
 
-            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level">
+            yearSelectHtml.append(` <select id="year" name="year" class="form-select" placeholder="Year Level" required>
             <option value="1ST YEAR">1ST YEAR</option>
             <option value="2ND YEAR">2ND YEAR</option>
             <option value="3RD YEAR">3RD YEAR</option>
@@ -124,7 +124,7 @@ $(document).ready(function () {
         <label for="year">Year
             <span class="badge badge-secondary text-danger ">*</span>`);
 
-            semGradeSelectHtml.append(`<select id="semester" name="semester" class="form-select">
+            semGradeSelectHtml.append(`<select id="semester" name="semester" class="form-select" required>
             <option value="1ST SEMESTER">1ST SEMESTER</option>
             <option value="2ND SEMESTER">2ND SEMESTER</option>
         </select>
@@ -132,7 +132,7 @@ $(document).ready(function () {
             <span class="badge badge-secondary text-danger ">*</span>`);
 
             courseSelectHtml.append(`<div class="mt-2 form-floating">
-            <select id="course" name="course" class="form-select">
+            <select id="course" name="course" class="form-select" required>
             <option value="BEC">Bachelor of Early Childhood</option>
             <option value="BEEd">Bachelor of Elementary Education (Gen. Ed.)</option>
             <option value="BPEd">Bachelor of Physical Education</option>

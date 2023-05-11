@@ -14981,8 +14981,8 @@ label {
   font-size: 14px;
 }
 
-.notificationLoader {
-  display: inline-block;
+.notificationLoader,.importingLoading {
+  display: block;
   padding: 8px 15px;
 
   background-color: white;

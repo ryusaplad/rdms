@@ -23,6 +23,7 @@ import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -208,13 +209,14 @@ public class Admin_Registrar_ManageServiceImpl implements Admin_RegistrarService
 
         try {
             if (findOneUserById(userId).isPresent()) {
-                usersRepository.deleteById(userId);
+
                 String date = LocalDateTime.now().toString();
                 String logMessage = "User " + session.getAttribute("name").toString()
                         + " deleted the user (" + findOneUserById(userId).get().getName()
                         + ")";
                 globalService.sendTopic("/topic/totals", "OK");
                 globalLogsServiceImpl.saveLog(0, logMessage, "High_Log", date, "high", session, request);
+                usersRepository.deleteById(userId);
                 return true;
             }
             return false;
@@ -445,4 +447,111 @@ public class Admin_Registrar_ManageServiceImpl implements Admin_RegistrarService
         }
 
     }
+
+    @Override
+    public ResponseEntity<String> importUserAccounts(List<List<String>> tableData, String userType, HttpSession session,
+            HttpServletRequest request) {
+        long insertedCount = 0;
+        long failedCount = 0;
+
+        try {
+
+            List<String> failedRecords = new ArrayList<>();
+            for (List<String> row : tableData) {
+                if (!row.isEmpty()) {
+                    // Parse input values
+                    String name = row.get(0);
+                    String email = row.get(1);
+                    String username = row.get(2);
+                    String password = row.get(3);
+                    String type = userType;
+                    String status = "Active";
+
+                    // Modify username based on user type
+                    if (type.equalsIgnoreCase("Student")) {
+                        username = "S-" + username.substring(2);
+                    } else if (type.equalsIgnoreCase("Registrar")) {
+                        username = "R-" + username.substring(2);
+                    } else if (type.equalsIgnoreCase("Teacher")) {
+                        username = "T-" + username.substring(2);
+                    }
+
+                    // Validate email
+                    if (!globalService.isValidEmail(email)) {
+                        failedCount++;
+                        failedRecords.add(String.join(",", "(" + email) + " - Invalid email address");
+                        continue;
+                    }
+
+                    // Validate password length
+                    if (password.length() < 8 || password.length() > 26) {
+                        failedCount++;
+                        failedRecords.add(String.join(",", "( A User: " + username)
+                                + " - Password must be between 8 and 26 characters long");
+                        continue;
+                    }
+
+                    // Check if user already exists
+                    Optional<Users> userData = usersRepository.findByUsernameAndEmail(username, email);
+
+                    if (userData.isPresent()) {
+                        failedCount++;
+                        failedRecords.add(String.join(",", "(" + email + ", " + username)
+                                + " - Username or Email already exists");
+                        continue;
+                    }
+
+                    // Save user
+                    String colorCode = globalService.generateRandomHexColor();
+                    Users user = Users.builder()
+                            .name(name)
+                            .email(email)
+                            .username(username)
+                            .password(new BCryptPasswordEncoder().encode(password))
+                            .type(type)
+                            .status(status)
+                            .colorCode(colorCode)
+                            .build();
+
+                    try {
+                        usersRepository.save(user);
+                        insertedCount++;
+                    } catch (DataIntegrityViolationException e) {
+                        failedCount++;
+                        failedRecords.add(String.join(",", "(" + email + ", " + username)
+                                + " - Username or Email already exists");
+                    }
+                }
+            }
+
+            String message = "Importing process successful, " + insertedCount + " records inserted";
+            if (failedCount > 0) {
+                message += ", " + failedCount + " records failed to insert";
+            }
+            if (!failedRecords.isEmpty()) {
+                message += "\nFailed records:\n" + String.join("\n", failedRecords);
+
+            }
+            // Log importing acc
+            String currentDate = LocalDateTime.now().toString();
+            String accountType = session.getAttribute("accountType").toString();
+            String userName = session.getAttribute("name").toString();
+            String logMessage = "User account import completed successfully by " + accountType + ": " + userName + ". Records Inserted";
+            String logLevel = "High_Log";
+            if (failedCount > 0) {
+                logMessage += " However, " + failedCount + " records failed to insert.";
+                logLevel = "Error_Log";
+            }
+            if (!failedRecords.isEmpty()) {
+                logMessage += " Failed records:\n" + String.join("\n", failedRecords);
+            }
+            globalLogsServiceImpl.saveLog(0, logMessage, logLevel, currentDate, "high", session, request);
+
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } catch (Exception e) {
+
+            throw new ApiRequestException("Failed to Import (Reason): " + e.getMessage());
+        }
+    }
+
 }

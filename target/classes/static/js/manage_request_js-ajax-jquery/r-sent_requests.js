@@ -46,6 +46,7 @@ $(document).ready(function () {
             htmlModal +=
               `
     <div  class="col m-1">
+    <a class="btn btn-primary text-white viewFile" data-value="${data[x].fileId}"><i class="fas fa-eye"></i> View</a>
       <a href="/registrar/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +
@@ -83,6 +84,7 @@ $(document).ready(function () {
             htmlModal +=
               `
     <div  class="col m-1">
+    <a class="btn btn-primary text-white viewFile" data-value="${data[x].fileId}"><i class="fas fa-eye"></i> View</a>
       <a href="/registrar/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +

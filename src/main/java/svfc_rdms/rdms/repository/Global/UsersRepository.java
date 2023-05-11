@@ -13,10 +13,11 @@ import svfc_rdms.rdms.model.Users;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
-     
      public Optional<Users> findUserIdByUsername(String username);
 
      public Optional<Users> findByUsername(String username);
+
+     public Optional<Users> findByUsernameAndEmail(String username, String email);
 
      public List<Users> findAllByStatusAndType(String status, String type);
 

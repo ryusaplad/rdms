@@ -47,7 +47,7 @@ import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
 public class AdminServicesImpl implements AdminService, FileService {
 
      @Autowired
-     private UsersRepository userRepository;
+     private UsersRepository usersRepository;
 
      @Autowired
      private StudentRepository studRepo;
@@ -73,17 +73,17 @@ public class AdminServicesImpl implements AdminService, FileService {
      @Override
      public List<Users> diplayAllAccounts(String status, String type) {
 
-          return userRepository.findAllByStatusAndType(status, type);
+          return usersRepository.findAllByStatusAndType(status, type);
      }
 
      @Override
      public List<Users> diplayAllAccountsByType(String type) {
-          return userRepository.findAllByType(type);
+          return usersRepository.findAllByType(type);
      }
 
      @Override
      public int displayCountsByStatusAndType(String status, String type) {
-          return userRepository.totalUsers(status, type);
+          return usersRepository.totalUsers(status, type);
      }
 
      @Override
@@ -136,7 +136,7 @@ public class AdminServicesImpl implements AdminService, FileService {
 
                     Documents saveDocument = new Documents(0, title, description, image, status);
 
-                    List<Users> users = userRepository.findAllByStatusAndType("Active", "Student");
+                    List<Users> users = usersRepository.findAllByStatusAndType("Active", "Student");
 
                     if (!users.isEmpty()) {
                          for (Users user : users) {
@@ -228,7 +228,7 @@ public class AdminServicesImpl implements AdminService, FileService {
                     }
 
                     Documents updateDocument = new Documents(id, title, description, image, status);
-                    List<Users> users = userRepository.findAllByStatusAndType("Active", "Student");
+                    List<Users> users = usersRepository.findAllByStatusAndType("Active", "Student");
 
                     if (!users.isEmpty()) {
                          for (Users user : users) {
@@ -270,7 +270,8 @@ public class AdminServicesImpl implements AdminService, FileService {
 
      @Override
      public List<Documents> getAllDocuments() {
-          return docRepo.findAll();
+          Sort ascendingSort = Sort.by("title").ascending();
+          return docRepo.findAll(ascendingSort);
      }
 
      @Override
@@ -299,13 +300,13 @@ public class AdminServicesImpl implements AdminService, FileService {
      }
 
      @Override
-     public Boolean deleteDocumentFile(long id, HttpSession session,HttpServletRequest request) {
+     public Boolean deleteDocumentFile(long id, HttpSession session, HttpServletRequest request) {
           if (id > -1) {
                docRepo.deleteById(id);
                String date = LocalDateTime.now().toString();
                String logMessage = "A Document has been deleted by the user " + session.getAttribute("name").toString()
                          + " with the username of : " + session.getAttribute("username").toString() + ".";
-                         globalLogsService.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
+               globalLogsService.saveLog(0, logMessage, "Normal_Log", date, "low", session, request);
                globalService.sendTopic("/topic/request/cards", "OK");
                return true;
           }
@@ -399,9 +400,9 @@ public class AdminServicesImpl implements AdminService, FileService {
                     .password(new BCryptPasswordEncoder().encode("Akosiryu123@")).type("School_Admin").status("Active")
                     .colorCode("#DC143C").build();
 
-          Optional<Users> defaultAdminUser = userRepository.findByUsername(user.getUsername());
+          Optional<Users> defaultAdminUser = usersRepository.findByUsername(user.getUsername());
           if (!defaultAdminUser.isPresent()) {
-               userRepository.save(user);
+               usersRepository.save(user);
           }
 
      }
@@ -441,11 +442,11 @@ public class AdminServicesImpl implements AdminService, FileService {
           users.add(accountTest3);
 
           users.stream().forEach(user -> {
-               Optional<Users> userData = userRepository.findByUsername(user.getUsername());
+               Optional<Users> userData = usersRepository.findByUsername(user.getUsername());
                if (!userData.isPresent()) {
                     String colorCode = globalService.generateRandomHexColor();
                     user.setColorCode(colorCode);
-                    userRepository.save(user);
+                    usersRepository.save(user);
                }
           });
 
@@ -454,13 +455,31 @@ public class AdminServicesImpl implements AdminService, FileService {
      @Override
      public void ensureDefaultDocumentsExist() {
 
-          ClassPathResource gradeImage = new ClassPathResource("static/images/GRADES.jpg");
+          ClassPathResource gradeImage = new ClassPathResource("static/images/report.PNG");
+          ClassPathResource coe = new ClassPathResource("static/images/coe.PNG");
+          ClassPathResource cog = new ClassPathResource("static/images/COG.PNG");
+          ClassPathResource cograd = new ClassPathResource("static/images/cograd.PNG");
+          ClassPathResource goodmoral = new ClassPathResource("static/images/report.PNG");
+          ClassPathResource sf9 = new ClassPathResource("static/images/sf9.PNG");
+          ClassPathResource sf10 = new ClassPathResource("static/images/sf10.PNG");
+          ClassPathResource honorable = new ClassPathResource("static/images/transfer.PNG");
+          ClassPathResource tor = new ClassPathResource("static/images/tor.PNG");
 
           // List all the files in the folder
           List<ClassPathResource> images = new ArrayList<>();
           images.add(gradeImage);
+          images.add(coe);
+          images.add(cog);
+          images.add(cograd);
+          images.add(goodmoral);
+          images.add(sf9);
+          images.add(sf10);
+          images.add(honorable);
+          images.add(tor);
 
-          String[] documentTitles = { "GRADES" };
+          String[] documentTitles = { "Reports Of Grades", "Certifcate Of Enrollment", "Certificate Of Grades",
+                    "Certificate Of Graduation", "Good Moral", "SF9-Form 138", "SF10-Form 137", "Honorable Dismissal",
+                    "TOR" };
 
           String gradeDescription = "Student Information - Requirements\n" +
                     "1. Year\n" +
@@ -468,7 +487,14 @@ public class AdminServicesImpl implements AdminService, FileService {
                     "3. Semester\n" +
                     "4. List of Subjects & Professors (Upload in a pdf/doc/docx/jpeg/jpg/png format)";
 
-          String[] documentDescriptions = { gradeDescription };
+          String allDiscription = "Student Information - Requirements\n" +
+                    "1. Year\n" +
+                    "2. Course\n" +
+                    "3. Semester\n";
+
+          String[] documentDescriptions = { gradeDescription,
+               allDiscription,allDiscription,allDiscription,
+               allDiscription,allDiscription,allDiscription,allDiscription,allDiscription};
 
           // Iterate through the files and upload them to the database
           for (int index = 0; index < images.size(); index++) {
@@ -525,7 +551,7 @@ public class AdminServicesImpl implements AdminService, FileService {
 
           try {
                if (userId != -1) {
-                    Users uploader = userRepository.findByuserId(userId).get();
+                    Users uploader = usersRepository.findByuserId(userId).get();
                     List<UserFiles> studentFiles = fileRepository.findAllByUploadedBy(uploader);
                     if (!studentFiles.isEmpty()) {
                          return studentFiles;
@@ -558,7 +584,7 @@ public class AdminServicesImpl implements AdminService, FileService {
 
           if (getAllFiles == null) {
                model.addAttribute("files", userFiles);
-               return "/svfc-admin/admin";
+               return "svfc-admin/admin";
           }
           getAllFiles.stream().forEach(file -> {
                String stringValue = file.getFileId().toString();
@@ -574,7 +600,7 @@ public class AdminServicesImpl implements AdminService, FileService {
           model.addAttribute("files", userFiles);
           model.addAttribute("page", "globalfiles");
           model.addAttribute("pageTitle", "Global Files");
-          return "/svfc-admin/admin";
+          return "svfc-admin/admin";
      }
 
 }

@@ -110,19 +110,20 @@ $(document).ready(function () {
           var file = data[i];
 
 
-          action = `<div  class="row">
-                                                        
-          <div class="col-sm">
-              <a href="/school_admin/files/download?id=${file.fileId}" type="button"class="btn btn-primary w-100">
-                  Download
+          action = `<div class="btn-group row">
+          <div class="col btn-group">
+              <a class="btn btn-primary text-white viewFile" data-value="${file.fileId}"><i class="fas fa-eye"></i> View</a>
+          </div>
+          <div class="col btn-group">
+              <a href="/school_admin/files/download?id=${file.fileId}" type="button" class="btn btn-secondary">
+              <i class="fas fa-download"></i> Download
               </a>
           </div>
-          <div class="col-sm">
-              <a type="button" data-value="${file.fileId}" class="btn btn-danger w-100 deleteFile">
-                  Delete
-              </a>
+          <div class="col btn-group">
+              <a type="button" data-value="${file.fileId}" class="btn btn-danger mt-1 text-white"><i class="fas fa-trash"></i> Delete</a>
           </div>
       </div>`;
+
           $("#zero_config")
             .DataTable()
             .row.add([

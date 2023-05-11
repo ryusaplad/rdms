@@ -207,8 +207,10 @@
                                             <tbody class="fileBody">
                                                 <tr th:each="file : ${files}">
                                                     <td>
-                                                        <a th:href="@{'/student/files/download?id='} + ${file.fileId}" type="button" class="btn btn-primary w-100">
-                                                            Download
+                                                        <a class="btn btn-primary text-white viewFile" th:data-value="${file.fileId}"><i class="fas fa-eye"></i> View</a>
+
+                                                        <a th:href="@{'/student/files/download?id='} + ${file.fileId}" type="button" class="btn btn-secondary ">
+                                                            <i class="fas fa-download"></i> Download
                                                         </a>
                                                     </td>
                                                     <td th:text="${file.name}"></td>
@@ -397,7 +399,7 @@
                                     name="file"
                                     type="file"
                                     id="fileData"
-                                    accept="image/*, application/pdf, application/msword"
+                                    accept="image/*, application/pdf"
                                 >
                                 <div class="row mt-3">
                                     <div class="col-sm">
@@ -470,7 +472,7 @@
                                     name="addFile"
                                     type="file"
                                     id="inputAddFile"
-                                    accept="image/*, application/pdf, application/msword"
+                                    accept="image/*, application/pdf"
                                 >
                                 <div class="row mt-3">
                                     <div class="col-sm">

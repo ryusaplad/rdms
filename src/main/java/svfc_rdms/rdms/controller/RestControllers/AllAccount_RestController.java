@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -519,6 +520,21 @@ public class AllAccount_RestController {
           return new ResponseEntity<>("You are performing invalid action, Please try again later.",
                     HttpStatus.BAD_REQUEST);
 
+     }
+
+     //importing account
+     @PostMapping("/{userType}/import-account/information")
+     public ResponseEntity<String> importAccountInformation(@PathVariable String userType,@RequestParam String accountType, @RequestBody List<List<String>> tableData,HttpSession session,
+     HttpServletResponse response,HttpServletRequest request) {
+        
+          if(userType.contains("svfc-admin")){
+               userType = "school_admin";
+          }
+          if (globalService.validatePages(userType, response, session)) {
+               return admin_RegistrarServiceImpl.importUserAccounts(tableData,accountType, session, request);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+          HttpStatus.BAD_REQUEST);
      }
 
      @GetMapping("/{userType}/load/document-info")

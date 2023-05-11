@@ -45,6 +45,7 @@ $(document).ready(function () {
             htmlModal +=
               `
     <div  class="col m-1">
+    <a data-value="${data[dataIndex].fileId}" class="btn btn-primary text-white viewFile"><i class="fas fa-eye"></i> View</a>
       <a href="/registrar/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +
@@ -79,9 +80,11 @@ $(document).ready(function () {
                 fileExtension;
             }
 
+            
             htmlModal +=
               `
     <div  class="col m-1">
+    <a data-value="${data[dataIndex].fileId}" class="btn btn-primary text-white viewFile"><i class="fas fa-eye"></i> View</a>
       <a href="/svfc-admin/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +

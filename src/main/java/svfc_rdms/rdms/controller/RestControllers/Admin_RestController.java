@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.controller.RestControllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,7 @@ import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
+import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.StudentRequest_ChartsLogicServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Student.Student_RequestServiceImpl;
 
@@ -53,6 +56,9 @@ public class Admin_RestController {
      
      @Autowired
      private StudentRequest_ChartsLogicServiceImpl student_RequestChartServiceImpl;
+     
+     @Autowired
+     private GlobalServiceControllerImpl globalService;
 
      @PostMapping(value = "/svfc-admin/saveUserAcc")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpSession session,HttpServletRequest request) {
@@ -220,5 +226,25 @@ public class Admin_RestController {
      public ResponseEntity<?> fetchFilterChartData(@RequestParam("s") String status,@RequestParam("d") String date) {
           return student_RequestChartServiceImpl.getCountAndRequestStatusAndYearAndCourseWhereStatusIsAndDateIs(status,date);
      }
+
+     @GetMapping("/svfc-admin/delete/file")
+     public ResponseEntity<String> deleteFile(
+               @RequestParam("id") String fileId,
+               HttpServletResponse response,
+               HttpSession session) throws IOException {
+
+          if (session == null) {
+               throw new ApiRequestException("Invalid session or service");
+          }
+
+          if (!globalService.validatePages("school_admin", response, session)) {
+               throw new ApiRequestException("Invalid session requests");
+          }
+
+          globalService.deleteFile(fileId);
+          return ResponseEntity.ok("File deleted");
+     }
+
+     
 
 }

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
+import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.RegistrarRequest;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
@@ -43,7 +44,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
      private FileRepository fileRepository;
 
      @Autowired
-     private UsersRepository userRepository;
+     private UsersRepository usersRepository;
 
      @Autowired
      private StudentRepository studentRequestRepository;
@@ -68,8 +69,7 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                } else {
 
                     boolean verifyAccountType = (session.getAttribute("accountType").toString()
-                              .toLowerCase().equals(validAccount)) ? true : false;
-
+                              .toLowerCase().trim().equalsIgnoreCase(validAccount)) ? true : false;
                     return verifyAccountType;
                }
 
@@ -150,92 +150,117 @@ public class GlobalServiceControllerImpl implements GlobalControllerService {
                }
           } catch (Exception e) {
                throw new ApiRequestException("Failed to download Reason: " + e.getMessage());
-          }finally{
+          } finally {
                try {
-                    
+
                     response.getOutputStream().close();
                } catch (Exception e) {
-                   e.printStackTrace();
+                    e.printStackTrace();
                }
           }
      }
 
      @Override
-     public ResponseEntity<String> deleteFile(String id) {
+     public ResponseEntity<String> deleteFile(String fileId) {
           try {
-               String stringValue = id.toString();
-               UUID uuidValue = UUID.fromString(stringValue);
-               UserFiles newUserFiles = null;
-               Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
-               if (!fileOptional.isPresent()) {
-                    return new ResponseEntity<String>("failed to delete this file", HttpStatus.OK);
+               UUID uuid = UUID.fromString(fileId);
+
+               Optional<UserFiles> optionalFile = fileRepository.findById(uuid);
+               if (!optionalFile.isPresent()) {
+                    return ResponseEntity
+                              .status(HttpStatus.OK)
+                              .body("Failed to delete file: file not found");
                }
-               newUserFiles = fileOptional.get();
+               UserFiles file = optionalFile.get();
 
-               Optional<Users> studentRequestWith = userRepository
-                         .findById(newUserFiles.getRequestWith().getRequestBy().getUserId());
-               Optional<Users> userRequestBy = userRepository
-                         .findById(newUserFiles.getUploadedBy().getUserId());
-               Optional<Users> registrarRequestWith = userRepository
-                         .findById(newUserFiles.getUploadedBy().getUserId());
+               Optional<Users> optionalRequestWith = Optional.ofNullable(file.getRequestWith())
+                         .map(StudentRequest::getRequestBy)
+                         .flatMap(requestBy -> usersRepository.findById(requestBy.getUserId()));
+               Optional<Users> optionalUploadedBy = Optional.ofNullable(file.getUploadedBy())
+                         .flatMap(uploadedBy -> usersRepository.findById(uploadedBy.getUserId()));
 
-               // cleaning associate keys and Reject any associated requests
-               if (studentRequestWith.isPresent()) {
-                    List<StudentRequest> studentRequest = studentRequestRepository
-                              .findAllByRequestBy(studentRequestWith.get());
-
-                    List<UserFiles> userFiles = fileRepository.findAllByRequestWith(newUserFiles.getRequestWith());
+               // Reject any associated student requests and clean up references
+               optionalRequestWith.ifPresent(requestWith -> {
+                    List<StudentRequest> studentRequests = studentRequestRepository.findAllByRequestBy(requestWith);
+                    List<UserFiles> userFiles = fileRepository.findAllByRequestWith(file.getRequestWith());
 
                     // Create a map to group UserFiles by StudentRequest
                     Map<StudentRequest, List<UserFiles>> filesByRequest = userFiles.stream()
                               .collect(Collectors.groupingBy(UserFiles::getRequestWith));
 
-                    // Loop over the StudentRequest objects and update their properties based on the
-                    // associated UserFiles
-                    for (StudentRequest studRequest : studentRequest) {
-                         List<UserFiles> associatedFiles = filesByRequest.get(studRequest);
+                    // Loop over the StudentRequest objects and clean them up
+                    for (StudentRequest studentRequest : studentRequests) {
+                         List<UserFiles> associatedFiles = filesByRequest.get(studentRequest);
                          if (associatedFiles != null && !associatedFiles.isEmpty()) {
-                              studRequest.setManageBy("Admin");
-                              studRequest.setRequestStatus("Rejected");
-                              studentRequestRepository.save(studRequest);
+                              studentRequest.setManageBy("Admin");
+                              studentRequest.setRequestStatus("Rejected");
+                              studentRequestRepository.save(studentRequest);
                          }
                     }
-                    newUserFiles.setRequestWith(null);
-               }
-               if (userRequestBy.isPresent()) {
-                    newUserFiles.setUploadedBy(null);
-               }
-               // cleaning associate keys and Reject any associated requests
-               if (registrarRequestWith.isPresent()) {
-                    List<RegistrarRequest> registrarRequest = regsRequestRepository
-                              .findAllByRequestBy(registrarRequestWith.get(), null);
+                    file.setRequestWith(null);
+               });
 
-                    List<UserFiles> userFiles = fileRepository.findAllByRequestWith(newUserFiles.getRequestWith());
+               // Clean up uploadedBy reference
+               optionalUploadedBy.ifPresent(uploadedBy -> file.setUploadedBy(null));
 
-                    // Create a map to group UserFiles by RegistrarRequest
-                    Map<RegistrarRequest, List<UserFiles>> filesByRequest = userFiles.stream()
-                              .collect(Collectors.groupingBy(UserFiles::getRegRequestsWith));
+               // Clean up references to registrar requests
+               Optional.ofNullable(file.getRegRequestsWith())
+                         .ifPresent(regRequestsWith -> {
+                              List<RegistrarRequest> registrarRequests = regsRequestRepository
+                                        .findAllByRequestBy(regRequestsWith.getRequestBy(), null);
 
-                    // Loop over the RegistrarRequest objects and update their properties based on
-                    // the
-                    // associated UserFiles
-                    for (RegistrarRequest regRequest : registrarRequest) {
-                         List<UserFiles> associatedFiles = filesByRequest.get(regRequest);
-                         if (associatedFiles != null && !associatedFiles.isEmpty()) {
+                              List<UserFiles> userFiles = fileRepository
+                                        .findAllByRegRequestsWith(file.getRegRequestsWith());
 
-                              regsRequestRepository.save(regRequest);
-                         }
-                    }
-                    newUserFiles.setRequestWith(null);
-                    newUserFiles.setRegRequestsWith(null);
-               }
+                              // Create a map to group UserFiles by RegistrarRequest
+                              Map<RegistrarRequest, List<UserFiles>> filesByRequest = userFiles.stream()
+                                        .collect(Collectors.groupingBy(UserFiles::getRegRequestsWith));
 
-               fileRepository.save(newUserFiles);
-               fileRepository.deleteById(uuidValue);
-               return new ResponseEntity<String>("success", HttpStatus.OK);
+                              // Loop over the RegistrarRequest objects and update their properties based on
+                              // the associated UserFiles
+                              for (RegistrarRequest registrarRequest : registrarRequests) {
+                                   List<UserFiles> associatedFiles = filesByRequest.get(registrarRequest);
+                                   if (associatedFiles != null && !associatedFiles.isEmpty()) {
+                                        regsRequestRepository.save(registrarRequest);
+                                   }
+                              }
+                              file.setRegRequestsWith(null);
+                         });
 
+               // Save the updated file and delete it
+               fileRepository.save(file);
+               fileRepository.deleteById(uuid);
+               return ResponseEntity
+                         .status(HttpStatus.OK)
+                         .body("File deleted successfully");
+
+          } catch (IllegalArgumentException e) {
+               throw new ApiRequestException("Failed to delete file: invalid UUID provided");
           } catch (Exception e) {
-               throw new ApiRequestException("Failed to delete this file Reason: " + e.getMessage());
+               throw new ApiRequestException("Failed to delete file: " + e.getMessage());
+          }
+     }
+
+     @Override
+     public ResponseEntity<Object> getFileInformations(String id) {
+          try {
+               String stringValue = id.toString();
+               UUID uuidValue = UUID.fromString(stringValue);
+               Optional<UserFiles> fileOptional = fileRepository.findById(uuidValue);
+
+               if (fileOptional.isPresent()) {
+                    UserFiles file = fileOptional.get();
+                    UserFiles_Dto fileData = new UserFiles_Dto(file.getFileId(), file.getData(), file.getName(),
+                              file.getSize(), file.getStatus(), file.getDateUploaded(),
+                              file.getFilePurpose(),
+                              file.getUploadedBy().getName());
+
+                    return new ResponseEntity<>(fileData, HttpStatus.OK);
+               } else {
+                    throw new ApiRequestException("File not found.");
+               }
+          } catch (Exception e) {
+               throw new ApiRequestException("Failed to get file. Reason: " + e.getMessage());
           }
      }
 

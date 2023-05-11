@@ -577,7 +577,8 @@
                                         <tbody class="logsTableBody">
                                             <tr th:each="log : ${globalLogs}">
                                                 <td th:text="${log.dateAndTime}"></td>
-                                                <td th:text="${log.message}"></td>
+                                                <td th:text="${log.message}" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></td>
+
                                                 <td>
                                                     <span th:switch="${log.threatLevel}">
                                                         <span th:case="'low'">
@@ -922,6 +923,10 @@
                                     <div class="card-header">
                                         <div class="d-flex flex-row-reverse">
                                             <div class="">
+                                                <a  class="btn btn-secondary importAccountToggle">
+                                                    Import
+                                                    <span th:text="${#strings.replace(title,'Accounts','')+' Accounts'}"></span>
+                                                </a>
                                                 <a data-bs-toggle="modal" data-bs-target="#registerModal" class="btn btn-primary ">
                                                     Add
                                                     <span th:text="${#strings.replace(title,'Accounts','')}"></span>
@@ -1378,6 +1383,9 @@
             <th:block th:case="'account_adding'">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
                 <script type="text/javascript" th:src="@{/js/adminjs/adding_account.js}"></script>
+                <script type="text/javascript" th:src="@{/js/a_libraries/sheetjs-min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/a_libraries/sheetjs-full.js}"></script>
+                <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/importAccount.js}"></script>
             </th:block>
         </th:block>
         <script type="text/javascript" th:src="@{/js/userpageJS/usermanual.js}"></script>

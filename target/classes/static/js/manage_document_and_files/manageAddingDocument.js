@@ -11,14 +11,23 @@ $(document).ready(function () {
 
 
   $(document).on('keypress', '#titleEdit,#title', function (event) {
-    /* Numbers have keyCodes between 48 and 57
-     And Letters have keyCodes between 65-90 (A-Z) and 97-122 (a-z), whitespace has keyCode 32*/
+    /* Letters have keyCodes between 65-90 (A-Z) and 97-122 (a-z)
+       Numbers have keyCodes between 48 and 57
+       Hyphen (-) has keyCode 45
+       Space has keyCode 32 */
     if ((event.keyCode >= 48 && event.keyCode <= 57) ||
-      !(event.keyCode >= 65 && event.keyCode <= 90) && !(event.keyCode >= 97 && event.keyCode <= 122) && event.keyCode !== 32) {
+        (event.keyCode >= 65 && event.keyCode <= 90) ||
+        (event.keyCode >= 97 && event.keyCode <= 122) ||
+        event.keyCode === 45 ||
+        event.keyCode === 32) {
+      // Allowed characters, do nothing
+    } else {
+      // Disallowed characters, prevent input
       event.preventDefault();
     }
   });
-
+  
+  
  
 
 
@@ -50,7 +59,7 @@ $(document).ready(function () {
                                 <p><b class="text-danger">(*) all fields are required</b></p>
 
                                 <label for="title">Title</label>
-                                <input id="titleEdit" name="title" type="text" class="required form-control" maxlength="20">
+                                <input id="titleEdit" name="title" type="text" class="required form-control" maxlength="30">
                                 <label for="description">Description</label>
                                 <textarea contenteditable="true" id="descriptionEdit" name="description"
                                     class="required form-control" maxlength="1000" rows="3" style="height:300px"></textarea>
@@ -196,7 +205,7 @@ $(document).ready(function () {
   }
   $(document).on("click", ".saveEditDocument", function (e) {
     e.preventDefault();
-    if($("#titleEdit").val().length > 20 || $("#descriptionEdit").val().length > 1000){
+    if($("#titleEdit").val().length > 30 || $("#descriptionEdit").val().length > 1000){
       $("#editDocumentModal").modal("hide");
 
       $("#resultDiv").fadeOut(1);
@@ -204,7 +213,7 @@ $(document).ready(function () {
       $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
       $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
       $("#resultMessage").html(
-        "Insertion/Updating Documents Failed Reason: Title(Max:20) And Description(Max:1000) length Invalid, Please Try again!");
+        "Insertion/Updating Documents Failed Reason: Title(Max:30) And Description(Max:1000) length Invalid, Please Try again!");
       focusToElement();
     }else{
       $("#updateDocumentForm").submit();
@@ -305,7 +314,7 @@ $(document).ready(function () {
                                         
                                                                     <p><b class="text-danger">(*) all fields are required</b></p>
                                                                     <label for="title">Title</label>
-                                                                    <input id="title" name="title" type="text" class="required form-control" maxlength="20">
+                                                                    <input id="title" name="title" type="text" class="required form-control" maxlength="30">
                                                                     <label for="description">Description</label>
                                                                     <textarea contenteditable="true" id="description" name="description"
                                                                         class="required form-control" maxlength="1000" rows="3" style="height:300px"></textarea>
@@ -347,7 +356,7 @@ $(document).ready(function () {
   });
   $(document).on("click", ".saveDocument", function (e) {
     e.preventDefault();
-    if($("#title").val().length > 20 || $("#description").val().length > 1000){
+    if($("#title").val().length > 30 || $("#description").val().length > 1000){
       $("#editDocumentModal").modal("hide");
 
       $("#resultDiv").fadeOut(1);
@@ -355,7 +364,7 @@ $(document).ready(function () {
       $("#buttonColor").removeClass("bg-success").addClass("bg-warning");
       $("#alertDiv").removeClass("alert-success").addClass("alert-warning");
       $("#resultMessage").html(
-        "Insertion/Updating Documents Failed Reason: Title(Max:20) And Description(Max:1000) length Invalid, Please Try again!");
+        "Insertion/Updating Documents Failed Reason: Title(Max:30) And Description(Max:1000) length Invalid, Please Try again!");
       focusToElement();
     }else{
       $("#addDocumentForm").submit();

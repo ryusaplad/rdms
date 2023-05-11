@@ -229,7 +229,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
 
                if (getAllFiles == null) {
                     model.addAttribute("files", userFiles);
-                    return "/student/stud";
+                    return "student/stud";
                }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
@@ -242,7 +242,7 @@ public class Student_RequirementServiceImpl implements Student_RequirementServic
                               file.getDateUploaded(), file.getFilePurpose(), uploadedBy));
                });
                model.addAttribute("files", userFiles);
-               return "/student/stud";
+               return "student/stud";
 
           }
 

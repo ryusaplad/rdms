@@ -228,36 +228,24 @@ $(document).ready(function () {
               finalValue = newValue + secondValue;
             }
             if (result.data[x].status == "Pending") {
-              dlAnchor =
-                "<tr>" +
-                "<td>" +
-                "<a href = '/svfc-admin/files/download?id=" +
-                result.data[x].fileId +
-                "'class='btn btn-danger text-white'>Download</a>" +
-                "</td>" +
-                "<td>" +
-                finalValue +
-                "</td>" +
-                "<td>" +
-                result.data[x].uploaderName +
-                "</td>" +
-                "</tr > ";
+              dlAnchor=`<tr><td>
+            <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+            <a href = "/svfc-admin/files/download?id=${request.data[x].fileId}"
+             class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
+             </td>
+          
+            <td>${finalValue}</td>
+            <td>${request.data[x].uploaderName}</td></tr>`;
               $(".tablebody").append(dlAnchor);
             } else if (result.data[x].status == "Approved") {
-              dlAnchor =
-                "<tr>" +
-                "<td>" +
-                "<a href = '/svfc-admin/files/download?id=" +
-                result.data[x].fileId +
-                "'class='btn btn-danger text-white'>Download</a>" +
-                "</td>" +
-                "<td>" +
-                finalValue +
-                "</td>" +
-                "<td>" +
-                result.data[x].uploaderName +
-                "</td>" +
-                "</tr > ";
+              dlAnchor=`<tr><td>
+            <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+            <a href = "/svfc-admin/files/download?id=${request.data[x].fileId}"
+             class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
+             </td>
+          
+            <td>${finalValue}</td>
+            <td>${request.data[x].uploaderName}</td></tr>`;
               $(".sentDocumentTable").show();
               $(".sentDocsBody").append(dlAnchor);
             }

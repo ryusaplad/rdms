@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.repository.Student.StudentRepository;
 import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_AccountServiceImpl;
@@ -40,7 +39,7 @@ public class Regs_RestController {
      private Student_RequestServiceImpl requestServiceImpl;
 
      @Autowired
-     private UsersRepository userRepository;
+     private UsersRepository usersRepository;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
@@ -141,7 +140,7 @@ public class Regs_RestController {
                HttpServletResponse response,
                HttpSession session) {
 
-          Optional<Users> user = userRepository.findByuserId(userId);
+          Optional<Users> user = usersRepository.findByuserId(userId);
           if (!user.isPresent()) {
                throw new ApiRequestException(
                          "Failed to get user informations, Please Try Again!. Please contact the administrator for further assistance.");

@@ -328,7 +328,11 @@
                                             <tbody class="fileBody">
                                                 <tr th:each="file : ${files}">
                                                     <td>
-                                                        <a th:href="@{'/registrar/files/download?id='} + ${file.fileId}" type="button" class="btn btn-primary w-100">
+                                                        <a class="btn btn-primary text-white viewFile" th:data-value="${file.fileId}">
+                                                            <i class="fas fa-eye"></i>
+                                                            View
+                                                        </a>
+                                                        <a th:href="@{'/registrar/files/download?id='} + ${file.fileId}" type="button" class="btn btn-secondary ">
                                                             Download
                                                         </a>
                                                     </td>
@@ -483,6 +487,10 @@
                                 <div class="card-header">
                                     <div class="d-flex flex-row-reverse">
                                         <div class="">
+                                            <a class="btn btn-secondary importAccountToggle">
+                                                Import
+                                                <span th:text="${accType}+' Accounts'"></span>
+                                            </a>
                                             <a data-bs-toggle="modal" data-bs-target="#registerModal" class="btn btn-primary ">
                                                 Add
                                                 <span th:text="${accType}"></span>
@@ -499,50 +507,7 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableBody">
-                                            <tr th:each="userList : ${usersLists}">
-                                                <td th:text="${userList.name}"></td>
-                                                <td th:text="${userList.status}"></td>
-                                                <td style="width:5%">
-                                                    <div class="btn-group dropstart" th:if="${userList.status}!='Temporary'">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-danger text-white "
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            Action
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li th:if="${userList.status}=='Active'">
-                                                                <a th:href="@{/registrar/user/update/(userId=${userList.userId})}" type="button" class="edit dropdown-item link text-primary">Edit</a>
-                                                            </li>
-                                                            <li th:if="${userList.type}=='Teacher' AND ${userList.status}=='Active'">
-                                                                <a
-                                                                    id="send_requests"
-                                                                    th:href="@{/(userId=${userList.userId},sendTo=${userList.name})}"
-                                                                    type="button"
-                                                                    class="sendRequests dropdown-item link text-success"
-                                                                >
-                                                                    Requests
-                                                                </a>
-                                                            </li>
-                                                            <li th:if="${userList.status}=='Active'">
-                                                                <a
-                                                                    id="delete"
-                                                                    th:href="${userList.userId}"
-                                                                    type="button"
-                                                                    class="delete  dropdown-item  text-danger"
-                                                                >Delete</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div th:if="${userList.status}=='Temporary'">
-                                                        <a th:href="${userList.userId}" type="button" class="undo  btn btn-warning text-white">Undo</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody id="tableBody"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -733,24 +698,19 @@
                                         </div>
                                         <div class="form-group has-validation">
                                             <label for="username" class="form-label">Username</label>
-                                            
-                                            <div id="alertMessage6" class="invalid-feedback" style="display:none"></div>
-                                        </div>
-                                        <div class="form-group has-validation">
-                                            <label for="username" class="form-label">Username</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" th:text="${idFormat}"></span>
                                                 </div>
                                                 <input
-                                                type="text"
-                                                class="form-control"
-                                                th:field="*{username}"
-                                                id="usernameEdit"
-                                                placeholder="Username"
-                                                name="username"
-                                                maxlength="10"
-                                            >
+                                                    type="text"
+                                                    class="form-control"
+                                                    th:field="*{username}"
+                                                    id="usernameEdit"
+                                                    placeholder="Username"
+                                                    name="username"
+                                                    maxlength="10"
+                                                >
                                                 <div id="alertMessage6" class="invalid-feedback" style="display:none"></div>
                                             </div>
                                         </div>
@@ -763,7 +723,7 @@
                                                 id="passwordEdit"
                                                 placeholder="Password"
                                                 name="password"
-                                                 maxlength="26"
+                                                maxlength="26"
                                             >
                                             <div id="alertMessage7" class="invalid-feedback" style="display:none"></div>
                                         </div>
@@ -774,7 +734,7 @@
                                                 class="form-control"
                                                 id="confirmPassEdit"
                                                 placeholder="Confirm Password"
-                                                 maxlength="26"
+                                                maxlength="26"
                                             >
                                             <div id="alertMessage8" class="invalid-feedback" style="display:none"></div>
                                         </div>
@@ -1112,7 +1072,7 @@
                             <div id="resultDiv" style="display:none">
                                 <div id="alertDiv" class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <strong id="resultMessage"></strong>
-                                    <button type="button" class="btn-close btn-close-alert"  aria-label="Close"></button>
+                                    <button type="button" class="btn-close btn-close-alert" aria-label="Close"></button>
                                 </div>
                             </div>
                             <div class="card table-responsive registrarRequestCard">
@@ -1158,13 +1118,11 @@
             </th:block>
             <th:block th:if="${page == 'accview'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
-                <script type="text/javascript">$("#zero_config").DataTable({
-                    "ordering": false,
-                    "destroy": true
-            });
-                </script>
+                <script type="text/javascript" th:src="@{/js/a_libraries/sheetjs-min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/a_libraries/sheetjs-full.js}"></script>
                 <script type="text/javascript" th:src="@{/js/manage_account_js-ajax-jquery/r-adding_accounts.js}"></script>
                 <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/r-send_request.js}"></script>
+                <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/importAccount.js}"></script>
             </th:block>
             <th:block th:if="${page == 'studrequest'}">
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>

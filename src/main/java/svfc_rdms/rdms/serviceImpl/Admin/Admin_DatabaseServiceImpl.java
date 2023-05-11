@@ -16,8 +16,9 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
 
     @Override
     public void backup(String host, String port, String dbName, String username, String password, String backupPath) {
-        List<String> command = Arrays.asList("mysqldump", "-u" + username, "-p" + password,
-                "--add-drop-database", "-B", dbName, "-r", backupPath);
+        List<String> command = Arrays.asList("mysqldump", "--hex-blob", "-u" + username, "-p" + password,
+        "--add-drop-database", "-B", dbName, "-r", backupPath);
+
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
@@ -55,7 +56,7 @@ public class Admin_DatabaseServiceImpl implements Admin_DatabaseService {
     @Override
     public byte[] backUpDatabase(String host, String port, String dbName, String username, String password) {
         try {
-            String[] command = new String[] { "mysqldump", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
+            String[] command = new String[] { "mysqldump", "--hex-blob", "-h" + host, "-P" + port, "-u" + username, "-p" + password,
                     dbName };
             
             Process process = Runtime.getRuntime().exec(command);

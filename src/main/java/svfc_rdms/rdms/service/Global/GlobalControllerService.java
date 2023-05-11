@@ -17,6 +17,8 @@ public interface GlobalControllerService {
 
       void downloadFile(String id, Model model, HttpServletResponse response);
       ResponseEntity<String> deleteFile(String id);
+     
+      ResponseEntity<Object> getFileInformations(String id);
 
       String formattedDate();
 

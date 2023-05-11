@@ -258,40 +258,24 @@ Edit|<b>Re</b>submit
           }
 
           if (request.data[x].status == "Pending") {
-            dlAnchor =
-              "<tr>" +
-              "<td>" +
-              "<a href = '/student/files/download?id=" +
-              request.data[x].fileId +
-              "'class='btn btn-danger text-white'>Download</a>" +
-              "</td>" +
-              "<td>" +
-              finalValue +
-              "</td>" +
-              "<td>" +
-              request.data[x].uploaderName +
-              "</td>" +
-              "</tr > ";
+            dlAnchor=`<tr><td>
+            <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+            <a href = "/student/files/download?id=${request.data[x].fileId}"
+             class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
+             </td>
+          
+            <td>${finalValue}</td>
+            <td>${request.data[x].uploaderName}</td></tr>`;
             $(".tablebody").append(dlAnchor);
           } else if (request.data[x].status == "Approved") {
-            dlAnchor =
-              "<tr>" +
-              "<td>" +
-              "<a href = '/student/files/download?id=" +
-              request.data[x].fileId +
-              "'class='btn btn-danger text-white'>Download</a>" +
-              "</td>" +
-              "<td>" +
-              finalValue +
-              "</td>" +
-              "<td>" +
-              request.data[x].uploaderName +
-              "</td>" +
-              "</tr > ";
-
-
-
-
+            dlAnchor=`<tr><td>
+            <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+            <a href = "/student/files/download?id=${request.data[x].fileId}"
+             class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
+             </td>
+          
+            <td>${finalValue}</td>
+            <td>${request.data[x].uploaderName}</td></tr>`;
 
             $(".receievedDoc").append(dlAnchor);
 

@@ -26,7 +26,7 @@ public class TeacherController {
           if (globalService.validatePages("teacher", response, session)) {
                model.addAttribute("pageTitle", "Dashboard");
                model.addAttribute("page", "dashboard");
-               return "/teacher/teach";
+               return "teacher/teach";
 
           }
           return "redirect:/";
@@ -38,7 +38,7 @@ public class TeacherController {
           if (globalService.validatePages("teacher", response, session)) {
                model.addAttribute("pageTitle", "Recieved Requests");
                model.addAttribute("page", "requests");
-               return "/teacher/teach";
+               return "teacher/teach";
           }
           return "redirect:/";
      }

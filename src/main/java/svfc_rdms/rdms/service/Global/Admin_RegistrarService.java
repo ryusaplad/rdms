@@ -13,20 +13,24 @@ import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 
 public interface Admin_RegistrarService {
-    ResponseEntity<Object> saveUsersAccount(Users user, int actions, HttpSession session,HttpServletRequest request);
+    ResponseEntity<Object> saveUsersAccount(Users user, int actions, HttpSession session, HttpServletRequest request);
+
+    ResponseEntity<String> importUserAccounts(List<List<String>> tableData,String userType, HttpSession session,
+            HttpServletRequest request);
 
     boolean findUserName(String username);
 
     Optional<Users> findOneUserById(long userId);
 
-    boolean deleteData(long userId, HttpSession session,HttpServletRequest request);
+    boolean deleteData(long userId, HttpSession session, HttpServletRequest request);
 
-    boolean changeAccountStatus(String status, long userId, HttpSession session,HttpServletRequest request);
+    boolean changeAccountStatus(String status, long userId, HttpSession session, HttpServletRequest request);
 
-    ResponseEntity<String> exportingStudentRequestToExcel(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq,HttpServletRequest request);
+    ResponseEntity<String> exportingStudentRequestToExcel(HttpServletResponse response, HttpSession session,
+            List<StudentRequest> studReq, HttpServletRequest request);
 
-    void exportConfirmation(HttpServletResponse response, HttpSession session,List<StudentRequest> studReq,HttpServletRequest request);
-
+    void exportConfirmation(HttpServletResponse response, HttpSession session, List<StudentRequest> studReq,
+            HttpServletRequest request);
 
     ResponseEntity<Object> fetchAllStudentRequest();
 }

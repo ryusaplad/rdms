@@ -35,7 +35,7 @@ public class RegistrarController {
           if (globalService.validatePages("registrar", response, session)) {
                model.addAttribute("page", "dashboard");
                model.addAttribute("pageTitle", "Dashboard");
-               return "/registrar/reg";
+               return "registrar/reg";
           }
           return "redirect:/";
      }
@@ -62,12 +62,12 @@ public class RegistrarController {
                          return "redirect:/";
                     }
                     model.addAttribute("page", "accview");
-                    model.addAttribute("pageTitle", "Uploaded Files");
+                    model.addAttribute("pageTitle", accountType+" Account");
                     model.addAttribute("accType", accountType);
                     model.addAttribute("idFormat", idFormat);
                     model.addAttribute("users", new Users());
                     model.addAttribute("usersLists", mainService.diplayAllAccountsByType(accountType));
-                    return "/registrar/reg";
+                    return "registrar/reg";
 
                } catch (Exception e) {
                     System.out.println("Error: " + e.getMessage());
@@ -83,7 +83,7 @@ public class RegistrarController {
           if (globalService.validatePages("registrar", response, session)) {
                model.addAttribute("page", "studrequest");
                model.addAttribute("pageTitle", "Student Requests");
-               return "/registrar/reg";
+               return "registrar/reg";
           }
           return "redirect:/";
 
@@ -106,7 +106,7 @@ public class RegistrarController {
           if (globalService.validatePages("registrar", response, session)) {
                model.addAttribute("pageTitle", "Documents");
                model.addAttribute("page", "documents");
-               return "/registrar/reg";
+               return "registrar/reg";
           }
           return "redirect:/";
      }
@@ -116,7 +116,7 @@ public class RegistrarController {
           if (globalService.validatePages("registrar", response, session)) {
                model.addAttribute("pageTitle", "Sent Requests");
                model.addAttribute("page", "myrequest");
-               return "/registrar/reg";
+               return "registrar/reg";
           }
           return "redirect:/";
      }

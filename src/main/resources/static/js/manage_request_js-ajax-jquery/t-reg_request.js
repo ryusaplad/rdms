@@ -52,6 +52,7 @@ $(document).ready(function () {
             htmlModalVal +=
               `
     <div  class="col m-1">
+    <a class="btn btn-primary text-white viewFile" data-value="${data[dataIndex].fileId}"><i class="fas fa-eye"></i> View</a>
       <a href="/teacher/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +
@@ -91,6 +92,7 @@ $(document).ready(function () {
             htmlModalVal +=
               `
     <div  class="col m-1">
+    <a class="btn btn-primary text-white viewFile" data-value="${data[dataIndex].fileId}"><i class="fas fa-eye"></i> View</a>
       <a href="/teacher/files/download?id=` +
               data[dataIndex].fileId +
               `" class="btn btn-light border border-light text-dark" title="` +
@@ -407,31 +409,42 @@ $(document).ready(function () {
       var split = fileName.split(".");
       fileName = split[0];
       var extension = split[1];
-      if (fileName.length > 10) {
-        fileName = fileName.substring(0, 10);
+      if (!["jpg", "jpeg", "png", "pdf"].includes(extension)) {
+        var message = "";
+        message = "Please select a valid file type (JPG, PNG, or PDF).";
+        $(".message").text(message);
+        $(".errorMessageAlert").show();
+        formData = new FormData();
+        $("#fileInfoTable").empty();
+        return false;
+      } else {
+        if (fileName.length > 10) {
+          fileName = fileName.substring(0, 10);
+        }
+        var name = fileName + "." + extension;
+        $("#fileInfoTable").append(
+          "'<tr>'" +
+          "<td>" +
+          "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
+          x +
+          ">Cancel</button>" +
+          "</td>" +
+          "<td>" +
+          name +
+          "</td >" +
+          "<td>" +
+          formatFileSize($("#files")[0].files[x].size) +
+          "</td >" +
+          "</tr >"
+        );
       }
-      var name = fileName + "." + extension;
-      $("#fileInfoTable").append(
-        "'<tr>'" +
-        "<td>" +
-        "<button type = 'button' class='btn removeItemFile btn-outline-danger' data-index=" +
-        x +
-        ">Cancel</button>" +
-        "</td>" +
-        "<td>" +
-        name +
-        "</td >" +
-        "<td>" +
-        formatFileSize($("#files")[0].files[x].size) +
-        "</td >" +
-        "</tr >"
-      );
-    }
-    fileListArr = Array.from($("#files")[0].files);
-    for (var i = 0; i < fileListArr.length; i++) {
-      formData.append("file[]", fileListArr[i]);
-    }
-    $(".errorMessageAlert").hide();
+      fileListArr = Array.from($("#files")[0].files);
+      for (var i = 0; i < fileListArr.length; i++) {
+        formData.append("file[]", fileListArr[i]);
+      }
+      $(".errorMessageAlert").hide();
+      }
+     
   });
 
   function formatFileSize(bytes) {

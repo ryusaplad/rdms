@@ -67,7 +67,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
                if (getAllFiles == null) {
                     model.addAttribute("files", userFiles);
-                    return "/registrar/reg";
+                    return "registrar/reg";
                }
                getAllFiles.stream().forEach(file -> {
                     String stringValue = file.getFileId().toString();
@@ -81,7 +81,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                });
                model.addAttribute("files", userFiles);
 
-               return "/registrar/reg";
+               return "registrar/reg";
 
           }
 

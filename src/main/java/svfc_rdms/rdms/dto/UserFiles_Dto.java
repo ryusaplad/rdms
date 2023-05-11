@@ -5,6 +5,7 @@ import java.util.UUID;
 public class UserFiles_Dto {
 
      private UUID fileId;
+     private byte[] fileData;
      private String name;
      private String size;
      private String status;
@@ -23,8 +24,24 @@ public class UserFiles_Dto {
           this.uploadedBy = uploadedBy;
      }
 
+     public UserFiles_Dto(UUID fileId, byte[] fileData, String name, String size, String status, String dateUploaded,
+               String filePurpose,
+               String uploadedBy) {
+          this.fileId = fileId;
+          this.fileData = fileData;
+          this.name = name;
+          this.size = size;
+          this.status = status;
+          this.dateUploaded = dateUploaded;
+          this.filePurpose = filePurpose;
+          this.uploadedBy = uploadedBy;
+     }
+
      public UUID getFileId() {
           return fileId;
+     }
+     public byte[] getFileData() {
+          return fileData;
      }
 
      public String getName() {
