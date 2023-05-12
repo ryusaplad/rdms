@@ -112,7 +112,7 @@ Edit|<b>Re</b>submit
           } else if (myrequest.requestStatus.toLowerCase().includes("pending")) {
             statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
           } else if (myrequest.requestStatus.toLowerCase().includes("on-going")) {
-            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-half text-primary" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
+            statusIcon = ` <td> <strong class="btn btn-outline-orange" > <i class="fa fa-hourglass-half " aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
           } else if (myrequest.requestStatus.toLowerCase().includes("rejected")) {
             statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${myrequest.requestStatus}</strong></td>`;
           }
@@ -183,6 +183,7 @@ Edit|<b>Re</b>submit
             </table>
         </div>
         <hr>
+        <h4 class="card-title ">Request Status</h4>
         <div style="display:none" class="detail-alert"></div>
         <h4 class="card-title ">Message</h4>
         <div class="messHeader" style="display:none;overflow-y: scroll;"></div>
@@ -258,7 +259,7 @@ Edit|<b>Re</b>submit
           }
 
           if (request.data[x].status == "Pending") {
-            dlAnchor=`<tr><td>
+            dlAnchor = `<tr><td>
             <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
             <a href = "/student/files/download?id=${request.data[x].fileId}"
              class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
@@ -268,7 +269,7 @@ Edit|<b>Re</b>submit
             <td>${request.data[x].uploaderName}</td></tr>`;
             $(".tablebody").append(dlAnchor);
           } else if (request.data[x].status == "Approved") {
-            dlAnchor=`<tr><td>
+            dlAnchor = `<tr><td>
             <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
             <a href = "/student/files/download?id=${request.data[x].fileId}"
              class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
@@ -297,48 +298,114 @@ Edit|<b>Re</b>submit
         $("#datereqpar").text(request.data[0].requestDate);
         $("#daterelpar").text(request.data[0].releaseDate);
         var status = request.data[0].requestStatus;
-        var message =
-          request.data[0].requestStatus + ", " + request.data[0].reply;
-        var alertType = "";
 
-        if (status.toLowerCase() == "approved") {
-          alertType = "alert-success";
-          faIcon = "fa fa-check-circle";
-          message = request.data[0].requestStatus;
-        } else if (status.toLowerCase() == "pending") {
-          alertType = "alert-info";
-          faIcon = "fa fa-clock";
-          message = request.data[0].requestStatus;
-        } else if (status.toLowerCase() == "on-going") {
-          alertType = "alert-info";
-          faIcon = "fa fa-spinner fa-spin";
-          message = request.data[0].requestStatus;
+
+
+        $(".messHeader").empty();
+        $(".messHeader").show();
+        $("#mess").text();
+
+        if (request.data[0].reply != null) {
+          if (request.data[0].reply.length != 0) {
+            if (
+              request.data[0].reply.length > 0 &&
+              request.data[0].manageBy.length > 0
+            ) {
+              var htmlP =
+                " <p id='mess'>From:<mark>" +
+                request.data[0].name +
+                "</mark>:(" +
+                request.data[0].message +
+                ")</p>" +
+                "<p id='reply'>From:<mark>" +
+                request.data[0].manageBy +
+                "</mark>:(" +
+                request.data[0].reply +
+                ")</p>";
+              $(".messHeader").append(htmlP);
+            }
+          } else {
+            var htmlP =
+              " <p id='mess'>From:<mark> " +
+              request.data[0].name +
+              "</mark>:(" +
+              request.data[0].message +
+              ")</p>";
+            $(".messHeader").append(htmlP);
+          }
         } else {
-          alertType = "alert-danger";
-          faIcon = "fa fa-exclamation-triangle";
+          var htmlP =
+            " <p id='mess'>From:<mark> " +
+            request.data[0].name +
+            "</mark>:(" +
+            request.data[0].message +
+            ")</p>";
+          $(".messHeader").append(htmlP);
         }
-        var htmlDiv =
-          "  <div class='alert " +
-          alertType +
-          " d-flex align-items-center' role='alert'>" +
-          "<i class='" +
-          faIcon +
-          " fa-fw'></i>" +
-          "Requests " +
-          message +
-          "</div>";
+
+
+        var htmlDiv = `<div class="progress">
+          <div class="progress-bar">
+            <div class="progress-label"></div>
+          </div>
+          <div class="days-remaining"></div>
+        </div>`;
+
         $(".detail-alert").empty();
         $(".detail-alert").append(htmlDiv);
         $(".detail-alert").show();
+        // Get the target date as a string
+        const targetDateStr = request.data[0].targetDate;
+
+        // Check if targetDateStr is empty or not a valid date
+        if (targetDateStr != "" || !isNaN(Date.parse(targetDateStr))) {
+          //parse the value to date
+          const targetDate = new Date(targetDateStr);
+          const currentDate = new Date();
+
+          // Calculate the remaining time in milliseconds
+          const remainingTime = targetDate.getTime() - currentDate.getTime();
+          // Calculate the remaining days
+          const remainingDays = Math.ceil(remainingTime / (1000 * 3600 * 24));
+          if (status.toLowerCase() == "approved") {
+            status = "completed";
+            setProgress(status, 100, remainingDays);
+          } else if (status.toLowerCase() == "pending") {
+
+            setProgress(status, 30, remainingDays);
+          } else if (status.toLowerCase() == "on-going") {
+
+            setProgress(status, 60, remainingDays);
+          } else if (status.toLowerCase() == "rejected") {
+
+            setProgress(status, 0, 0);
+          }
+        }
+
+
+
         $(".receievedDocumentTable").show();
         $(".studDetailedLoaderDiv").remove();
         $("#detailsBody").show();
       }
     });
-   
+
 
   });
-  $(".clearDetailModal").on("click",function(e){
+  function setProgress(status, percentage, days) {
+    const progressBar = document.querySelector('.progress-bar');
+    const progressLabel = document.querySelector('.progress-label');
+    const daysRemaining = document.querySelector('.days-remaining');
+
+    progressBar.classList.remove('pending', 'on-going', 'completed', 'rejected');
+    progressBar.classList.add(status);
+    status = status.substring(0, 1).toUpperCase() + status.substring(1);
+    progressLabel.textContent = `${status} — ${percentage}%`;
+    progressBar.style.width = `${percentage}%`;
+    daysRemaining.textContent = `${days} days remaining`;
+  }
+
+  $(".clearDetailModal").on("click", function (e) {
     $("#detail-modal-body").empty();
   })
   $(document).on("click", ".toggleEditReqModal", function (e) {

@@ -9,9 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +60,7 @@ public class NotificationServiceImpl implements NotificationService {
              * if the to is not null that is from or
              * between registrar and teacher notification
              */
-            page = notifRepository.findAllByToIsNullOrTo(user,
+            page = notifRepository.findAllByToIsNullAndFromIsNotNullOrTo(user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
             
             notifications = page.getContent();
@@ -121,7 +119,7 @@ public class NotificationServiceImpl implements NotificationService {
                 }
                 if (notifData.getTo() == null) {
 
-                    reciever = "Add Here";
+                    reciever = "All Registrar";
                 }
                 if (notifData.getFrom() == null) {
                     sender = "System";
@@ -203,7 +201,7 @@ public class NotificationServiceImpl implements NotificationService {
              * if the to is not null that is from or
              * between registrar and teacher notification
              */
-            page = notifRepository.findAllByToIsNullAndStatusOrTo(status,user,
+            page = notifRepository.findAllByToIsNullAndStatusAndFromNotNull(status,user,
                     PageRequest.of(lowestPage, totalPage, descendingSort));
 
             notifications = page.getContent();

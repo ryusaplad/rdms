@@ -46,11 +46,7 @@ $(document).ready(function () {
                    <div class="table-responsive d-none">
                      <table class="table table-bordered text-center" id="zero_config">
                        <thead>
-                         <tr>
-                           <th>Column 1</th>
-                           <th>Column 2</th>
-                           <th>Column 3</th>
-                         </tr>
+                      
                        </thead>
                        <tbody>
                        </tbody>

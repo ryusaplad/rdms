@@ -55,8 +55,6 @@ public class Regs_RestController {
      @Autowired
      private Admin_Registrar_ManageServiceImpl adminAccountService;
 
-     
-
      @PostMapping(value = "/registrar/save/user-account")
      public ResponseEntity<Object> saveUser(@RequestBody Users user, Model model, HttpServletResponse response,
                HttpSession session,
@@ -153,14 +151,15 @@ public class Regs_RestController {
      @ResponseBody
      public ResponseEntity<String> changeRequestInformations(
                @PathVariable("status") String status,
+               @RequestParam("targetDate") String targetDate,
                @RequestParam("userId") long userId,
                @RequestParam("requestId") long requestId,
                @RequestParam("reason") String message,
                HttpServletResponse response,
                HttpSession session, HttpServletRequest request) {
 
-
-          return regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, message, userId, requestId,
+          return regs_RequestService.changeStatusAndManageByAndMessageOfRequests(status, targetDate, message, userId,
+                    requestId,
                     session, request);
 
      }

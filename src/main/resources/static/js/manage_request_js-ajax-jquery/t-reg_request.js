@@ -36,7 +36,7 @@ $(document).ready(function () {
           htmlModalVal += `
           <div class="card">
           <hr>
-  <strong>Files</strong>
+  <strong><i class="far fa-file"></i> Files</strong>
   <div class="card-body text-start">
    <div class="row">`;
           for (let dataIndex = 1; dataIndex < data.length; dataIndex++) {
@@ -76,7 +76,7 @@ $(document).ready(function () {
           htmlModalVal += `
           <div class="card">
           <hr>
-  <strong>Files</strong>
+  <strong><i class="far fa-file"></i> Files</strong>
   <div class="card-body text-start">
    <div class="row">`;
           for (let dataIndex = 1; dataIndex < data.length; dataIndex++) {
@@ -91,18 +91,17 @@ $(document).ready(function () {
 
             htmlModalVal +=
               `
-    <div  class="col m-1">
-    <a class="btn btn-primary text-white viewFile" data-value="${data[dataIndex].fileId}"><i class="fas fa-eye"></i> View</a>
-      <a href="/teacher/files/download?id=` +
-              data[dataIndex].fileId +
-              `" class="btn btn-light border border-light text-dark" title="` +
-              data[dataIndex].name +
-              `">
-        <i class="far fa-file"></i> ` +
-              fileName +
-              `
-      </a>
-    </div>
+              <div class="col m-1">
+              <div class="d-flex flex-nowrap  align-items-center">
+                <a href="#" class="btn btn-primary btn-view viewFile" data-value="${data[dataIndex].fileId}">
+                  <i class="fas fa-eye"></i> View
+                </a>
+                <a href="/teacher/files/download?id=${data[dataIndex].fileId}" class="btn btn-light btn-download" title="${data[dataIndex].name}">
+                  <i class="fas fa-download"></i> ${fileName}
+                </a>
+              </div>
+            </div>
+            
   `;
           }
 
@@ -339,6 +338,7 @@ $(document).ready(function () {
       $(".modalView").append(mainHtmlModal);
     }
   });
+  var alertDiv = $("#alertDiv");
   var alertBox = $("#resultDiv");
   var alertMessage = $("#resultMessage");
   // Sending Request
@@ -356,8 +356,10 @@ $(document).ready(function () {
         $(".sentConfirm").attr("disabled", true);
       },
       success: function (result) {
+        alertDiv.removeClass("alert-warning");
+        alertDiv.addClass("alert-success");
         alertBox.show();
-        alertMessage.val("Requests have been sent back to the registrar.");
+        alertMessage.text("Requests have been sent back to the registrar.");
         $(".sentConfirm").attr("disabled", false);
         $("#responseModal").modal("hide");
         $(".modalView").empty();
@@ -365,6 +367,8 @@ $(document).ready(function () {
       error: function (error) {
         $("#responseModal").modal("hide");
         if(!error.responseText.includes("<!DOCTYPE html>")){
+          alertDiv.removeClass("alert-warning");
+          alertDiv.addClass("alert-success");
           alertBox.show();
           alertMessage.text(`Failed to Sent: ${error.responseText}`);
           

@@ -45,6 +45,7 @@ public class StudentRequest {
       private String requestStatus;
 
       private String releaseDate;
+      private String targetDate;
       @Column(columnDefinition = "text")
       private String manageBy;
 

@@ -1,6 +1,6 @@
-target/
 HELP.md
 !.mvn/wrapper/maven-wrapper.jar
+target/
 
 
 ### STS ###

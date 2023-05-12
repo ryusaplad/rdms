@@ -22,13 +22,13 @@ $(document).ready(function () {
           var studRequest = data[i];
           var statusIcon = "";
           if (studRequest.requestStatus.toLowerCase().includes("approved")) {
-            statusIcon = ` <td> <strong class="btn btn-outline-success" > <i class="fas fa-check text-success" aria-hidden="true"></i> Completed</strong></td>`;
+            statusIcon = ` <td> <strong class="btn btn-outline-success"> <i class="fas fa-check text-success" aria-hidden="true"></i> Completed</strong></td>`;
           } else if (studRequest.requestStatus.toLowerCase().includes("pending")) {
-            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+            statusIcon = ` <td> <strong class="btn btn-outline-primary"> <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           } else if (studRequest.requestStatus.toLowerCase().includes("on-going")) {
-            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-half text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+            statusIcon = ` <td> <strong class="btn btn-outline-orange"> <i class="fa fa-hourglass-half" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           } else if (studRequest.requestStatus.toLowerCase().includes("rejected")) {
-            statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+            statusIcon = ` <td> <strong class="btn btn-outline-danger"> <i class="fas fa-times text-danger" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           }
 
 
@@ -75,7 +75,7 @@ $(document).ready(function () {
     }
 
     var link =
-      "/svfc-admin/dashboard/studentrequest/fetch?s=" +
+      "/svfc-admin/student-request/fetch?s=" +
       paramMap.s +
       "&req=" +
       paramMap.req;
@@ -155,7 +155,8 @@ $(document).ready(function () {
     <table class="table table-primary table-responsive">
         <thead>
             <tr>
-                <th>Date Request</th>
+                <th>Date of Request</th>
+                <th>Date of Released</th>
                 <th>Request Status</th>
                 <th>Manage by</th>
             </tr>
@@ -164,6 +165,7 @@ $(document).ready(function () {
         <tbody>
             <tr>
                 <td class="font-weight-bold" id="datereqpar">N/A</td>
+                <td class="font-weight-bold" id="datereqrel">N/A</td>
                 <td class="font-weight-bold" id="reqstatuspar">N/A</td>
                 <td class="font-weight-bold" id="manageby"></td>
             </tr>
@@ -229,23 +231,23 @@ $(document).ready(function () {
             }
             if (result.data[x].status == "Pending") {
               dlAnchor=`<tr><td>
-            <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
-            <a href = "/svfc-admin/files/download?id=${request.data[x].fileId}"
+            <a class="btn btn-primary text-white viewFile" data-value="${result.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+            <a href = "/svfc-admin/files/download?id=${result.data[x].fileId}"
              class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
              </td>
           
             <td>${finalValue}</td>
-            <td>${request.data[x].uploaderName}</td></tr>`;
+            <td>${result.data[x].uploaderName}</td></tr>`;
               $(".tablebody").append(dlAnchor);
             } else if (result.data[x].status == "Approved") {
               dlAnchor=`<tr><td>
-            <a class="btn btn-primary text-white viewFile" data-value="${request.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
-            <a href = "/svfc-admin/files/download?id=${request.data[x].fileId}"
+            <a class="btn btn-primary text-white viewFile" data-value="${result.data[x].fileId}"><i class="fas fa-eye"></i> View</a>
+            <a href = "/svfc-admin/files/download?id=${result.data[x].fileId}"
              class="btn btn-secondary text-white"><i class="fas fa-download"></i> Download</a>
              </td>
           
             <td>${finalValue}</td>
-            <td>${request.data[x].uploaderName}</td></tr>`;
+            <td>${result.data[x].uploaderName}</td></tr>`;
               $(".sentDocumentTable").show();
               $(".sentDocsBody").append(dlAnchor);
             }
@@ -282,6 +284,7 @@ $(document).ready(function () {
           $("#statusInSup").text(result.data[0].requestStatus);
           $("#reqstatuspar").text(result.data[0].requestStatus);
           $("#datereqpar").text(result.data[0].requestDate);
+          $("#datereqrel").text(result.data[0].releaseDate);
           $("#manageby").text(result.data[0].manageBy);
           $(".messHeader").empty();
           $(".messHeader").show();

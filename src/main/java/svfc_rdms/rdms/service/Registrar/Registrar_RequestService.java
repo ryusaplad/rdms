@@ -20,6 +20,6 @@ public interface Registrar_RequestService {
 
      String displayAllFilesByUserId(HttpSession session, Model model);
 
-     ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String message, long userId,
+     ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status,String targetDate, String message, long userId,
                long requestId, HttpSession session,HttpServletRequest request);
 }

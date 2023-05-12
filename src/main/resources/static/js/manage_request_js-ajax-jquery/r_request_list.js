@@ -33,7 +33,7 @@ $(document).ready(function () {
           } else if (studRequest.requestStatus.toLowerCase().includes("pending")) {
             statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-start text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           } else if (studRequest.requestStatus.toLowerCase().includes("on-going")) {
-            statusIcon = ` <td> <strong class="btn btn-outline-primary" > <i class="fa fa-hourglass-half text-primary" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
+            statusIcon = ` <td> <strong class="btn btn-outline-orange" > <i class="fa fa-hourglass-half" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           } else if (studRequest.requestStatus.toLowerCase().includes("rejected")) {
             statusIcon = ` <td> <strong class="btn btn-outline-danger" > <i class="fas fa-times text-danger" aria-hidden="true"></i> ${studRequest.requestStatus}</strong></td>`;
           }
@@ -78,7 +78,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".toggleRequestDetail", function (e) {
     e.preventDefault();
-    $(".modalView").empty();
+
     var href = $(this).attr("href");
 
     var queryString = href.split("?")[1];
@@ -107,7 +107,7 @@ $(document).ready(function () {
                     <h5 class="modal-title" id="reqDetailModal">
                         <span id="titleVal">More Details</span> - <span class="btn" id="statusInSup" style="cursor: text;"></span>
                     </h5>
-                    <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                 <div class="reqDetailedLoaderDiv">
@@ -137,8 +137,8 @@ $(document).ready(function () {
       type: "GET",
       success: function (result) {
         $(".reqDetailedLoaderDiv").replaceWith(`<h4 class="card-title">Requests Informations</h4>
-        <div class="container-sm"></div>
-        <table class="table table-primary table-responsive">
+        <div class="container-sm table-responsive">
+        <table class="table table-primary ">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -161,6 +161,7 @@ $(document).ready(function () {
                 </tr>
             </tbody>
         </table>
+        </div>
         <hr>
         <h4 class="card-title ">Message</h4>
         <pre class="messHeader" style="display:none;overflow-y: scroll; font-size:14px; white-space: pre-wrap;">
@@ -168,11 +169,13 @@ $(document).ready(function () {
         </pre>
         <hr>
         <h4 class="card-title">Request Status</h4>
-        <table class="table table-primary table-responsive">
+        <div class="container-sm table-responsive">
+        <table class="table table-primary ">
             <thead>
                 <tr>
-                    <th>Date Request</th>
+                    <th>Date Of Request</th>
                     <th>Request Status</th>
+                    <th>Target Date / Due</th>
                     <th>Manage by</th>
                 </tr>
     
@@ -181,13 +184,16 @@ $(document).ready(function () {
                 <tr>
                     <td class="font-weight-bold" id="datereqpar">N/A</td>
                     <td class="font-weight-bold" id="reqstatuspar">N/A</td>
+                    <td class="font-weight-bold" id="targetdate">N/A</td>
                     <td class="font-weight-bold" id="manageby"></td>
                 </tr>
             </tbody>
         </table>
+        </div>
         <hr>
         <h4 class="card-title">Receieved Requirements</h4>
-        <table class="table table-white table-responsive receiveRequirementsTable"
+        <div class="container-sm table-responsive">
+        <table class="table table-white receiveRequirementsTable"
             style="overflow-y: scroll; height: 100px;">
             <thead>
                 <tr>
@@ -206,8 +212,10 @@ $(document).ready(function () {
                 </tr>
             </tbody>
         </table>
+        </div>
         <h4 class="card-title">Sent Documents</h4>
-        <table class="table table-white table-responsive sentDocumentTable"
+        <div class="container-sm table-responsive">
+        <table class="table table-white sentDocumentTable"
             style="overflow-y: scroll; height: 100px; display:none">
             <thead>
                 <tr>
@@ -224,7 +232,7 @@ $(document).ready(function () {
                     </td>
                 </tr>
             </tbody>
-        </table>`);
+        </table> </div>`);
         $(".tablebody").empty();
         $(".sentDocsBody").empty();
         var dlAnchor = "";
@@ -301,6 +309,33 @@ $(document).ready(function () {
           $("#statusInSup").text(result.data[0].requestStatus);
           $("#reqstatuspar").text(result.data[0].requestStatus);
           $("#datereqpar").text(result.data[0].requestDate);
+
+          // Get the target date as a string
+          const targetDateStr = result.data[0].targetDate;
+
+          // Check if targetDateStr is empty or not a valid date
+          if (targetDateStr === "" || isNaN(Date.parse(targetDateStr))) {
+            $("#targetdate").text(`(${result.data[0].targetDate}):${ result.data[0].releaseDate}`);
+          } else {
+       
+            //parse the value to date
+            const targetDate = new Date(targetDateStr);
+            const currentDate = new Date();
+
+            // Calculate the remaining time in milliseconds
+            const remainingTime = targetDate.getTime() - currentDate.getTime();
+            // Calculate the remaining days
+            const remainingDays = Math.ceil(remainingTime / (1000 * 3600 * 24));
+            // Format the date to remove the time zone text
+            const formattedDate = targetDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+            // Create the text to display
+            const displayText = formattedDate + " (" + remainingDays + " days remaining)";
+            // Set the text of the element with id "targetdate"
+            $("#targetdate").text(displayText);
+          }
+
+
+
           $("#manageby").text(result.data[0].manageBy);
           $(".messHeader").empty();
           $(".messHeader").show();
@@ -357,29 +392,37 @@ $(document).ready(function () {
     usId = userId;
     htmlModal =
       `
-      <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        role="dialog" aria-labelledby="confirmModalModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalModalLabel">Process Confirmation</h5>
-                    <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body mBody">
-                    <p>Are you sure you want to process this requests.?</p>
-                    <b> Note:</b>
-                    <p>This action can be undone and changed to <strong>'REJECTED'</strong> if necessary.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>
-                    <a id="processHref" href=` +
+        <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          role="dialog" aria-labelledby="confirmModalModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="confirmModalModalLabel">Process Confirmation</h5>
+                      <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body mBody">
+                    <p>Are you sure you want to process this request?</p>
+                    <b>Notes:</b>
+                    <ul>
+                      <li>This action can be undone and changed to <strong>'REJECTED'</strong> if necessary.</li>
+                      <li>Selecting a target date is required and will set the deadline for completing this request.</li>
+                      <li>The target date must not be less than or greater than to the current date.</li>
+                    </ul>
+                    <label for="datepicker">Select target date:</label>
+                    <input type="date" id="datepicker" name="datepicker" class="form-control" required>
+                    <div class="invalid-feedback d-none invalidMessage"></div>
+                  
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary clearModal" data-bs-dismiss="modal">Cancel</button>
+                      <a id="processHref" href=` +
       usId +
-      ` type="button" class="btn btn-danger confirmProcess clearModal" data-bs-dismiss="modal">Confirm</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
+      ` type="button" class="btn btn-danger confirmProcess">Confirm</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      `;
     $(".modalView").append(htmlModal);
     $("#confirmModal").modal("toggle");
   });
@@ -702,28 +745,55 @@ $(document).ready(function () {
     $("#rejectModal").modal("toggle");
   });
 
+
+
+
+
   $(document).on("click", ".confirmProcess", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    console.log(userId + "And" + rId);
-    updateStudentRequests(userId, "N/A", "On-Going");
+    var targetDate = new Date($("#datepicker").val());
+    var currentDate = new Date();
+    var maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 100);
+
+    if (isNaN(targetDate) || targetDate < currentDate) {
+      $("#datepicker").addClass("is-invalid");
+      $(".invalidMessage").removeClass("d-none");
+      $(".invalidMessage").text("Please select a valid target and date that is not in the past.");
+      return;
+    } else if (targetDate > maxDate) {
+      $(".invalidMessage").removeClass("d-none");
+      $(".invalidMessage").text("Please select a target date within the next 100 days.");
+      return;
+    } else {
+      $("#datepicker").removeClass("is-invalid");
+      $(".invalidMessage").addClass("d-none");
+    }
+
+    updateStudentRequests(userId, targetDate, "", "On-Going");
   });
+
+
+
   $(document).on("click", ".confirmReject", function (e) {
     e.preventDefault();
     var userId = $(this).attr("href");
-    console.log(userId + "And" + rId);
+
     var message = $("#reason").val();
     if (message.length < -1) {
-      updateStudentRequests(userId, "N/A", "Rejected");
+      updateStudentRequests(userId, "", "N/A", "Rejected");
     }
-    updateStudentRequests(userId, message, "Rejected");
+    updateStudentRequests(userId, "", message, "Rejected");
   });
-  function updateStudentRequests(userId, reason, status) {
+  function updateStudentRequests(userId, targetDate, reason, status) {
     var status =
       "/registrar/studentreq/change/" +
       status +
       "/?userId=" +
       userId +
+      "&targetDate=" +
+      targetDate +
       "&requestId=" +
       rId +
       "&reason=" +
@@ -731,6 +801,9 @@ $(document).ready(function () {
     $.get(status, function (status) {
       if (status == "Success") {
         $("#rejectModal").modal("hide");
+        $("#confirmModal").modal("hide");
+        $(".modalView").empty();
+
         refreshTable();
       }
     });

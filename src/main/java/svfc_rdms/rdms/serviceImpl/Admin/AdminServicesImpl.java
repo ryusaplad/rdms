@@ -423,23 +423,11 @@ public class AdminServicesImpl implements AdminService, FileService {
                     .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Teacher").status("Active")
                     .build();
 
-          Users accountTest1 = Users.builder().name("Test Account").username("S-0")
-                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Student").status("Active")
-                    .build();
-
-          Users accountTest2 = Users.builder().name("Test Account").username("R-0")
-                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Registrar").status("Active")
-                    .build();
-          Users accountTest3 = Users.builder().name("Test Account").username("T-0")
-                    .password(new BCryptPasswordEncoder().encode("Rdms123@")).type("Teacher").status("Active")
-                    .build();
+          
 
           users.add(account1);
           users.add(account2);
           users.add(account3);
-          users.add(accountTest1);
-          users.add(accountTest2);
-          users.add(accountTest3);
 
           users.stream().forEach(user -> {
                Optional<Users> userData = usersRepository.findByUsername(user.getUsername());

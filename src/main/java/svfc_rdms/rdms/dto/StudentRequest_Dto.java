@@ -17,6 +17,7 @@ public class StudentRequest_Dto {
      private String manageBy;
      private String requestBy;
      private String name;
+     private String targetDate;
 
      // Student User Information
      private long studentId;
@@ -53,13 +54,13 @@ public class StudentRequest_Dto {
           this.requestStatus = requestStatus;
           this.releaseDate = releaseDate;
           this.manageBy = manageBy;
-
+         
      }
 
      public StudentRequest_Dto(long requestId, long studentId, String requestBy, String name, String accountType,
                String year, String course,
                String semester, String requestDocument,
-               String message, String reply, String requestDate, String requestStatus, String releaseDate,
+               String message, String reply, String requestDate, String requestStatus, String releaseDate, String targetDate,
                String manageBy) {
           this.requestId = requestId;
           this.studentId = studentId;
@@ -76,7 +77,7 @@ public class StudentRequest_Dto {
           this.requestStatus = requestStatus;
           this.releaseDate = releaseDate;
           this.manageBy = manageBy;
-
+          this.targetDate = targetDate;
      }
 
      public StudentRequest_Dto(UUID fileId, byte[] data, String fname, String size, String status, String dateUploaded,
@@ -129,6 +130,10 @@ public class StudentRequest_Dto {
 
      public String getReleaseDate() {
           return releaseDate;
+     }
+     
+     public String getTargetDate() {
+          return targetDate;
      }
 
      public String getManageBy() {

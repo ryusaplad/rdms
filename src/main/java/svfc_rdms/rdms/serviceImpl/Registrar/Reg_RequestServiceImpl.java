@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.ExceptionHandler.UserNotFoundException;
-import svfc_rdms.rdms.dto.StudentRequest_Dto;
 import svfc_rdms.rdms.dto.UserFiles_Dto;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.UserFiles;
@@ -53,7 +52,6 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
 
      @Autowired
      private NotificationServiceImpl notificationService;
-
 
      @Override
      public String displayAllFilesByUserId(HttpSession session, Model model) {
@@ -90,7 +88,8 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
      }
 
      @Override
-     public ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String message,
+     public ResponseEntity<String> changeStatusAndManageByAndMessageOfRequests(String status, String targetDate,
+               String message,
                long userId, long requestId, HttpSession session, HttpServletRequest request) {
           Users user = usersRepository.findByuserId(userId).get();
           Optional<StudentRequest> studRequest = studentRepository.findOneByRequestByAndRequestId(user, requestId);
@@ -117,32 +116,29 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                     }
                     String title = "Request Status", notifMessage = "";
                     String documentName = studentRequest.getRequestDocument().getTitle();
-                  
+
                     if (status.equals("On-Going")) {
 
                          notifMessage = "Hello " + user.getName() + ", the " + documentName
                                    + " request is currently ongoing, please go to the 'My Request' to view the details.";
-                      
+
                     } else if (status.equals("Rejected")) {
 
                          notifMessage = "Hello " + user.getName() + ", unfortunately your request for " + documentName
                                    + " has been rejected. Please review the request provided and resubmit the request if needed.";
-                         
+
                     }
 
                     String messageType = "requesting_notification";
                     String dateAndTime = globalService.formattedDate();
 
                     if (user != null && studentRequest != null) {
-                         String text = notifMessage + "Please check 'My Requests' for further information.";
-
-                         
-
                          if (notificationService.sendStudentNotification(title, notifMessage, messageType, dateAndTime,
                                    false,
                                    user, session, request)) {
 
-                              studentRepository.changeStatusAndManagebyAndMessageOfRequests(status,
+                              studentRepository.changeStatusAndManagebyAndMessageAndTargetDateOfRequests(status,
+                                        targetDate,
                                         manageBy,
                                         message, studentRequest.getRequestId());
 
@@ -153,7 +149,6 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                               globalService.sendTopic("/topic/totals", "OK");
                               globalService.sendTopic("/topic/student_request/recieved", "OK");
 
-                              
                               return new ResponseEntity<>("Success", HttpStatus.OK);
 
                          } else {
@@ -165,7 +160,6 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                                         "Failed to change status, Please Try Again!. Please contact the administrator for further assistance.");
 
                          }
-                         
 
                     }
 
@@ -200,6 +194,7 @@ public class Reg_RequestServiceImpl implements Registrar_RequestService, FileSer
                     StudentRequest studentRequest = studRequest.get();
 
                     studentRequest.setReleaseDate(globalService.formattedDate());
+                    studentRequest.setTargetDate("COMPLETED");
                     studentRequest.setRequestStatus("Approved");
                     List<String> excludedFiles = new ArrayList<>();
 

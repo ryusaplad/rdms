@@ -316,7 +316,7 @@ $(document).ready(function () {
                       <div class="accordion-body">
                         <p><strong>Message:</strong> ${notification.message}</p>
                         <p><strong>Date and Time:</strong> ${notification.dateAndTime}</p>
-                        <p><strong>From:</strong> System</p>
+                        <p><strong>From:</strong> ${notification.from}</p>
                         <p><strong>Receiver:</strong> ${notification.to}</p>
                       </div>
                     </div>

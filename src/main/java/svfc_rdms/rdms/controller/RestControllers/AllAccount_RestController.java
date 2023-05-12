@@ -451,6 +451,7 @@ public class AllAccount_RestController {
                }
 
           } catch (Exception e) {
+               e.printStackTrace();
                throw new ApiRequestException(e.getMessage());
           }
 

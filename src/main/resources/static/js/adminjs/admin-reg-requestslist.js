@@ -16,7 +16,7 @@ $(document).ready(function () {
         $(this).removeClass("bg-light");
         $(this).css("box-shadow", "");
       });
-    $(".modalView").empty();
+      $(".modalView").empty();
     var dataVal = $(this).data("value");
 
     $.ajax({
@@ -112,12 +112,12 @@ $(document).ready(function () {
           `
 <div class="modal fade" id="sentReqInfo" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-retent">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="sentReqInfoLabel">` +
           data[0].requestTitle +
           `</h5>
-        <button type="button" class="btn-close clearModal" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body s-2">
     

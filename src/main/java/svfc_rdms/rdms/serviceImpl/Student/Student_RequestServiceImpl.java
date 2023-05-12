@@ -166,6 +166,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                     req.setRequestDate(globalService.formattedDate());
                     req.setRequestStatus("Pending");
                     req.setReleaseDate("");
+                    req.setTargetDate("");
                     req.setManageBy("");
 
                     if (findDocumentByTitle(document).isPresent()) {
@@ -338,7 +339,7 @@ public class Student_RequestServiceImpl implements Student_RequestService, FileS
                               e.getRequestBy().getUsername(), e.getRequestBy().getName(),
                               e.getRequestBy().getType(), e.getYear(), e.getCourse(), e.getSemester(),
                               e.getRequestDocument().getTitle(), e.getMessage(), e.getReply(),
-                              e.getRequestDate(), e.getRequestStatus(), e.getReleaseDate(), e.getManageBy()));
+                              e.getRequestDate(), e.getRequestStatus(), e.getReleaseDate(),e.getTargetDate(), e.getManageBy()));
 
                });
                if (ufOptional != null) {
