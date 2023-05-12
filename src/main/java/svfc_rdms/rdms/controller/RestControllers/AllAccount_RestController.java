@@ -36,7 +36,6 @@ import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
-import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
 
 @RestController
 public class AllAccount_RestController {
@@ -58,9 +57,6 @@ public class AllAccount_RestController {
 
      @Autowired
      private GlobalServiceControllerImpl globalService;
-
-     @Autowired
-     private Reg_RequestServiceImpl regs_RequestService;
 
      @Autowired
      private StudentRepository studentRepository;

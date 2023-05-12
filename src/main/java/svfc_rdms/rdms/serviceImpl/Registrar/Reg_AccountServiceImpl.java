@@ -12,7 +12,6 @@ import svfc_rdms.rdms.dto.ServiceResponse;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.service.Registrar.Registrar_AccountService;
-import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
 @Service
@@ -23,8 +22,6 @@ public class Reg_AccountServiceImpl implements Registrar_AccountService {
 
      @Autowired
      GlobalServiceControllerImpl globalService;
-     @Autowired
-     private GlobalLogsServiceImpl globalLogsServiceImpl;
 
      @Override
      public ResponseEntity<Object> displayAllUserAccountByType(String type) {

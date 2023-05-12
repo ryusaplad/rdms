@@ -13,13 +13,9 @@ import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Registrar.Reg_RequestServiceImpl;
-import svfc_rdms.rdms.serviceImpl.Registrar.Registrar_ServiceImpl;
 
 @Controller
 public class RegistrarController {
-
-     @Autowired
-     private Registrar_ServiceImpl regs_ServiceImpl;
 
      @Autowired
      private GlobalServiceControllerImpl globalService;

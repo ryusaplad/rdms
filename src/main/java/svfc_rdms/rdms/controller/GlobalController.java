@@ -29,7 +29,6 @@ import svfc_rdms.rdms.model.UserFiles;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
 import svfc_rdms.rdms.repository.Global.UsersRepository;
-import svfc_rdms.rdms.serviceImpl.Admin.AdminServicesImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalLogsServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 
@@ -47,9 +46,6 @@ public class GlobalController {
 
      @Autowired
      private UsersRepository usersRepository;
-
-     @Autowired
-     private AdminServicesImpl mainService;
 
      @GetMapping(value = "/")
      public String loginPage(HttpSession session, HttpServletResponse response, HttpServletRequest request,

@@ -19,7 +19,6 @@ import svfc_rdms.rdms.dto.Notification_Dto;
 import svfc_rdms.rdms.model.Notifications;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.Global.NotificationRepository;
-import svfc_rdms.rdms.repository.Global.UsersRepository;
 import svfc_rdms.rdms.service.Global.NotificationService;
 
 @Service
@@ -27,9 +26,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private NotificationRepository notifRepository;
-
-    @Autowired
-    private UsersRepository usersRepository;
 
     @Autowired
     private GlobalLogsServiceImpl globalLogsServiceImpl;
