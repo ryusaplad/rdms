@@ -8,7 +8,7 @@ $(document).ready(function () {
         var yearSelectHtml = $(".yearSelect");
         var courseSelectHtml = $(".courseSelect");
         var semGradeSelectHtml = $(".semGradeSelect");
-        if (schoolLevel == "pre-school") {
+        if (schoolLevel == "kinder") {
 
             yearSelectHtml.show();
 
@@ -20,7 +20,7 @@ $(document).ready(function () {
             <option value="kinder1">Kinder Garten 1</option>
             <option value="kinder2">Kinder Garten 2</option>
         </select>
-        <label for="year">Pre School
+        <label for="year">Kinder
             <span class="badge badge-secondary text-danger ">*</span>`);
 
         } else if (schoolLevel == "elementary") {

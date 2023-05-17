@@ -124,6 +124,7 @@ Edit|<b>Re</b>submit
             .DataTable()
             .row.add([
               myrequest.requestDocument,
+              myrequest.requestDate,
               statusIcon,
               buttons,
             ])
@@ -356,7 +357,7 @@ Edit|<b>Re</b>submit
         $(".detail-alert").show();
         // Get the target date as a string
         const targetDateStr = request.data[0].targetDate;
-
+        setProgress(status, 30, 0);
         // Check if targetDateStr is empty or not a valid date
         if (targetDateStr != "" || !isNaN(Date.parse(targetDateStr))) {
           //parse the value to date
@@ -369,7 +370,7 @@ Edit|<b>Re</b>submit
           const remainingDays = Math.ceil(remainingTime / (1000 * 3600 * 24));
           if (status.toLowerCase() == "approved") {
             status = "completed";
-            setProgress(status, 100, remainingDays);
+            setProgress(status, 100, 0);
           } else if (status.toLowerCase() == "pending") {
 
             setProgress(status, 30, remainingDays);
@@ -378,7 +379,7 @@ Edit|<b>Re</b>submit
             setProgress(status, 60, remainingDays);
           } else if (status.toLowerCase() == "rejected") {
 
-            setProgress(status, 0, 0);
+            setProgress(status, 100, remainingDays);
           }
         }
 
@@ -400,9 +401,16 @@ Edit|<b>Re</b>submit
     progressBar.classList.remove('pending', 'on-going', 'completed', 'rejected');
     progressBar.classList.add(status);
     status = status.substring(0, 1).toUpperCase() + status.substring(1);
+  
     progressLabel.textContent = `${status} — ${percentage}%`;
     progressBar.style.width = `${percentage}%`;
-    daysRemaining.textContent = `${days} days remaining`;
+    if(status.includes("Pending")){
+      daysRemaining.textContent = ``;
+    }else{
+      daysRemaining.textContent = `${days} days remaining`;
+    }
+    
+    
   }
 
   $(".clearDetailModal").on("click", function (e) {

@@ -14,7 +14,7 @@
         <!-- Custom CSS -->
         <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
         <link th:href="@{/css/croppie.css}" rel="stylesheet">
-        <th:block th:if="${page == 'globallogs' || page == 'student_request' || page == 'registrar_request' || page == 'account_adding' || page == 'globalfiles'}">
+        <th:block th:if="${page == 'globallogs' || page == 'student_request' || page == 'registrar_request' || page == 'account_adding'|| page == 'manageSchoolPrograms' || page == 'globalfiles'}">
             <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
         </th:block>
         <style>
@@ -578,7 +578,6 @@
                                             <tr th:each="log : ${globalLogs}">
                                                 <td th:text="${log.dateAndTime}"></td>
                                                 <td th:text="${log.message}" style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></td>
-
                                                 <td>
                                                     <span th:switch="${log.threatLevel}">
                                                         <span th:case="'low'">
@@ -923,7 +922,7 @@
                                     <div class="card-header">
                                         <div class="d-flex flex-row-reverse">
                                             <div class="">
-                                                <a  class="btn btn-secondary importAccountToggle">
+                                                <a class="btn btn-secondary importAccountToggle">
                                                     Import
                                                     <span th:text="${#strings.replace(title,'Accounts','')+' Accounts'}"></span>
                                                 </a>
@@ -1333,6 +1332,131 @@
                         </div>
                     </div>
                 </th:block>
+                <!-- ============================================================== -->
+                <!-- Manage School Programs -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <th:block th:case="'manageSchoolPrograms'">
+                    <div class="page-wrapper">
+                        <!-- ============================================================== -->
+                        <!-- Bread crumb and right sidebar toggle -->
+                        <!-- ============================================================== -->
+                        <div class="page-breadcrumb">
+                            <div class="row">
+                                <div class="col-12 d-flex no-block align-items-center">
+                                    <h4 id="main-title" class="page-title mt-4">School Programs</h4>
+                                    <div class="ms-auto text-end">
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item">
+                                                    <a href="/svfc-admin/dashboard">Dashboard</a>
+                                                </li>
+                                                <li class="breadcrumb-item">Manage</li>
+                                                <li class="breadcrumb-item active">School Programs</li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- Container fluid  -->
+                        <!-- ============================================================== -->
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form id="manage-school-form" class="needs-validation" novalidate>
+                                        <div class="form-group">
+                                          <label for="school-level">School Level</label>
+                                          <input
+                                            type="text"
+                                            class="form-control"
+                                            id="school-level"
+                                            placeholder="Enter school level (e.g., Kinder, Elementary, High School)"
+                                            required
+                                            maxlength="50"
+                                          >
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid school level.
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="year-level">Year Level</label>
+                                          <input
+                                            type="text"
+                                            class="form-control"
+                                            id="year-level"
+                                            placeholder="Enter year level or grade level"
+                                            required
+                                            maxlength="20"
+                                          >
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid year level or grade level.
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="course">Course</label>
+                                          <input
+                                            type="text"
+                                            class="form-control"
+                                            id="course"
+                                            placeholder="Enter course"
+                                            required
+                                            maxlength="100"
+                                          >
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid course.
+                                          </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="reset" class="btn btn-secondary">Clear</button>
+                                      </form>
+                                      
+                                </div>
+                                <div class="container col-md-6 table-responsive">
+                                    <table id="zero_config" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>School Level</th>
+                                                <th>Year/Grade/Level</th>
+                                                <th>Course/Category</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Kinder</td>
+                                                <td>Preschool</td>
+                                                <td>N/A</td>
+                                                <td>
+                                                    <!-- Action buttons for delete and hide -->
+                                                    <button class="btn btn-danger btn-sm" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                        Delete
+                                                    </button>
+                                                    <button class="btn btn-secondary btn-sm" title="Hide">
+                                                        <i class="fa fa-eye"></i>
+                                                        Hide
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <!-- Add more rows with sample data for different school levels as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
             </div>
         </div>
         <div class="modalView"></div>
@@ -1386,6 +1510,15 @@
                 <script type="text/javascript" th:src="@{/js/a_libraries/sheetjs-min.js}"></script>
                 <script type="text/javascript" th:src="@{/js/a_libraries/sheetjs-full.js}"></script>
                 <script type="text/javascript" th:src="@{/js/manage_request_js-ajax-jquery/importAccount.js}"></script>
+            </th:block>
+            <th:block th:case="'manageSchoolPrograms'">
+                <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
+                <script type="text/javascript" th:src="@{/js/manage_school_programs/schoolprograms.js}"></script>
+                <script type="text/javascript">$("#zero_config").DataTable({
+                    "ordering": false,
+                    "destroy": true
+            });
+                </script>
             </th:block>
         </th:block>
         <script type="text/javascript" th:src="@{/js/userpageJS/usermanual.js}"></script>
