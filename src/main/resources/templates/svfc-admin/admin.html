@@ -1364,88 +1364,69 @@
                         <!-- ============================================================== -->
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="alert alert-dismissible alert-info" id="form-alert" style="display: none;">
-                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
                                         <p class="alertMessage"></p>
-                                      </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
                                     <form id="manage-school-form" class="needs-validation" novalidate>
                                         <div class="form-group">
-                                          <label for="school-level">School Level</label>
-                                          <select id="school-level" name="schoolLevel" class="form-control" required>
-                                            <option value="0">--Select School Level--</option>
-                                            <option value="kinder">Kinder</option>
-                                            <option value="elementary">Elementary</option>
-                                            <option value="junior-high">Junior High School</option>
-                                            <option value="senior-high">Senior High School</option>
+                                          <label for="courseCode">Course Code</label>
+                                          <input type="text" class="form-control" id="courseCode" name="code" placeholder="Enter course code (e.g. BSIT, BPAD)" required maxlength="20">
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid Course Code.
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="course">Course Name</label>
+                                          <input type="text" class="form-control" id="course" name="course" placeholder="Enter course" required maxlength="100">
+                                          <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                          <div class="invalid-feedback">
+                                            Please provide a valid course.
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="educationLevel">Education Level</label>
+                                          <select class="form-control" id="educationLevel" name="level" required>
+                                            <option value="" selected disabled>Select education level</option>
+                                            <option value="shs">Senior High School</option>
                                             <option value="college">College</option>
                                           </select>
                                           <div class="valid-feedback">
                                             Looks good!
                                           </div>
                                           <div class="invalid-feedback">
-                                            Please select a valid school level.
+                                            Please select an education level.
                                           </div>
                                         </div>
-                                        <div class="form-group">
-                                          <label for="year-level">Year Level</label>
-                                          <input type="text" class="form-control" id="year-level" name="level" placeholder="Enter year level or grade level" required maxlength="20">
-                                          <div class="valid-feedback">
-                                            Looks good!
-                                          </div>
-                                          <div class="invalid-feedback">
-                                            Please provide a valid year level or grade level.
-                                          </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="course">Course</label>
-                                            <input type="text" class="form-control" id="course"  name="course" placeholder="Enter course" required maxlength="100">
-                                            <div class="valid-feedback">
-                                              Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                              Please provide a valid course.
-                                            </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="reset" class="btn btn-secondary">Clear</button>
-                                            </form>
-                                    </div>
-                                         
+                                        <button class="btn btn-primary submitSchoolProgram">Submit</button>
+                                        <button type="reset" class="btn btn-secondary clearBtn">Clear</button>
+                                      </form>
                                       
-                                
-                                <div class="container col-md-6 table-responsive">
+                                </div>
+                            
+                                <div class="container col-md-8 table-responsive">
                                     <table id="zero_config" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>School Level</th>
-                                                <th>Year/Grade/Level</th>
-                                                <th>Course/Category</th>
+                                                <th>Level</th>
+                                                <th>Code</th>
+                                                <th>Name</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Kinder</td>
-                                                <td>Preschool</td>
-                                                <td>N/A</td>
-                                                <td>
-                                                    <!-- Action buttons for delete and hide -->
-                                                    <button class="btn btn-danger btn-sm" title="Delete">
-                                                        <i class="fas fa-trash"></i>
-                                                        Delete
-                                                    </button>
-                                                    <button class="btn btn-secondary btn-sm" title="Hide">
-                                                        <i class="fa fa-eye"></i>
-                                                        Hide
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <!-- Add more rows with sample data for different school levels as needed -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </th:block>

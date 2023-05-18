@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import svfc_rdms.rdms.model.SchoolPrograms;
+import svfc_rdms.rdms.model.Course;
 
-public interface School_ProgramRepository extends JpaRepository<SchoolPrograms, Long> {
-    List<SchoolPrograms> findAllBySchoolLevel(String schoolLevel);
-    List<SchoolPrograms> findAllByLevelAndSchoolLevel(String level, String schoolLevel);
+public interface School_ProgramRepository extends JpaRepository<Course, Long> {
+  List<Course> findAllByLevelAndStatus(String level, String status);
 }

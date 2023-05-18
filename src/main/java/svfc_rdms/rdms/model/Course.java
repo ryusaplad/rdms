@@ -1,5 +1,6 @@
 package svfc_rdms.rdms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,18 +14,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "school_programs")
+@Table(name = "course")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SchoolPrograms {
+public class Course {
     @Id
-    @SequenceGenerator(name = "sprogram_sequence", sequenceName = "sprogram_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sprogram_sequence")
+    @SequenceGenerator(name = "course_sequence", sequenceName = "course_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_sequence")
     private long id;
-    private String schoolLevel; 
+    @Column(unique = true)
+    private String code;
+    @Column(unique = true)
+    private String name;
     private String level;
-    private String courseOrcategory;
     private String status;
 }

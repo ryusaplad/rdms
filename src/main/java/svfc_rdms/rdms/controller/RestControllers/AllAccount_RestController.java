@@ -25,7 +25,6 @@ import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Notifications;
-import svfc_rdms.rdms.model.SchoolPrograms;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
@@ -562,12 +561,56 @@ public class AllAccount_RestController {
      @PostMapping("/{userType}/save/school-program-information")
      public ResponseEntity<String> saveSchoolProgramInformation(@PathVariable String userType,
                @RequestParam Map<String, String> schoolProgramInfos, HttpSession session,
-               HttpServletResponse response) {
+               HttpServletResponse response, HttpServletRequest request) {
           if (userType.contains("svfc-admin")) {
                userType = "school_admin";
-          }    
+          }
           if (globalService.validatePages(userType, response, session)) {
-               return programServiceImpl.saveSchoolProgramInfo(schoolProgramInfos);
+               return programServiceImpl.saveSchoolProgramInfo(schoolProgramInfos, session, request);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
+     @PostMapping("/{userType}/update/school-program-information/{id}")
+     public ResponseEntity<String> updateSchoolProgramInformation(@PathVariable String userType, @PathVariable long id,
+               @RequestParam Map<String, String> schoolProgramInfos, HttpSession session,
+               HttpServletResponse response, HttpServletRequest request) {
+          if (userType.contains("svfc-admin")) {
+               userType = "school_admin";
+          }
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.updateSchoolProgramInfo(id, schoolProgramInfos, session, request);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
+     @PostMapping("/{userType}/update/school-program-status/{id}/{status}")
+     public ResponseEntity<String> updateSchoolProgramStatus(@PathVariable String userType, @PathVariable long id,
+               @PathVariable String status,
+               @RequestParam Map<String, String> schoolProgramInfos, HttpSession session,
+               HttpServletResponse response, HttpServletRequest request) {
+          if (userType.contains("svfc-admin")) {
+               userType = "school_admin";
+          }
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.updateSchoolProgramStatus(id, status, session, request);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
+     // Saving Shool Program
+     @PostMapping("/{userType}/delete/school-program-information/{id}")
+     public ResponseEntity<String> deleteSchoolProgramInformation(@PathVariable String userType, @PathVariable long id,
+               @RequestParam Map<String, String> schoolProgramInfos, HttpSession session,
+               HttpServletResponse response, HttpServletRequest request) {
+          if (userType.contains("svfc-admin")) {
+               userType = "school_admin";
+          }
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.deleteSchoolProgramInfo(id, session, request);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.",
                     HttpStatus.BAD_REQUEST);
@@ -575,10 +618,10 @@ public class AllAccount_RestController {
 
      @GetMapping("/{userType}/load/school-program-informations")
      public ResponseEntity<Object> loadSchoolProgramInfo(@PathVariable String userType, HttpSession session,
-     HttpServletResponse response){
+               HttpServletResponse response) {
           if (userType.contains("svfc-admin")) {
                userType = "school_admin";
-          }    
+          }
           if (globalService.validatePages(userType, response, session)) {
                return programServiceImpl.loadAllSchoolProgramInfo();
           }
@@ -586,4 +629,30 @@ public class AllAccount_RestController {
                     HttpStatus.BAD_REQUEST);
      }
 
+     @GetMapping("/{userType}/load/school-program-informations/{id}")
+     public ResponseEntity<Object> loadSchoolProgramInfoById(@PathVariable String userType, @PathVariable long id,
+               HttpSession session,
+               HttpServletResponse response) {
+          if (userType.contains("svfc-admin")) {
+               userType = "school_admin";
+          }
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.loadSpecificSchoolProgramInfoById(id);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
+     @GetMapping("/{userType}/load/school-program-informations/{level}/{status}")
+     public ResponseEntity<Object> loadSchoolProgramInfoByLevelAndStatus(@PathVariable String userType,
+               @PathVariable String level, @PathVariable String status,
+               HttpSession session,
+               HttpServletResponse response) {
+
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.loadAllSchoolProgramInfoByLevelAndStatus(level, status);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
 }

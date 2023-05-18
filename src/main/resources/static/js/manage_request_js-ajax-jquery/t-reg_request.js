@@ -442,13 +442,13 @@ $(document).ready(function () {
           "</tr >"
         );
       }
+      
+      }
       fileListArr = Array.from($("#files")[0].files);
       for (var i = 0; i < fileListArr.length; i++) {
         formData.append("file[]", fileListArr[i]);
       }
       $(".errorMessageAlert").hide();
-      }
-     
   });
 
   function formatFileSize(bytes) {

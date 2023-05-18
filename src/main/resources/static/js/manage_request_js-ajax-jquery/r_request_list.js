@@ -592,11 +592,12 @@ $(document).ready(function () {
         $(".errorMessageAlert").hide();
       }
 
-      for (var i = 0; i < fileListArr.length; i++) {
-        formData.append("rfile[]", fileListArr[i]);
-      }
+    }
+    for (var i = 0; i < fileListArr.length; i++) {
+      formData.append("rfile[]", fileListArr[i]);
     }
   });
+
   $(document).on("click", ".f-removeItem", function (e) {
     var index = $(this).attr("data-index");
 
@@ -618,6 +619,7 @@ $(document).ready(function () {
     $(".f-alert").hide();
     $("#f-alertM").text("");
   });
+
   $(document).on("click", ".clearModal", function (e) {
     $(".modalView").empty();
   });
@@ -639,7 +641,7 @@ $(document).ready(function () {
   });
   $(document).on("submit", "#f-reqs-upload", function (e) {
     e.preventDefault();
-
+    console.log("i got called");
     usId = $(".confirmCompleteFinal").data("value");
     $.ajax({
       url:
