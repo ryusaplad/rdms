@@ -235,23 +235,21 @@ public class GlobalController {
 
      @GetMapping("/{accountType}/manage/school-programs")
      public String goToManageSchoolPrograms(@PathVariable String accountType, HttpServletResponse response,
-               HttpSession session,Model model) {
+               HttpSession session, Model model) {
 
-          if (accountType.equalsIgnoreCase("svfc-admin") || accountType.equalsIgnoreCase("registrar")) {
-               if (!globalService.validatePages(accountType, response, session)) {
-
-                    model.addAttribute("page", "manageSchoolPrograms");
-                    model.addAttribute("pageTitle", "Manage School Programs");
-
-                   
-               }
-               if(accountType.equalsIgnoreCase("svfc-admin")){
-                    return "svfc-admin/admin";
-               }else{
-                    return "registrar/reg";
-               }
+          if (accountType.equalsIgnoreCase("svfc-admin")) {
+               accountType = "school_admin";
+          }
+          if (!globalService.validatePages(accountType, response, session)) {
+               return "redirect:/";
+          }
+          model.addAttribute("page", "manageSchoolPrograms");
+          model.addAttribute("pageTitle", "Manage School Programs");
+          if (accountType.equalsIgnoreCase("school_admin")) {
+               return "svfc-admin/admin";
+          } else {
+               return "registrar/reg";
           }
 
-          return "redirect:/";
      }
 }

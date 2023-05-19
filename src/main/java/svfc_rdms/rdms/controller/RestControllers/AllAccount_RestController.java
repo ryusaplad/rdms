@@ -3,6 +3,7 @@ package svfc_rdms.rdms.controller.RestControllers;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import svfc_rdms.rdms.Enums.ValidAccounts;
 import svfc_rdms.rdms.ExceptionHandler.ApiRequestException;
 import svfc_rdms.rdms.model.Documents;
 import svfc_rdms.rdms.model.Notifications;
+import svfc_rdms.rdms.model.SchoolPrograms;
 import svfc_rdms.rdms.model.StudentRequest;
 import svfc_rdms.rdms.model.Users;
 import svfc_rdms.rdms.repository.File.FileRepository;
@@ -36,6 +38,7 @@ import svfc_rdms.rdms.serviceImpl.Global.Admin_Registrar_ManageServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.AllAccountServiceImpl;
 import svfc_rdms.rdms.serviceImpl.Global.GlobalServiceControllerImpl;
 import svfc_rdms.rdms.serviceImpl.Global.NotificationServiceImpl;
+import svfc_rdms.rdms.serviceImpl.SchoolProgram.School_ProgramServiceImpl;
 
 @RestController
 public class AllAccount_RestController {
@@ -48,6 +51,9 @@ public class AllAccount_RestController {
 
      @Autowired
      private Admin_Registrar_ManageServiceImpl admin_RegistrarServiceImpl;
+
+     @Autowired
+     private School_ProgramServiceImpl programServiceImpl;
 
      @Autowired
      private NotificationServiceImpl notificationServiceImpl;
@@ -97,7 +103,7 @@ public class AllAccount_RestController {
 
                }
                Optional<Users> user = usersRepository.findUserIdByUsername(username);
-            
+
                List<Long> totals = new ArrayList<>();
 
                if (!user.isPresent()) {
@@ -227,7 +233,7 @@ public class AllAccount_RestController {
           String username = "";
           if ((username = session.getAttribute("username").toString()) == null) {
                throw new ApiRequestException("Invalid Action");
-             
+
           }
           Optional<Users> optionalUser = usersRepository.findByUsername(username);
           if (!optionalUser.isPresent()) {
@@ -235,7 +241,6 @@ public class AllAccount_RestController {
           }
           userId = optionalUser.get().getUserId();
           return accountServiceImpl.changePassword(oldPassword, newPassword, userId, session, request);
-         
 
      }
 
@@ -244,10 +249,10 @@ public class AllAccount_RestController {
                HttpServletRequest request) {
           long userId = 0;
           String username = "";
-         
+
           if ((username = session.getAttribute("username").toString()) == null) {
                throw new ApiRequestException("Invalid Action");
-             
+
           }
           Optional<Users> optionalUser = usersRepository.findByUsername(username);
           if (!optionalUser.isPresent()) {
@@ -519,19 +524,20 @@ public class AllAccount_RestController {
 
      }
 
-     //importing account
+     // importing account
      @PostMapping("/{userType}/import-account/information")
-     public ResponseEntity<String> importAccountInformation(@PathVariable String userType,@RequestParam String accountType, @RequestBody List<List<String>> tableData,HttpSession session,
-     HttpServletResponse response,HttpServletRequest request) {
-        
-          if(userType.contains("svfc-admin")){
+     public ResponseEntity<String> importAccountInformation(@PathVariable String userType,
+               @RequestParam String accountType, @RequestBody List<List<String>> tableData, HttpSession session,
+               HttpServletResponse response, HttpServletRequest request) {
+
+          if (userType.contains("svfc-admin")) {
                userType = "school_admin";
           }
           if (globalService.validatePages(userType, response, session)) {
-               return admin_RegistrarServiceImpl.importUserAccounts(tableData,accountType, session, request);
+               return admin_RegistrarServiceImpl.importUserAccounts(tableData, accountType, session, request);
           }
           return new ResponseEntity<>("You are performing invalid action, Please try again later.",
-          HttpStatus.BAD_REQUEST);
+                    HttpStatus.BAD_REQUEST);
      }
 
      @GetMapping("/{userType}/load/document-info")
@@ -551,7 +557,33 @@ public class AllAccount_RestController {
                return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
           }
      }
-     //Saving Shool Program
-     
+
+     // Saving Shool Program
+     @PostMapping("/{userType}/save/school-program-information")
+     public ResponseEntity<String> saveSchoolProgramInformation(@PathVariable String userType,
+               @RequestParam Map<String, String> schoolProgramInfos, HttpSession session,
+               HttpServletResponse response) {
+          if (userType.contains("svfc-admin")) {
+               userType = "school_admin";
+          }    
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.saveSchoolProgramInfo(schoolProgramInfos);
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
+
+     @GetMapping("/{userType}/load/school-program-informations")
+     public ResponseEntity<Object> loadSchoolProgramInfo(@PathVariable String userType, HttpSession session,
+     HttpServletResponse response){
+          if (userType.contains("svfc-admin")) {
+               userType = "school_admin";
+          }    
+          if (globalService.validatePages(userType, response, session)) {
+               return programServiceImpl.loadAllSchoolProgramInfo();
+          }
+          return new ResponseEntity<>("You are performing invalid action, Please try again later.",
+                    HttpStatus.BAD_REQUEST);
+     }
 
 }

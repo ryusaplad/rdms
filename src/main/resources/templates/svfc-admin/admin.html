@@ -1365,34 +1365,31 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6">
+                                    <div class="alert alert-dismissible alert-info" id="form-alert" style="display: none;">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        <p class="alertMessage"></p>
+                                      </div>
                                     <form id="manage-school-form" class="needs-validation" novalidate>
                                         <div class="form-group">
                                           <label for="school-level">School Level</label>
-                                          <input
-                                            type="text"
-                                            class="form-control"
-                                            id="school-level"
-                                            placeholder="Enter school level (e.g., Kinder, Elementary, High School)"
-                                            required
-                                            maxlength="50"
-                                          >
+                                          <select id="school-level" name="schoolLevel" class="form-control" required>
+                                            <option value="0">--Select School Level--</option>
+                                            <option value="kinder">Kinder</option>
+                                            <option value="elementary">Elementary</option>
+                                            <option value="junior-high">Junior High School</option>
+                                            <option value="senior-high">Senior High School</option>
+                                            <option value="college">College</option>
+                                          </select>
                                           <div class="valid-feedback">
                                             Looks good!
                                           </div>
                                           <div class="invalid-feedback">
-                                            Please provide a valid school level.
+                                            Please select a valid school level.
                                           </div>
                                         </div>
                                         <div class="form-group">
                                           <label for="year-level">Year Level</label>
-                                          <input
-                                            type="text"
-                                            class="form-control"
-                                            id="year-level"
-                                            placeholder="Enter year level or grade level"
-                                            required
-                                            maxlength="20"
-                                          >
+                                          <input type="text" class="form-control" id="year-level" name="level" placeholder="Enter year level or grade level" required maxlength="20">
                                           <div class="valid-feedback">
                                             Looks good!
                                           </div>
@@ -1401,27 +1398,22 @@
                                           </div>
                                         </div>
                                         <div class="form-group">
-                                          <label for="course">Course</label>
-                                          <input
-                                            type="text"
-                                            class="form-control"
-                                            id="course"
-                                            placeholder="Enter course"
-                                            required
-                                            maxlength="100"
-                                          >
-                                          <div class="valid-feedback">
-                                            Looks good!
-                                          </div>
-                                          <div class="invalid-feedback">
-                                            Please provide a valid course.
-                                          </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <button type="reset" class="btn btn-secondary">Clear</button>
-                                      </form>
+                                            <label for="course">Course</label>
+                                            <input type="text" class="form-control" id="course"  name="course" placeholder="Enter course" required maxlength="100">
+                                            <div class="valid-feedback">
+                                              Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                              Please provide a valid course.
+                                            </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="reset" class="btn btn-secondary">Clear</button>
+                                            </form>
+                                    </div>
+                                         
                                       
-                                </div>
+                                
                                 <div class="container col-md-6 table-responsive">
                                     <table id="zero_config" class="table table-striped table-bordered">
                                         <thead>

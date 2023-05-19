@@ -25,6 +25,6 @@ public class SchoolPrograms {
     private long id;
     private String schoolLevel; 
     private String level;
-    private String category;
+    private String courseOrcategory;
     private String status;
 }
