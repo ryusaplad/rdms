@@ -15,7 +15,7 @@
         <!-- Custom CSS -->
         <link th:href="@{/css/userpageCSS/style.min.css}" rel="stylesheet">
         <link th:href="@{/css/croppie.css}" rel="stylesheet">
-        <th:block th:if="${page == 'myrequest' || page == 'myfiles' || page == 'studrequest' || page == 'accview'}">
+        <th:block th:if="${page == 'myrequest' || page == 'myfiles' || page == 'studrequest' || page == 'accview' || page == 'manageSchoolPrograms'}">
             <link th:href="@{/css/userpageCSS/dataTables.bootstrap4.css}" rel="stylesheet">
         </th:block>
         <th:block th:if="${page == 'studrequest'}">
@@ -1232,7 +1232,9 @@
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
                 <script type="text/javascript">$("#zero_config").DataTable({
                     "ordering": false,
-                    "destroy": true
+                    "destroy": true,
+                    columnDefs: [
+                    { targets: [0], orderable: false } ]
             });
                 </script>
             </th:block>
@@ -1258,8 +1260,10 @@
                 <script type="text/javascript" th:src="@{/js/a_libraries/datatables.min.js}"></script>
                 <script type="text/javascript" th:src="@{/js/manage_school_programs/schoolprograms.js}"></script>
                 <script type="text/javascript">$("#zero_config").DataTable({
-                    "ordering": false,
-                    "destroy": true
+                  "ordering": true,
+                    "destroy": true,
+                    columnDefs: [
+                    { targets: [4], orderable: false } ]
             });
                 </script>
             </th:block>

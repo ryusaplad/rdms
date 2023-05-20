@@ -21,7 +21,12 @@ $(document).ready(function () {
       dataType: "json",
       success: function (data) {
         // Empty table body
-        var table = $("#zero_config").DataTable();
+        var table = $("#zero_config").DataTable({
+          "ordering": true,
+          "destroy": true,
+          columnDefs: [
+            { targets: [3], orderable: false }]
+        });
         table.clear();
 
         var actions = "";

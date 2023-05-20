@@ -28,6 +28,7 @@ $(document).ready(function () {
                 var table = $("#zero_config").DataTable({
                     "ordering": false,
                     "destroy": true
+                    
                 });
                 table.clear();
 

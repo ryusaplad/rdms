@@ -42,6 +42,9 @@ $(document).ready(function () {
           // Show the success alert
           $('#form-alert').addClass('alert-success');
           $('#form-alert').find('p').text(message).end().fadeIn();
+          setTimeout(() => {
+            $('#form-alert').fadeOut();
+          }, 2000);
           refreshTable();
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -124,15 +127,49 @@ $(document).ready(function () {
         $(".updateSchoolProgram").text("Update");
         $(".clearBtn").text("Cancel");
 
+        var toastHtml = `
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 50">
+          <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header"> <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+              <strong class="me-auto">Successful Program Information Retrieval</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+            School program successfully retrieved.
+            </div>
+          </div>
+        </div>`;
+        $(".modalView").empty();
+        $(".modalView").append(toastHtml);
+        var toast = new bootstrap.Toast($('#liveToast'));
+        toast.show();
 
 
       },
       error: function (xhr, textStatus, errorThrown) {
+        if (xhr.includes("<!DOCTYPE html>")) {
+          xhr.responseText = "Failed to retrieve school program informations, Please try again.";
 
-        console.log(xhr.responseText);
+        }
+        var toastHtml = `
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 50">
+          <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header"> <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+              <strong class="me-auto">Failed Program Information Retrieval</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+            ${xhr.responseText}
+            </div>
+          </div>
+        </div>`;
+        $(".modalView").empty();
+        $(".modalView").append(toastHtml);
+        var toast = new bootstrap.Toast($('#liveToast'));
+        toast.show();
       }
     });
-    
+
   });
 
 
@@ -180,8 +217,7 @@ $(document).ready(function () {
             <div class="position-fixed top-0 end-0 p-3" style="z-index: 50">
               <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
-                  <img src="..." class="rounded me-2" alt="...">
-                  <strong class="me-auto">Program Status</strong>
+                <i class="fas fa-trash"></i> <strong class="me-auto">Program Status</strong>
                   <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
@@ -227,8 +263,7 @@ $(document).ready(function () {
         var toastHtml = `
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 50">
           <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-            <i class="fas fa-eye-slash"></i>
+            <div class="toast-header"> <i class="fas fa-eye-slash"></i>
               <strong class="me-auto">Program Status</strong>
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -263,8 +298,7 @@ $(document).ready(function () {
         var toastHtml = `<div class="position-fixed top-0 end-0 p-3" style="z-index: 50">
         <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="toast-header">
-          <i class="fas fa-eye"></i>
-            <strong class="me-auto">Program Status</strong>
+          <i class="fas fa-eye"></i> <strong class="me-auto">Program Status</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
           <div class="toast-body">
@@ -300,6 +334,8 @@ $(document).ready(function () {
     courseCode.next('.invalid-feedback').hide();
     course.next('.invalid-feedback').hide();
     educationLevelInput.next('.invalid-feedback').hide();
+    var form = $("#manage-school-form");
+    form.removeClass('was-validated');
   });
 
   $('#educationLevel').on('change', function () {

@@ -296,7 +296,7 @@ $(document).ready(function () {
         $("#updateModal").modal("hide");
         $("#registerModal").modal("hide");
       },
-      
+
     });
     $('#resultDiv').get(0).scrollIntoView({ behavior: 'smooth' });
   }
@@ -359,7 +359,7 @@ $(document).ready(function () {
         $("#alertDiv").removeClass("alert-warning").addClass("alert-success");
         $("#resultMessage").html("The account has been deleted permanently.");
         $("#resultDiv").fadeIn(100);
-       
+
       },
       error: function (error) {
         console.log(error);
@@ -371,11 +371,11 @@ $(document).ready(function () {
             error.responseText + ' <a class="link" href="#">Contact</a>'
           );
           $("#resultDiv").fadeIn(100);
-          
+
         }
 
       },
-   
+
     });
     $('#resultDiv').get(0).scrollIntoView({ behavior: 'smooth' });
   });
@@ -429,7 +429,7 @@ $(document).ready(function () {
   });
 });
 function ajaxGet(userType) {
- 
+
   $.ajax({
     type: "GET",
     url: "/registrar/getAllAccounts?account-type=" + userType.trim(),
@@ -438,6 +438,8 @@ function ajaxGet(userType) {
         var table = $("#zero_config").DataTable({
           "ordering": false,
           "destroy": true,
+          columnDefs: [
+            { targets: [2], orderable: false }]
         });
         table.clear();
         // Save the current page index and page length
@@ -530,7 +532,7 @@ function ajaxGet(userType) {
         $("#resultDiv").fadeIn(100);
         $("#deleteTempModalConfirm").modal("hide");
       }
-     
+
     },
     error: function (e) {
       if (e.responseText != null) {

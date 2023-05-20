@@ -78,7 +78,7 @@ $(document).ready(function () {
           $('.successCheck').addClass('animate__animated animate__heartBeat');
           $('#successModal').modal('hide');
           modalView.empty();
-          
+
         }, 1500);
         // Refresh File table
         loadUserFiles();
@@ -101,7 +101,9 @@ $(document).ready(function () {
         var table = $("#zero_config").DataTable({
           "ordering": true,
           "destroy": true,
-          "order": [[1, "asc"]]
+          "order": [[1, "asc"]],
+          columnDefs: [
+            { targets: [0], orderable: false }]
         });
         var action = "";
         table.clear();

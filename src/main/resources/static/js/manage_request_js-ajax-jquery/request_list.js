@@ -18,7 +18,9 @@ $(document).ready(function () {
         // Empty table body
         var table = $("#zero_config").DataTable({
           "ordering": false,
-          "destroy": true
+          "destroy": true,
+          columnDefs: [
+            { targets: [3], orderable: false }]
         });
         table.clear();
 
@@ -401,16 +403,16 @@ Edit|<b>Re</b>submit
     progressBar.classList.remove('pending', 'on-going', 'completed', 'rejected');
     progressBar.classList.add(status);
     status = status.substring(0, 1).toUpperCase() + status.substring(1);
-  
+
     progressLabel.textContent = `${status} — ${percentage}%`;
     progressBar.style.width = `${percentage}%`;
-    if(status.includes("Pending")){
+    if (status.includes("Pending")) {
       daysRemaining.textContent = ``;
-    }else{
+    } else {
       daysRemaining.textContent = `${days} days remaining`;
     }
-    
-    
+
+
   }
 
   $(".clearDetailModal").on("click", function (e) {
