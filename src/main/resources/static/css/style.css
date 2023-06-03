@@ -462,7 +462,7 @@ span:nth-child(5) {
   animation-delay: 0.5s;
 }
 
-.btnSubmit {
+.btnSubmit,.btnsub {
   font-size: 14px;
   width: 120px;
   height: 40px;

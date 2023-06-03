@@ -517,6 +517,125 @@ $(document).ready(function () {
 <p>Note: The database will automatically backup every midnight, and the folder location is in the C:\rdms_db_backup_sql.</p>`
     ;
 
+  var privacyPolicy = `
+  <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <h5>Privacy Policy</h5>
+        <p>
+          This Privacy Policy outlines how we collect, use, disclose, and protect the personal information of users of our web-based Request and Document Management System (RDMS) for St. Vincent de Ferrer College Camarin Inc. We are committed to maintaining the privacy and security of your personal information and complying with applicable data protection laws. By using our system, you agree to the terms of this Privacy Policy.
+        </p>
+      
+        <h6>Information We Collect</h6>
+      
+        <p>
+          <strong>1.1 Personal Information</strong>
+          <br>
+          We may collect personal information from users, including but not limited to:
+        </p>
+        <ul>
+          <li>Full name</li>
+          <li>Student ID or employee ID</li>
+          <li>Email address</li>
+        </ul>
+      
+        <p>
+          <strong>1.2 Log Information</strong>
+          <br>
+          We collect log information, which includes IP addresses and other non-personal information, to analyze system performance, diagnose technical issues, and enhance system security.
+        </p>
+      
+        <h6>Use of Information</h6>
+      
+        <p>
+          <strong>2.1 Personal Information</strong>
+          <br>
+          We use personal information to:
+        </p>
+        <ul>
+          <li>Facilitate the document requesting process</li>
+          <li>Process and fulfill document requests</li>
+          <li>Communicate with users regarding their requests</li>
+          <li>Improve and enhance our system's functionality</li>
+          <li>Respond to user inquiries or support requests</li>
+          <li>Comply with legal obligations</li>
+        </ul>
+      
+        <p>
+          <strong>2.2 Log Information</strong>
+          <br>
+          We use log information to:
+        </p>
+        <ul>
+          <li>Analyze system performance</li>
+          <li>Diagnose technical issues</li>
+          <li>Enhance system security</li>
+        </ul>
+      
+        <h6>Disclosure of Information</h6>
+      
+        <p>
+          <strong>3.1 Third-Party Service Providers</strong>
+          <br>
+          We may engage third-party service providers who assist us in operating our system, conducting our business, or servicing users. These service providers may have access to personal information but are only authorized to use it for the purpose of providing their services to us.
+        </p>
+      
+        <p>
+          <strong>3.2 Legal Compliance</strong>
+          <br>
+          We may disclose personal information when required by law or in response to valid legal requests, such as court orders or government regulations.
+        </p>
+      
+        <h6>Data Security</h6>
+      
+        <p>
+          We take reasonable measures to protect the personal information we collect from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the internet or electronic storage is completely secure, and we cannot guarantee absolute security.
+        </p>
+      
+        <h6>Data Retention</h6>
+      
+        <p>
+          We retain personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law.
+        </p>
+      
+        <h6>Your Rights</h6>
+      
+        <p>
+          You have the right to access, update, and correct your personal information. You may also have the right to
+          request the deletion of your personal information, subject to applicable legal requirements. To exercise these rights or for any privacy-related concerns, please contact us using the contact information provided below. </p>
+
+<h6>Changes to this Privacy Policy</h6>
+
+<p> We reserve the right to update or modify this Privacy Policy at any time. Any changes will be effective immediately upon posting the revised Privacy Policy on our website. Your continued use of our system after the changes indicates your acceptance of the revised Privacy Policy. </p>
+
+<h6>Contact Us</h6>
+
+<p> If you have any questions, comments, or concerns about this Privacy Policy or our privacy practices, please contact us at: <br> [Contact Information] </p> </div>
+<div class="container-sm">
+ <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="privacyCheckbox">
+    <label class="form-check-label" for="privacyCheckbox">
+      I confirm that I have read and agree to the Privacy Policy.
+    </label>
+  </div>
+  </div>
+        
+<div class="modal-footer">
+<!-- Button to proceed or go back -->
+<button type="button" class="btn btn-primary" id="confirmBtn" disabled>Proceed</button>
+<button type="button" class="btn btn-secondary" id="goBackBtn" data-bs-dismiss="modal">Go Back</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+
+
   $(".triggerAbout").on("click", function () {
     modalView.empty();
     modalView.append(welcomeModal);
@@ -531,8 +650,89 @@ $(document).ready(function () {
     $("#loginUserManualModal").modal("toggle");
   });
 
+  $(window).ready(function () {
+    privacyPolicyStorageChecker("onload");
+  });
+
+  $(".triggerPrivacyPolicy").on("click", function () {
+    modalView.empty();
+    modalView.append(privacyPolicy);
+
+    privacyPolicyStorageChecker("onclick");
+
+    $("#privacyModal").modal("toggle");
+  });
+
+  function privacyPolicyStorageChecker(action) {
+    var privacyAccepted = localStorage.getItem("privacyAccepted");
+    if (privacyAccepted === "true" || privacyAccepted != null && action === "onclick") {
+      $("#privacyCheckbox").prop("checked", true);
+      $("#privacyCheckbox").prop("disabled", true);
+      $("#confirmBtn").prop("disabled", true);
+
+      $(".btnSubmit").remove();
+      $(`<button class="btn btn-danger btnSubmit" type="submit">Login</button>`).insertAfter('#hideMe');
+     
+      $("#confirmBtn").removeClass("confirmBtn");
+      $("#goBackBtn").removeClass("goBackBtn");
+      $("#goBackBtn").text("Close");
+
+      $("#confirmBtn").removeClass("btn-primary");
+      $("#confirmBtn").addClass("btn-success");
+
+    } else {
+      $("#privacyCheckbox").prop("checked", false);
+      $("#confirmBtn").prop("disabled", true);
+
+      
+     $(".btnSubmit").remove();
+
+      $("#confirmBtn").removeClass("confirmBtn");
+      $("#goBackBtn").removeClass("goBackBtn");
+      $("#goBackBtn").text("Close");
+
+      $("#confirmBtn").removeClass("btn-primary");
+      $("#confirmBtn").addClass("btn-success");
+    }
+    
+    if (privacyAccepted === null || privacyAccepted === "false" && action === "onload") {
+      modalView.empty();
+      modalView.append(privacyPolicy);
+      $("#privacyModal").modal("toggle")
+      $(".btnSubmit").remove();
+      $("#goBackBtn").addClass("goBackBtn");
+    
+    }
+  }
+
   $(document).on("click", ".clearAbout", function () {
     modalView.empty();
+  });
+
+  $(document).change("#privacyCheckbox", function () {
+
+    if ($("#privacyCheckbox").is(":checked")) {
+      $("#confirmBtn").prop("disabled", false);
+      $("#confirmBtn").addClass("confirmBtn");
+      $("#goBackBtn").addClass("goBackBtn");
+    } else {
+      $("#confirmBtn").prop("disabled", true);
+      $("#confirmBtn").removeClass("confirmBtn");
+      $("#goBackBtn").removeClass("goBackBtn");
+    }
+  });
+
+  $(document).on("click", ".confirmBtn", function () {
+
+    localStorage.setItem("privacyAccepted", "true");
+    $("#privacyModal").modal("hide");
+    modalView.empty();
+    $(".btnSubmit").remove();
+    $(`<button class="btn btn-danger btnSubmit" type="submit">Login</button>`).insertAfter('#hideMe');
+  });
+  $(document).on("click", ".goBackBtn", function () {
+   
+    history.back();
   });
 
   $(".userManual").on("click", function () {
